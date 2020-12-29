@@ -124,4 +124,14 @@ public class MaterialSupplierController extends BaseController
     {
         return toAjax(materialSupplierService.deleteMaterialSupplierByIds(ids));
     }
+
+
+
+    @RequiresPermissions("busi:supplier:view")
+    @GetMapping("/toFile")
+    public String toFile(String supplierId)
+    {
+        return "busi/file/file_manager";
+    }
+
 }

@@ -86,7 +86,6 @@
         });
 
         function submitHandler() {
-            debugger;
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-supplier-add').serialize());
             }
