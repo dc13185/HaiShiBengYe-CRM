@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiSupplierAnnexMapper">
+    
+    <resultMap type="BusiSupplierAnnex" id="BusiSupplierAnnexResult">
+        <result property="id"    column="id"    />
+        <result property="supplierId"    column="supplier_id"    />
+        <result property="annexId"    column="annex_id"    />
+    </resultMap>
+
+    <sql id="selectBusiSupplierAnnexVo">
+        select id, supplier_id, annex_id from busi_supplier_annex
+    </sql>
+
+    <select id="selectBusiSupplierAnnexList" parameterType="BusiSupplierAnnex" resultMap="BusiSupplierAnnexResult">
+        <include refid="selectBusiSupplierAnnexVo"/>
+        <where>  
+            <if test="supplierId != null  and supplierId != ''"> and supplier_id = #{supplierId}</if>
+            <if test="annexId != null "> and annex_id = #{annexId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiSupplierAnnexById" parameterType="Long" resultMap="BusiSupplierAnnexResult">
+        <include refid="selectBusiSupplierAnnexVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBusiSupplierAnnex" parameterType="BusiSupplierAnnex" useGeneratedKeys="true" keyProperty="id">
+        insert into busi_supplier_annex
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="supplierId != null and supplierId != ''">supplier_id,</if>
+            <if test="annexId != null">annex_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="supplierId != null and supplierId != ''">#{supplierId},</if>
+            <if test="annexId != null">#{annexId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiSupplierAnnex" parameterType="BusiSupplierAnnex">
+        update busi_supplier_annex
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="supplierId != null and supplierId != ''">supplier_id = #{supplierId},</if>
+            <if test="annexId != null">annex_id = #{annexId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBusiSupplierAnnexById" parameterType="Long">
+        delete from busi_supplier_annex where id = #{id}
+    </delete>
+
+    <delete id="deleteBusiSupplierAnnexByIds" parameterType="String">
+        delete from busi_supplier_annex where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

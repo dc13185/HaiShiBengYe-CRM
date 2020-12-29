@@ -129,9 +129,10 @@ public class MaterialSupplierController extends BaseController
 
     @RequiresPermissions("busi:supplier:view")
     @GetMapping("/toFile")
-    public String toFile(String supplierId)
+    public String toFile(String supplierId,ModelMap modelMap)
     {
-        return "busi/file/file_manager";
+        modelMap.put("supplierId",supplierId);
+        return "busi/file/upload";
     }
 
 }
