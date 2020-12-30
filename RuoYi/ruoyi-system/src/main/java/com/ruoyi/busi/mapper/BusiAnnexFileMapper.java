@@ -5,23 +5,26 @@ import com.ruoyi.busi.domain.BusiAnnexFile;
 
 /**
  * 附件Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2020-12-29
  */
-public interface BusiAnnexFileMapper 
+public interface BusiAnnexFileMapper
 {
     /**
      * 查询附件
-     * 
+     *
      * @param annexId 附件ID
      * @return 附件
      */
     public BusiAnnexFile selectBusiAnnexFileById(Long annexId);
 
+    public List<BusiAnnexFile> selectBusiAnnexFileBySupplierId(String supplierId);
+
+
     /**
      * 查询附件列表
-     * 
+     *
      * @param busiAnnexFile 附件
      * @return 附件集合
      */
@@ -29,7 +32,7 @@ public interface BusiAnnexFileMapper
 
     /**
      * 新增附件
-     * 
+     *
      * @param busiAnnexFile 附件
      * @return 结果
      */
@@ -37,7 +40,7 @@ public interface BusiAnnexFileMapper
 
     /**
      * 修改附件
-     * 
+     *
      * @param busiAnnexFile 附件
      * @return 结果
      */
@@ -45,7 +48,7 @@ public interface BusiAnnexFileMapper
 
     /**
      * 删除附件
-     * 
+     *
      * @param annexId 附件ID
      * @return 结果
      */
@@ -53,7 +56,7 @@ public interface BusiAnnexFileMapper
 
     /**
      * 批量删除附件
-     * 
+     *
      * @param annexIds 需要删除的数据ID
      * @return 结果
      */

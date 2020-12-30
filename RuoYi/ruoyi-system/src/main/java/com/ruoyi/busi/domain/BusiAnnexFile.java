@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 附件对象 busi_annex_file
- * 
+ *
  * @author ruoyi
  * @date 2020-12-29
  */
@@ -34,50 +34,61 @@ public class BusiAnnexFile extends BaseEntity
     @Excel(name = "文件路径")
     private String annexFilePath;
 
-    public void setAnnexId(Long annexId) 
+    /** 原始文件名 */
+    private String annexFileSrcName;
+
+    public void setAnnexId(Long annexId)
     {
         this.annexId = annexId;
     }
 
-    public Long getAnnexId() 
+    public Long getAnnexId()
     {
         return annexId;
     }
-    public void setAnnexFileSuffix(String annexFileSuffix) 
+    public void setAnnexFileSuffix(String annexFileSuffix)
     {
         this.annexFileSuffix = annexFileSuffix;
     }
 
-    public String getAnnexFileSuffix() 
+    public String getAnnexFileSuffix()
     {
         return annexFileSuffix;
     }
-    public void setAnnexFileName(String annexFileName) 
+    public void setAnnexFileName(String annexFileName)
     {
         this.annexFileName = annexFileName;
     }
 
-    public String getAnnexFileName() 
+    public String getAnnexFileName()
     {
         return annexFileName;
     }
-    public void setAnnexFileSize(Long annexFileSize) 
+    public void setAnnexFileSize(Long annexFileSize)
     {
         this.annexFileSize = annexFileSize;
     }
 
-    public Long getAnnexFileSize() 
+    public Long getAnnexFileSize()
     {
         return annexFileSize;
     }
-    public void setAnnexFilePath(String annexFilePath) 
+    public void setAnnexFilePath(String annexFilePath)
     {
         this.annexFilePath = annexFilePath;
     }
 
-    public String getAnnexFilePath() 
+    public String getAnnexFilePath()
     {
         return annexFilePath;
+    }
+
+    public String getAnnexFileSrcName() {
+        return annexFileSrcName;
+    }
+
+    public void setAnnexFileSrcName(String annexFileSrcName) {
+        this.annexFileSrcName = annexFileSrcName;
     }
 
     @Override

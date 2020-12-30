@@ -2,7 +2,12 @@ package com.ruoyi.busi.controller;
 
 import java.util.List;
 
+import com.ruoyi.busi.domain.BusiAnnexFile;
+import com.ruoyi.busi.domain.BusiSupplierAnnex;
 import com.ruoyi.busi.domain.MaterialSupplier;
+import com.ruoyi.busi.mapper.BusiAnnexFileMapper;
+import com.ruoyi.busi.service.IBusiAnnexFileService;
+import com.ruoyi.busi.service.IBusiSupplierAnnexService;
 import com.ruoyi.busi.service.IMaterialSupplierService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +39,11 @@ public class MaterialSupplierController extends BaseController
 
     @Autowired
     private IMaterialSupplierService materialSupplierService;
+
+    @Autowired
+    private IBusiSupplierAnnexService busiSupplierAnnexService;
+    @Autowired
+    private BusiAnnexFileMapper busiAnnexFileMapper;
 
     @RequiresPermissions("busi:supplier:view")
     @GetMapping()
@@ -133,6 +143,18 @@ public class MaterialSupplierController extends BaseController
     {
         modelMap.put("supplierId",supplierId);
         return "busi/file/upload";
+    }
+
+    @RequiresPermissions("busi:supplier:view")
+    @GetMapping("/toFileDetails")
+    public String toFileDetails(String supplierId,ModelMap modelMap)
+    {
+        BusiSupplierAnnex busiSupplierAnnex =  new BusiSupplierAnnex();
+        busiSupplierAnnex.setSupplierId(supplierId);
+        List<BusiAnnexFile> busiAnnexFiles = busiAnnexFileMapper.selectBusiAnnexFileBySupplierId(supplierId);
+        modelMap.put("busiAnnexFiles",busiAnnexFiles);
+        modelMap.put("supplierId",supplierId);
+        return "busi/file/file_manager";
     }
 
 }

@@ -8,54 +8,25 @@
 <body class="gray-bg">
     <div class="wrapper wrapper-content">
         <div class="row">
-            <div class="col-sm-3">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-content">
-                        <div class="file-manager">
-                            <form method="post" id="file_form" action="/common/upload" enctype="multipart/form-data">
-                                <input id="annex_file" type="file" name="file" />
-                            </form>
-                            <button class="btn btn-primary btn-block uploadFile">提交</button>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-9 animated fadeInRight">
+            <div class="col-sm-12 animated fadeInRight">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="file-box">
+                        <div class="file-box" th:each="busiAnnexFile : ${busiAnnexFiles}">
                             <div class="file">
-                                <a href="file_manager.html#">
+                                <a href="javascript:void(0)">
                                     <span class="corner"></span>
-
                                     <div class="icon">
                                         <i class="fa fa-file"></i>
                                     </div>
                                     <div class="file-name">
-                                        Document_2014.doc
+                                        <p th:text="${busiAnnexFile.annexFileSrcName}"></p>
                                         <br/>
-                                        <small>添加时间：2014-10-13</small>
+                                        <small th:text="上传时间 + ${#dates.format(busiAnnexFile.createTime,'yyyy-MM-dd HH:mm:ss')}"></small>
+                                        <button type="button" class="btn btn-primary btn-xs" th:onclick="download([[${busiAnnexFile.annexFileName}]])">下载</button>
+                                        <button type="button" class="btn  btn-danger btn-xs">删除</button>
+
                                     </div>
                                 </a>
-                            </div>
-
-                        </div>
-                        <div class="file-box">
-                            <div class="file">
-                                <a href="file_manager.html#">
-                                    <span class="corner"></span>
-
-                                    <div class="image">
-                                        <img alt="image" class="img-responsive" src="img/p1.jpg">
-                                    </div>
-                                    <div class="file-name">
-                                        Italy street.jpg
-                                        <br/>
-                                        <small>添加时间：2014-10-13</small>
-                                    </div>
-                                </a>
-
                             </div>
                         </div>
 
@@ -73,24 +44,14 @@
             });
         });
 
-        $(".uploadFile").on("click" , function () {
-            debugger;
-            var form = new FormData(document.getElementById("file_form"));
-            $.ajax({
-                url: ctx+"common/upload",
-                type: "POST",
-                data: form,
-                success : function(data) {
-                },
-                error : function(data) {
-                }
-            });
-        });
-
-
         function submitHandler() {
             $.modal.close();
         }
+
+        function download(fileName){
+            window.location.href = ctx+"common/download/resource?resource="+fileName+"&delete=false";
+        }
+
     </script>
 
     <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>

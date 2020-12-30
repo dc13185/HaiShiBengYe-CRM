@@ -93,6 +93,8 @@ public class CommonController
             busiAnnexFile.setAnnexFileName(fileName);
             busiAnnexFile.setAnnexFilePath(url);
             busiAnnexFile.setAnnexFileSuffix(FileUploadUtils.getExtension(file));
+            busiAnnexFile.setAnnexFileSrcName(file.getOriginalFilename());
+            busiAnnexFile.setAnnexFileSize(file.getSize());
             busiAnnexFileService.insertBusiAnnexFile(busiAnnexFile);
             //插入中间表
             BusiSupplierAnnex busiSupplierAnnex = new BusiSupplierAnnex();
