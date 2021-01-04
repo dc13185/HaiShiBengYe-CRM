@@ -73,8 +73,9 @@ public class BusiMotorController extends BaseController
      * 新增电机产品
      */
     @GetMapping("/add")
-    public String add()
+    public String add(String supplierId,ModelMap modelMap)
     {
+        modelMap.put("supplierId",supplierId);
         return prefix + "/add";
     }
 

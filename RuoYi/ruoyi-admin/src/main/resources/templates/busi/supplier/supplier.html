@@ -64,6 +64,7 @@
         var editFlag = [[${@permission.hasPermi('busi:supplier:edit')}]];
         var removeFlag = [[${@permission.hasPermi('busi:supplier:remove')}]];
         var supplierLevelDatas = [[${@dict.getType('supplier_level')}]];
+        var procurement_type = [[${@dict.getType('procurement_type')}]];
         var prefix = ctx + "busi/supplier";
         var supplierType = $("#supplierType").val();
         $(function() {
@@ -91,7 +92,10 @@
                 },
                 {
                     field: 'purchaseCategory',
-                    title: '采购类别'
+                    title: '采购类别',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(procurement_type, value);
+                    }
                 },
                 {
                     field: 'contacts',

@@ -3,32 +3,34 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.busi.mapper.BusiMotorMapper">
-    
+
     <resultMap type="BusiMotor" id="BusiMotorResult">
         <result property="motorId"    column="motor_id"    />
         <result property="motorModel"    column="motor_model"    />
         <result property="motorPower"    column="motor_power"    />
         <result property="motorType"    column="motor_type"    />
         <result property="price"    column="price"    />
+        <result property="supplierId"    column="supplier_id"    />
     </resultMap>
 
     <sql id="selectBusiMotorVo">
-        select motor_id, motor_model, motor_power, motor_type, price from busi_motor
+        select motor_id, motor_model, motor_power, motor_type, price,supplier_id from busi_motor
     </sql>
 
     <select id="selectBusiMotorList" parameterType="BusiMotor" resultMap="BusiMotorResult">
         <include refid="selectBusiMotorVo"/>
-        <where>  
+        <where>
             <if test="motorModel != null  and motorModel != ''"> and motor_model like concat('%', #{motorModel}, '%')</if>
             <if test="motorType != null  and motorType != ''"> and motor_type = #{motorType}</if>
+            <if test="supplierId != null "> and supplier_id = #{supplierId}</if>
         </where>
     </select>
-    
+
     <select id="selectBusiMotorById" parameterType="Long" resultMap="BusiMotorResult">
         <include refid="selectBusiMotorVo"/>
         where motor_id = #{motorId}
     </select>
-        
+
     <insert id="insertBusiMotor" parameterType="BusiMotor" useGeneratedKeys="true" keyProperty="motorId">
         insert into busi_motor
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -36,12 +38,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="motorPower != null">motor_power,</if>
             <if test="motorType != null">motor_type,</if>
             <if test="price != null">price,</if>
+            <if test="supplierId != null ">supplier_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="motorModel != null">#{motorModel},</if>
             <if test="motorPower != null">#{motorPower},</if>
             <if test="motorType != null">#{motorType},</if>
             <if test="price != null">#{price},</if>
+            <if test="supplierId != null ">#{supplierId},</if>
          </trim>
     </insert>
 
@@ -61,7 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBusiMotorByIds" parameterType="String">
-        delete from busi_motor where motor_id in 
+        delete from busi_motor where motor_id in
         <foreach item="motorId" collection="array" open="(" separator="," close=")">
             #{motorId}
         </foreach>

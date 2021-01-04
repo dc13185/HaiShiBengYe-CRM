@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('电机产品列表')" />
+    <th:block th:include="include :: header('机封以及系统产品列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -12,15 +12,16 @@
                         <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
                         <ul>
                             <li>
-                                <label>电机型号：</label>
-                                <input type="text" name="motorModel"/>
+                                <label>机封型号：</label>
+                                <input type="text" name="machineSealModel"/>
                             </li>
                             <li>
-                                <label>电机种类：</label>
-                                <select name="motorType" th:with="type=${@dict.getType('motor_type')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
+                                <label>冲洗方案：</label>
+                                <input type="text" name="rinseSolution"/>
+                            </li>
+                            <li>
+                                <label>系统型号：</label>
+                                <input type="text" name="systemModel"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -32,16 +33,16 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="busi:motor:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="busi:seal:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="busi:motor:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="busi:seal:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="busi:motor:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="busi:seal:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:motor:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:seal:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
             </div>
@@ -52,10 +53,9 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('busi:motor:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('busi:motor:remove')}]];
-        var motorTypeDatas = [[${@dict.getType('motor_type')}]];
-        var prefix = ctx + "busi/motor";
+        var editFlag = [[${@permission.hasPermi('busi:seal:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('busi:seal:remove')}]];
+        var prefix = ctx + "busi/seal";
         var supplierId = $("#supplierId").val();
         $(function() {
             var options = {
@@ -64,41 +64,46 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "电机产品",
+                modalName: "机封以及系统产品",
                 columns: [{
                     checkbox: true
                 },
                 {
-                    field: 'motorId',
-                    title: '',
+                    field: 'machineId',
+                    title: '机封Id',
                     visible: false
                 },
                 {
-                    field: 'motorModel',
-                    title: '电机型号'
+                    field: 'machineSealModel',
+                    title: '机封型号'
                 },
                 {
-                    field: 'motorPower',
-                    title: '功率/KW'
+                    field: 'machineSealPrice',
+                    title: '机封价格'
                 },
                 {
-                    field: 'motorType',
-                    title: '电机种类',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(motorTypeDatas, value);
-                    }
+                    field: 'rinseSolution',
+                    title: '冲洗方案'
                 },
                 {
-                    field: 'price',
-                    title: '价格'
+                    field: 'rinseSolutionPrice',
+                    title: '冲洗方案价格'
+                },
+                {
+                    field: 'systemModel',
+                    title: '系统型号'
+                },
+                {
+                    field: 'systemPrice',
+                    title: '系统价格'
                 },
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.motorId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.motorId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.machineId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.machineId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]

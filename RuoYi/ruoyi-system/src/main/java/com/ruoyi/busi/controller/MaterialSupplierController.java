@@ -102,7 +102,7 @@ public class MaterialSupplierController extends BaseController
     }
 
     /**
-     * 修改材料供应商
+     * 修改材料供应商z
      */
     @GetMapping("/edit/{supplierId}")
     public String edit(@PathVariable("supplierId") String supplierId, ModelMap mmap)
@@ -170,6 +170,8 @@ public class MaterialSupplierController extends BaseController
             return "redirect:/busi/production?supplierId="+supplierId;
         }else if(supplier.getSupplierType().equals("motor")){
             return "redirect:/busi/motor?supplierId="+supplierId;
+        }else if(supplier.getSupplierType().equals("seal")){
+            return "redirect:/busi/seal?supplierId="+supplierId;
         }
 
 
