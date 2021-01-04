@@ -14,6 +14,7 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
+                        <input name="supplierType" id="supplierType" th:value="${supplierType}" type="hidden">
                         <ul>
                             <li>
                                 <label>供应商编号：</label>
@@ -64,11 +65,11 @@
         var removeFlag = [[${@permission.hasPermi('busi:supplier:remove')}]];
         var supplierLevelDatas = [[${@dict.getType('supplier_level')}]];
         var prefix = ctx + "busi/supplier";
-
+        var supplierType = $("#supplierType").val();
         $(function() {
             var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
+                url: prefix + "/list?",
+                createUrl: prefix + "/add?supplierType="+supplierType,
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
@@ -123,7 +124,8 @@
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.supplierId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.supplierId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openFile(\'' + row.supplierId + '\')"><i class="fa fa-cloud-upload"></i>上传材料</a>');
-                        actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openFileDetails(\'' + row.supplierId + '\')"><i class="fa fa-cloud-upload"></i>查看材料</a>');
+                        actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openFileDetails(\'' + row.supplierId + '\')"><i class="fa fa-eye"></i>查看材料</a>');
+                        actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openProduct(\'' + row.supplierId + '\')"><i class="fa fa-eye"></i>查看产品</a>');
                         return actions.join('');
                     }
                 }]
@@ -138,6 +140,11 @@
 
         function openFileDetails(supplierId){
             $.modal.openFull("查看附件", prefix+"/toFileDetails?supplierId="+supplierId);
+        }
+
+        function openProduct(supplierId){
+            $.modal.openTab("查看产品",prefix+"/toProduct?supplierId="+supplierId);
+
         }
 
     </script>

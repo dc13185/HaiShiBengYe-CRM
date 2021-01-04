@@ -24,7 +24,6 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
-
 /**
  * 材料供应商Controller
  *
@@ -47,8 +46,9 @@ public class MaterialSupplierController extends BaseController
 
     @RequiresPermissions("busi:supplier:view")
     @GetMapping()
-    public String supplier()
+    public String supplier(String supplierType,ModelMap modelMap)
     {
+        modelMap.put("supplierType",supplierType);
         return prefix + "/supplier";
     }
 
@@ -83,8 +83,9 @@ public class MaterialSupplierController extends BaseController
      * 新增材料供应商
      */
     @GetMapping("/add")
-    public String add()
+    public String add(String supplierType,ModelMap modelMap)
     {
+        modelMap.put("supplierType",supplierType);
         return prefix + "/add";
     }
 
@@ -154,6 +155,24 @@ public class MaterialSupplierController extends BaseController
         List<BusiAnnexFile> busiAnnexFiles = busiAnnexFileMapper.selectBusiAnnexFileBySupplierId(supplierId);
         modelMap.put("busiAnnexFiles",busiAnnexFiles);
         modelMap.put("supplierId",supplierId);
+        return "busi/file/file_manager";
+    }
+
+
+
+
+    @RequiresPermissions("busi:supplier:view")
+    @GetMapping("/toProduct")
+    public String toProduct(String supplierId,ModelMap modelMap)
+    {
+        MaterialSupplier supplier = materialSupplierService.selectMaterialSupplierById(supplierId);
+        if (supplier.getSupplierType().equals("material")){
+            return "redirect:/busi/production?supplierId="+supplierId;
+        }else if(supplier.getSupplierType().equals("motor")){
+            return "redirect:/busi/motor?supplierId="+supplierId;
+        }
+
+
         return "busi/file/file_manager";
     }
 

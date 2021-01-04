@@ -17,10 +17,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="supplierLevel"    column="supplier_level"    />
         <result property="profile"    column="profile"    />
         <result property="material"    column="material"    />
+        <result property="supplierType"    column="supplier_type"    />
     </resultMap>
 
     <sql id="selectMaterialSupplierVo">
-        select supplier_id, material_name, material_address, purchase_category, contacts, contact_title, contact_information, contact_address, qualification, supplier_level, profile, material from material_supplier
+        select supplier_id, material_name, material_address, purchase_category, contacts, contact_title, contact_information, contact_address, qualification, supplier_level, profile, material,supplier_type from material_supplier
     </sql>
 
     <select id="selectMaterialSupplierList" parameterType="MaterialSupplier" resultMap="MaterialSupplierResult">
@@ -29,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="supplierId != null  and supplierId != ''"> and supplier_id like concat('%', #{supplierId}, '%')</if>
             <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
             <if test="supplierLevel != null "> and supplier_level = #{supplierLevel}</if>
+            <if test="supplierType != null "> and supplier_type = #{supplierType}</if>
         </where>
     </select>
 
@@ -52,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="supplierLevel != null">supplier_level,</if>
             <if test="profile != null">profile,</if>
             <if test="material != null">material,</if>
+            <if test="supplierType != null">supplier_type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="supplierId != null and supplierId != ''">#{supplierId},</if>
@@ -66,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="supplierLevel != null">#{supplierLevel},</if>
             <if test="profile != null">#{profile},</if>
             <if test="material != null">#{material},</if>
+            <if test="supplierType != null">#{supplierType},</if>
          </trim>
     </insert>
 

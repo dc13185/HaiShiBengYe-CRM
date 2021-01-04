@@ -53,6 +53,8 @@ public class MaterialSupplier extends BaseEntity
     @Excel(name = "供应商评级")
     private Long supplierLevel;
 
+    private String supplierType;
+
     /** 供应商简介 */
     private String profile;
 
@@ -166,6 +168,14 @@ public class MaterialSupplier extends BaseEntity
     public Long getMaterial()
     {
         return material;
+    }
+
+    public String getSupplierType() {
+        return supplierType;
+    }
+
+    public void setSupplierType(String supplierType) {
+        this.supplierType = supplierType;
     }
 
     @Override

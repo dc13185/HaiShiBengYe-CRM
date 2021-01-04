@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiMaterialProductionMapper">
+
+    <resultMap type="BusiMaterialProduction" id="BusiMaterialProductionResult">
+        <result property="materialId"    column="material_id"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="materialLevel"    column="material_level"    />
+        <result property="form"    column="form"    />
+        <result property="price"    column="price"    />
+        <result property="supplierId"    column="supplier_id"    />
+    </resultMap>
+
+    <sql id="selectBusiMaterialProductionVo">
+        select material_id, material_name, material_level, form, price,supplier_id from busi_material_production
+    </sql>
+
+    <select id="selectBusiMaterialProductionList" parameterType="BusiMaterialProduction" resultMap="BusiMaterialProductionResult">
+        <include refid="selectBusiMaterialProductionVo"/>
+        <where>
+            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
+            <if test="materialLevel != null "> and material_level = #{materialLevel}</if>
+            <if test="supplierId != null "> and supplier_id = #{supplierId}</if>
+        </where>
+    </select>
+
+    <select id="selectBusiMaterialProductionById" parameterType="Long" resultMap="BusiMaterialProductionResult">
+        <include refid="selectBusiMaterialProductionVo"/>
+        where material_id = #{materialId}
+    </select>
+
+    <insert id="insertBusiMaterialProduction" parameterType="BusiMaterialProduction" useGeneratedKeys="true" keyProperty="materialId">
+        insert into busi_material_production
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialName != null">material_name,</if>
+            <if test="materialLevel != null">material_level,</if>
+            <if test="form != null">form,</if>
+            <if test="price != null">price,</if>
+            <if test="supplierId != null ">supplier_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialName != null">#{materialName},</if>
+            <if test="materialLevel != null">#{materialLevel},</if>
+            <if test="form != null">#{form},</if>
+            <if test="price != null">#{price},</if>
+            <if test="supplierId != null ">#{supplierId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiMaterialProduction" parameterType="BusiMaterialProduction">
+        update busi_material_production
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="materialLevel != null">material_level = #{materialLevel},</if>
+            <if test="form != null">form = #{form},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="supplierId != null ">supplier_id = #{supplierId},</if>
+        </trim>
+        where material_id = #{materialId}
+    </update>
+
+    <delete id="deleteBusiMaterialProductionById" parameterType="Long">
+        delete from busi_material_production where material_id = #{materialId}
+    </delete>
+
+    <delete id="deleteBusiMaterialProductionByIds" parameterType="String">
+        delete from busi_material_production where material_id in
+        <foreach item="materialId" collection="array" open="(" separator="," close=")">
+            #{materialId}
+        </foreach>
+    </delete>
+
+</mapper>
