@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiBearingMapper">
+    
+    <resultMap type="BusiBearing" id="BusiBearingResult">
+        <result property="bearingId"    column="bearing_id"    />
+        <result property="bearingModel"    column="bearing_model"    />
+        <result property="bearingPrice"    column="bearing_price"    />
+        <result property="supplierId"    column="supplier_id"    />
+    </resultMap>
+
+    <sql id="selectBusiBearingVo">
+        select bearing_id, bearing_model, bearing_price, supplier_id from busi_bearing
+    </sql>
+
+    <select id="selectBusiBearingList" parameterType="BusiBearing" resultMap="BusiBearingResult">
+        <include refid="selectBusiBearingVo"/>
+        <where>  
+            <if test="bearingModel != null  and bearingModel != ''"> and bearing_model = #{bearingModel}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiBearingById" parameterType="Long" resultMap="BusiBearingResult">
+        <include refid="selectBusiBearingVo"/>
+        where bearing_id = #{bearingId}
+    </select>
+        
+    <insert id="insertBusiBearing" parameterType="BusiBearing" useGeneratedKeys="true" keyProperty="bearingId">
+        insert into busi_bearing
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bearingModel != null and bearingModel != ''">bearing_model,</if>
+            <if test="bearingPrice != null">bearing_price,</if>
+            <if test="supplierId != null">supplier_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bearingModel != null and bearingModel != ''">#{bearingModel},</if>
+            <if test="bearingPrice != null">#{bearingPrice},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiBearing" parameterType="BusiBearing">
+        update busi_bearing
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bearingModel != null and bearingModel != ''">bearing_model = #{bearingModel},</if>
+            <if test="bearingPrice != null">bearing_price = #{bearingPrice},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+        </trim>
+        where bearing_id = #{bearingId}
+    </update>
+
+    <delete id="deleteBusiBearingById" parameterType="Long">
+        delete from busi_bearing where bearing_id = #{bearingId}
+    </delete>
+
+    <delete id="deleteBusiBearingByIds" parameterType="String">
+        delete from busi_bearing where bearing_id in 
+        <foreach item="bearingId" collection="array" open="(" separator="," close=")">
+            #{bearingId}
+        </foreach>
+    </delete>
+
+</mapper>

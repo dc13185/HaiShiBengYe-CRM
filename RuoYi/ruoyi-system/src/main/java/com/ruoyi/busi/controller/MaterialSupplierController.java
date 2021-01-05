@@ -172,7 +172,10 @@ public class MaterialSupplierController extends BaseController
             return "redirect:/busi/motor?supplierId="+supplierId;
         }else if(supplier.getSupplierType().equals("seal")){
             return "redirect:/busi/seal?supplierId="+supplierId;
+        }else if(supplier.getSupplierType().equals("coupling")){
+            return "redirect:/busi/coupling?supplierId="+supplierId;
         }
+
 
 
         return "busi/file/file_manager";
