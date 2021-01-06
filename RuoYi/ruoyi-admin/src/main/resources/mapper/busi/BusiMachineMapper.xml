@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiMachineMapper">
+
+    <resultMap type="BusiMachine" id="BusiMachineResult">
+        <result property="machineId"    column="machine_id"    />
+        <result property="machineModel"    column="machine_model"    />
+        <result property="machinePrice"    column="machine_price"    />
+        <result property="supplierId"    column="supplier_id"    />
+    </resultMap>
+
+    <sql id="selectBusiMachineVo">
+        select machine_id, machine_model, machine_price, supplier_id from busi_machine
+    </sql>
+
+    <select id="selectBusiMachineList" parameterType="BusiMachine" resultMap="BusiMachineResult">
+        <include refid="selectBusiMachineVo"/>
+        <where>
+            <if test="machineModel != null  and machineModel != ''"> and machine_model = #{machineModel}</if>
+            <if test="supplierId != null  and supplierId != ''"> and supplier_id = #{supplierId}</if>
+        </where>
+    </select>
+
+    <select id="selectBusiMachineById" parameterType="Long" resultMap="BusiMachineResult">
+        <include refid="selectBusiMachineVo"/>
+        where machine_id = #{machineId}
+    </select>
+
+    <insert id="insertBusiMachine" parameterType="BusiMachine" useGeneratedKeys="true" keyProperty="machineId">
+        insert into busi_machine
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="machineModel != null and machineModel != ''">machine_model,</if>
+            <if test="machinePrice != null and machinePrice != ''">machine_price,</if>
+            <if test="supplierId != null">supplier_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="machineModel != null and machineModel != ''">#{machineModel},</if>
+            <if test="machinePrice != null and machinePrice != ''">#{machinePrice},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiMachine" parameterType="BusiMachine">
+        update busi_machine
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="machineModel != null and machineModel != ''">machine_model = #{machineModel},</if>
+            <if test="machinePrice != null and machinePrice != ''">machine_price = #{machinePrice},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+        </trim>
+        where machine_id = #{machineId}
+    </update>
+
+    <delete id="deleteBusiMachineById" parameterType="Long">
+        delete from busi_machine where machine_id = #{machineId}
+    </delete>
+
+    <delete id="deleteBusiMachineByIds" parameterType="String">
+        delete from busi_machine where machine_id in
+        <foreach item="machineId" collection="array" open="(" separator="," close=")">
+            #{machineId}
+        </foreach>
+    </delete>
+
+</mapper>
