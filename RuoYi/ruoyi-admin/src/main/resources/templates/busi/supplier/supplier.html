@@ -129,7 +129,15 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.supplierId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openFile(\'' + row.supplierId + '\')"><i class="fa fa-cloud-upload"></i>上传材料</a>');
                         actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openFileDetails(\'' + row.supplierId + '\')"><i class="fa fa-eye"></i>查看材料</a>');
-                        actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openProduct(\'' + row.supplierId + '\')"><i class="fa fa-eye"></i>查看产品</a>');
+                        if (row.supplierType == 'seal'){
+                            actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openSeal(\'' + row.supplierId + '\',\'machine\')"><i class="fa fa-eye"></i>机封管理</a>');
+                            actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openSeal(\'' + row.supplierId + '\',\'system\')"><i class="fa fa-eye"></i>系统管理</a>');
+                            actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openSeal(\'' + row.supplierId + '\',\'seal\')"><i class="fa fa-eye"></i>冲洗方案</a>');
+                        }else{
+                            actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openProduct(\'' + row.supplierId + '\')"><i class="fa fa-eye"></i>产品管理</a>');
+                        }
+
+
                         return actions.join('');
                     }
                 }]
@@ -148,6 +156,16 @@
 
         function openProduct(supplierId){
             $.modal.openTab("查看产品",prefix+"/toProduct?supplierId="+supplierId);
+        }
+
+        function openSeal(supplierId,type){
+            if (type == "machine"){
+                $.modal.openTab("机封管理",prefix+"/toProduct?supplierId="+supplierId);
+            }else if(type == "system"){
+                $.modal.openTab("系统管理",prefix+"/toProduct?supplierId="+supplierId);
+            }else if(type == "seal"){
+                $.modal.openTab("冲洗方案",prefix+"/toProduct?supplierId="+supplierId);
+            }
 
         }
 
