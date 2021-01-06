@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.OfficeStaffMapper">
+    
+    <resultMap type="OfficeStaff" id="OfficeStaffResult">
+        <result property="officeStaffId"    column="office_staff_id"    />
+        <result property="officeAddress"    column="office_address"    />
+        <result property="officeStaffName"    column="office_staff_name"    />
+        <result property="position"    column="position"    />
+        <result property="birth"    column="birth"    />
+        <result property="school"    column="school"    />
+        <result property="major"    column="major"    />
+        <result property="residence"    column="residence"    />
+        <result property="information"    column="information"    />
+        <result property="mail"    column="mail"    />
+    </resultMap>
+
+    <sql id="selectOfficeStaffVo">
+        select office_staff_id, office_address, office_staff_name, position, birth, school, major, residence, information, mail from office_staff
+    </sql>
+
+    <select id="selectOfficeStaffList" parameterType="OfficeStaff" resultMap="OfficeStaffResult">
+        <include refid="selectOfficeStaffVo"/>
+        <where>  
+            <if test="officeAddress != null  and officeAddress != ''"> and office_address = #{officeAddress}</if>
+            <if test="officeStaffName != null  and officeStaffName != ''"> and office_staff_name like concat('%', #{officeStaffName}, '%')</if>
+            <if test="school != null  and school != ''"> and school = #{school}</if>
+        </where>
+    </select>
+    
+    <select id="selectOfficeStaffById" parameterType="Long" resultMap="OfficeStaffResult">
+        <include refid="selectOfficeStaffVo"/>
+        where office_staff_id = #{officeStaffId}
+    </select>
+        
+    <insert id="insertOfficeStaff" parameterType="OfficeStaff" useGeneratedKeys="true" keyProperty="officeStaffId">
+        insert into office_staff
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="officeAddress != null and officeAddress != ''">office_address,</if>
+            <if test="officeStaffName != null and officeStaffName != ''">office_staff_name,</if>
+            <if test="position != null">position,</if>
+            <if test="birth != null">birth,</if>
+            <if test="school != null">school,</if>
+            <if test="major != null">major,</if>
+            <if test="residence != null">residence,</if>
+            <if test="information != null">information,</if>
+            <if test="mail != null">mail,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="officeAddress != null and officeAddress != ''">#{officeAddress},</if>
+            <if test="officeStaffName != null and officeStaffName != ''">#{officeStaffName},</if>
+            <if test="position != null">#{position},</if>
+            <if test="birth != null">#{birth},</if>
+            <if test="school != null">#{school},</if>
+            <if test="major != null">#{major},</if>
+            <if test="residence != null">#{residence},</if>
+            <if test="information != null">#{information},</if>
+            <if test="mail != null">#{mail},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOfficeStaff" parameterType="OfficeStaff">
+        update office_staff
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="officeAddress != null and officeAddress != ''">office_address = #{officeAddress},</if>
+            <if test="officeStaffName != null and officeStaffName != ''">office_staff_name = #{officeStaffName},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="birth != null">birth = #{birth},</if>
+            <if test="school != null">school = #{school},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="residence != null">residence = #{residence},</if>
+            <if test="information != null">information = #{information},</if>
+            <if test="mail != null">mail = #{mail},</if>
+        </trim>
+        where office_staff_id = #{officeStaffId}
+    </update>
+
+    <delete id="deleteOfficeStaffById" parameterType="Long">
+        delete from office_staff where office_staff_id = #{officeStaffId}
+    </delete>
+
+    <delete id="deleteOfficeStaffByIds" parameterType="String">
+        delete from office_staff where office_staff_id in 
+        <foreach item="officeStaffId" collection="array" open="(" separator="," close=")">
+            #{officeStaffId}
+        </foreach>
+    </delete>
+
+</mapper>

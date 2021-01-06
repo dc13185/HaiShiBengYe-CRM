@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiCustomerMapper">
+    
+    <resultMap type="BusiCustomer" id="BusiCustomerResult">
+        <result property="customerId"    column="customer_id"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="customerNature"    column="customer_nature"    />
+        <result property="customerIndustry"    column="customer_industry"    />
+        <result property="contacts"    column="contacts"    />
+        <result property="contactTitle"    column="contact_title"    />
+        <result property="contactAddress"    column="contact_address"    />
+        <result property="contactPhone"    column="contact_phone"    />
+    </resultMap>
+
+    <sql id="selectBusiCustomerVo">
+        select customer_id, customer_name, customer_nature, customer_industry, contacts, contact_title, contact_address, contact_phone from busi_customer
+    </sql>
+
+    <select id="selectBusiCustomerList" parameterType="BusiCustomer" resultMap="BusiCustomerResult">
+        <include refid="selectBusiCustomerVo"/>
+        <where>  
+            <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="customerNature != null  and customerNature != ''"> and customer_nature = #{customerNature}</if>
+            <if test="contacts != null  and contacts != ''"> and contacts = #{contacts}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiCustomerById" parameterType="Long" resultMap="BusiCustomerResult">
+        <include refid="selectBusiCustomerVo"/>
+        where customer_id = #{customerId}
+    </select>
+        
+    <insert id="insertBusiCustomer" parameterType="BusiCustomer" useGeneratedKeys="true" keyProperty="customerId">
+        insert into busi_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerName != null and customerName != ''">customer_name,</if>
+            <if test="customerNature != null">customer_nature,</if>
+            <if test="customerIndustry != null">customer_industry,</if>
+            <if test="contacts != null">contacts,</if>
+            <if test="contactTitle != null">contact_title,</if>
+            <if test="contactAddress != null">contact_address,</if>
+            <if test="contactPhone != null">contact_phone,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerName != null and customerName != ''">#{customerName},</if>
+            <if test="customerNature != null">#{customerNature},</if>
+            <if test="customerIndustry != null">#{customerIndustry},</if>
+            <if test="contacts != null">#{contacts},</if>
+            <if test="contactTitle != null">#{contactTitle},</if>
+            <if test="contactAddress != null">#{contactAddress},</if>
+            <if test="contactPhone != null">#{contactPhone},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiCustomer" parameterType="BusiCustomer">
+        update busi_customer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerName != null and customerName != ''">customer_name = #{customerName},</if>
+            <if test="customerNature != null">customer_nature = #{customerNature},</if>
+            <if test="customerIndustry != null">customer_industry = #{customerIndustry},</if>
+            <if test="contacts != null">contacts = #{contacts},</if>
+            <if test="contactTitle != null">contact_title = #{contactTitle},</if>
+            <if test="contactAddress != null">contact_address = #{contactAddress},</if>
+            <if test="contactPhone != null">contact_phone = #{contactPhone},</if>
+        </trim>
+        where customer_id = #{customerId}
+    </update>
+
+    <delete id="deleteBusiCustomerById" parameterType="Long">
+        delete from busi_customer where customer_id = #{customerId}
+    </delete>
+
+    <delete id="deleteBusiCustomerByIds" parameterType="String">
+        delete from busi_customer where customer_id in 
+        <foreach item="customerId" collection="array" open="(" separator="," close=")">
+            #{customerId}
+        </foreach>
+    </delete>
+
+</mapper>
