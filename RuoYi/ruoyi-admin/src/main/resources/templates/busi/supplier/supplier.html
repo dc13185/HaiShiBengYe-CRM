@@ -162,9 +162,9 @@
             if (type == "machine"){
                 $.modal.openTab("机封管理",ctx+"busi/machine?supplierId="+supplierId);
             }else if(type == "system"){
-                $.modal.openTab("系统管理",prefix+"toProduct?supplierId="+supplierId);
+                $.modal.openTab("系统管理",ctx+"busi/busiSystem?supplierId="+supplierId);
             }else if(type == "seal"){
-                $.modal.openTab("冲洗方案",prefix+"toProduct?supplierId="+supplierId);
+                $.modal.openTab("冲洗方案",ctx+"busi/rinse?supplierId="+supplierId);
             }
 
         }

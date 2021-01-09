@@ -26,7 +26,7 @@ import com.ruoyi.common.core.domain.Ztree;
 
 /**
  * ${functionName}Controller
- * 
+ *
  * @author ${author}
  * @date ${datetime}
  */
@@ -41,8 +41,9 @@ public class ${ClassName}Controller extends BaseController
 
     @RequiresPermissions("${permissionPrefix}:view")
     @GetMapping()
-    public String ${businessName}()
+    public String ${businessName}(String supplierId,ModelMap modelMap)
     {
+        modelMap.put("supplierId",supplierId);
         return prefix + "/${businessName}";
     }
 
@@ -92,8 +93,9 @@ public class ${ClassName}Controller extends BaseController
      * 新增${functionName}
      */
     @GetMapping("/add")
-    public String add()
+    public String add(String supplierId,ModelMap modelMap)
     {
+        modelMap.put("supplierId",supplierId);
         return prefix + "/add";
     }
 #elseif($table.tree)

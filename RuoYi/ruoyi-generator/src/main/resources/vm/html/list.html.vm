@@ -9,6 +9,7 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
+                        <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
                         <ul>
 #foreach($column in $columns)
 #if($column.query)
@@ -17,9 +18,9 @@
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
 #if($parentheseIndex != -1)
 #set($comment=$column.columnComment.substring(0, $parentheseIndex))
-#else  
+#else
 #set($comment=$column.columnComment)
-#end  
+#end
 #if($column.htmlType == "input")
                             <li>
                                 <label>${comment}：</label>
@@ -89,11 +90,11 @@
 #end
 #end
         var prefix = ctx + "${moduleName}/${businessName}";
-
+        var supplierId = $("#supplierId").val();
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add",
+                createUrl: prefix + "/add?supplierId="+supplierId,
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
@@ -129,7 +130,7 @@
                     field: '${javaField}',
                     title: '${comment}'
                 },
-#end                
+#end
 #end
                 {
                     title: '操作',
