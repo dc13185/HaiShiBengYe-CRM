@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiProductParameterMapper">
+    
+    <resultMap type="BusiProductParameter" id="BusiProductParameterResult">
+        <result property="parameterId"    column="parameter_id"    />
+        <result property="itemNumber"    column="item_number"    />
+        <result property="material"    column="material"    />
+        <result property="materialForm"    column="material_form"    />
+        <result property="weight"    column="weight"    />
+        <result property="time"    column="time"    />
+        <result property="isCurrent"    column="is_current"    />
+        <result property="modelId"    column="model_id"    />
+    </resultMap>
+
+    <sql id="selectBusiProductParameterVo">
+        select parameter_id, item_number, material, material_form, weight, time, is_current, model_id from busi_product_parameter
+    </sql>
+
+    <select id="selectBusiProductParameterList" parameterType="BusiProductParameter" resultMap="BusiProductParameterResult">
+        <include refid="selectBusiProductParameterVo"/>
+        <where>  
+            <if test="itemNumber != null  and itemNumber != ''"> and item_number like concat('%', #{itemNumber}, '%')</if>
+            <if test="material != null  and material != ''"> and material like concat('%', #{material}, '%')</if>
+            <if test="materialForm != null  and materialForm != ''"> and material_form like concat('%', #{materialForm}, '%')</if>
+            <if test="isCurrent != null "> and is_current = #{isCurrent}</if>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiProductParameterById" parameterType="Long" resultMap="BusiProductParameterResult">
+        <include refid="selectBusiProductParameterVo"/>
+        where parameter_id = #{parameterId}
+    </select>
+        
+    <insert id="insertBusiProductParameter" parameterType="BusiProductParameter" useGeneratedKeys="true" keyProperty="parameterId">
+        insert into busi_product_parameter
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itemNumber != null and itemNumber != ''">item_number,</if>
+            <if test="material != null and material != ''">material,</if>
+            <if test="materialForm != null and materialForm != ''">material_form,</if>
+            <if test="weight != null">weight,</if>
+            <if test="time != null">time,</if>
+            <if test="isCurrent != null">is_current,</if>
+            <if test="modelId != null">model_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itemNumber != null and itemNumber != ''">#{itemNumber},</if>
+            <if test="material != null and material != ''">#{material},</if>
+            <if test="materialForm != null and materialForm != ''">#{materialForm},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="time != null">#{time},</if>
+            <if test="isCurrent != null">#{isCurrent},</if>
+            <if test="modelId != null">#{modelId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiProductParameter" parameterType="BusiProductParameter">
+        update busi_product_parameter
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itemNumber != null and itemNumber != ''">item_number = #{itemNumber},</if>
+            <if test="material != null and material != ''">material = #{material},</if>
+            <if test="materialForm != null and materialForm != ''">material_form = #{materialForm},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="isCurrent != null">is_current = #{isCurrent},</if>
+            <if test="modelId != null">model_id = #{modelId},</if>
+        </trim>
+        where parameter_id = #{parameterId}
+    </update>
+
+    <delete id="deleteBusiProductParameterById" parameterType="Long">
+        delete from busi_product_parameter where parameter_id = #{parameterId}
+    </delete>
+
+    <delete id="deleteBusiProductParameterByIds" parameterType="String">
+        delete from busi_product_parameter where parameter_id in 
+        <foreach item="parameterId" collection="array" open="(" separator="," close=")">
+            #{parameterId}
+        </foreach>
+    </delete>
+
+</mapper>
