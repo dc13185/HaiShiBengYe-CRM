@@ -65,7 +65,7 @@
                 exportUrl: prefix + "/export",
                 modalName: "客户管理",
                 columns: [{
-                    checkbox: true
+                    radio: true
                 },
                 {
                     field: 'customerId',
@@ -113,6 +113,19 @@
             };
             $.table.init(options);
         });
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var column = $.table.selectColumns('customerName');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#customerId').val(rows);
+            parent.$('#customerName').val(column);
+        }
+
     </script>
 </body>
 </html>

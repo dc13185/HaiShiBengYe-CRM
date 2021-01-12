@@ -121,6 +121,21 @@
             };
             $.table.init(options);
         });
+
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var officeAddress = $.table.selectColumns('officeAddress');
+            var officeStaffName = $.table.selectColumns('officeStaffName');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#officeAddress').val(officeAddress);
+            parent.$('#officeStaffName').val(officeStaffName);
+            parent.$('#staffId').val(rows);
+        }
     </script>
 </body>
 </html>

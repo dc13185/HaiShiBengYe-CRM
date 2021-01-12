@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiQuotationMapper">
+    
+    <resultMap type="BusiQuotation" id="BusiQuotationResult">
+        <result property="quotationId"    column="quotation_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectAddress"    column="project_address"    />
+        <result property="quotationNo"    column="quotation_no"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="officeAddress"    column="office_address"    />
+        <result property="officeStaffName"    column="office_staff_name"    />
+        <result property="technicalStaffId"    column="technical_staff_id"    />
+        <result property="quotationType"    column="quotation_type"    />
+    </resultMap>
+
+    <sql id="selectBusiQuotationVo">
+        select quotation_id, project_name, project_address, quotation_no, customer_id, office_address, office_staff_name, technical_staff_id, quotation_type from busi_quotation
+    </sql>
+
+    <select id="selectBusiQuotationList" parameterType="BusiQuotation" resultMap="BusiQuotationResult">
+        <include refid="selectBusiQuotationVo"/>
+        <where>  
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="quotationNo != null  and quotationNo != ''"> and quotation_no = #{quotationNo}</if>
+            <if test="quotationType != null "> and quotation_type = #{quotationType}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiQuotationById" parameterType="Long" resultMap="BusiQuotationResult">
+        <include refid="selectBusiQuotationVo"/>
+        where quotation_id = #{quotationId}
+    </select>
+        
+    <insert id="insertBusiQuotation" parameterType="BusiQuotation" useGeneratedKeys="true" keyProperty="quotationId">
+        insert into busi_quotation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectName != null and projectName != ''">project_name,</if>
+            <if test="projectAddress != null and projectAddress != ''">project_address,</if>
+            <if test="quotationNo != null and quotationNo != ''">quotation_no,</if>
+            <if test="customerId != null">customer_id,</if>
+            <if test="officeAddress != null and officeAddress != ''">office_address,</if>
+            <if test="officeStaffName != null and officeStaffName != ''">office_staff_name,</if>
+            <if test="technicalStaffId != null">technical_staff_id,</if>
+            <if test="quotationType != null">quotation_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectName != null and projectName != ''">#{projectName},</if>
+            <if test="projectAddress != null and projectAddress != ''">#{projectAddress},</if>
+            <if test="quotationNo != null and quotationNo != ''">#{quotationNo},</if>
+            <if test="customerId != null">#{customerId},</if>
+            <if test="officeAddress != null and officeAddress != ''">#{officeAddress},</if>
+            <if test="officeStaffName != null and officeStaffName != ''">#{officeStaffName},</if>
+            <if test="technicalStaffId != null">#{technicalStaffId},</if>
+            <if test="quotationType != null">#{quotationType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiQuotation" parameterType="BusiQuotation">
+        update busi_quotation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectName != null and projectName != ''">project_name = #{projectName},</if>
+            <if test="projectAddress != null and projectAddress != ''">project_address = #{projectAddress},</if>
+            <if test="quotationNo != null and quotationNo != ''">quotation_no = #{quotationNo},</if>
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="officeAddress != null and officeAddress != ''">office_address = #{officeAddress},</if>
+            <if test="officeStaffName != null and officeStaffName != ''">office_staff_name = #{officeStaffName},</if>
+            <if test="technicalStaffId != null">technical_staff_id = #{technicalStaffId},</if>
+            <if test="quotationType != null">quotation_type = #{quotationType},</if>
+        </trim>
+        where quotation_id = #{quotationId}
+    </update>
+
+    <delete id="deleteBusiQuotationById" parameterType="Long">
+        delete from busi_quotation where quotation_id = #{quotationId}
+    </delete>
+
+    <delete id="deleteBusiQuotationByIds" parameterType="String">
+        delete from busi_quotation where quotation_id in 
+        <foreach item="quotationId" collection="array" open="(" separator="," close=")">
+            #{quotationId}
+        </foreach>
+    </delete>
+
+</mapper>
