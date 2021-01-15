@@ -124,6 +124,20 @@
             $.modal.openTab("生产参数管理",ctx+"busi/parameter?modelId="+modelId);
         }
 
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var column = $.table.selectColumns('modelName');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#modelId').val(rows);
+            parent.$('#modelName').val(column);
+        }
+
+
     </script>
 </body>
 </html>

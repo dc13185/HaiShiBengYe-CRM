@@ -57,7 +57,7 @@
                 exportUrl: prefix + "/export",
                 modalName: "产品系列管理",
                 columns: [{
-                    checkbox: true
+                    radio: true
                 },
                 {
                     field: 'productLineId',
@@ -89,6 +89,19 @@
 
         function openProduct(productLineId){
             $.modal.openTab("型号管理",ctx+"busi/model?productLineId="+productLineId);
+        }
+
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var column = $.table.selectColumns('productLineName');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#productLineId').val(rows);
+            parent.$('#productLineName').val(column);
         }
 
     </script>

@@ -106,6 +106,19 @@
             };
             $.table.init(options);
         });
+
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var column = $.table.selectColumns('materialName');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#materialId').val(rows);
+            parent.$('#materialName').val(column);
+        }
     </script>
 </body>
 </html>

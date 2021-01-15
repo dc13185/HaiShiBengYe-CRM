@@ -169,6 +169,33 @@
 
         }
 
+
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var column = $.table.selectColumns('materialName');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+
+            if (supplierType == "material"){
+                parent.$('#materialSupplierId').val(rows);
+                parent.$('#materialSupplierName').val(column);
+            }else if(supplierType == "motor"){
+                parent.$('#motorSupplierId').val(rows);
+                parent.$('#motorSupplierName').val(column);
+            }else if(supplierType == "seal"){
+                parent.$('#machineSupplierId').val(rows);
+                parent.$('#machineSupplierName').val(column);
+            }else if(supplierType == 'coupling'){
+                parent.$('#couplingSupplierId').val(rows);
+                parent.$('#couplingSupplierName').val(column);
+            }
+        }
+
+
     </script>
 </body>
 </html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('报价明细列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
+                        <ul>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="busi:details:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="busi:details:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="busi:details:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:details:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('busi:details:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('busi:details:remove')}]];
+        var prefix = ctx + "busi/details";
+        var supplierId = $("#supplierId").val();
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add?supplierId="+supplierId,
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "报价明细",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'detailsId',
+                    title: '',
+                    visible: false
+                },
+                {
+                    field: 'quotationId',
+                    title: '报价单ID'
+                },
+                {
+                    field: 'equipmentNum',
+                    title: '设备位号'
+                },
+                {
+                    field: 'productLineId',
+                    title: '产品系列'
+                },
+                {
+                    field: 'modelId',
+                    title: '产品规格型号'
+                },
+                {
+                    field: 'materialId',
+                    title: '材料'
+                },
+                {
+                    field: 'number',
+                    title: '数量'
+                },
+                {
+                    field: 'rinseSolutionId',
+                    title: '冲洗方案'
+                },
+                {
+                    field: 'otherExpenses',
+                    title: '其他费用'
+                },
+                {
+                    field: 'otherExpensesDescription',
+                    title: '其他费用说明'
+                },
+                {
+                    field: 'ratedFlow',
+                    title: '额定流量(m3/h)'
+                },
+                {
+                    field: 'lift',
+                    title: '扬程(m)'
+                },
+                {
+                    field: 'operatingTemperature',
+                    title: '工况温度(℃)'
+                },
+                {
+                    field: 'fluidDensity',
+                    title: '流体密度(Kg/m³)'
+                },
+                {
+                    field: 'inletPressure',
+                    title: '入口压力(Mpa)'
+                },
+                {
+                    field: 'npsh',
+                    title: '汽蚀余量(m)'
+                },
+                {
+                    field: 'motorSupplierId',
+                    title: '电机品牌'
+                },
+                {
+                    field: 'motorId',
+                    title: '电机型号'
+                },
+                {
+                    field: 'otherMotor',
+                    title: '其他电机'
+                },
+                {
+                    field: 'otherMotorPrice',
+                    title: '其他电机价格'
+                },
+                {
+                    field: 'machineSupplierId',
+                    title: '机封品牌'
+                },
+                {
+                    field: 'machineId',
+                    title: '机封型号'
+                },
+                {
+                    field: 'otherMachine',
+                    title: '其他机封'
+                },
+                {
+                    field: 'otherMachinePrice',
+                    title: '其他机封价格'
+                },
+                {
+                    field: 'couplingSupplierId',
+                    title: '联轴器品牌'
+                },
+                {
+                    field: 'couplingId',
+                    title: '联轴器型号'
+                },
+                {
+                    field: 'otherCoupling',
+                    title: '其他联轴器'
+                },
+                {
+                    field: 'otherCouplingPrice',
+                    title: '其他联轴器价格'
+                },
+                {
+                    field: 'quotationType',
+                    title: '报价类型'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.detailsId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.detailsId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

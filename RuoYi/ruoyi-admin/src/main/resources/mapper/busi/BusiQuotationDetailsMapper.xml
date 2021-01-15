@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiQuotationDetailsMapper">
+    
+    <resultMap type="BusiQuotationDetails" id="BusiQuotationDetailsResult">
+        <result property="detailsId"    column="details_id"    />
+        <result property="quotationId"    column="quotation_id"    />
+        <result property="equipmentNum"    column="equipment_num"    />
+        <result property="productLineId"    column="product_line_id"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="materialId"    column="material_id"    />
+        <result property="number"    column="number"    />
+        <result property="rinseSolutionId"    column="rinse_solution_id"    />
+        <result property="otherExpenses"    column="other_expenses"    />
+        <result property="otherExpensesDescription"    column="other_expenses_description"    />
+        <result property="ratedFlow"    column="rated_flow"    />
+        <result property="lift"    column="lift"    />
+        <result property="operatingTemperature"    column="operating_temperature"    />
+        <result property="fluidDensity"    column="fluid_density"    />
+        <result property="inletPressure"    column="inlet_pressure"    />
+        <result property="npsh"    column="npsh"    />
+        <result property="motorSupplierId"    column="motor_supplier_id"    />
+        <result property="motorId"    column="motor_id"    />
+        <result property="otherMotor"    column="other_motor"    />
+        <result property="otherMotorPrice"    column="other_motor_price"    />
+        <result property="machineSupplierId"    column="machine_supplier_id"    />
+        <result property="machineId"    column="machine_id"    />
+        <result property="otherMachine"    column="other_machine"    />
+        <result property="otherMachinePrice"    column="other_machine_price"    />
+        <result property="couplingSupplierId"    column="coupling_supplier_id"    />
+        <result property="couplingId"    column="coupling_id"    />
+        <result property="otherCoupling"    column="other_coupling"    />
+        <result property="otherCouplingPrice"    column="other_coupling_price"    />
+        <result property="quotationType"    column="quotation_type"    />
+    </resultMap>
+
+    <sql id="selectBusiQuotationDetailsVo">
+        select details_id, quotation_id, equipment_num, product_line_id, model_id, material_id, number, rinse_solution_id, other_expenses, other_expenses_description, rated_flow, lift, operating_temperature, fluid_density, inlet_pressure, npsh, motor_supplier_id, motor_id, other_motor, other_motor_price, machine_supplier_id, machine_id, other_machine, other_machine_price, coupling_supplier_id, coupling_id, other_coupling, other_coupling_price, quotation_type from busi_quotation_details
+    </sql>
+
+    <select id="selectBusiQuotationDetailsList" parameterType="BusiQuotationDetails" resultMap="BusiQuotationDetailsResult">
+        <include refid="selectBusiQuotationDetailsVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectBusiQuotationDetailsById" parameterType="Long" resultMap="BusiQuotationDetailsResult">
+        <include refid="selectBusiQuotationDetailsVo"/>
+        where details_id = #{detailsId}
+    </select>
+        
+    <insert id="insertBusiQuotationDetails" parameterType="BusiQuotationDetails" useGeneratedKeys="true" keyProperty="detailsId">
+        insert into busi_quotation_details
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="quotationId != null">quotation_id,</if>
+            <if test="equipmentNum != null and equipmentNum != ''">equipment_num,</if>
+            <if test="productLineId != null">product_line_id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="materialId != null">material_id,</if>
+            <if test="number != null">number,</if>
+            <if test="rinseSolutionId != null">rinse_solution_id,</if>
+            <if test="otherExpenses != null">other_expenses,</if>
+            <if test="otherExpensesDescription != null">other_expenses_description,</if>
+            <if test="ratedFlow != null">rated_flow,</if>
+            <if test="lift != null">lift,</if>
+            <if test="operatingTemperature != null">operating_temperature,</if>
+            <if test="fluidDensity != null">fluid_density,</if>
+            <if test="inletPressure != null">inlet_pressure,</if>
+            <if test="npsh != null">npsh,</if>
+            <if test="motorSupplierId != null">motor_supplier_id,</if>
+            <if test="motorId != null">motor_id,</if>
+            <if test="otherMotor != null">other_motor,</if>
+            <if test="otherMotorPrice != null">other_motor_price,</if>
+            <if test="machineSupplierId != null">machine_supplier_id,</if>
+            <if test="machineId != null">machine_id,</if>
+            <if test="otherMachine != null">other_machine,</if>
+            <if test="otherMachinePrice != null">other_machine_price,</if>
+            <if test="couplingSupplierId != null">coupling_supplier_id,</if>
+            <if test="couplingId != null">coupling_id,</if>
+            <if test="otherCoupling != null">other_coupling,</if>
+            <if test="otherCouplingPrice != null">other_coupling_price,</if>
+            <if test="quotationType != null">quotation_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="quotationId != null">#{quotationId},</if>
+            <if test="equipmentNum != null and equipmentNum != ''">#{equipmentNum},</if>
+            <if test="productLineId != null">#{productLineId},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="materialId != null">#{materialId},</if>
+            <if test="number != null">#{number},</if>
+            <if test="rinseSolutionId != null">#{rinseSolutionId},</if>
+            <if test="otherExpenses != null">#{otherExpenses},</if>
+            <if test="otherExpensesDescription != null">#{otherExpensesDescription},</if>
+            <if test="ratedFlow != null">#{ratedFlow},</if>
+            <if test="lift != null">#{lift},</if>
+            <if test="operatingTemperature != null">#{operatingTemperature},</if>
+            <if test="fluidDensity != null">#{fluidDensity},</if>
+            <if test="inletPressure != null">#{inletPressure},</if>
+            <if test="npsh != null">#{npsh},</if>
+            <if test="motorSupplierId != null">#{motorSupplierId},</if>
+            <if test="motorId != null">#{motorId},</if>
+            <if test="otherMotor != null">#{otherMotor},</if>
+            <if test="otherMotorPrice != null">#{otherMotorPrice},</if>
+            <if test="machineSupplierId != null">#{machineSupplierId},</if>
+            <if test="machineId != null">#{machineId},</if>
+            <if test="otherMachine != null">#{otherMachine},</if>
+            <if test="otherMachinePrice != null">#{otherMachinePrice},</if>
+            <if test="couplingSupplierId != null">#{couplingSupplierId},</if>
+            <if test="couplingId != null">#{couplingId},</if>
+            <if test="otherCoupling != null">#{otherCoupling},</if>
+            <if test="otherCouplingPrice != null">#{otherCouplingPrice},</if>
+            <if test="quotationType != null">#{quotationType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiQuotationDetails" parameterType="BusiQuotationDetails">
+        update busi_quotation_details
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="quotationId != null">quotation_id = #{quotationId},</if>
+            <if test="equipmentNum != null and equipmentNum != ''">equipment_num = #{equipmentNum},</if>
+            <if test="productLineId != null">product_line_id = #{productLineId},</if>
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="materialId != null">material_id = #{materialId},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="rinseSolutionId != null">rinse_solution_id = #{rinseSolutionId},</if>
+            <if test="otherExpenses != null">other_expenses = #{otherExpenses},</if>
+            <if test="otherExpensesDescription != null">other_expenses_description = #{otherExpensesDescription},</if>
+            <if test="ratedFlow != null">rated_flow = #{ratedFlow},</if>
+            <if test="lift != null">lift = #{lift},</if>
+            <if test="operatingTemperature != null">operating_temperature = #{operatingTemperature},</if>
+            <if test="fluidDensity != null">fluid_density = #{fluidDensity},</if>
+            <if test="inletPressure != null">inlet_pressure = #{inletPressure},</if>
+            <if test="npsh != null">npsh = #{npsh},</if>
+            <if test="motorSupplierId != null">motor_supplier_id = #{motorSupplierId},</if>
+            <if test="motorId != null">motor_id = #{motorId},</if>
+            <if test="otherMotor != null">other_motor = #{otherMotor},</if>
+            <if test="otherMotorPrice != null">other_motor_price = #{otherMotorPrice},</if>
+            <if test="machineSupplierId != null">machine_supplier_id = #{machineSupplierId},</if>
+            <if test="machineId != null">machine_id = #{machineId},</if>
+            <if test="otherMachine != null">other_machine = #{otherMachine},</if>
+            <if test="otherMachinePrice != null">other_machine_price = #{otherMachinePrice},</if>
+            <if test="couplingSupplierId != null">coupling_supplier_id = #{couplingSupplierId},</if>
+            <if test="couplingId != null">coupling_id = #{couplingId},</if>
+            <if test="otherCoupling != null">other_coupling = #{otherCoupling},</if>
+            <if test="otherCouplingPrice != null">other_coupling_price = #{otherCouplingPrice},</if>
+            <if test="quotationType != null">quotation_type = #{quotationType},</if>
+        </trim>
+        where details_id = #{detailsId}
+    </update>
+
+    <delete id="deleteBusiQuotationDetailsById" parameterType="Long">
+        delete from busi_quotation_details where details_id = #{detailsId}
+    </delete>
+
+    <delete id="deleteBusiQuotationDetailsByIds" parameterType="String">
+        delete from busi_quotation_details where details_id in 
+        <foreach item="detailsId" collection="array" open="(" separator="," close=")">
+            #{detailsId}
+        </foreach>
+    </delete>
+
+</mapper>
