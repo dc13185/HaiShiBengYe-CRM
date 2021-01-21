@@ -6,57 +6,56 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="BusiMaterialProduction" id="BusiMaterialProductionResult">
         <result property="materialId"    column="material_id"    />
-        <result property="materialName"    column="material_name"    />
+        <!--<result property="materialName"    column="material_name"    />-->
         <result property="materialLevel"    column="material_level"    />
-        <result property="form"    column="form"    />
+        <result property="textureId"    column="texture_id"    />
+       <!-- <result property="form"    column="form"    />-->
         <result property="price"    column="price"    />
         <result property="supplierId"    column="supplier_id"    />
     </resultMap>
 
     <sql id="selectBusiMaterialProductionVo">
-        select material_id, material_name, material_level, form, price,supplier_id from busi_material_production
+         SELECT bmp.material_id, bmp.texture_id,bmp.material_level, bmp.price,bmp.supplier_id ,bt.texture_name,bmp.texture_id AS materialName ,bt.texture_type AS form
+            FROM busi_material_production bmp LEFT JOIN busi_texture bt ON bmp.texture_id = bt.texture_id
     </sql>
 
     <select id="selectBusiMaterialProductionList" parameterType="BusiMaterialProduction" resultMap="BusiMaterialProductionResult">
         <include refid="selectBusiMaterialProductionVo"/>
         <where>
-            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
-            <if test="materialLevel != null "> and material_level = #{materialLevel}</if>
-            <if test="supplierId != null "> and supplier_id = #{supplierId}</if>
+            <if test="materialLevel != null "> and bmp.material_level = #{materialLevel}</if>
+            <if test="materialName != null "> and bt.texture_name like  concat('%', #{materialName}, '%') </if>
+            <if test="supplierId != null "> and bmp.supplier_id = #{supplierId}</if>
         </where>
     </select>
 
     <select id="selectBusiMaterialProductionById" parameterType="Long" resultMap="BusiMaterialProductionResult">
         <include refid="selectBusiMaterialProductionVo"/>
-        where material_id = #{materialId}
+        where bmp.material_id = #{materialId}
     </select>
 
     <insert id="insertBusiMaterialProduction" parameterType="BusiMaterialProduction" useGeneratedKeys="true" keyProperty="materialId">
         insert into busi_material_production
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="materialName != null">material_name,</if>
             <if test="materialLevel != null">material_level,</if>
-            <if test="form != null">form,</if>
             <if test="price != null">price,</if>
             <if test="supplierId != null ">supplier_id,</if>
+            <if test="textureId != null ">texture_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="materialName != null">#{materialName},</if>
             <if test="materialLevel != null">#{materialLevel},</if>
-            <if test="form != null">#{form},</if>
             <if test="price != null">#{price},</if>
             <if test="supplierId != null ">#{supplierId},</if>
+            <if test="textureId != null ">#{textureId},</if>
          </trim>
     </insert>
 
     <update id="updateBusiMaterialProduction" parameterType="BusiMaterialProduction">
         update busi_material_production
         <trim prefix="SET" suffixOverrides=",">
-            <if test="materialName != null">material_name = #{materialName},</if>
             <if test="materialLevel != null">material_level = #{materialLevel},</if>
-            <if test="form != null">form = #{form},</if>
             <if test="price != null">price = #{price},</if>
             <if test="supplierId != null ">supplier_id = #{supplierId},</if>
+            <if test="textureId != null ">texture_id = #{textureId},</if>
         </trim>
         where material_id = #{materialId}
     </update>

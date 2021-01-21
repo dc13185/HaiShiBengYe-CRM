@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 生产参数对象 busi_product_parameter
- * 
+ *
  * @author ruoyi
  * @date 2021-01-10
  */
@@ -32,11 +32,11 @@ public class BusiProductParameter extends BaseEntity
 
     /** 重量/kg */
     @Excel(name = "重量/kg")
-    private Long weight;
+    private Float weight;
 
     /** 机加工工时/h */
     @Excel(name = "机加工工时/h")
-    private Long time;
+    private Float time;
 
     /** 是否为过流部件 */
     @Excel(name = "是否为过流部件")
@@ -45,78 +45,89 @@ public class BusiProductParameter extends BaseEntity
     /** 模型ID */
     private Long modelId;
 
-    public void setParameterId(Long parameterId) 
+
+    private Long  textureId;
+
+    public void setParameterId(Long parameterId)
     {
         this.parameterId = parameterId;
     }
 
-    public Long getParameterId() 
+    public Long getParameterId()
     {
         return parameterId;
     }
-    public void setItemNumber(String itemNumber) 
+    public void setItemNumber(String itemNumber)
     {
         this.itemNumber = itemNumber;
     }
 
-    public String getItemNumber() 
+    public String getItemNumber()
     {
         return itemNumber;
     }
-    public void setMaterial(String material) 
+    public void setMaterial(String material)
     {
         this.material = material;
     }
 
-    public String getMaterial() 
+    public String getMaterial()
     {
         return material;
     }
-    public void setMaterialForm(String materialForm) 
+    public void setMaterialForm(String materialForm)
     {
         this.materialForm = materialForm;
     }
 
-    public String getMaterialForm() 
+    public String getMaterialForm()
     {
         return materialForm;
     }
-    public void setWeight(Long weight) 
-    {
+
+    public Float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Float weight) {
         this.weight = weight;
     }
 
-    public Long getWeight() 
-    {
-        return weight;
+    public Float getTime() {
+        return time;
     }
-    public void setTime(Long time) 
-    {
+
+    public void setTime(Float time) {
         this.time = time;
     }
 
-    public Long getTime() 
-    {
-        return time;
-    }
-    public void setIsCurrent(Long isCurrent) 
+    public void setIsCurrent(Long isCurrent)
     {
         this.isCurrent = isCurrent;
     }
 
-    public Long getIsCurrent() 
+    public Long getIsCurrent()
     {
         return isCurrent;
     }
-    public void setModelId(Long modelId) 
+    public void setModelId(Long modelId)
     {
         this.modelId = modelId;
     }
 
-    public Long getModelId() 
+    public Long getModelId()
     {
         return modelId;
     }
+
+    public Long getTextureId() {
+        return textureId;
+    }
+
+    public void setTextureId(Long textureId) {
+        this.textureId = textureId;
+    }
+
 
     @Override
     public String toString() {

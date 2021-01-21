@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 产品系列管理对象 busi_product_line
- * 
+ *
  * @author ruoyi
  * @date 2021-01-06
  */
@@ -24,34 +24,33 @@ public class BusiProductLine extends BaseEntity
 
     /** 毛利率 */
     @Excel(name = "毛利率")
-    private Long grossProfitRate;
+    private Float grossProfitRate;
 
-    public void setProductLineId(Long productLineId) 
+    public void setProductLineId(Long productLineId)
     {
         this.productLineId = productLineId;
     }
 
-    public Long getProductLineId() 
+    public Long getProductLineId()
     {
         return productLineId;
     }
-    public void setProductLineName(String productLineName) 
+    public void setProductLineName(String productLineName)
     {
         this.productLineName = productLineName;
     }
 
-    public String getProductLineName() 
+    public String getProductLineName()
     {
         return productLineName;
     }
-    public void setGrossProfitRate(Long grossProfitRate) 
-    {
-        this.grossProfitRate = grossProfitRate;
+
+    public Float getGrossProfitRate() {
+        return grossProfitRate;
     }
 
-    public Long getGrossProfitRate() 
-    {
-        return grossProfitRate;
+    public void setGrossProfitRate(Float grossProfitRate) {
+        this.grossProfitRate = grossProfitRate;
     }
 
     @Override

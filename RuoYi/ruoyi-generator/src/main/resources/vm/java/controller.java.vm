@@ -41,9 +41,8 @@ public class ${ClassName}Controller extends BaseController
 
     @RequiresPermissions("${permissionPrefix}:view")
     @GetMapping()
-    public String ${businessName}(String supplierId,ModelMap modelMap)
+    public String ${businessName}()
     {
-        modelMap.put("supplierId",supplierId);
         return prefix + "/${businessName}";
     }
 
@@ -93,9 +92,8 @@ public class ${ClassName}Controller extends BaseController
      * 新增${functionName}
      */
     @GetMapping("/add")
-    public String add(String supplierId,ModelMap modelMap)
+    public String add()
     {
-        modelMap.put("supplierId",supplierId);
         return prefix + "/add";
     }
 #elseif($table.tree)

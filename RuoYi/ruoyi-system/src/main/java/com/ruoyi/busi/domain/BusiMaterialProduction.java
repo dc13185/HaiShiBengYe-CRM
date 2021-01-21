@@ -33,7 +33,10 @@ public class BusiMaterialProduction extends BaseEntity
 
     /** 价格 */
     @Excel(name = "价格")
-    private Long price;
+    private Float price;
+
+    /** 材质Id */
+    private Long textureId;
 
     private String supplierId;
 
@@ -73,14 +76,13 @@ public class BusiMaterialProduction extends BaseEntity
     {
         return form;
     }
-    public void setPrice(Long price)
-    {
-        this.price = price;
+
+    public Float getPrice() {
+        return price;
     }
 
-    public Long getPrice()
-    {
-        return price;
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     public String getSupplierId() {
@@ -89,6 +91,14 @@ public class BusiMaterialProduction extends BaseEntity
 
     public void setSupplierId(String supplierId) {
         this.supplierId = supplierId;
+    }
+
+    public Long getTextureId() {
+        return textureId;
+    }
+
+    public void setTextureId(Long textureId) {
+        this.textureId = textureId;
     }
 
     @Override

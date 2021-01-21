@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiTextureMapper">
+    
+    <resultMap type="BusiTexture" id="BusiTextureResult">
+        <result property="textureId"    column="texture_id"    />
+        <result property="textureName"    column="texture_name"    />
+        <result property="textureType"    column="texture_type"    />
+        <result property="massRatio"    column="mass_ratio"    />
+    </resultMap>
+
+    <sql id="selectBusiTextureVo">
+        select texture_id, texture_name, texture_type, mass_ratio from busi_texture
+    </sql>
+
+    <select id="selectBusiTextureList" parameterType="BusiTexture" resultMap="BusiTextureResult">
+        <include refid="selectBusiTextureVo"/>
+        <where>  
+            <if test="textureName != null  and textureName != ''"> and texture_name like concat('%', #{textureName}, '%')</if>
+            <if test="textureType != null  and textureType != ''"> and texture_type like concat('%', #{textureType}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiTextureById" parameterType="Long" resultMap="BusiTextureResult">
+        <include refid="selectBusiTextureVo"/>
+        where texture_id = #{textureId}
+    </select>
+        
+    <insert id="insertBusiTexture" parameterType="BusiTexture" useGeneratedKeys="true" keyProperty="textureId">
+        insert into busi_texture
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="textureName != null and textureName != ''">texture_name,</if>
+            <if test="textureType != null and textureType != ''">texture_type,</if>
+            <if test="massRatio != null">mass_ratio,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="textureName != null and textureName != ''">#{textureName},</if>
+            <if test="textureType != null and textureType != ''">#{textureType},</if>
+            <if test="massRatio != null">#{massRatio},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiTexture" parameterType="BusiTexture">
+        update busi_texture
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="textureName != null and textureName != ''">texture_name = #{textureName},</if>
+            <if test="textureType != null and textureType != ''">texture_type = #{textureType},</if>
+            <if test="massRatio != null">mass_ratio = #{massRatio},</if>
+        </trim>
+        where texture_id = #{textureId}
+    </update>
+
+    <delete id="deleteBusiTextureById" parameterType="Long">
+        delete from busi_texture where texture_id = #{textureId}
+    </delete>
+
+    <delete id="deleteBusiTextureByIds" parameterType="String">
+        delete from busi_texture where texture_id in 
+        <foreach item="textureId" collection="array" open="(" separator="," close=")">
+            #{textureId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -24,7 +24,7 @@ public class BusiSystem extends BaseEntity
 
     /** 系统价格 */
     @Excel(name = "系统价格")
-    private Long systemPrice;
+    private Float systemPrice;
 
     /**  */
     private String supplierId;
@@ -43,27 +43,27 @@ public class BusiSystem extends BaseEntity
         this.systemModel = systemModel;
     }
 
-    public String getSystemModel()
-    {
-        return systemModel;
-    }
-    public void setSystemPrice(Long systemPrice)
-    {
-        this.systemPrice = systemPrice;
-    }
-
-    public Long getSystemPrice()
-    {
-        return systemPrice;
-    }
-    public void setSupplierId(String supplierId)
-    {
-        this.supplierId = supplierId;
-    }
 
     public String getSupplierId()
     {
         return supplierId;
+    }
+
+    public Float getSystemPrice() {
+        return systemPrice;
+    }
+
+    public void setSystemPrice(Float systemPrice) {
+        this.systemPrice = systemPrice;
+    }
+
+
+    public String getSystemModel() {
+        return systemModel;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
     }
 
     @Override

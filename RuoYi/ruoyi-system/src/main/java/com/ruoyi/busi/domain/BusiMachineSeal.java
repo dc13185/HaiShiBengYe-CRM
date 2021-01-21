@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 机封以及系统产品对象 busi_machine_seal
- * 
+ *
  * @author ruoyi
  * @date 2021-01-04
  */
@@ -32,7 +32,7 @@ public class BusiMachineSeal extends BaseEntity
 
     /** 冲洗方案价格 */
     @Excel(name = "冲洗方案价格")
-    private Long rinseSolutionPrice;
+    private Float rinseSolutionPrice;
 
     /** 系统型号 */
     @Excel(name = "系统型号")
@@ -40,80 +40,78 @@ public class BusiMachineSeal extends BaseEntity
 
     /** 系统价格 */
     @Excel(name = "系统价格")
-    private Long systemPrice;
+    private Float systemPrice;
 
     /**  */
     private String supplierId;
 
-    public void setMachineId(Long machineId) 
+    public void setMachineId(Long machineId)
     {
         this.machineId = machineId;
     }
 
-    public Long getMachineId() 
+    public Long getMachineId()
     {
         return machineId;
     }
-    public void setMachineSealModel(String machineSealModel) 
+    public void setMachineSealModel(String machineSealModel)
     {
         this.machineSealModel = machineSealModel;
     }
 
-    public String getMachineSealModel() 
+    public String getMachineSealModel()
     {
         return machineSealModel;
     }
-    public void setMachineSealPrice(Long machineSealPrice) 
+    public void setMachineSealPrice(Long machineSealPrice)
     {
         this.machineSealPrice = machineSealPrice;
     }
 
-    public Long getMachineSealPrice() 
+    public Long getMachineSealPrice()
     {
         return machineSealPrice;
     }
-    public void setRinseSolution(String rinseSolution) 
+    public void setRinseSolution(String rinseSolution)
     {
         this.rinseSolution = rinseSolution;
     }
 
-    public String getRinseSolution() 
+    public String getRinseSolution()
     {
         return rinseSolution;
     }
-    public void setRinseSolutionPrice(Long rinseSolutionPrice) 
-    {
+
+    public Float getRinseSolutionPrice() {
+        return rinseSolutionPrice;
+    }
+
+    public void setRinseSolutionPrice(Float rinseSolutionPrice) {
         this.rinseSolutionPrice = rinseSolutionPrice;
     }
 
-    public Long getRinseSolutionPrice() 
-    {
-        return rinseSolutionPrice;
+    public String getSystemModel() {
+        return systemModel;
     }
-    public void setSystemModel(String systemModel) 
-    {
+
+    public void setSystemModel(String systemModel) {
         this.systemModel = systemModel;
     }
 
-    public String getSystemModel() 
-    {
-        return systemModel;
+    public Float getSystemPrice() {
+        return systemPrice;
     }
-    public void setSystemPrice(Long systemPrice) 
-    {
+
+    public void setSystemPrice(Float systemPrice) {
         this.systemPrice = systemPrice;
     }
 
-    public Long getSystemPrice() 
-    {
-        return systemPrice;
-    }
-    public void setSupplierId(String supplierId) 
+    public void setSupplierId(String supplierId)
     {
         this.supplierId = supplierId;
     }
 
-    public String getSupplierId() 
+    public String getSupplierId()
     {
         return supplierId;
     }

@@ -9,7 +9,6 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
-                        <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
                         <ul>
 #foreach($column in $columns)
 #if($column.query)
@@ -90,11 +89,11 @@
 #end
 #end
         var prefix = ctx + "${moduleName}/${businessName}";
-        var supplierId = $("#supplierId").val();
+
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add?supplierId="+supplierId,
+                createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",

@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 冲洗方案管理对象 busi_seal
- * 
+ *
  * @author ruoyi
  * @date 2021-01-09
  */
@@ -24,44 +24,44 @@ public class BusiSeal extends BaseEntity
 
     /** 冲洗价格 */
     @Excel(name = "冲洗价格")
-    private Long sealPrice;
+    private Float sealPrice;
 
     /**  */
     private String supplierId;
 
-    public void setSealId(Long sealId) 
+    public void setSealId(Long sealId)
     {
         this.sealId = sealId;
     }
 
-    public Long getSealId() 
+    public Long getSealId()
     {
         return sealId;
     }
-    public void setSealModel(String sealModel) 
+    public void setSealModel(String sealModel)
     {
         this.sealModel = sealModel;
     }
 
-    public String getSealModel() 
+    public String getSealModel()
     {
         return sealModel;
     }
-    public void setSealPrice(Long sealPrice) 
-    {
+
+    public Float getSealPrice() {
+        return sealPrice;
+    }
+
+    public void setSealPrice(Float sealPrice) {
         this.sealPrice = sealPrice;
     }
 
-    public Long getSealPrice() 
-    {
-        return sealPrice;
-    }
-    public void setSupplierId(String supplierId) 
+    public void setSupplierId(String supplierId)
     {
         this.supplierId = supplierId;
     }
 
-    public String getSupplierId() 
+    public String getSupplierId()
     {
         return supplierId;
     }
