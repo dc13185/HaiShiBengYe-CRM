@@ -17,10 +17,10 @@
     border-top: 1px solid #e3e4e8;
 }
 /* 如果设置了是否自动调节高度为false,需要加滚动条 */
-/*.sw>.tab-content{
+.sw>.tab-content{
 	overflow-x: hidden;
     overflow-y: auto;
-}*/
+}
 </style>
 </head>
 <body class="gray-bg">
@@ -60,16 +60,13 @@
 						<div id="smartwizard">
 							<ul class="nav">
 								<li class="nav-item">
-									<a class="nav-link" href="#step-1"> 第一步 </a>
+									<a class="nav-link" href="#step-1"> 报价单基本信息 </a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="#step-2"> 第二步 </a>
+									<a class="nav-link" href="#step-2"> 报价单详情 </a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="#step-3"> 第三步 </a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="#step-4"> 第四步 </a>
+									<a class="nav-link" href="#step-3"> 核算 </a>
 								</li>
 							</ul>
 							<div class="tab-content">
@@ -77,6 +74,7 @@
 									<!-- 保存基本信息 -->
 									<div>
 										<form class="form form-horizontal m-t" id="form-quotation-add">
+											<input name="quotationId" class="quotationId" th:value="${quotationId}" type="hidden">
 											<div class="form-group">
 												<label class="col-sm-3 control-label is-required">项目名称：</label>
 												<div class="col-sm-8">
@@ -90,17 +88,11 @@
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">报价单号：</label>
-												<div class="col-sm-8">
-													<input name="quotationNo" class="form-control" type="text" required>
-												</div>
-											</div>
-											<div class="form-group">
 												<label class="col-sm-3 control-label is-required">客户：</label>
 												<div class="col-sm-8">
 													<div class="input-group">
 														<input class="form-control" type="text" onclick="selectUsersToParent()" id="customerName" readonly="true">
-														<input name="supplierId" id="customerId" th:value="${customerId}" type="hidden">
+														<input name="customerId" id="customerId" th:value="${customerId}" type="hidden">
 														<span class="input-group-addon"><i class="fa fa-search"></i></span>
 													</div>
 												</div>
@@ -141,28 +133,210 @@
 								</div>
 								<div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
 									<div>
-										<form class="form form-horizontal m-t">
+										<form class="form form-horizontal m" id="form-details-add">
+											<input name="quotationId" class="quotationId" th:value="${quotationId}" type="hidden">
 											<div class="form-group">
-												<label class="col-sm-3 control-label">性别：</label>
+												<label class="col-sm-3 control-label is-required">设备位号：</label>
 												<div class="col-sm-8">
-													<select name="sex" class="form-control m-b" th:with="type=${@dict.getType('sys_user_sex')}">
-				                						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-				            						</select>
+													<input name="equipmentNum" class="form-control" type="text" required>
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="col-sm-3 control-label">时间：</label>
+												<label class="col-sm-3 control-label is-required">产品系列：</label>
 												<div class="col-sm-8">
-													<input id="time" name="time" class="form-control time-input" type="text">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">状态：</label>
-												<div class="col-sm-8">
-													<div class="radio-box" th:each="dict : ${@dict.getType('sys_normal_disable')}">
-														<input type="radio" th:id="${dict.dictCode}" name="status" th:value="${dict.dictValue}" th:checked="${dict.default}">
-														<label th:for="${dict.dictCode}" th:text="${dict.dictLabel}"></label>
+													<div class="input-group">
+														<input class="form-control" type="text" onclick="selectProductLine()" id="productLineName" readonly="true" required>
+														<input name="productLineId" id="productLineId" th:value="${productLineId}" type="hidden">
+														<span class="input-group-addon"><i class="fa fa-search"></i></span>
 													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label is-required">产品规格型号：</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input class="form-control" type="text" onclick="selectProductModel()" id="modelName" readonly="true" required>
+														<input name="modelId" id="modelId" th:value="${modelId}" type="hidden">
+														<span class="input-group-addon"><i class="fa fa-search"></i></span>
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label is-required">过流部件品牌：</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input class="form-control" type="text" onclick="selectSupplier('material')" id="materialSupplierName" readonly="true" required>
+														<input name="materialSupplierId" id="materialSupplierId" th:value="${materialSupplierId}" type="hidden">
+														<span class="input-group-addon"><i class="fa fa-search"></i></span>
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label is-required">过流部件材质：</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input class="form-control" type="text" onclick="selectMateria()" id="materialName" readonly="true" required>
+														<input name="materialId" id="materialId" th:value="${materialId}" type="hidden">
+														<span class="input-group-addon"><i class="fa fa-search"></i></span>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label is-required">数量：</label>
+												<div class="col-sm-8">
+													<input name="number" class="form-control" type="text" required>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">冲洗方案：</label>
+												<div class="col-sm-8">
+													<input name="rinseSolutionId" class="form-control"></input>
+												</div>
+											</div>
+										<div class="form-group">
+												<label class="col-sm-3 control-label">其他费用：</label>
+												<div class="col-sm-8">
+													<input name="otherExpenses" class="form-control" type="text">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">其他费用说明：</label>
+												<div class="col-sm-8">
+													<input name="otherExpensesDescription" class="form-control"></input>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">额定流量(m3/h)：</label>
+												<div class="col-sm-8">
+													<input name="ratedFlow" class="form-control" type="text">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">扬程(m)：</label>
+												<div class="col-sm-8">
+													<input name="lift" class="form-control" type="text">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">工况温度(℃)：</label>
+												<div class="col-sm-8">
+													<input name="operatingTemperature" class="form-control" type="text">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">流体密度(Kg/m³)：</label>
+												<div class="col-sm-8">
+													<input name="fluidDensity" class="form-control" type="text">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">入口压力(Mpa)：</label>
+												<div class="col-sm-8">
+													<input name="inletPressure" class="form-control" type="text">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">汽蚀余量(m)：</label>
+												<div class="col-sm-8">
+													<input name="npsh" class="form-control" type="text">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">电机品牌：</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input class="form-control" type="text" onclick="selectSupplier('motor')" id="motorSupplierName" readonly="true" required>
+														<input name="materialId" id="motorSupplierId" th:value="${motorSupplierId}" type="hidden">
+														<span class="input-group-addon"><i class="fa fa-search"></i></span>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">电机型号：</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input class="form-control" type="text" onclick="selectMotor()" id="motorName" readonly="true" required>
+														<input name="materialId" id="motorId" th:value="${motorId}" type="hidden">
+														<span class="input-group-addon"><i class="fa fa-search"></i></span>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">其他电机：</label>
+												<div class="col-sm-8">
+													<input name="otherMotor" class="form-control"></input>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">其他电机价格：</label>
+												<div class="col-sm-8">
+													<input name="otherMotorPrice" class="form-control" type="text">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">机封品牌：</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input class="form-control" type="text" onclick="selectSupplier('seal')" id="machineSupplierName" readonly="true" required>
+														<input name="machineSupplierId" id="machineSupplierId" th:value="${machineSupplierId}" type="hidden">
+														<span class="input-group-addon"><i class="fa fa-search"></i></span>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">机封型号：</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input class="form-control" type="text" onclick="selectMachine()" id="machineName" readonly="true" required>
+														<input name="machineSupplierId" id="machineId" th:value="${machineId}" type="hidden">
+														<span class="input-group-addon"><i class="fa fa-search"></i></span>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">其他机封：</label>
+												<div class="col-sm-8">
+													<input name="otherMachine" class="form-control"></input>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">其他机封价格：</label>
+												<div class="col-sm-8">
+													<input name="otherMachinePrice" class="form-control" type="text">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">联轴器品牌：</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input class="form-control" type="text" onclick="selectSupplier('coupling')" id="couplingSupplierName" readonly="true" required>
+														<input name="machineSupplierId" id="couplingSupplierId" th:value="${couplingSupplierId}" type="hidden">
+														<span class="input-group-addon"><i class="fa fa-search"></i></span>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">联轴器型号：</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input class="form-control" type="text" onclick="selectCoupling()" id="couplingName" readonly="true" required>
+														<input name="machineSupplierId" id="couplingId" th:value="${couplingId}" type="hidden">
+														<span class="input-group-addon"><i class="fa fa-search"></i></span>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">其他联轴器：</label>
+												<div class="col-sm-8">
+													<input name="otherCoupling" class="form-control"></input>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">其他联轴器价格：</label>
+												<div class="col-sm-8">
+													<input name="otherCouplingPrice" class="form-control" type="text">
 												</div>
 											</div>
 										</form>
@@ -235,7 +409,9 @@
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: jquery-smartwizard-js" />
 	<script>
-		var prefix = ctx + "busi/quotation"
+		var quotation_prefix = ctx + "busi/quotation"
+		var quotation_prefix_details = ctx + "busi/details"
+		var Q_ID;
 		$("#form-quotation-add").validate({
 			focusCleanup: true
 		});
@@ -313,12 +489,64 @@
 		// 该事件在离开某个步骤之前触发
 		$("#smartwizard").on("leaveStep", function(e, anchorObject, currentStepNumber, nextStepNumber, stepDirection) {
 			if(stepDirection == 'forward'){
-				debugger;
-				var form = $("#step-" + (currentStepNumber + 1)).find('.form');
+				var step = currentStepNumber + 1;
+				var form = $("#step-" + step).find('.form');
 				if(form.length > 0){
-					return form.validate().form();
+					if (form.validate().form()){
+						if (step == 1) {
+							debugger;
+							if (!Q_ID){
+								$.ajax({
+									url:quotation_prefix+'/add',
+									data:form.serialize(),
+									type:'POST',
+									dataType:'json',
+									success:function(data){
+										Q_ID = data.msg;
+										$(".quotationId").val(Q_ID);
+										alert(data);
+										//success
+									},
+									error:function(){
+										console.log("提交ajax函数异常");
+									},
+								});
+							}
+					}
+					if(step == 2){
+						    var form_details = $("#form-details-add");
+							$.ajax({
+								url:quotation_prefix_details+'/add',
+								data:form_details.serialize(),
+								type:'POST',
+								dataType:'json',
+								success:function(data){
+									//success
+								},
+								error:function(){
+									console.log("提交ajax函数异常");
+								},
+							});
+						}
+						return form.validate().form();
+					}
+					/*if (form.validate().form()){
+						$.ajax({
+							url:quotation_prefix+'/add',
+							data:form.serialize(),
+							type:'POST',
+							dataType:'json',
+							success:function(data){
+								//success
+							},
+							error:function(){
+								console.log("提交ajax函数异常");
+							},
+						});
+						return form.validate().form();
+					}*/
+					return true;
 				}
-				return true;
 			}
 			return true;
 		});
@@ -350,15 +578,106 @@
             return true;
         });
 
-
-
-
 		function selectUsersToParent(){
 			$.modal.open("选择用户", ctx + "busi/customer");
 		}
 
 		function selectUsersToParentToAddress(){
 			$.modal.open("选择业务员", ctx + "busi/staff");
+		}
+
+		$("#form-details-add").validate({
+			focusCleanup: true,
+			rules:{
+				number:{
+					isNumber:true
+				},
+				otherExpenses:{
+					isNumber:true
+				},
+				ratedFlow:{
+					isNumber:true
+				},
+				operatingTemperature:{
+					isNumber:true
+				},
+				fluidDensity:{
+					isNumber:true
+				},
+				inletPressure:{
+					isNumber:true
+				},
+				npsh:{
+					isNumber:true
+				},
+				otherMotorPrice:{
+					isNumber:true
+				},
+				otherCouplingPrice:{
+					isNumber:true
+				},
+			}
+		});
+		function selectProductLine(){
+			$.modal.open("选择产品系列", ctx + "busi/line");
+		}
+
+		function selectProductModel(){
+			var productLineId = $("#productLineId").val();
+			if (!productLineId){
+				$.modal.alertError("请先选择产品系列");
+			}else{
+				$.modal.open("选择产品系列", ctx + "busi/model?productLineId="+productLineId);
+			}
+		}
+
+		function selectSupplier(supplierType){
+			if (supplierType == "material") {
+				$.modal.open("选择材料品牌", ctx + "busi/supplier?supplierType=" + supplierType);
+			}else if (supplierType == "motor"){
+				$.modal.open("选择材料品牌", ctx + "busi/supplier?supplierType="+supplierType);
+			}else if(supplierType == "seal"){
+				$.modal.open("选择机封品牌", ctx + "busi/supplier?supplierType="+supplierType);
+			}else if(supplierType == 'coupling'){
+				$.modal.open("选择联轴器品牌", ctx + "busi/supplier?supplierType="+supplierType);
+			}
+
+		}
+
+		function selectMateria(){
+			var materialSupplierId = $("#materialSupplierId").val();
+			if(!materialSupplierId){
+				$.modal.alertError("请先选择材料品牌");
+			}else{
+				$.modal.open("选择材料产品", ctx + "busi/production?supplierId="+materialSupplierId);
+			}
+		}
+
+		function selectMotor(){
+			var motorSupplierId = $("#motorSupplierId").val();
+			if (!motorSupplierId){
+				$.modal.alertError("请先选择电机品牌");
+			}else{
+				$.modal.open("选择电机产品", ctx + "busi/motor?supplierId="+motorSupplierId);
+			}
+		}
+
+		function selectMachine(){
+			var machineSupplierId = $("#machineSupplierId").val();
+			if (!machineSupplierId){
+				$.modal.alertError("请先选择机封品牌");
+			}else{
+				$.modal.open("选择机封产品", ctx + "busi/machine?supplierId="+machineSupplierId);
+			}
+		}
+
+		function selectCoupling(){
+			var couplingSupplierId = $("#couplingSupplierId").val();
+			if (!couplingSupplierId){
+				$.modal.alertError("请先选择联轴器品牌");
+			}else{
+				$.modal.open("选择机封产品", ctx + "busi/coupling?supplierId="+couplingSupplierId);
+			}
 		}
 	</script>
 </body>

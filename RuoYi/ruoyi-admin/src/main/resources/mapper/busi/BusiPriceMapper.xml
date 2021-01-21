@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiPriceMapper">
+    
+    <resultMap type="BusiPrice" id="BusiPriceResult">
+        <result property="priceId"    column="price_id"    />
+        <result property="priceName"    column="price_name"    />
+        <result property="priceDate"    column="price_date"    />
+    </resultMap>
+
+    <sql id="selectBusiPriceVo">
+        select price_id, price_name, price_date from busi_price
+    </sql>
+
+    <select id="selectBusiPriceList" parameterType="BusiPrice" resultMap="BusiPriceResult">
+        <include refid="selectBusiPriceVo"/>
+        <where>  
+            <if test="priceName != null  and priceName != ''"> and price_name like concat('%', #{priceName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiPriceById" parameterType="Long" resultMap="BusiPriceResult">
+        <include refid="selectBusiPriceVo"/>
+        where price_id = #{priceId}
+    </select>
+        
+    <insert id="insertBusiPrice" parameterType="BusiPrice" useGeneratedKeys="true" keyProperty="priceId">
+        insert into busi_price
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="priceName != null and priceName != ''">price_name,</if>
+            <if test="priceDate != null">price_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="priceName != null and priceName != ''">#{priceName},</if>
+            <if test="priceDate != null">#{priceDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiPrice" parameterType="BusiPrice">
+        update busi_price
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="priceName != null and priceName != ''">price_name = #{priceName},</if>
+            <if test="priceDate != null">price_date = #{priceDate},</if>
+        </trim>
+        where price_id = #{priceId}
+    </update>
+
+    <delete id="deleteBusiPriceById" parameterType="Long">
+        delete from busi_price where price_id = #{priceId}
+    </delete>
+
+    <delete id="deleteBusiPriceByIds" parameterType="String">
+        delete from busi_price where price_id in 
+        <foreach item="priceId" collection="array" open="(" separator="," close=")">
+            #{priceId}
+        </foreach>
+    </delete>
+
+</mapper>

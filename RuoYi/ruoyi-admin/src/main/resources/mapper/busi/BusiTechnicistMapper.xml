@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiTechnicistMapper">
+    
+    <resultMap type="BusiTechnicist" id="BusiTechnicistResult">
+        <result property="technicistId"    column="technicist_id"    />
+        <result property="technicistName"    column="technicist_name"    />
+        <result property="position"    column="position"    />
+        <result property="birthDate"    column="birth_date"    />
+        <result property="education"    column="education"    />
+        <result property="university"    column="university"    />
+        <result property="major"    column="major"    />
+        <result property="residence"    column="residence"    />
+        <result property="email"    column="email"    />
+    </resultMap>
+
+    <sql id="selectBusiTechnicistVo">
+        select technicist_id, technicist_name, position, birth_date, education, university, major, residence, email from busi_technicist
+    </sql>
+
+    <select id="selectBusiTechnicistList" parameterType="BusiTechnicist" resultMap="BusiTechnicistResult">
+        <include refid="selectBusiTechnicistVo"/>
+        <where>  
+            <if test="technicistName != null  and technicistName != ''"> and technicist_name like concat('%', #{technicistName}, '%')</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiTechnicistById" parameterType="Long" resultMap="BusiTechnicistResult">
+        <include refid="selectBusiTechnicistVo"/>
+        where technicist_id = #{technicistId}
+    </select>
+        
+    <insert id="insertBusiTechnicist" parameterType="BusiTechnicist" useGeneratedKeys="true" keyProperty="technicistId">
+        insert into busi_technicist
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="technicistName != null">technicist_name,</if>
+            <if test="position != null">position,</if>
+            <if test="birthDate != null">birth_date,</if>
+            <if test="education != null">education,</if>
+            <if test="university != null">university,</if>
+            <if test="major != null">major,</if>
+            <if test="residence != null">residence,</if>
+            <if test="email != null">email,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="technicistName != null">#{technicistName},</if>
+            <if test="position != null">#{position},</if>
+            <if test="birthDate != null">#{birthDate},</if>
+            <if test="education != null">#{education},</if>
+            <if test="university != null">#{university},</if>
+            <if test="major != null">#{major},</if>
+            <if test="residence != null">#{residence},</if>
+            <if test="email != null">#{email},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiTechnicist" parameterType="BusiTechnicist">
+        update busi_technicist
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="technicistName != null">technicist_name = #{technicistName},</if>
+            <if test="position != null">position = #{position},</if>
+            <if test="birthDate != null">birth_date = #{birthDate},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="university != null">university = #{university},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="residence != null">residence = #{residence},</if>
+            <if test="email != null">email = #{email},</if>
+        </trim>
+        where technicist_id = #{technicistId}
+    </update>
+
+    <delete id="deleteBusiTechnicistById" parameterType="Long">
+        delete from busi_technicist where technicist_id = #{technicistId}
+    </delete>
+
+    <delete id="deleteBusiTechnicistByIds" parameterType="String">
+        delete from busi_technicist where technicist_id in 
+        <foreach item="technicistId" collection="array" open="(" separator="," close=")">
+            #{technicistId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,6 +1,10 @@
 package com.ruoyi.busi.controller;
 
 import java.util.List;
+
+import com.ruoyi.busi.domain.BusiCustomer;
+import com.ruoyi.busi.service.IBusiCustomerService;
+import com.ruoyi.common.utils.DateUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +37,9 @@ public class BusiQuotationController extends BaseController
 
     @Autowired
     private IBusiQuotationService busiQuotationService;
+
+    @Autowired
+    private IBusiCustomerService customerService;
 
     @RequiresPermissions("busi:quotation:view")
     @GetMapping()
@@ -88,7 +95,21 @@ public class BusiQuotationController extends BaseController
     @ResponseBody
     public AjaxResult addSave(BusiQuotation busiQuotation)
     {
-        return toAjax(busiQuotationService.insertBusiQuotation(busiQuotation));
+        Long customerId = busiQuotation.getCustomerId();
+        BusiCustomer customer = customerService.selectBusiCustomerById(customerId);
+        Integer endCount = busiQuotationService.selectEndCount();
+        String endCountStr = endCount != null ? endCount+"":"0";
+        if (endCountStr.length() < 3){
+            String qz = "";
+            for (int i = 0; i < 3 - endCountStr.length(); i++) {
+                qz += "0";
+            }
+            endCountStr =    qz + endCountStr;
+        }
+        String quotationNo = DateUtils.dateTimeNow("YYYY_MM")+"_"+customer.getContactAddress()+"_"+endCountStr+"_A";
+        busiQuotation.setQuotationNo(quotationNo);
+        busiQuotationService.insertBusiQuotation(busiQuotation);
+        return success(busiQuotation.getQuotationId().toString());
     }
 
     /**
@@ -97,6 +118,7 @@ public class BusiQuotationController extends BaseController
     @GetMapping("/edit/{quotationId}")
     public String edit(@PathVariable("quotationId") Long quotationId, ModelMap mmap)
     {
+
         BusiQuotation busiQuotation = busiQuotationService.selectBusiQuotationById(quotationId);
         mmap.put("busiQuotation", busiQuotation);
         return prefix + "/edit";

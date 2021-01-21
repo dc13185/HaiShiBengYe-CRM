@@ -5,15 +5,15 @@ import com.ruoyi.busi.domain.BusiQuotation;
 
 /**
  * 报价单管理Service接口
- * 
+ *
  * @author ruoyi
  * @date 2021-01-12
  */
-public interface IBusiQuotationService 
+public interface IBusiQuotationService
 {
     /**
      * 查询报价单管理
-     * 
+     *
      * @param quotationId 报价单管理ID
      * @return 报价单管理
      */
@@ -21,7 +21,7 @@ public interface IBusiQuotationService
 
     /**
      * 查询报价单管理列表
-     * 
+     *
      * @param busiQuotation 报价单管理
      * @return 报价单管理集合
      */
@@ -29,7 +29,7 @@ public interface IBusiQuotationService
 
     /**
      * 新增报价单管理
-     * 
+     *
      * @param busiQuotation 报价单管理
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface IBusiQuotationService
 
     /**
      * 修改报价单管理
-     * 
+     *
      * @param busiQuotation 报价单管理
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface IBusiQuotationService
 
     /**
      * 批量删除报价单管理
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -53,9 +53,11 @@ public interface IBusiQuotationService
 
     /**
      * 删除报价单管理信息
-     * 
+     *
      * @param quotationId 报价单管理ID
      * @return 结果
      */
     public int deleteBusiQuotationById(Long quotationId);
+
+    public Integer selectEndCount();
 }

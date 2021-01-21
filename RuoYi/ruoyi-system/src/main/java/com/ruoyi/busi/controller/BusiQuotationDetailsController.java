@@ -88,6 +88,17 @@ public class BusiQuotationDetailsController extends BaseController
     @ResponseBody
     public AjaxResult addSave(BusiQuotationDetails busiQuotationDetails)
     {
+
+        //获取数量
+        Long number = busiQuotationDetails.getNumber();
+
+
+        //如果为整机
+        if (busiQuotationDetails.getQuotationType() == 0){
+
+        }
+
+
         return toAjax(busiQuotationDetailsService.insertBusiQuotationDetails(busiQuotationDetails));
     }
 

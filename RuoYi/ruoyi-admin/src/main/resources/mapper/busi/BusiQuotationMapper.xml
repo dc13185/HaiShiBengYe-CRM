@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.busi.mapper.BusiQuotationMapper">
-    
+
     <resultMap type="BusiQuotation" id="BusiQuotationResult">
         <result property="quotationId"    column="quotation_id"    />
         <result property="projectName"    column="project_name"    />
@@ -22,18 +22,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBusiQuotationList" parameterType="BusiQuotation" resultMap="BusiQuotationResult">
         <include refid="selectBusiQuotationVo"/>
-        <where>  
+        <where>
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
             <if test="quotationNo != null  and quotationNo != ''"> and quotation_no = #{quotationNo}</if>
             <if test="quotationType != null "> and quotation_type = #{quotationType}</if>
         </where>
     </select>
-    
+
     <select id="selectBusiQuotationById" parameterType="Long" resultMap="BusiQuotationResult">
         <include refid="selectBusiQuotationVo"/>
         where quotation_id = #{quotationId}
     </select>
-        
+
+    <select id="selectEndCount" resultType="java.lang.Integer">
+        select IFNULL(quotation_id,0) from  busi_quotation order by quotation_id desc limit 1
+    </select>
+
+
     <insert id="insertBusiQuotation" parameterType="BusiQuotation" useGeneratedKeys="true" keyProperty="quotationId">
         insert into busi_quotation
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -78,7 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBusiQuotationByIds" parameterType="String">
-        delete from busi_quotation where quotation_id in 
+        delete from busi_quotation where quotation_id in
         <foreach item="quotationId" collection="array" open="(" separator="," close=")">
             #{quotationId}
         </foreach>

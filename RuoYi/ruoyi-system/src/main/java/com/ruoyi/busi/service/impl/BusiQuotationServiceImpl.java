@@ -10,19 +10,19 @@ import com.ruoyi.common.core.text.Convert;
 
 /**
  * 报价单管理Service业务层处理
- * 
+ *
  * @author ruoyi
  * @date 2021-01-12
  */
 @Service
-public class BusiQuotationServiceImpl implements IBusiQuotationService 
+public class BusiQuotationServiceImpl implements IBusiQuotationService
 {
     @Autowired
     private BusiQuotationMapper busiQuotationMapper;
 
     /**
      * 查询报价单管理
-     * 
+     *
      * @param quotationId 报价单管理ID
      * @return 报价单管理
      */
@@ -34,7 +34,7 @@ public class BusiQuotationServiceImpl implements IBusiQuotationService
 
     /**
      * 查询报价单管理列表
-     * 
+     *
      * @param busiQuotation 报价单管理
      * @return 报价单管理
      */
@@ -46,7 +46,7 @@ public class BusiQuotationServiceImpl implements IBusiQuotationService
 
     /**
      * 新增报价单管理
-     * 
+     *
      * @param busiQuotation 报价单管理
      * @return 结果
      */
@@ -58,7 +58,7 @@ public class BusiQuotationServiceImpl implements IBusiQuotationService
 
     /**
      * 修改报价单管理
-     * 
+     *
      * @param busiQuotation 报价单管理
      * @return 结果
      */
@@ -70,7 +70,7 @@ public class BusiQuotationServiceImpl implements IBusiQuotationService
 
     /**
      * 删除报价单管理对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -82,7 +82,7 @@ public class BusiQuotationServiceImpl implements IBusiQuotationService
 
     /**
      * 删除报价单管理信息
-     * 
+     *
      * @param quotationId 报价单管理ID
      * @return 结果
      */
@@ -90,5 +90,10 @@ public class BusiQuotationServiceImpl implements IBusiQuotationService
     public int deleteBusiQuotationById(Long quotationId)
     {
         return busiQuotationMapper.deleteBusiQuotationById(quotationId);
+    }
+
+    @Override
+    public Integer selectEndCount(){
+        return busiQuotationMapper.selectEndCount();
     }
 }
