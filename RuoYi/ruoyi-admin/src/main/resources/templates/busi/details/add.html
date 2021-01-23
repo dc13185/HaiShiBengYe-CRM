@@ -68,18 +68,6 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">其他费用：</label>
-                <div class="col-sm-8">
-                    <input name="otherExpenses" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">其他费用说明：</label>
-                <div class="col-sm-8">
-                    <input name="otherExpensesDescription" class="form-control"></input>
-                </div>
-            </div>
-            <div class="form-group">
                 <label class="col-sm-3 control-label">额定流量(m3/h)：</label>
                 <div class="col-sm-8">
                     <input name="ratedFlow" class="form-control" type="text">
@@ -179,12 +167,47 @@
                     <input name="otherMachinePrice" class="form-control" type="text">
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">轴承品牌：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectSupplier('bearing')" id="bearingSupplierName" readonly="true" required>
+                        <input name="bearingSupplierId" id="bearingSupplierId" th:value="${bearingSupplierId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">轴承型号：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectBearing()" id="bearingName" readonly="true" required>
+                        <input name="bearingId" id="bearingId" th:value="${bearingId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他轴承：</label>
+                <div class="col-sm-8">
+                    <input name="otherBearing" class="form-control"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他轴承价格：</label>
+                <div class="col-sm-8">
+                    <input name="otherBearingPrice" class="form-control" type="text">
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">联轴器品牌：</label>
                 <div class="col-sm-8">
                     <div class="input-group">
                         <input class="form-control" type="text" onclick="selectSupplier('coupling')" id="couplingSupplierName" readonly="true" required>
-                        <input name="machineSupplierId" id="couplingSupplierId" th:value="${couplingSupplierId}" type="hidden">
+                        <input name="couplingSupplierId" id="couplingSupplierId" th:value="${couplingSupplierId}" type="hidden">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                 </div>
@@ -194,7 +217,7 @@
                 <div class="col-sm-8">
                     <div class="input-group">
                         <input class="form-control" type="text" onclick="selectCoupling()" id="couplingName" readonly="true" required>
-                        <input name="machineSupplierId" id="couplingId" th:value="${couplingId}" type="hidden">
+                        <input name="couplingId" id="couplingId" th:value="${couplingId}" type="hidden">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                 </div>
@@ -209,6 +232,24 @@
                 <label class="col-sm-3 control-label">其他联轴器价格：</label>
                 <div class="col-sm-8">
                     <input name="otherCouplingPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他费用：</label>
+                <div class="col-sm-8">
+                    <input name="otherExpenses" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他费用说明：</label>
+                <div class="col-sm-8">
+                    <input name="otherExpensesDescription" class="form-control"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">单价系数：</label>
+                <div class="col-sm-8">
+                    <input name="coefficient" class="form-control" type="text">
                 </div>
             </div>
         </form>
@@ -246,6 +287,9 @@
                 otherCouplingPrice:{
                     isNumber:true
                 },
+                coefficient:{
+                    isNumber:true
+                },
             }
         });
 
@@ -277,6 +321,8 @@
                 $.modal.open("选择机封品牌", ctx + "busi/supplier?supplierType="+supplierType);
             }else if(supplierType == 'coupling'){
                 $.modal.open("选择联轴器品牌", ctx + "busi/supplier?supplierType="+supplierType);
+            }else if(supplierType == 'bearing'){
+                $.modal.open("选择承轴品牌", ctx + "busi/supplier?supplierType="+supplierType);
             }
 
         }
@@ -314,6 +360,16 @@
                 $.modal.alertError("请先选择联轴器品牌");
             }else{
                 $.modal.open("选择机封产品", ctx + "busi/coupling?supplierId="+couplingSupplierId);
+            }
+        }
+
+
+        function  selectBearing() {
+            var bearingSupplierId = $("#bearingSupplierId").val();
+            if (!bearingSupplierId){
+                $.modal.alertError("请先选择承轴器品牌");
+            }else{
+                $.modal.open("选择承轴产品", ctx + "busi/bearing?supplierId="+bearingSupplierId);
             }
         }
 

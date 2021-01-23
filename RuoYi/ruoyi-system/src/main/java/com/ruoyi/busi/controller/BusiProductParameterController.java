@@ -80,6 +80,17 @@ public class BusiProductParameterController extends BaseController
     }
 
     /**
+     * 修改生产参数
+     */
+    @GetMapping("/edit/{parameterId}")
+    public String edit(@PathVariable("parameterId") Long parameterId, ModelMap mmap)
+    {
+        BusiProductParameter busiProductParameter = busiProductParameterService.selectBusiProductParameterById(parameterId);
+        mmap.put("busiProductParameter", busiProductParameter);
+        return prefix + "/edit";
+    }
+
+    /**
      * 新增保存生产参数
      */
     @RequiresPermissions("busi:parameter:add")
@@ -89,17 +100,6 @@ public class BusiProductParameterController extends BaseController
     public AjaxResult addSave(BusiProductParameter busiProductParameter)
     {
         return toAjax(busiProductParameterService.insertBusiProductParameter(busiProductParameter));
-    }
-
-    /**
-     * 修改生产参数
-     */
-    @GetMapping("/edit/{parameterId}")
-    public String edit(@PathVariable("parameterId") Long parameterId, ModelMap mmap)
-    {
-        BusiProductParameter busiProductParameter = busiProductParameterService.selectBusiProductParameterById(parameterId);
-        mmap.put("busiProductParameter", busiProductParameter);
-        return prefix + "/edit";
     }
 
     /**

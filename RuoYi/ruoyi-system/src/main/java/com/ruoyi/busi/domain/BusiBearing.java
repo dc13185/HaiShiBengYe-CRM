@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 轴承供应商对象 busi_bearing
- * 
+ *
  * @author ruoyi
  * @date 2021-01-04
  */
@@ -24,46 +24,46 @@ public class BusiBearing extends BaseEntity
 
     /** 轴承价格 */
     @Excel(name = "轴承价格")
-    private Long bearingPrice;
+    private Double bearingPrice;
 
     /**  */
     private String supplierId;
 
-    public void setBearingId(Long bearingId) 
+    public void setBearingId(Long bearingId)
     {
         this.bearingId = bearingId;
     }
 
-    public Long getBearingId() 
+    public Long getBearingId()
     {
         return bearingId;
     }
-    public void setBearingModel(String bearingModel) 
+    public void setBearingModel(String bearingModel)
     {
         this.bearingModel = bearingModel;
     }
 
-    public String getBearingModel() 
+    public String getBearingModel()
     {
         return bearingModel;
     }
-    public void setBearingPrice(Long bearingPrice) 
-    {
-        this.bearingPrice = bearingPrice;
-    }
-
-    public Long getBearingPrice() 
-    {
-        return bearingPrice;
-    }
-    public void setSupplierId(String supplierId) 
+    public void setSupplierId(String supplierId)
     {
         this.supplierId = supplierId;
     }
 
-    public String getSupplierId() 
+    public String getSupplierId()
     {
         return supplierId;
+    }
+
+
+    public Double getBearingPrice() {
+        return bearingPrice;
+    }
+
+    public void setBearingPrice(Double bearingPrice) {
+        this.bearingPrice = bearingPrice;
     }
 
     @Override

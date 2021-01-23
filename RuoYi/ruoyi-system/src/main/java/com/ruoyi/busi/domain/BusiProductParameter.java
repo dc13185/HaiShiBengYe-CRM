@@ -48,6 +48,11 @@ public class BusiProductParameter extends BaseEntity
 
     private Long  textureId;
 
+    /** 是否为过流部件 */
+    @Excel(name = "低值物料成本")
+    private Double lowMaterialCost;
+
+
     public void setParameterId(Long parameterId)
     {
         this.parameterId = parameterId;
@@ -128,6 +133,13 @@ public class BusiProductParameter extends BaseEntity
         this.textureId = textureId;
     }
 
+    public Double getLowMaterialCost() {
+        return lowMaterialCost;
+    }
+
+    public void setLowMaterialCost(Double lowMaterialCost) {
+        this.lowMaterialCost = lowMaterialCost;
+    }
 
     @Override
     public String toString() {

@@ -1,6 +1,12 @@
 package com.ruoyi.busi.controller;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.function.Function;
+
+import com.ruoyi.busi.domain.PriceSum;
+import com.ruoyi.busi.mapper.BusiQuotationDetailsMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +39,8 @@ public class BusiQuotationDetailsController extends BaseController
 
     @Autowired
     private IBusiQuotationDetailsService busiQuotationDetailsService;
+    @Autowired
+    private BusiQuotationDetailsMapper quotationDetailsMapper;
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
@@ -88,15 +96,53 @@ public class BusiQuotationDetailsController extends BaseController
     @ResponseBody
     public AjaxResult addSave(BusiQuotationDetails busiQuotationDetails)
     {
-
         //获取数量
         Long number = busiQuotationDetails.getNumber();
+        Double  motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice;
+
+        Double laborCostCoefficient = 11d;
+        Double makeCoefficient = 11d;
+        List<PriceSum> priceSums = quotationDetailsMapper.selectPriceDetil(busiQuotationDetails);
+        //返回材料成本费用
+        Double materialCosts = format(priceSums.parallelStream().mapToDouble(p -> p.getWeight() * p.getMaterialPrice()* p.getMassRatio()).sum());
+        //返回人工成本费用
+        Double laborCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * laborCostCoefficient).sum());
+        //返回制造成本费用
+        Double makeCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * makeCoefficient).sum());
+        //低值物料成本
+        Double  lowMaterialCost = format(priceSums.parallelStream().mapToDouble(PriceSum::getLowMaterialCost).sum());
+
+        //电机价格
+        if (busiQuotationDetails.getMotorId() != null){
+            motorPrice = quotationDetailsMapper.getMotorPrice(busiQuotationDetails.getMotorId());
+        }
+        if (busiQuotationDetails.getOtherMotorPrice() != null){
+            motorPrice =  format(motorPrice + busiQuotationDetails.getOtherMotorPrice());
+        }
+        //机封成本
+        if (busiQuotationDetails.getMachineId() != null){
+            machineProce = quotationDetailsMapper.getMachinePrice(busiQuotationDetails.getMachineId());
+        }
+        if (busiQuotationDetails.getOtherMachinePrice() != null){
+            machineProce = format(machineProce + busiQuotationDetails.getOtherMachinePrice());
+        }
+        //联轴器成本
+        if (busiQuotationDetails.getCouplingId() != null){
+            couplingPrice = quotationDetailsMapper.getCouplingPrice(busiQuotationDetails.getCouplingId());
+        }
+        if (busiQuotationDetails.getOtherMachinePrice() != null){
+            couplingPrice = format(couplingPrice + busiQuotationDetails.getOtherCouplingPrice());
+        }
+        //轴承成本
+        if (busiQuotationDetails.getBearingId() != null){
+            bearingPrice =  quotationDetailsMapper.getBearingPrice(busiQuotationDetails.getBearingId());
+        }
 
 
         //如果为整机
-        if (busiQuotationDetails.getQuotationType() == 0){
+       /* if (busiQuotationDetails.getQuotationType() == 0){
 
-        }
+        }*/
 
 
         return toAjax(busiQuotationDetailsService.insertBusiQuotationDetails(busiQuotationDetails));
@@ -135,5 +181,23 @@ public class BusiQuotationDetailsController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(busiQuotationDetailsService.deleteBusiQuotationDetailsByIds(ids));
+    }
+
+    private Function<Double,Double> format = (d -> {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        // 保留两位小数
+        nf.setMaximumFractionDigits(2);
+        // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+        nf.setRoundingMode(RoundingMode.UP);
+        return  Double.valueOf(nf.format(d));
+    });
+
+    public Double format(Double d){
+        NumberFormat nf = NumberFormat.getNumberInstance();
+            // 保留两位小数
+        nf.setMaximumFractionDigits(2);
+         // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+        nf.setRoundingMode(RoundingMode.UP);
+        return  Double.valueOf(nf.format(d));
     }
 }

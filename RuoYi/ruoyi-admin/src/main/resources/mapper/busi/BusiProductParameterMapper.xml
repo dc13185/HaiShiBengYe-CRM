@@ -14,10 +14,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isCurrent"    column="is_current"    />
         <result property="modelId"    column="model_id"    />
         <result property="textureId"    column="texture_id"    />
+        <result property="lowMaterialCost" column="low_material_cost" />
     </resultMap>
 
     <sql id="selectBusiProductParameterVo">
-           SELECT parameter_id, item_number, weight, TIME, is_current, model_id , bpp.texture_id,texture_name AS material , texture_type AS materialForm
+           SELECT parameter_id, item_number, weight, TIME, is_current, model_id  ,low_material_cost, bpp.texture_id,texture_name AS material , texture_type  AS materialForm
     FROM busi_product_parameter  bpp LEFT JOIN busi_texture bt ON bpp.texture_id = bt.texture_id
     </sql>
 
@@ -46,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isCurrent != null">is_current,</if>
             <if test="modelId != null">model_id,</if>
             <if test="textureId != null">texture_id,</if>
+            <if test="lowMaterialCost != null">low_material_cost,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="itemNumber != null and itemNumber != ''">#{itemNumber},</if>
@@ -54,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isCurrent != null">#{isCurrent},</if>
             <if test="modelId != null">#{modelId},</if>
             <if test="textureId != null">#{textureId},</if>
+            <if test="lowMaterialCost != null">#{lowMaterialCost},</if>
          </trim>
     </insert>
 
@@ -66,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isCurrent != null">is_current = #{isCurrent},</if>
             <if test="modelId != null">model_id = #{modelId},</if>
             <if test="textureId != null">texture_id = #{textureId},</if>
+            <if test="lowMaterialCost != null"> low_material_cost = #{lowMaterialCost},</if>
         </trim>
         where parameter_id = #{parameterId}
     </update>

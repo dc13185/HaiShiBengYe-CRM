@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.busi.mapper.BusiQuotationDetailsMapper">
-    
+
     <resultMap type="BusiQuotationDetails" id="BusiQuotationDetailsResult">
         <result property="detailsId"    column="details_id"    />
         <result property="quotationId"    column="quotation_id"    />
@@ -34,23 +34,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="otherCoupling"    column="other_coupling"    />
         <result property="otherCouplingPrice"    column="other_coupling_price"    />
         <result property="quotationType"    column="quotation_type"    />
+        <result property="coefficient"    column="coefficient"    />
+        <result property="detailsPrice"    column="details_price"    />
+        <result property="materialSupplierId"    column="material_supplier_id"    />
+
     </resultMap>
 
     <sql id="selectBusiQuotationDetailsVo">
-        select details_id, quotation_id, equipment_num, product_line_id, model_id, material_id, number, rinse_solution_id, other_expenses, other_expenses_description, rated_flow, lift, operating_temperature, fluid_density, inlet_pressure, npsh, motor_supplier_id, motor_id, other_motor, other_motor_price, machine_supplier_id, machine_id, other_machine, other_machine_price, coupling_supplier_id, coupling_id, other_coupling, other_coupling_price, quotation_type from busi_quotation_details
+        select details_id, quotation_id, equipment_num, product_line_id, model_id, material_id, number, rinse_solution_id, other_expenses, other_expenses_description, rated_flow, lift, operating_temperature, fluid_density, inlet_pressure, npsh, motor_supplier_id, motor_id, other_motor, other_motor_price, machine_supplier_id, machine_id, other_machine, other_machine_price, coupling_supplier_id, coupling_id, other_coupling, other_coupling_price, quotation_type ,coefficient ,details_price from busi_quotation_details
     </sql>
 
     <select id="selectBusiQuotationDetailsList" parameterType="BusiQuotationDetails" resultMap="BusiQuotationDetailsResult">
         <include refid="selectBusiQuotationDetailsVo"/>
-        <where>  
+        <where>
         </where>
     </select>
-    
+
     <select id="selectBusiQuotationDetailsById" parameterType="Long" resultMap="BusiQuotationDetailsResult">
         <include refid="selectBusiQuotationDetailsVo"/>
         where details_id = #{detailsId}
     </select>
-        
+
     <insert id="insertBusiQuotationDetails" parameterType="BusiQuotationDetails" useGeneratedKeys="true" keyProperty="detailsId">
         insert into busi_quotation_details
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -82,6 +86,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="otherCoupling != null">other_coupling,</if>
             <if test="otherCouplingPrice != null">other_coupling_price,</if>
             <if test="quotationType != null">quotation_type,</if>
+            <if test="coefficient != null">coefficient,</if>
+            <if test="detailsPrice != null">details_price,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="quotationId != null">#{quotationId},</if>
@@ -112,6 +118,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="otherCoupling != null">#{otherCoupling},</if>
             <if test="otherCouplingPrice != null">#{otherCouplingPrice},</if>
             <if test="quotationType != null">#{quotationType},</if>
+            <if test="coefficient != null">#{coefficient},</if>
+            <if test="detailsPrice != null">#{detailsPrice},</if>
          </trim>
     </insert>
 
@@ -146,6 +154,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="otherCoupling != null">other_coupling = #{otherCoupling},</if>
             <if test="otherCouplingPrice != null">other_coupling_price = #{otherCouplingPrice},</if>
             <if test="quotationType != null">quotation_type = #{quotationType},</if>
+            <if test="coefficient != null">coefficient = #{coefficient},</if>
+            <if test="detailsPrice != null">details_price = #{detailsPrice},</if>
         </trim>
         where details_id = #{detailsId}
     </update>
@@ -155,10 +165,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBusiQuotationDetailsByIds" parameterType="String">
-        delete from busi_quotation_details where details_id in 
+        delete from busi_quotation_details where details_id in
         <foreach item="detailsId" collection="array" open="(" separator="," close=")">
             #{detailsId}
         </foreach>
     </delete>
+
+
+
+
+    <select id="selectPriceDetil" parameterType="BusiQuotationDetails" resultType="com.ruoyi.busi.domain.PriceSum">
+        SELECT bpp.weight ,bt.`mass_ratio` as massRatio ,bmp.`price` as materialPrice,bpp.time ,
+        bpp.low_material_cost as lowMaterialCost
+        FROM   `busi_product_parameter` bpp  LEFT JOIN  busi_texture bt
+        ON bpp.`texture_id` = bt.`texture_id`
+        LEFT JOIN `busi_material_production` bmp ON bt.`texture_id` = bmp.`texture_id`
+        WHERE bpp.`model_id` = #{modelId} AND bmp.`supplier_id` = #{materialSupplierId}
+    </select>
+
+
+
+    <!--SELECT price AS motor_price ,machine_Price ,coupling_price AS couplingPrice ,
+
+    FROM busi_motor , busi_machine ,busi_coupling ,busi_be aring-->
+    <select id="getMotorPrice" resultType="java.lang.Double" parameterType="java.lang.Long">
+            SELECT price FROM busi_motor where motor_id = #{motorId}
+    </select>
+
+
+    <select id="getMachinePrice" resultType="java.lang.Double" parameterType="java.lang.String">
+            SELECT machine_Price FROM busi_machine where supplier_id = #{supplierId}
+    </select>
+
+    <select id="getCouplingPrice" resultType="java.lang.Double" parameterType="java.lang.String">
+            SELECT coupling_price FROM busi_coupling where supplier_id = #{supplierId}
+    </select>
+
+    <select id="getBearingPrice" resultType="java.lang.Double" parameterType="java.lang.String">
+            SELECT bearing_price FROM busi_bearing where supplier_id = #{supplierId}
+    </select>
+
 
 </mapper>

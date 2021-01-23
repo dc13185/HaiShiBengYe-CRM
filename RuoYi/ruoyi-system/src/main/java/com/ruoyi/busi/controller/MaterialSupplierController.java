@@ -174,6 +174,8 @@ public class MaterialSupplierController extends BaseController
             return "redirect:/busi/seal?supplierId="+supplierId;
         }else if(supplier.getSupplierType().equals("coupling")){
             return "redirect:/busi/coupling?supplierId="+supplierId;
+        }else if(supplier.getSupplierType().equals("bearing")){
+            return "redirect:/busi/bearing?supplierId="+supplierId;
         }
 
 
