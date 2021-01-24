@@ -1,5 +1,6 @@
 package com.ruoyi.busi.controller;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.List;
@@ -44,9 +45,15 @@ public class BusiQuotationDetailsController extends BaseController
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
-    public String details(String supplierId,ModelMap modelMap)
+    public String details(String quotationId,ModelMap modelMap)
     {
-        modelMap.put("supplierId",supplierId);
+        Double sumPrice =  quotationDetailsMapper.getSumPrice(Long.parseLong(quotationId));
+        modelMap.put("quotationId",quotationId);
+        if (sumPrice != null){
+            modelMap.put("sumPrice", format(sumPrice));
+        }else{
+            modelMap.put("sumPrice", 0);
+        }
         return prefix + "/details";
     }
 
@@ -58,10 +65,14 @@ public class BusiQuotationDetailsController extends BaseController
     @ResponseBody
     public TableDataInfo list(BusiQuotationDetails busiQuotationDetails)
     {
+
         startPage();
         List<BusiQuotationDetails> list = busiQuotationDetailsService.selectBusiQuotationDetailsList(busiQuotationDetails);
         return getDataTable(list);
     }
+
+
+
 
     /**
      * 导出报价明细列表
@@ -81,9 +92,20 @@ public class BusiQuotationDetailsController extends BaseController
      * 新增报价明细
      */
     @GetMapping("/add")
-    public String add(String supplierId,ModelMap modelMap)
+    public String add(String quotationId,ModelMap modelMap)
     {
-        modelMap.put("supplierId",supplierId);
+        modelMap.put("quotationId",quotationId);
+        return prefix + "/choose";
+    }
+
+
+    /**
+     * 新增报价明细
+     */
+    @GetMapping("/addDetails")
+    public String addDetails(String quotationId,ModelMap modelMap)
+    {
+        modelMap.put("quotationId",quotationId);
         return prefix + "/add";
     }
 
@@ -98,7 +120,7 @@ public class BusiQuotationDetailsController extends BaseController
     {
         //获取数量
         Long number = busiQuotationDetails.getNumber();
-        Double  motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice;
+        Double  motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice=0d;
 
         Double laborCostCoefficient = 11d;
         Double makeCoefficient = 11d;
@@ -137,15 +159,20 @@ public class BusiQuotationDetailsController extends BaseController
         if (busiQuotationDetails.getBearingId() != null){
             bearingPrice =  quotationDetailsMapper.getBearingPrice(busiQuotationDetails.getBearingId());
         }
+        if (busiQuotationDetails.getOtherBearingPrice() != null){
+            bearingPrice = format(bearingPrice + busiQuotationDetails.getOtherBearingPrice());
+        }
+        //基准单价
+        Double quotationDetailsPrice =  format(materialCosts + laborCost + makeCost + lowMaterialCost + motorPrice + machineProce + couplingPrice + bearingPrice);
+        if (busiQuotationDetails.getOtherExpenses() != null){
+            quotationDetailsPrice = format(quotationDetailsPrice + busiQuotationDetails.getOtherExpenses());
+        }
+        busiQuotationDetails.setDetailsPrice(quotationDetailsPrice);
 
-
-        //如果为整机
-       /* if (busiQuotationDetails.getQuotationType() == 0){
-
-        }*/
-
-
-        return toAjax(busiQuotationDetailsService.insertBusiQuotationDetails(busiQuotationDetails));
+        busiQuotationDetails.setQuotationType(0L);
+        busiQuotationDetailsService.insertBusiQuotationDetails(busiQuotationDetails);
+        Double sumPrice =  quotationDetailsMapper.getSumPrice(busiQuotationDetails.getQuotationId());
+        return success(format(sumPrice).toString());
     }
 
     /**
@@ -193,11 +220,7 @@ public class BusiQuotationDetailsController extends BaseController
     });
 
     public Double format(Double d){
-        NumberFormat nf = NumberFormat.getNumberInstance();
-            // 保留两位小数
-        nf.setMaximumFractionDigits(2);
-         // 如果不需要四舍五入，可以使用RoundingMode.DOWN
-        nf.setRoundingMode(RoundingMode.UP);
-        return  Double.valueOf(nf.format(d));
+        BigDecimal b   =   new  BigDecimal(d);
+        return b.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 }

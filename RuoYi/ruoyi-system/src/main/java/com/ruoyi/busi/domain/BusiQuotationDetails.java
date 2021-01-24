@@ -27,19 +27,15 @@ public class BusiQuotationDetails extends BaseEntity
     private String equipmentNum;
 
     /** 产品系列 */
-    @Excel(name = "产品系列")
     private Long productLineId;
 
     /** 产品规格型号 */
-    @Excel(name = "产品规格型号")
     private Long modelId;
 
     /** 材料 */
-    @Excel(name = "材料")
     private Long materialId;
 
 
-    @Excel(name = "过流材质品牌")
     private String materialSupplierId;
 
     /** 数量 */
@@ -52,7 +48,7 @@ public class BusiQuotationDetails extends BaseEntity
 
     /** 其他费用 */
     @Excel(name = "其他费用")
-    private Long otherExpenses;
+    private Double otherExpenses;
 
     /** 其他费用说明 */
     @Excel(name = "其他费用说明")
@@ -83,11 +79,9 @@ public class BusiQuotationDetails extends BaseEntity
     private Long npsh;
 
     /** 电机品牌 */
-    @Excel(name = "电机品牌")
     private String motorSupplierId;
 
     /** 电机型号 */
-    @Excel(name = "电机型号")
     private Long motorId;
 
     /** 其他电机 */
@@ -99,11 +93,9 @@ public class BusiQuotationDetails extends BaseEntity
     private Double otherMotorPrice;
 
     /** 机封品牌 */
-    @Excel(name = "机封品牌")
     private String machineSupplierId;
 
     /** 机封型号 */
-    @Excel(name = "机封型号")
     private Long machineId;
 
     /** 其他机封 */
@@ -127,11 +119,9 @@ public class BusiQuotationDetails extends BaseEntity
     private Double otherBearingPrice;
 
     /** 联轴器品牌 */
-    @Excel(name = "联轴器品牌")
     private String couplingSupplierId;
 
     /** 联轴器型号 */
-    @Excel(name = "联轴器型号")
     private Long couplingId;
 
     /** 其他联轴器 */
@@ -146,10 +136,47 @@ public class BusiQuotationDetails extends BaseEntity
     @Excel(name = "报价类型")
     private Long quotationType;
 
+    @Excel(name = "产品系列")
+    private String productLineName;
+
+    /** 机封品牌 */
+    private String machineSupplierName;
+
+    @Excel(name = "产品规格型号")
+    private String modelName;
+
+    @Excel(name = "电机品牌")
+    private String motorSupplierName;
+
+    @Excel(name = "电机型号")
+    private String motorName;
+
+
+    @Excel(name = "过流材质品牌")
+    private String materialSupplierName;
+
+    @Excel(name = "过流材质")
+    private String materialName;
+
+    @Excel(name = "机封型号")
+    private String machineModel;
+
+    @Excel(name = "联轴器品牌")
+    private String couplingSupplierName;
+
+    @Excel(name = "联轴器型号")
+    private String couplingName;
+
+    @Excel(name = "轴承品牌")
+    private String bearingSupplierName;
+
+    @Excel(name = "轴承型号")
+    private String bearingName;
+
+    /** 调整系数 */
     private Double coefficient;
 
     private Double detailsPrice;
-
 
 
 
@@ -225,15 +252,15 @@ public class BusiQuotationDetails extends BaseEntity
     {
         return rinseSolutionId;
     }
-    public void setOtherExpenses(Long otherExpenses)
-    {
+
+    public Double getOtherExpenses() {
+        return otherExpenses;
+    }
+
+    public void setOtherExpenses(Double otherExpenses) {
         this.otherExpenses = otherExpenses;
     }
 
-    public Long getOtherExpenses()
-    {
-        return otherExpenses;
-    }
     public void setOtherExpensesDescription(String otherExpensesDescription)
     {
         this.otherExpensesDescription = otherExpensesDescription;
@@ -348,6 +375,22 @@ public class BusiQuotationDetails extends BaseEntity
         this.otherCoupling = otherCoupling;
     }
 
+    public String getMaterialSupplierName() {
+        return materialSupplierName;
+    }
+
+    public void setMaterialSupplierName(String materialSupplierName) {
+        this.materialSupplierName = materialSupplierName;
+    }
+
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName;
+    }
+
     public String getOtherCoupling()
     {
         return otherCoupling;
@@ -449,6 +492,103 @@ public class BusiQuotationDetails extends BaseEntity
 
     public void setBearingId(Long bearingId) {
         this.bearingId = bearingId;
+    }
+
+    public String getOtherBearingSupplier() {
+        return otherBearingSupplier;
+    }
+
+    public void setOtherBearingSupplier(String otherBearingSupplier) {
+        this.otherBearingSupplier = otherBearingSupplier;
+    }
+
+    public Double getOtherBearingPrice() {
+        return otherBearingPrice;
+    }
+
+    public void setOtherBearingPrice(Double otherBearingPrice) {
+        this.otherBearingPrice = otherBearingPrice;
+    }
+
+
+    public String getProductLineName() {
+        return productLineName;
+    }
+
+    public void setProductLineName(String productLineName) {
+        this.productLineName = productLineName;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public String getMotorSupplierName() {
+        return motorSupplierName;
+    }
+
+    public void setMotorSupplierName(String motorSupplierName) {
+        this.motorSupplierName = motorSupplierName;
+    }
+
+    public String getMotorName() {
+        return motorName;
+    }
+
+    public void setMotorName(String motorName) {
+        this.motorName = motorName;
+    }
+
+    public String getMachineSupplierName() {
+        return machineSupplierName;
+    }
+
+    public void setMachineSupplierName(String machineSupplierName) {
+        this.machineSupplierName = machineSupplierName;
+    }
+
+    public String getMachineModel() {
+        return machineModel;
+    }
+
+    public void setMachineModel(String machineModel) {
+        this.machineModel = machineModel;
+    }
+
+    public String getCouplingSupplierName() {
+        return couplingSupplierName;
+    }
+
+    public void setCouplingSupplierName(String couplingSupplierName) {
+        this.couplingSupplierName = couplingSupplierName;
+    }
+
+    public String getCouplingName() {
+        return couplingName;
+    }
+
+    public void setCouplingName(String couplingName) {
+        this.couplingName = couplingName;
+    }
+
+    public String getBearingSupplierName() {
+        return bearingSupplierName;
+    }
+
+    public void setBearingSupplierName(String bearingSupplierName) {
+        this.bearingSupplierName = bearingSupplierName;
+    }
+
+    public String getBearingName() {
+        return bearingName;
+    }
+
+    public void setBearingName(String bearingName) {
+        this.bearingName = bearingName;
     }
 
     @Override

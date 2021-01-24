@@ -37,7 +37,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="coefficient"    column="coefficient"    />
         <result property="detailsPrice"    column="details_price"    />
         <result property="materialSupplierId"    column="material_supplier_id"    />
-
+        <result property="bearingSupplierId"    column="bearing_supplier_id"    />
+        <result property="bearingId"    column="bearing_id"    />
+        <result property="otherBearingSupplier"    column="other_bearing_supplier"    />
+        <result property="otherBearingPrice"    column="other_bearing_price"    />
+        <result property="productLineName"    column="product_line_name"    />
+        <result property="modelName"    column="model_name"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="materialSupplierName"    column="material_supplier_name"    />
+        <result property="motorSupplierName"    column="motor_supplier_name"    />
+        <result property="motorName"    column="motor_name"    />
+        <result property="machineSupplierName"    column="machine_supplier_name"    />
+        <result property="machineModel"    column="machine_model"    />
+        <result property="couplingSupplierName"    column="coupling_supplier_name"    />
+        <result property="couplingName"    column="coupling_name"    />
+        <result property="bearingSupplierName"    column="bearing_supplier_name"    />
+        <result property="bearingName"    column="bearing_name"    />
     </resultMap>
 
     <sql id="selectBusiQuotationDetailsVo">
@@ -45,8 +60,62 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectBusiQuotationDetailsList" parameterType="BusiQuotationDetails" resultMap="BusiQuotationDetailsResult">
-        <include refid="selectBusiQuotationDetailsVo"/>
+        SELECT details_id, quotation_id,
+        equipment_num,
+        product_line_id,
+        (SELECT product_line_name FROM busi_product_line bpl WHERE bpl.product_line_id = bqd.product_line_id) AS product_line_name ,
+        model_id,
+        (SELECT model_name FROM busi_product_model bpm WHERE bpm.model_id = bqd.model_id) AS model_name ,
+        material_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.material_supplier_id ) AS  material_supplier_name,
+        motor_id,
+        material_id,
+        (SELECT bt.texture_name FROM busi_material_production bmp
+        LEFT JOIN  busi_texture bt ON bmp.`texture_id` = bt.texture_id
+        WHERE bmp.material_id = bqd.material_id) AS material_name ,
+        number,
+        rinse_solution_id,
+        other_expenses,
+        other_expenses_description,
+        rated_flow,
+        lift,
+        operating_temperature,
+        fluid_density,
+        inlet_pressure,
+        npsh,
+        motor_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.motor_supplier_id ) AS  motor_supplier_name,
+        motor_id,
+        (SELECT motor_model FROM busi_motor bu WHERE bu.motor_id = bqd.motor_id) AS motor_name,
+        other_motor,
+        other_motor_price,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.machine_supplier_id ) AS  machine_supplier_name,
+        machine_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.machine_supplier_id ) AS  machine_supplier_name,
+        machine_id,
+        (SELECT machine_model FROM busi_machine bm WHERE bm.machine_id = bqd.machine_id) AS machine_model,
+        other_machine,
+        other_machine_price,
+        coupling_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.coupling_supplier_id ) AS  coupling_supplier_name,
+        coupling_id,
+        (SELECT coupling_model FROM busi_coupling bc WHERE bc.coupling_id = bqd.coupling_id) AS coupling_name,
+        other_coupling,
+        other_coupling_price,
+        bearing_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.bearing_supplier_id ) AS  bearing_supplier_name,
+        bearing_id,
+        (SELECT bearing_model FROM busi_bearing bb WHERE bb.bearing_id = bqd.bearing_id) AS bearing_name,
+        other_bearing,
+        other_bearing_price,
+        quotation_type,
+        coefficient,
+        details_price
+        FROM
+        busi_quotation_details bqd
+
         <where>
+            <if test="quotationId != null  and quotationId != ''"> and bqd.quotation_id = #{quotationId}</if>
         </where>
     </select>
 
@@ -60,66 +129,76 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="quotationId != null">quotation_id,</if>
             <if test="equipmentNum != null and equipmentNum != ''">equipment_num,</if>
-            <if test="productLineId != null">product_line_id,</if>
-            <if test="modelId != null">model_id,</if>
-            <if test="materialId != null">material_id,</if>
-            <if test="number != null">number,</if>
-            <if test="rinseSolutionId != null">rinse_solution_id,</if>
-            <if test="otherExpenses != null">other_expenses,</if>
-            <if test="otherExpensesDescription != null">other_expenses_description,</if>
-            <if test="ratedFlow != null">rated_flow,</if>
-            <if test="lift != null">lift,</if>
-            <if test="operatingTemperature != null">operating_temperature,</if>
-            <if test="fluidDensity != null">fluid_density,</if>
-            <if test="inletPressure != null">inlet_pressure,</if>
-            <if test="npsh != null">npsh,</if>
-            <if test="motorSupplierId != null">motor_supplier_id,</if>
-            <if test="motorId != null">motor_id,</if>
-            <if test="otherMotor != null">other_motor,</if>
-            <if test="otherMotorPrice != null">other_motor_price,</if>
-            <if test="machineSupplierId != null">machine_supplier_id,</if>
-            <if test="machineId != null">machine_id,</if>
-            <if test="otherMachine != null">other_machine,</if>
-            <if test="otherMachinePrice != null">other_machine_price,</if>
-            <if test="couplingSupplierId != null">coupling_supplier_id,</if>
-            <if test="couplingId != null">coupling_id,</if>
-            <if test="otherCoupling != null">other_coupling,</if>
-            <if test="otherCouplingPrice != null">other_coupling_price,</if>
+            <if test="productLineId != null and productLineId != ''">product_line_id,</if>
+            <if test="modelId != null and modelId != '' ">model_id,</if>
+            <if test="materialSupplierId != null and materialSupplierId != ''">material_supplier_id,</if>
+            <if test="materialId != null and materialId != ''">material_id,</if>
+            <if test="number != null  and number != ''">number,</if>
+            <if test="rinseSolutionId != null and rinseSolutionId != '' ">rinse_solution_id,</if>
+            <if test="otherExpenses != null and otherExpenses != '' ">other_expenses,</if>
+            <if test="otherExpensesDescription != null and otherExpensesDescription != '' ">other_expenses_description,</if>
+            <if test="ratedFlow != null and ratedFlow != ''  ">rated_flow,</if>
+            <if test="lift != null and lift != '' ">lift,</if>
+            <if test="operatingTemperature != null and operatingTemperature != '' ">operating_temperature,</if>
+            <if test="fluidDensity != null and fluidDensity != ''">fluid_density,</if>
+            <if test="inletPressure != null and inletPressure != ''">inlet_pressure,</if>
+            <if test="npsh != null and npsh != '' ">npsh,</if>
+            <if test="motorSupplierId != null  and motorSupplierId != '' ">motor_supplier_id,</if>
+            <if test="motorId != null and motorId != '' ">motor_id,</if>
+            <if test="otherMotor != null and otherMotor != '' ">other_motor,</if>
+            <if test="otherMotorPrice != null and otherMotorPrice != ''">other_motor_price,</if>
+            <if test="machineSupplierId != null and machineSupplierId != ''">machine_supplier_id,</if>
+            <if test="machineId != null and machineId != ''">machine_id,</if>
+            <if test="otherMachine != null and otherMachine != ''">other_machine,</if>
+            <if test="otherMachinePrice != null  and otherMachinePrice != ''">other_machine_price,</if>
+            <if test="couplingSupplierId != null  and couplingSupplierId != ''">coupling_supplier_id,</if>
+            <if test="couplingId != null and couplingId != ''">coupling_id,</if>
+            <if test="otherCoupling != null and otherCoupling != ''">other_coupling,</if>
+            <if test="otherCouplingPrice != null and otherCouplingPrice != ''">other_coupling_price,</if>
             <if test="quotationType != null">quotation_type,</if>
-            <if test="coefficient != null">coefficient,</if>
-            <if test="detailsPrice != null">details_price,</if>
+            <if test="coefficient != null and coefficient != ''">coefficient,</if>
+            <if test="detailsPrice != null and detailsPrice != ''">details_price,</if>
+            <if test="bearingSupplierId != null and bearingSupplierId != ''">bearing_supplier_id,</if>
+            <if test="bearingId != null and bearingId != ''">bearing_id,</if>
+            <if test="otherBearingSupplier != null and otherBearingSupplier != ''">other_bearing_supplier,</if>
+            <if test="otherBearingPrice != null and otherBearingPrice != ''">other_bearing_price,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="quotationId != null">#{quotationId},</if>
+            <if test="quotationId != null and quotationId != ''">#{quotationId},</if>
             <if test="equipmentNum != null and equipmentNum != ''">#{equipmentNum},</if>
-            <if test="productLineId != null">#{productLineId},</if>
-            <if test="modelId != null">#{modelId},</if>
-            <if test="materialId != null">#{materialId},</if>
-            <if test="number != null">#{number},</if>
-            <if test="rinseSolutionId != null">#{rinseSolutionId},</if>
-            <if test="otherExpenses != null">#{otherExpenses},</if>
-            <if test="otherExpensesDescription != null">#{otherExpensesDescription},</if>
-            <if test="ratedFlow != null">#{ratedFlow},</if>
-            <if test="lift != null">#{lift},</if>
-            <if test="operatingTemperature != null">#{operatingTemperature},</if>
-            <if test="fluidDensity != null">#{fluidDensity},</if>
-            <if test="inletPressure != null">#{inletPressure},</if>
-            <if test="npsh != null">#{npsh},</if>
-            <if test="motorSupplierId != null">#{motorSupplierId},</if>
-            <if test="motorId != null">#{motorId},</if>
-            <if test="otherMotor != null">#{otherMotor},</if>
-            <if test="otherMotorPrice != null">#{otherMotorPrice},</if>
-            <if test="machineSupplierId != null">#{machineSupplierId},</if>
-            <if test="machineId != null">#{machineId},</if>
-            <if test="otherMachine != null">#{otherMachine},</if>
-            <if test="otherMachinePrice != null">#{otherMachinePrice},</if>
-            <if test="couplingSupplierId != null">#{couplingSupplierId},</if>
-            <if test="couplingId != null">#{couplingId},</if>
-            <if test="otherCoupling != null">#{otherCoupling},</if>
-            <if test="otherCouplingPrice != null">#{otherCouplingPrice},</if>
+            <if test="productLineId != null and productLineId != ''">#{productLineId},</if>
+            <if test="modelId != null and modelId != ''">#{modelId},</if>
+            <if test="materialSupplierId != null and materialSupplierId != ''">#{materialSupplierId},</if>
+            <if test="materialId != null and materialId != ''">#{materialId},</if>
+            <if test="number != null and number != ''">#{number},</if>
+            <if test="rinseSolutionId != null and rinseSolutionId != ''">#{rinseSolutionId},</if>
+            <if test="otherExpenses != null and otherExpenses != ''">#{otherExpenses},</if>
+            <if test="otherExpensesDescription != null and otherExpensesDescription != '' ">#{otherExpensesDescription},</if>
+            <if test="ratedFlow != null and ratedFlow != '' ">#{ratedFlow},</if>
+            <if test="lift != null and lift != ''">#{lift},</if>
+            <if test="operatingTemperature != null  and operatingTemperature != ''">#{operatingTemperature},</if>
+            <if test="fluidDensity != null  and fluidDensity != ''">#{fluidDensity},</if>
+            <if test="inletPressure != null  and inletPressure != ''">#{inletPressure},</if>
+            <if test="npsh != null   and npsh != ''">#{npsh},</if>
+            <if test="motorSupplierId != null  and motorSupplierId != ''">#{motorSupplierId},</if>
+            <if test="motorId != null and motorSupplierId != '' ">#{motorId},</if>
+            <if test="otherMotor != null  and otherMotor != '' ">#{otherMotor},</if>
+            <if test="otherMotorPrice != null and otherMotorPrice != '' ">#{otherMotorPrice},</if>
+            <if test="machineSupplierId != null and machineSupplierId != ''">#{machineSupplierId},</if>
+            <if test="machineId != null and machineId != ''">#{machineId},</if>
+            <if test="otherMachine != null and otherMachine != ''">#{otherMachine},</if>
+            <if test="otherMachinePrice != null and otherMachinePrice != ''">#{otherMachinePrice},</if>
+            <if test="couplingSupplierId != null and couplingSupplierId != ''">#{couplingSupplierId},</if>
+            <if test="couplingId != null and couplingId != ''">#{couplingId},</if>
+            <if test="otherCoupling != null and otherCoupling != ''">#{otherCoupling},</if>
+            <if test="otherCouplingPrice != null and otherCouplingPrice != ''">#{otherCouplingPrice},</if>
             <if test="quotationType != null">#{quotationType},</if>
-            <if test="coefficient != null">#{coefficient},</if>
-            <if test="detailsPrice != null">#{detailsPrice},</if>
+            <if test="coefficient != null and coefficient != ''">#{coefficient},</if>
+            <if test="detailsPrice != null and detailsPrice != ''">#{detailsPrice},</if>
+            <if test="bearingSupplierId != null and bearingSupplierId != ''">#{bearingSupplierId},</if>
+            <if test="bearingId != null and bearingId != ''">#{bearingId},</if>
+            <if test="otherBearingSupplier != null and otherBearingSupplier != ''">#{otherBearingSupplier},</if>
+            <if test="otherBearingPrice != null and otherBearingPrice != ''">#{otherBearingPrice},</if>
          </trim>
     </insert>
 
@@ -130,6 +209,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="equipmentNum != null and equipmentNum != ''">equipment_num = #{equipmentNum},</if>
             <if test="productLineId != null">product_line_id = #{productLineId},</if>
             <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="materialSupplierId != null and materialSupplierId != ''">material_supplier_id = #{materialSupplierId},</if>
             <if test="materialId != null">material_id = #{materialId},</if>
             <if test="number != null">number = #{number},</if>
             <if test="rinseSolutionId != null">rinse_solution_id = #{rinseSolutionId},</if>
@@ -156,6 +236,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quotationType != null">quotation_type = #{quotationType},</if>
             <if test="coefficient != null">coefficient = #{coefficient},</if>
             <if test="detailsPrice != null">details_price = #{detailsPrice},</if>
+            <if test="bearingSupplierId != null and bearingSupplierId != ''">bearing_supplier_id = #{bearingSupplierId},</if>
+            <if test="bearingId != null and bearingId != ''">bearing_id = #{bearingId},</if>
+            <if test="otherBearingSupplier != null and otherBearingSupplier != ''">other_bearing_supplier = #{otherBearingSupplier},</if>
+            <if test="otherBearingPrice != null and otherBearingPrice != ''">other_bearing_price = #{otherBearingPrice},</if>
         </trim>
         where details_id = #{detailsId}
     </update>
@@ -193,16 +277,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <select id="getMachinePrice" resultType="java.lang.Double" parameterType="java.lang.String">
-            SELECT machine_Price FROM busi_machine where supplier_id = #{supplierId}
+    <select id="getMachinePrice" resultType="java.lang.Double" parameterType="java.lang.Long">
+            SELECT machine_Price FROM busi_machine where machine_id = #{machineId }
     </select>
 
-    <select id="getCouplingPrice" resultType="java.lang.Double" parameterType="java.lang.String">
-            SELECT coupling_price FROM busi_coupling where supplier_id = #{supplierId}
+    <select id="getCouplingPrice" resultType="java.lang.Double" parameterType="java.lang.Long">
+            SELECT coupling_price FROM busi_coupling where coupling_id = #{couplingId}
     </select>
 
-    <select id="getBearingPrice" resultType="java.lang.Double" parameterType="java.lang.String">
-            SELECT bearing_price FROM busi_bearing where supplier_id = #{supplierId}
+    <select id="getBearingPrice" resultType="java.lang.Double" parameterType="java.lang.Long">
+            SELECT bearing_price FROM busi_bearing where bearing_id = #{bearingId}
+    </select>
+
+    <select id="getSumPrice" parameterType="java.lang.Long" resultType="java.lang.Double">
+        SELECT SUM(details_price*coefficient * number)  FROM busi_quotation_details WHERE  quotation_id = #{quotationId}
     </select>
 
 

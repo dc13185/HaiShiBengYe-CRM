@@ -66,7 +66,9 @@ public interface BusiQuotationDetailsMapper
 
     public Double getMachinePrice(Long machineId);
 
-    public Double getCouplingPrice(Long motorId);
+    public Double getCouplingPrice(Long couplingId);
 
-    public Double getBearingPrice(Long motorId);
+    public Double getBearingPrice(Long bearingId);
+
+    public Double getSumPrice(Long quotationId);
 }

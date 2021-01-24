@@ -9,7 +9,7 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
-                        <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
+                        <input name="quotationId" id="quotationId" th:value="${quotationId}" type="hidden">
                         <ul>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -21,7 +21,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="busi:details:add">
+                <a class="btn btn-success" onclick="chooseType()" shiro:hasPermission="busi:details:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="busi:details:edit">
@@ -37,12 +37,18 @@
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
+
+            <div class="col-sm-3 search-collapse">
+              <small id="sumPrice1"> 费用合计:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
+            </div>
+
         </div>
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('busi:details:edit')}]];
         var removeFlag = [[${@permission.hasPermi('busi:details:remove')}]];
+        var project_type = [[${@dict.getType('project_type')}]];
         var prefix = ctx + "busi/details";
         var supplierId = $("#supplierId").val();
         $(function() {
@@ -62,122 +68,106 @@
                     visible: false
                 },
                 {
-                    field: 'quotationId',
-                    title: '报价单ID'
-                },
-                {
                     field: 'equipmentNum',
+                    align: 'center',
                     title: '设备位号'
                 },
                 {
-                    field: 'productLineId',
-                    title: '产品系列'
-                },
-                {
-                    field: 'modelId',
-                    title: '产品规格型号'
-                },
-                {
-                    field: 'materialId',
-                    title: '材料'
-                },
-                {
                     field: 'number',
+                    align: 'center',
                     title: '数量'
                 },
                 {
-                    field: 'rinseSolutionId',
-                    title: '冲洗方案'
+                    field: 'modelName',
+                    align: 'center',
+                    title: '泵型号'
                 },
                 {
-                    field: 'otherExpenses',
-                    title: '其他费用'
-                },
-                {
-                    field: 'otherExpensesDescription',
-                    title: '其他费用说明'
+                    field: 'materialName',
+                    align: 'center',
+                    title: '过流部件材质'
                 },
                 {
                     field: 'ratedFlow',
+                    align: 'center',
                     title: '额定流量(m3/h)'
                 },
                 {
                     field: 'lift',
+                    align: 'center',
                     title: '扬程(m)'
                 },
                 {
                     field: 'operatingTemperature',
+                    align: 'center',
                     title: '工况温度(℃)'
                 },
                 {
                     field: 'fluidDensity',
+                    align: 'center',
                     title: '流体密度(Kg/m³)'
                 },
                 {
                     field: 'inletPressure',
+                    align: 'center',
                     title: '入口压力(Mpa)'
                 },
                 {
                     field: 'npsh',
+                    align: 'center',
                     title: '汽蚀余量(m)'
                 },
                 {
                     field: 'motorSupplierId',
+                    align: 'center',
                     title: '电机品牌'
                 },
                 {
-                    field: 'motorId',
+                    field: 'motorName',
+                    align: 'center',
                     title: '电机型号'
                 },
                 {
-                    field: 'otherMotor',
-                    title: '其他电机'
+                    field: 'rinseSolutionId',
+                    align: 'center',
+                    title: '冲洗方案'
                 },
                 {
-                    field: 'otherMotorPrice',
-                    title: '其他电机价格'
+                    field: 'detailsPrice',
+                    align: 'center',
+                    title: '基准单价'
                 },
                 {
-                    field: 'machineSupplierId',
-                    title: '机封品牌'
+                    title: '调整单价',
+                    formatter: function(value, row, index) {
+                        var num = row.coefficient * row.detailsPrice;
+                        return num.toFixed(2);
+                    }
                 },
                 {
-                    field: 'machineId',
-                    title: '机封型号'
+                    field: 'coefficient',
+                    title: '调整系数'
                 },
                 {
-                    field: 'otherMachine',
-                    title: '其他机封'
-                },
-                {
-                    field: 'otherMachinePrice',
-                    title: '其他机封价格'
-                },
-                {
-                    field: 'couplingSupplierId',
-                    title: '联轴器品牌'
-                },
-                {
-                    field: 'couplingId',
-                    title: '联轴器型号'
-                },
-                {
-                    field: 'otherCoupling',
-                    title: '其他联轴器'
-                },
-                {
-                    field: 'otherCouplingPrice',
-                    title: '其他联轴器价格'
+                    title: '总价',
+                    formatter: function(value, row, index) {
+                        var num = row.coefficient * row.detailsPrice * row.number;
+                        return  num.toFixed(2);
+                    }
                 },
                 {
                     field: 'quotationType',
-                    title: '报价类型'
+                    title: '报价类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(project_type, value);
+                    }
                 },
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
+                        actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.detailsId + '\')"><i class="fa fa-eye"></i>查看</a> ');
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.detailsId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.detailsId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
@@ -186,6 +176,12 @@
             };
             $.table.init(options);
         });
+
+        function chooseType(){
+            var quotationId = $("#quotationId").val();
+            $.modal.openFull("添加报价单明细",ctx+"busi/details/add?quotationId="+quotationId)
+        }
+
     </script>
 </body>
 </html>
