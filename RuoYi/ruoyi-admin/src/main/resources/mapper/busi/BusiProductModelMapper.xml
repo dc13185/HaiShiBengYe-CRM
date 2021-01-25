@@ -13,10 +13,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="pressure"    column="pressure"    />
         <result property="npsh"    column="npsh"    />
         <result property="productLineId"    column="product_line_id"    />
+        <result property="lowMaterialCost" column="low_material_cost" />
     </resultMap>
 
     <sql id="selectBusiProductModelVo">
-        select model_id, model_name, flow, lift, temperature, pressure, npsh, product_line_id from busi_product_model
+        select model_id, model_name, flow, lift, temperature, pressure, npsh, product_line_id ,low_material_cost from busi_product_model
     </sql>
 
     <select id="selectBusiProductModelList" parameterType="BusiProductModel" resultMap="BusiProductModelResult">
@@ -46,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pressure != null">pressure,</if>
             <if test="npsh != null">npsh,</if>
             <if test="productLineId != null">product_line_id,</if>
+            <if test="lowMaterialCost != null">low_material_cost,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="modelName != null and modelName != ''">#{modelName},</if>
@@ -55,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pressure != null">#{pressure},</if>
             <if test="npsh != null">#{npsh},</if>
             <if test="productLineId != null">#{productLineId},</if>
+            <if test="lowMaterialCost != null">#{lowMaterialCost},</if>
          </trim>
     </insert>
 
@@ -68,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="pressure != null">pressure = #{pressure},</if>
             <if test="npsh != null">npsh = #{npsh},</if>
             <if test="productLineId != null">product_line_id = #{productLineId},</if>
+            <if test="lowMaterialCost != null"> low_material_cost = #{lowMaterialCost},</if>
         </trim>
         where model_id = #{modelId}
     </update>

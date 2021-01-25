@@ -79,8 +79,10 @@
                     title: '职位'
                 },
                 {
-                    field: 'birthDate',
-                    title: '出生年月'
+                    title: '出生年月',
+                    formatter: function(value, row, index) {
+                        return row.birthDate.substring(0,10);
+                    }
                 },
                 {
                     field: 'education',
@@ -118,6 +120,19 @@
             };
             $.table.init(options);
         });
+
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var technicistName = $.table.selectColumns('technicistName');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#technicalStaffName').val(technicistName);
+            parent.$('#technicalStaffId').val(rows);
+        }
     </script>
 </body>
 </html>

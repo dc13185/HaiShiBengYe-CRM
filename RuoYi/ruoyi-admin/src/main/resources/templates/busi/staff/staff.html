@@ -85,8 +85,10 @@
                     title: '职位'
                 },
                 {
-                    field: 'birth',
-                    title: '出生年月'
+                    title: '出生年月',
+                    formatter: function(value, row, index) {
+                        return row.birth.substring(0,10);
+                    }
                 },
                 {
                     field: 'school',

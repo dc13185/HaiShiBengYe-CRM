@@ -6,7 +6,7 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-coupling-edit" th:object="${busiCoupling}">
-            <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
+            <input name="supplierId" id="supplierId" th:field="*{supplierId}" type="hidden">
             <input name="couplingId" th:field="*{couplingId}" type="hidden">
             <div class="form-group">
                 <label class="col-sm-3 control-label is-required">联轴器型号：</label>

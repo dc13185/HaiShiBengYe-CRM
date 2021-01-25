@@ -9,10 +9,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="machineModel"    column="machine_model"    />
         <result property="machinePrice"    column="machine_price"    />
         <result property="supplierId"    column="supplier_id"    />
+        <result property="materialModel"    column="material_model"    />
     </resultMap>
 
     <sql id="selectBusiMachineVo">
-        select machine_id, machine_model, machine_price, supplier_id from busi_machine
+        select machine_id, machine_model, machine_price, supplier_id ,material_model from busi_machine
     </sql>
 
     <select id="selectBusiMachineList" parameterType="BusiMachine" resultMap="BusiMachineResult">
@@ -34,11 +35,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="machineModel != null and machineModel != ''">machine_model,</if>
             <if test="machinePrice != null and machinePrice != ''">machine_price,</if>
             <if test="supplierId != null">supplier_id,</if>
+            <if test="materialModel != null">material_model,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="machineModel != null and machineModel != ''">#{machineModel},</if>
             <if test="machinePrice != null and machinePrice != ''">#{machinePrice},</if>
             <if test="supplierId != null">#{supplierId},</if>
+            <if test="materialModel != null">#{materialModel},</if>
          </trim>
     </insert>
 
@@ -48,6 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="machineModel != null and machineModel != ''">machine_model = #{machineModel},</if>
             <if test="machinePrice != null and machinePrice != ''">machine_price = #{machinePrice},</if>
             <if test="supplierId != null">supplier_id = #{supplierId},</if>
+            <if test="materialModel != null">material_model = #{materialModel},</if>
         </trim>
         where machine_id = #{machineId}
     </update>

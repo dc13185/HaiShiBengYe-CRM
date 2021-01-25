@@ -6,8 +6,10 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.function.Function;
 
+import com.ruoyi.busi.domain.BusiProductModel;
 import com.ruoyi.busi.domain.PriceSum;
 import com.ruoyi.busi.mapper.BusiQuotationDetailsMapper;
+import com.ruoyi.busi.service.IBusiProductModelService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +44,8 @@ public class BusiQuotationDetailsController extends BaseController
     private IBusiQuotationDetailsService busiQuotationDetailsService;
     @Autowired
     private BusiQuotationDetailsMapper quotationDetailsMapper;
+    @Autowired
+    private IBusiProductModelService busiProductModelService;
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
@@ -121,7 +125,6 @@ public class BusiQuotationDetailsController extends BaseController
         //获取数量
         Long number = busiQuotationDetails.getNumber();
         Double  motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice=0d;
-
         Double laborCostCoefficient = 11d;
         Double makeCoefficient = 11d;
         List<PriceSum> priceSums = quotationDetailsMapper.selectPriceDetil(busiQuotationDetails);
@@ -132,8 +135,10 @@ public class BusiQuotationDetailsController extends BaseController
         //返回制造成本费用
         Double makeCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * makeCoefficient).sum());
         //低值物料成本
-        Double  lowMaterialCost = format(priceSums.parallelStream().mapToDouble(PriceSum::getLowMaterialCost).sum());
-
+        Double  lowMaterialCost = busiProductModelService.selectBusiProductModelById(busiQuotationDetails.getModelId()).getLowMaterialCost();
+        if (lowMaterialCost == null){
+            lowMaterialCost = 0d;
+        }
         //电机价格
         if (busiQuotationDetails.getMotorId() != null){
             motorPrice = quotationDetailsMapper.getMotorPrice(busiQuotationDetails.getMotorId());

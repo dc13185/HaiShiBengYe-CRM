@@ -14,11 +14,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isCurrent"    column="is_current"    />
         <result property="modelId"    column="model_id"    />
         <result property="textureId"    column="texture_id"    />
-        <result property="lowMaterialCost" column="low_material_cost" />
     </resultMap>
 
     <sql id="selectBusiProductParameterVo">
-           SELECT parameter_id, item_number, weight, TIME, is_current, model_id  ,low_material_cost, bpp.texture_id,texture_name AS material , texture_type  AS materialForm
+           SELECT parameter_id, item_number, weight, TIME, is_current, model_id  , bpp.texture_id,texture_name AS material , texture_type  AS materialForm
     FROM busi_product_parameter  bpp LEFT JOIN busi_texture bt ON bpp.texture_id = bt.texture_id
     </sql>
 

@@ -6,7 +6,7 @@
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-motor-edit" th:object="${busiMotor}">
-            <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
+            <input name="supplierId" id="supplierId" th:field="*{supplierId}" type="hidden">
             <input name="motorId" th:field="*{motorId}" type="hidden">
             <div class="form-group">
                 <label class="col-sm-3 control-label">电机型号：</label>

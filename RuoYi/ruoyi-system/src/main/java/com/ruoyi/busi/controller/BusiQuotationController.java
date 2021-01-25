@@ -1,5 +1,6 @@
 package com.ruoyi.busi.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.busi.domain.BusiCustomer;
@@ -108,6 +109,7 @@ public class BusiQuotationController extends BaseController
         }
         String quotationNo = DateUtils.dateTimeNow("YYYY_MM")+"_"+customer.getContactAddress()+"_"+endCountStr+"_A";
         busiQuotation.setQuotationNo(quotationNo);
+        busiQuotation.setCreateTime(new Date());
         busiQuotationService.insertBusiQuotation(busiQuotation);
         return success(busiQuotation.getQuotationId().toString());
     }

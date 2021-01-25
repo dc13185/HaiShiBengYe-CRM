@@ -45,6 +45,10 @@ public class BusiProductModel extends BaseEntity
     /** 产品系列Id */
     private Long productLineId;
 
+    /** 是否为过流部件 */
+    @Excel(name = "低值物料成本")
+    private Double lowMaterialCost;
+
     public void setModelId(Long modelId)
     {
         this.modelId = modelId;
@@ -110,6 +114,14 @@ public class BusiProductModel extends BaseEntity
     public Long getProductLineId()
     {
         return productLineId;
+    }
+
+    public Double getLowMaterialCost() {
+        return lowMaterialCost;
+    }
+
+    public void setLowMaterialCost(Double lowMaterialCost) {
+        this.lowMaterialCost = lowMaterialCost;
     }
 
     @Override

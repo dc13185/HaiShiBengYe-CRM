@@ -14,10 +14,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="officeStaffName"    column="office_staff_name"    />
         <result property="technicalStaffId"    column="technical_staff_id"    />
         <result property="quotationType"    column="quotation_type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="customerIndustry"    column="customer_industry"    />
+        <result property="customerAddress"    column="customer_address"    />
     </resultMap>
 
     <sql id="selectBusiQuotationVo">
-        select quotation_id, project_name, project_address, quotation_no, customer_id, office_address, office_staff_name, technical_staff_id, quotation_type from busi_quotation
+        SELECT
+            quotation_id,
+            project_name,
+            project_address,
+            quotation_no,
+            customer_id,
+            (SELECT bc.customer_name FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_name,
+            (SELECT bc.customer_industry FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_industry,
+            (SELECT bc.contact_address FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_address,
+            office_address,
+            office_staff_name,
+            technical_staff_id,
+            quotation_type,
+            create_time,
+            (SELECT COUNT(1) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  allCount,
+            (SELECT IFNULL(ROUND(SUM(details_price*coefficient * number),2),0) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  sumPrice
+            FROM
+            busi_quotation bq
     </sql>
 
     <select id="selectBusiQuotationList" parameterType="BusiQuotation" resultMap="BusiQuotationResult">
@@ -26,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
             <if test="quotationNo != null  and quotationNo != ''"> and quotation_no = #{quotationNo}</if>
             <if test="quotationType != null "> and quotation_type = #{quotationType}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
         </where>
     </select>
 
@@ -50,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="officeStaffName != null and officeStaffName != ''">office_staff_name,</if>
             <if test="technicalStaffId != null">technical_staff_id,</if>
             <if test="quotationType != null">quotation_type,</if>
+            <if test="createTime != null">create_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null and projectName != ''">#{projectName},</if>
@@ -60,6 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="officeStaffName != null and officeStaffName != ''">#{officeStaffName},</if>
             <if test="technicalStaffId != null">#{technicalStaffId},</if>
             <if test="quotationType != null">#{quotationType},</if>
+            <if test="createTime != null">#{createTime},</if>
          </trim>
     </insert>
 
@@ -74,6 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="officeStaffName != null and officeStaffName != ''">office_staff_name = #{officeStaffName},</if>
             <if test="technicalStaffId != null">technical_staff_id = #{technicalStaffId},</if>
             <if test="quotationType != null">quotation_type = #{quotationType},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
         </trim>
         where quotation_id = #{quotationId}
     </update>

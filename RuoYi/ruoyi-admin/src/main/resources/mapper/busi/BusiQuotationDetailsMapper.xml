@@ -259,8 +259,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <select id="selectPriceDetil" parameterType="BusiQuotationDetails" resultType="com.ruoyi.busi.domain.PriceSum">
-        SELECT bpp.weight ,bt.`mass_ratio` as massRatio ,bmp.`price` as materialPrice,bpp.time ,
-        bpp.low_material_cost as lowMaterialCost
+        SELECT bpp.weight ,bt.`mass_ratio` as massRatio ,bmp.`price` as materialPrice,bpp.time
         FROM   `busi_product_parameter` bpp  LEFT JOIN  busi_texture bt
         ON bpp.`texture_id` = bt.`texture_id`
         LEFT JOIN `busi_material_production` bmp ON bt.`texture_id` = bmp.`texture_id`

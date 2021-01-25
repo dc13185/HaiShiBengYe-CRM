@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 报价单管理对象 busi_quotation
- * 
+ *
  * @author ruoyi
  * @date 2021-01-12
  */
@@ -31,8 +31,17 @@ public class BusiQuotation extends BaseEntity
     private String quotationNo;
 
     /** 客户id */
-    @Excel(name = "客户id")
     private Long customerId;
+
+    @Excel(name = "客户姓名")
+    private String customerName;
+
+    @Excel(name = "所在行业")
+    private String customerIndustry;
+
+    @Excel(name = "客户所在地")
+    private String customerAddress;
+
 
     /** 办事处 */
     @Excel(name = "办事处")
@@ -50,86 +59,133 @@ public class BusiQuotation extends BaseEntity
     @Excel(name = "产品类型")
     private Long quotationType;
 
-    public void setQuotationId(Long quotationId) 
+    @Excel(name = "合计数量")
+    private Double allCount;
+
+    @Excel(name = "合计价格")
+    private Double sumPrice;
+
+    public void setQuotationId(Long quotationId)
     {
         this.quotationId = quotationId;
     }
 
-    public Long getQuotationId() 
+    public Long getQuotationId()
     {
         return quotationId;
     }
-    public void setProjectName(String projectName) 
+    public void setProjectName(String projectName)
     {
         this.projectName = projectName;
     }
 
-    public String getProjectName() 
+    public String getProjectName()
     {
         return projectName;
     }
-    public void setProjectAddress(String projectAddress) 
+    public void setProjectAddress(String projectAddress)
     {
         this.projectAddress = projectAddress;
     }
 
-    public String getProjectAddress() 
+    public String getProjectAddress()
     {
         return projectAddress;
     }
-    public void setQuotationNo(String quotationNo) 
+    public void setQuotationNo(String quotationNo)
     {
         this.quotationNo = quotationNo;
     }
 
-    public String getQuotationNo() 
+    public String getQuotationNo()
     {
         return quotationNo;
     }
-    public void setCustomerId(Long customerId) 
+    public void setCustomerId(Long customerId)
     {
         this.customerId = customerId;
     }
 
-    public Long getCustomerId() 
+    public Long getCustomerId()
     {
         return customerId;
     }
-    public void setOfficeAddress(String officeAddress) 
+    public void setOfficeAddress(String officeAddress)
     {
         this.officeAddress = officeAddress;
     }
 
-    public String getOfficeAddress() 
+    public String getOfficeAddress()
     {
         return officeAddress;
     }
-    public void setOfficeStaffName(String officeStaffName) 
+    public void setOfficeStaffName(String officeStaffName)
     {
         this.officeStaffName = officeStaffName;
     }
 
-    public String getOfficeStaffName() 
+    public String getOfficeStaffName()
     {
         return officeStaffName;
     }
-    public void setTechnicalStaffId(Long technicalStaffId) 
+    public void setTechnicalStaffId(Long technicalStaffId)
     {
         this.technicalStaffId = technicalStaffId;
     }
 
-    public Long getTechnicalStaffId() 
+    public Long getTechnicalStaffId()
     {
         return technicalStaffId;
     }
-    public void setQuotationType(Long quotationType) 
+    public void setQuotationType(Long quotationType)
     {
         this.quotationType = quotationType;
     }
 
-    public Long getQuotationType() 
+    public Long getQuotationType()
     {
         return quotationType;
+    }
+
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerIndustry() {
+        return customerIndustry;
+    }
+
+    public void setCustomerIndustry(String customerIndustry) {
+        this.customerIndustry = customerIndustry;
+    }
+
+    public Double getAllCount() {
+        return allCount;
+    }
+
+    public void setAllCount(Double allCount) {
+        this.allCount = allCount;
+    }
+
+    public Double getSumPrice() {
+        return sumPrice;
+    }
+
+    public void setSumPrice(Double sumPrice) {
+        this.sumPrice = sumPrice;
+    }
+
+    public String getCustomerAddress() {
+        return customerAddress;
+    }
+
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
     }
 
     @Override

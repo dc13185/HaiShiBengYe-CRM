@@ -7,7 +7,7 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-production-edit" th:object="${busiMaterialProduction}">
             <input name="materialId" th:field="*{materialId}" type="hidden">
-            <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
+            <input name="supplierId" id="supplierId" th:field="*{supplierId}" type="hidden">
             <div class="form-group">
                 <label class="col-sm-3 control-label">材质：</label>
                 <div class="col-sm-8">

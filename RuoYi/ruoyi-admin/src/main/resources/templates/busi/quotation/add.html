@@ -1,684 +1,93 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-<th:block th:include="include :: header('表单向导')" />
-<th:block th:include="include :: jquery-smartwizard-css" />
-<style type="text/css">
-/* 如果要让工具栏固定在页面底部,使用下面的样式,不需要的可以注释 */
-.sw>.toolbar-bottom{
-	z-index: 100;
-    bottom: 0px;
-    left: 0;
-    width: 100%;
-   /* position: fixed;*/
-    text-align: right;
-    background: #fff;
-    box-shadow: 0 -2px 6px 1px hsla(223,8%,83%,.5);
-    border-top: 1px solid #e3e4e8;
-}
-/* 如果设置了是否自动调节高度为false,需要加滚动条 */
-.sw>.tab-content{
-	overflow-x: hidden;
-    overflow-y: auto;
-}
-</style>
+    <th:block th:include="include :: header('新增报价单管理')" />
 </head>
-<body class="gray-bg">
-	<div class="wrapper wrapper-content animated fadeInRight" style="height: 100%;">
-		<div class="row">
-			<div class="col-sm-12">
-				<div class="ibox">
-					<div class="ibox-title">
-						<h5>
-							表单向导
-							<small>https://github.com/techlab/jquery-smartwizard</small>
-						</h5>
-					</div>
-					<div class="ibox-content">
-						<div class="row select-list" style="padding-left: 15px; margin-bottom: 10px;">
-							<ul>
-								<li>
-									选择样式：
-									<select id="theme-selector">
-										<option value="default">Default</option>
-										<option value="arrows" selected>Arrows</option>
-										<option value="dots">Dots</option>
-										<option value="progress">Progress</option>
-									</select>
-								</li>
-								<!-- 快速操作栏按钮 -->
-								<li>
-									<div class="btn-group-sm" role="group">
-										<a class="btn btn-info" id="prev-btn"> 上一步 </a>
-										<a class="btn btn-success" id="next-btn"> 下一步 </a>
-										<a class="btn btn-danger" id="reset-btn"> 重置 </a>
-									</div>
-								</li>
-							</ul>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-quotation-add">
+            <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">项目名称：</label>
+                <div class="col-sm-8">
+                    <input name="projectName" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">项目所在地：</label>
+                <div class="col-sm-8">
+                    <input name="projectAddress" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">客户：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectUsersToParent()" id="customerName" readonly="true">
+                        <input name="customerId" id="customerId" th:value="${customerId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
 
-						</div>
-						<div id="smartwizard">
-							<ul class="nav">
-								<li class="nav-item">
-									<a class="nav-link" href="#step-1"> 报价单基本信息 </a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="#step-2"> 报价单详情 </a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="#step-3"> 核算 </a>
-								</li>
-							</ul>
-							<div class="tab-content">
-								<div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
-									<!-- 保存基本信息 -->
-									<div>
-										<form class="form form-horizontal m-t" id="form-quotation-add">
-											<input name="quotationId" class="quotationId" th:value="${quotationId}" type="hidden">
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">项目名称：</label>
-												<div class="col-sm-8">
-													<input name="projectName" class="form-control" type="text" required>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">项目所在地：</label>
-												<div class="col-sm-8">
-													<input name="projectAddress" class="form-control" type="text" required>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">客户：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectUsersToParent()" id="customerName" readonly="true">
-														<input name="customerId" id="customerId" th:value="${customerId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">业务员：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectUsersToParentToAddress()" name="officeStaffName" id="officeStaffName" readonly="true">
+                        <input name="staffId" id="staffId" th:value="${staffId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">办事处：</label>
+                <div class="col-sm-8">
+                    <input name="officeAddress" id="officeAddress" class="form-control" type="text" readonly="true" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">选型技术人员：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectTechnicalStaff()" name="technicalStaffName" id="technicalStaffName" readonly="true">
+                        <input name="technicalStaffId" id="technicalStaffId" th:value="${technicalStaffId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "busi/quotation"
+        $("#form-quotation-add").validate({
+            focusCleanup: true
+        });
 
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">办事处：</label>
-												<div class="col-sm-8">
-													<input name="officeAddress" id="officeAddress" class="form-control" type="text" readonly="true" required>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">业务员：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectUsersToParentToAddress()" id="officeStaffName" readonly="true">
-														<input name="supplierId" id="staffId" th:value="${staffId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">选型技术人员：</label>
-												<div class="col-sm-8">
-													<input name="technicalStaffId" class="form-control" type="text" required>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">产品类型：</label>
-												<div class="col-sm-8">
-													<select name="quotationType" class="form-control m-b" th:with="type=${@dict.getType('project_type')}" required>
-														<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-													</select>
-												</div>
-											</div>
-										</form>
-									</div>
-								</div>
-								<div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
-									<div>
-										<form class="form form-horizontal m" id="form-details-add">
-											<input name="quotationId" class="quotationId" th:value="${quotationId}" type="hidden">
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">设备位号：</label>
-												<div class="col-sm-8">
-													<input name="equipmentNum" class="form-control" type="text" required>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">产品系列：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectProductLine()" id="productLineName" readonly="true" required>
-														<input name="productLineId" id="productLineId" th:value="${productLineId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">产品规格型号：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectProductModel()" id="modelName" readonly="true" required>
-														<input name="modelId" id="modelId" th:value="${modelId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">过流部件品牌：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectSupplier('material')" id="materialSupplierName" readonly="true" required>
-														<input name="materialSupplierId" id="materialSupplierId" th:value="${materialSupplierId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">过流部件材质：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectMateria()" id="materialName" readonly="true" required>
-														<input name="materialId" id="materialId" th:value="${materialId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label is-required">数量：</label>
-												<div class="col-sm-8">
-													<input name="number" class="form-control" type="text" required>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">冲洗方案：</label>
-												<div class="col-sm-8">
-													<input name="rinseSolutionId" class="form-control"></input>
-												</div>
-											</div>
-										<div class="form-group">
-												<label class="col-sm-3 control-label">其他费用：</label>
-												<div class="col-sm-8">
-													<input name="otherExpenses" class="form-control" type="text">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">其他费用说明：</label>
-												<div class="col-sm-8">
-													<input name="otherExpensesDescription" class="form-control"></input>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">额定流量(m3/h)：</label>
-												<div class="col-sm-8">
-													<input name="ratedFlow" class="form-control" type="text">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">扬程(m)：</label>
-												<div class="col-sm-8">
-													<input name="lift" class="form-control" type="text">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">工况温度(℃)：</label>
-												<div class="col-sm-8">
-													<input name="operatingTemperature" class="form-control" type="text">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">流体密度(Kg/m³)：</label>
-												<div class="col-sm-8">
-													<input name="fluidDensity" class="form-control" type="text">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">入口压力(Mpa)：</label>
-												<div class="col-sm-8">
-													<input name="inletPressure" class="form-control" type="text">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">汽蚀余量(m)：</label>
-												<div class="col-sm-8">
-													<input name="npsh" class="form-control" type="text">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">电机品牌：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectSupplier('motor')" id="motorSupplierName" readonly="true" required>
-														<input name="motorSupplierId" id="motorSupplierId" th:value="${motorSupplierId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">电机型号：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectMotor()" id="motorName" readonly="true" required>
-														<input name="motorId" id="motorId" th:value="${motorId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">其他电机：</label>
-												<div class="col-sm-8">
-													<input name="otherMotor" class="form-control"></input>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">其他电机价格：</label>
-												<div class="col-sm-8">
-													<input name="otherMotorPrice" class="form-control" type="text">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">机封品牌：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectSupplier('seal')" id="machineSupplierName" readonly="true" required>
-														<input name="machineSupplierId" id="machineSupplierId" th:value="${machineSupplierId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">机封型号：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectMachine()" id="machineName" readonly="true" required>
-														<input name="machineId" id="machineId" th:value="${machineId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">其他机封：</label>
-												<div class="col-sm-8">
-													<input name="otherMachine" class="form-control"></input>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">其他机封价格：</label>
-												<div class="col-sm-8">
-													<input name="otherMachinePrice" class="form-control" type="text">
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">联轴器品牌：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectSupplier('coupling')" id="couplingSupplierName" readonly="true" required>
-														<input name="couplingSupplierId" id="couplingSupplierId" th:value="${couplingSupplierId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">联轴器型号：</label>
-												<div class="col-sm-8">
-													<div class="input-group">
-														<input class="form-control" type="text" onclick="selectCoupling()" id="couplingName" readonly="true" required>
-														<input name="couplingId" id="couplingId" th:value="${couplingId}" type="hidden">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">其他联轴器：</label>
-												<div class="col-sm-8">
-													<input name="otherCoupling" class="form-control"></input>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label">其他联轴器价格：</label>
-												<div class="col-sm-8">
-													<input name="otherCouplingPrice" class="form-control" type="text">
-												</div>
-											</div>
-										</form>
-									</div>
-								</div>
-								<div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
-									<div class="m-t-md">
-										<p>1、如果需要工具栏在页面底部显示, 将style中下面的部分取消注释<blockquote>.sw>.toolbar-bottom </blockquote></p>
-										<p>2、如果设置了自动调节高度为false, 将style中下面的部分取消注释<blockquote>.sw>.tab-content </blockquote></p>
-										<p>3、工具栏的按钮样式会被表单插件中.btn样式覆盖导致bootstrap中的按钮样式无效, 如果需要改变按钮样式可以自己定义并提高优先级</blockquote></p>
-									</div>
-								</div>
-								<div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
-									<div class="m-t-md">
-										<h3>测试多行显示</h3>
-										<pre style="overflow-x: hidden;">
-											$('#smartwizard').smartWizard({
-											  selected: 0, // Initial selected step, 0 = first step
-											  theme: 'default', // theme for the wizard, related css need to include for other than default theme
-											  justified: true, // Nav menu justification. true/false
-											  darkMode:false, // Enable/disable Dark Mode if the theme supports. true/false
-											  autoAdjustHeight: true, // Automatically adjust content height
-											  cycleSteps: false, // Allows to cycle the navigation of steps
-											  backButtonSupport: true, // Enable the back button support
-											  enableURLhash: true, // Enable selection of the step based on url hash
-											  transition: {
-												  animation: 'none', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
-												  speed: '400', // Transion animation speed
-												  easing:'' // Transition animation easing. Not supported without a jQuery easing plugin
-											  },
-											  toolbarSettings: {
-												  toolbarPosition: 'bottom', // none, top, bottom, both
-												  toolbarButtonPosition: 'right', // left, right, center
-												  showNextButton: true, // show/hide a Next button
-												  showPreviousButton: true, // show/hide a Previous button
-												  toolbarExtraButtons: [] // Extra buttons to show on toolbar, array of jQuery input/buttons elements
-											  },
-											  anchorSettings: {
-												  anchorClickable: true, // Enable/Disable anchor navigation
-												  enableAllAnchors: false, // Activates all anchors clickable all times
-												  markDoneStep: true, // Add done state on navigation
-												  markAllPreviousStepsAsDone: true, // When a step selected by url hash, all previous steps are marked done
-												  removeDoneStepOnNavigateBack: false, // While navigate back done step after active step will be cleared
-												  enableAnchorOnDoneStep: true // Enable/Disable the done steps navigation
-											  },
-											  keyboardSettings: {
-												  keyNavigation: true, // Enable/Disable keyboard navigation(left and right keys are used if enabled)
-												  keyLeft: [37], // Left key code
-												  keyRight: [39] // Right key code
-											  },
-											  lang: { // Language variables for button
-												  next: 'Next',
-												  previous: 'Previous'
-											  },
-											  disabledSteps: [], // Array Steps disabled
-											  errorSteps: [], // Highlight step with errors
-											  hiddenSteps: [] // Hidden steps
-											});
-										</pre>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
-	<th:block th:include="include :: footer" />
-	<th:block th:include="include :: jquery-smartwizard-js" />
-	<script>
-		var quotation_prefix = ctx + "busi/quotation"
-		var quotation_prefix_details = ctx + "busi/details"
-		var Q_ID;
-		$("#form-quotation-add").validate({
-			focusCleanup: true
-		});
-
-		$(document).ready(function() {
-			// 工具栏按钮
-            var btnFinish = $('<a id="btn-finish"></a>').text('完成')
-                                             .addClass('btn btn-info')
-                                             .on('click', function(){ submit(); });
-            var btnCancel = $('<a id="btn-cancel"></a>').text('取消')
-                                             .addClass('btn btn-danger')
-                                             .on('click', function(){ $('#smartwizard').smartWizard("reset"); });
-           	// 下面两个按钮是为了因为插件默认的是botton,这里换成<a>,也可以选择用样式替换,或者不替换
-            var btnNext = $('<a id="btn-next"></a>').text('下一步')
-											 .addClass('btn btn-info')
-											 .on('click', function(){ $('#smartwizard').smartWizard("next");});
-			var btnPrev = $('<a id="btn-prev"></a>').text('上一步')
-											 .addClass('btn btn-success disabled')
-											 .on('click', function(){ $('#smartwizard').smartWizard("prev"); });
-            // 初始化表单向导组件
-            $('#smartwizard').smartWizard({
-                theme: 'arrows', // default, arrows, dots, progress
-                autoAdjustHeight : false, // 自动调整高度, 默认true
-                enableURLhash:false, //开启URL hash,开启后点击浏览器前进后退按钮会执行下一步和上一步操作
-                transition: {
-                    animation: 'slide-horizontal', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
-                },
-                toolbarSettings: {
-                	showNextButton: false,// 因为上面自定义了下一步按钮, 所以隐藏掉插件自带的按钮, 如果不使用自定义按钮, 需要改为true或者去掉该属性
-    				showPreviousButton: false,// 因为上面自定义了上一步按钮, 所以隐藏掉插件自带的按钮, 如果不使用自定义按钮, 需要改为true或者去掉该属性
-                    toolbarExtraButtons: [btnCancel,btnPrev,btnNext,btnFinish]// 扩展的按钮集合
-                }
-            });
-		});
-
-		function submit(){
-			var data = {};
-			$('.form').each(function (index, form){
-				// 这里可以使用$.common.formToJSON(formId);  需要在form上加id
-                $.each($(form).serializeArray(), function(i, field) {
-                 	 if(data[field.name]) {
-                 		data[field.name] += ("," + field.value);
-					 } else {
-						data[field.name] = field.value;
-                     }
-                });
-			});
-			alert(JSON.stringify(data))
-		}
-		// 显示步骤时将触发事件
-        $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection, stepPosition) {
-        	// 下面按钮是快速操作栏的
-        	$("#prev-btn").removeClass('disabled');
-            $("#next-btn").removeClass('disabled');
-        	// 下面按钮是工具栏的
-        	$("#btn-prev").removeClass('disabled');
-            $("#btn-next").removeClass('disabled');
-            $("#btn-finish").removeClass('disabled');
-            if(stepPosition === 'first') {
-            	$("#prev-btn").addClass('disabled');// 快速操作栏（演示用）
-            	$("#btn-prev").addClass('disabled');
-				$("#btn-finish").addClass('disabled');
-            } else if(stepPosition === 'last') {
-            	$("#next-btn").addClass('disabled');// 快速操作栏（演示用）
-                $("#btn-next").addClass('disabled');
-            } else {
-            	$("#prev-btn").removeClass('disabled');// 快速操作栏（演示用）
-                $("#next-btn").removeClass('disabled');// 快速操作栏（演示用）
-                $("#btn-prev").removeClass('disabled');
-                $("#btn-next").removeClass('disabled');
-                $("#btn-finish").addClass('disabled');
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-quotation-add').serialize());
             }
-        });
+        }
 
-		// 该事件在离开某个步骤之前触发
-		$("#smartwizard").on("leaveStep", function(e, anchorObject, currentStepNumber, nextStepNumber, stepDirection) {
-			if(stepDirection == 'forward'){
-				var step = currentStepNumber + 1;
-				var form = $("#step-" + step).find('.form');
-				if(form.length > 0){
-					if (form.validate().form()){
-						if (step == 1) {
-							debugger;
-							if (!Q_ID){
-								$.ajax({
-									url:quotation_prefix+'/add',
-									data:form.serialize(),
-									type:'POST',
-									dataType:'json',
-									success:function(data){
-										Q_ID = data.msg;
-										$(".quotationId").val(Q_ID);
-										alert(data);
-										//success
-									},
-									error:function(){
-										console.log("提交ajax函数异常");
-									},
-								});
-							}
-					}
-					if(step == 2){
-						    var form_details = $("#form-details-add");
-							$.ajax({
-								url:quotation_prefix_details+'/add',
-								data:form_details.serialize(),
-								type:'POST',
-								dataType:'json',
-								success:function(data){
-									//success
-								},
-								error:function(){
-									console.log("提交ajax函数异常");
-								},
-							});
-						}
-						return form.validate().form();
-					}
-					/*if (form.validate().form()){
-						$.ajax({
-							url:quotation_prefix+'/add',
-							data:form.serialize(),
-							type:'POST',
-							dataType:'json',
-							success:function(data){
-								//success
-							},
-							error:function(){
-								console.log("提交ajax函数异常");
-							},
-						});
-						return form.validate().form();
-					}*/
-					return true;
-				}
-			}
-			return true;
-		});
+        function selectUsersToParent(){
+            $.modal.open("选择用户", ctx + "busi/customer");
+        }
 
-		$("#theme-selector").on("change", function() {
-			// Change theme
-			var options = {
-				theme : $(this).val()
-			};
-			$('#smartwizard').smartWizard("setOptions", options);
-			return true;
-		});
+        function selectUsersToParentToAddress(){
+            $.modal.open("选择业务员", ctx + "busi/staff");
+        }
 
-		$("#reset-btn").on("click", function() {
-            // Reset wizard
-            $('#smartwizard').smartWizard("reset");
-            return true;
-        });
+        function selectTechnicalStaff(){
+            $.modal.open("选择技术人员", ctx + "busi/technicist");
+        }
 
-        $("#prev-btn").on("click", function() {
-            // Navigate previous
-            $('#smartwizard').smartWizard("prev");
-            return true;
-        });
 
-        $("#next-btn").on("click", function() {
-            // Navigate next
-            $('#smartwizard').smartWizard("next");
-            return true;
-        });
 
-		function selectUsersToParent(){
-			$.modal.open("选择用户", ctx + "busi/customer");
-		}
 
-		function selectUsersToParentToAddress(){
-			$.modal.open("选择业务员", ctx + "busi/staff");
-		}
 
-		$("#form-details-add").validate({
-			focusCleanup: true,
-			rules:{
-				number:{
-					isNumber:true
-				},
-				otherExpenses:{
-					isNumber:true
-				},
-				ratedFlow:{
-					isNumber:true
-				},
-				operatingTemperature:{
-					isNumber:true
-				},
-				fluidDensity:{
-					isNumber:true
-				},
-				inletPressure:{
-					isNumber:true
-				},
-				npsh:{
-					isNumber:true
-				},
-				otherMotorPrice:{
-					isNumber:true
-				},
-				otherCouplingPrice:{
-					isNumber:true
-				},
-			}
-		});
-		function selectProductLine(){
-			$.modal.open("选择产品系列", ctx + "busi/line");
-		}
 
-		function selectProductModel(){
-			var productLineId = $("#productLineId").val();
-			if (!productLineId){
-				$.modal.alertError("请先选择产品系列");
-			}else{
-				$.modal.open("选择产品系列", ctx + "busi/model?productLineId="+productLineId);
-			}
-		}
-
-		function selectSupplier(supplierType){
-			if (supplierType == "material") {
-				$.modal.open("选择材料品牌", ctx + "busi/supplier?supplierType=" + supplierType);
-			}else if (supplierType == "motor"){
-				$.modal.open("选择材料品牌", ctx + "busi/supplier?supplierType="+supplierType);
-			}else if(supplierType == "seal"){
-				$.modal.open("选择机封品牌", ctx + "busi/supplier?supplierType="+supplierType);
-			}else if(supplierType == 'coupling'){
-				$.modal.open("选择联轴器品牌", ctx + "busi/supplier?supplierType="+supplierType);
-			}
-
-		}
-
-		function selectMateria(){
-			var materialSupplierId = $("#materialSupplierId").val();
-			if(!materialSupplierId){
-				$.modal.alertError("请先选择材料品牌");
-			}else{
-				$.modal.open("选择材料产品", ctx + "busi/production?supplierId="+materialSupplierId);
-			}
-		}
-
-		function selectMotor(){
-			var motorSupplierId = $("#motorSupplierId").val();
-			if (!motorSupplierId){
-				$.modal.alertError("请先选择电机品牌");
-			}else{
-				$.modal.open("选择电机产品", ctx + "busi/motor?supplierId="+motorSupplierId);
-			}
-		}
-
-		function selectMachine(){
-			var machineSupplierId = $("#machineSupplierId").val();
-			if (!machineSupplierId){
-				$.modal.alertError("请先选择机封品牌");
-			}else{
-				$.modal.open("选择机封产品", ctx + "busi/machine?supplierId="+machineSupplierId);
-			}
-		}
-
-		function selectCoupling(){
-			var couplingSupplierId = $("#couplingSupplierId").val();
-			if (!couplingSupplierId){
-				$.modal.alertError("请先选择联轴器品牌");
-			}else{
-				$.modal.open("选择机封产品", ctx + "busi/coupling?supplierId="+couplingSupplierId);
-			}
-		}
-	</script>
+    </script>
 </body>
 </html>

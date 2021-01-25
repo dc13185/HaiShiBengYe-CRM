@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 机封管理对象 busi_machine
- * 
+ *
  * @author ruoyi
  * @date 2021-01-06
  */
@@ -26,44 +26,56 @@ public class BusiMachine extends BaseEntity
     @Excel(name = "机封价格")
     private String machinePrice;
 
+    /** 材质型号 */
+    @Excel(name = "材质型号")
+    private String materialModel;
+
     /**  */
     private String supplierId;
 
-    public void setMachineId(Long machineId) 
+    public void setMachineId(Long machineId)
     {
         this.machineId = machineId;
     }
 
-    public Long getMachineId() 
+    public Long getMachineId()
     {
         return machineId;
     }
-    public void setMachineModel(String machineModel) 
+    public void setMachineModel(String machineModel)
     {
         this.machineModel = machineModel;
     }
 
-    public String getMachineModel() 
+    public String getMachineModel()
     {
         return machineModel;
     }
-    public void setMachinePrice(String machinePrice) 
+    public void setMachinePrice(String machinePrice)
     {
         this.machinePrice = machinePrice;
     }
 
-    public String getMachinePrice() 
+    public String getMachinePrice()
     {
         return machinePrice;
     }
-    public void setSupplierId(String supplierId) 
+    public void setSupplierId(String supplierId)
     {
         this.supplierId = supplierId;
     }
 
-    public String getSupplierId() 
+    public String getSupplierId()
     {
         return supplierId;
+    }
+
+    public String getMaterialModel() {
+        return materialModel;
+    }
+
+    public void setMaterialModel(String materialModel) {
+        this.materialModel = materialModel;
     }
 
     @Override
