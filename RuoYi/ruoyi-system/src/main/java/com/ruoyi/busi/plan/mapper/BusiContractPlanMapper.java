@@ -27,6 +27,9 @@ public interface BusiContractPlanMapper
      */
     public List<BusiContractPlan> selectBusiContractPlanList(BusiContractPlan busiContractPlan);
 
+    public List<BusiContractPlan> selectBusiContractPlanListNotNull(BusiContractPlan busiContractPlan);
+
+
     /**
      * 新增合同进度
      *

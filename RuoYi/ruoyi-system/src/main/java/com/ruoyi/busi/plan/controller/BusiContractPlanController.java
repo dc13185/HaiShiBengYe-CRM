@@ -5,11 +5,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.busi.plan.domain.BusiContractPlan;
@@ -41,6 +37,15 @@ public class BusiContractPlanController extends BaseController
         return prefix + "/plan";
     }
 
+
+    @RequiresPermissions("busi.plan:plan:view")
+    @GetMapping("/contract")
+    public String contractPlan(String contractId,ModelMap modelMap)
+    {
+        modelMap.put("contractId",contractId);
+        return prefix + "/contract_plan";
+    }
+
     /**
      * 查询合同进度列表
      */
@@ -54,6 +59,20 @@ public class BusiContractPlanController extends BaseController
         return getDataTable(list);
     }
 
+
+
+    /**
+     * 查询合同进度列表
+     */
+    @RequiresPermissions("busi.plan:plan:list")
+    @PostMapping("/listNotNull")
+    @ResponseBody
+    public TableDataInfo listNotNull(BusiContractPlan busiContractPlan)
+    {
+        startPage();
+        List<BusiContractPlan> list = busiContractPlanService.selectBusiContractPlanListNotNull(busiContractPlan);
+        return getDataTable(list);
+    }
     /**
      * 导出合同进度列表
      */
@@ -107,10 +126,11 @@ public class BusiContractPlanController extends BaseController
     @Log(title = "合同进度", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(BusiContractPlan busiContractPlan)
+    public AjaxResult editSave(@RequestBody BusiContractPlan busiContractPlan)
     {
         return toAjax(busiContractPlanService.updateBusiContractPlan(busiContractPlan));
     }
+
 
     /**
      * 删除合同进度

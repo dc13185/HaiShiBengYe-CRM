@@ -6,6 +6,12 @@
 </head>
 <body class="gray-bg">
      <div class="container-div">
+         <form id="formId">
+             <div class="select-list">
+                 <input name="contractId" id="contractId" th:value="${contractId}" type="hidden">
+             </div>
+         </form>
+
         <div class="row">
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -21,11 +27,15 @@
 
         $(function() {
             var options = {
-                url: prefix + "/list",
+                url: prefix + "/listNotNull",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "合同进度",
-                pageSize: 20,
+                pageSize: 25,
+                showToggle: false,
+                showColumns: false,
+                search: false,
+                onEditableSave: onEditableSave,
                 columns: [{
                     checkbox: true
                 },
@@ -65,7 +75,13 @@
                 {
                     title: '是否延期',
                     formatter: function(value, row, index) {
-                        return "否";
+                        if (row.actualTime && row.plannedTime ){
+                            var flag = compareDate(row.actualTime,row.plannedTime);
+                            if (!flag){
+                                return "<small style='color: red'>已延期</small>";
+                            }
+                        }
+                        return "<small style='color: #007aff'>未延期</small>";
                     }
                 },
 
@@ -73,6 +89,43 @@
             };
             $.table.init(options);
         });
+
+
+        function onEditableSave (field, row, rowIndex, oldValue, $el) {
+            var fieldName = field.toString();
+            var dateFrom = {};
+            dateFrom["planId"]=row.planId;
+            dateFrom[fieldName]=row[field];
+            $.ajax({
+                url: prefix + "/edit",
+                data: JSON.stringify(dateFrom),
+                type: "post",
+                processData: false,
+                contentType: "application/json",
+                success: function(result) {
+
+                }
+            });
+        }
+
+
+
+
+        function compareDate(logintime, logouttime) {
+            var arys1 = new Array();
+            var arys2 = new Array();
+            if (logintime != null && logouttime != null) {
+                arys1 = logintime.split('-');
+                var logindate = new Date(arys1[0], parseInt(arys1[1] - 1), arys1[2]);
+                arys2 = logouttime.split('-');
+                var logoutdate = new Date(arys2[0], parseInt(arys2[1] - 1), arys2[2]);
+                if (logindate > logoutdate) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
     </script>
 </body>
 </html>

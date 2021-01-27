@@ -1,6 +1,8 @@
 package com.ruoyi.busi.plan.domain;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -8,7 +10,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 合同进度对象 busi_contract_plan
- * 
+ *
  * @author ruoyi
  * @date 2021-01-25
  */
@@ -29,54 +31,56 @@ public class BusiContractPlan extends BaseEntity
 
     /** 计划完成时间 */
     @Excel(name = "计划完成时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date plannedTime;
 
     /** 实际完成时间 */
     @Excel(name = "实际完成时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date actualTime;
 
-    public void setPlanId(Long planId) 
+    public void setPlanId(Long planId)
     {
         this.planId = planId;
     }
 
-    public Long getPlanId() 
+    public Long getPlanId()
     {
         return planId;
     }
-    public void setContractId(Long contractId) 
+    public void setContractId(Long contractId)
     {
         this.contractId = contractId;
     }
 
-    public Long getContractId() 
+    public Long getContractId()
     {
         return contractId;
     }
-    public void setPlanName(String planName) 
+    public void setPlanName(String planName)
     {
         this.planName = planName;
     }
 
-    public String getPlanName() 
+    public String getPlanName()
     {
         return planName;
     }
-    public void setPlannedTime(Date plannedTime) 
+    public void setPlannedTime(Date plannedTime)
     {
         this.plannedTime = plannedTime;
     }
 
-    public Date getPlannedTime() 
+    public Date getPlannedTime()
     {
         return plannedTime;
     }
-    public void setActualTime(Date actualTime) 
+    public void setActualTime(Date actualTime)
     {
         this.actualTime = actualTime;
     }
 
-    public Date getActualTime() 
+    public Date getActualTime()
     {
         return actualTime;
     }

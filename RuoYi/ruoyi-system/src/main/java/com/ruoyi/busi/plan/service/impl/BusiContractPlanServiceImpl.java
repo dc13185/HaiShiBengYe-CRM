@@ -44,6 +44,11 @@ public class BusiContractPlanServiceImpl implements IBusiContractPlanService
         return busiContractPlanMapper.selectBusiContractPlanList(busiContractPlan);
     }
 
+    @Override
+    public List<BusiContractPlan> selectBusiContractPlanListNotNull(BusiContractPlan busiContractPlan) {
+        return busiContractPlanMapper.selectBusiContractPlanListNotNull(busiContractPlan);
+    }
+
     /**
      * 新增合同进度
      *

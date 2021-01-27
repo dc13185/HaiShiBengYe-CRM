@@ -23,10 +23,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+
     <select id="selectBusiContractPlanById" parameterType="Long" resultMap="BusiContractPlanResult">
         <include refid="selectBusiContractPlanVo"/>
         where plan_id = #{planId}
     </select>
+
+
+    <select id="selectBusiContractPlanListNotNull" parameterType="Long" resultMap="BusiContractPlanResult">
+        <include refid="selectBusiContractPlanVo"/>
+        <where>
+            <if test="contractId != null  and contractId != ''"> and contract_id = #{contractId}</if>
+        </where>
+    </select>
+
 
     <insert id="insertBusiContractPlan" parameterType="BusiContractPlan" useGeneratedKeys="true" keyProperty="planId">
         insert into busi_contract_plan
