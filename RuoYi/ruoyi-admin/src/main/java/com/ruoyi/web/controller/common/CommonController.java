@@ -2,6 +2,11 @@ package com.ruoyi.web.controller.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.busi.domain.BusiAnnexFile;
+import com.ruoyi.busi.domain.BusiSupplierAnnex;
+import com.ruoyi.busi.service.IBusiAnnexFileService;
+import com.ruoyi.busi.service.IBusiSupplierAnnexService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +26,7 @@ import com.ruoyi.common.utils.file.FileUtils;
 
 /**
  * 通用请求处理
- * 
+ *
  * @author ruoyi
  */
 @Controller
@@ -32,9 +37,14 @@ public class CommonController
     @Autowired
     private ServerConfig serverConfig;
 
+    @Autowired
+    private IBusiAnnexFileService busiAnnexFileService;
+
+    @Autowired
+    private IBusiSupplierAnnexService busiSupplierAnnexService;
     /**
      * 通用下载请求
-     * 
+     *
      * @param fileName 文件名称
      * @param delete 是否删除
      */
@@ -69,7 +79,7 @@ public class CommonController
      */
     @PostMapping("/common/upload")
     @ResponseBody
-    public AjaxResult uploadFile(MultipartFile file) throws Exception
+    public AjaxResult uploadFile(MultipartFile file,String supplierId) throws Exception
     {
         try
         {
@@ -78,6 +88,20 @@ public class CommonController
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
             String url = serverConfig.getUrl() + fileName;
+            //入库附件
+            BusiAnnexFile busiAnnexFile = new BusiAnnexFile();
+            busiAnnexFile.setAnnexFileName(fileName);
+            busiAnnexFile.setAnnexFilePath(url);
+            busiAnnexFile.setAnnexFileSuffix(FileUploadUtils.getExtension(file));
+            busiAnnexFile.setAnnexFileSrcName(file.getOriginalFilename());
+            busiAnnexFile.setAnnexFileSize(file.getSize());
+            busiAnnexFileService.insertBusiAnnexFile(busiAnnexFile);
+            //插入中间表
+            BusiSupplierAnnex busiSupplierAnnex = new BusiSupplierAnnex();
+            busiSupplierAnnex.setAnnexId(busiAnnexFile.getAnnexId());
+            busiSupplierAnnex.setSupplierId(supplierId);
+            busiSupplierAnnexService.insertBusiSupplierAnnex(busiSupplierAnnex);
+
             AjaxResult ajax = AjaxResult.success();
             ajax.put("fileName", fileName);
             ajax.put("url", url);
@@ -88,6 +112,9 @@ public class CommonController
             return AjaxResult.error(e.getMessage());
         }
     }
+
+
+
 
     /**
      * 本地资源通用下载

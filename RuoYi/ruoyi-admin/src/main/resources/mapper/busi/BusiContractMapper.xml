@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiContractMapper">
+
+    <resultMap type="BusiContract" id="BusiContractResult">
+        <result property="contractId"    column="contract_id"    />
+        <result property="qutationId"    column="qutation_id"    />
+        <result property="contractPrice"    column="contract_price"    />
+        <result property="productComposition"    column="product_composition"    />
+        <result property="componentPrice"    column="component_price"    />
+        <result property="paymentMethod"    column="payment_method"    />
+        <result property="deliveryTime"    column="delivery_time"    />
+        <result property="signingDate"    column="signing_date"    />
+        <result property="remake"    column="remake"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="progressStatement"    column="progress_statement"    />
+        <result property="principal"    column="principal"    />
+        <result property="delayWarning"    column="delay_warning"    />
+        <result property="delayInstructions"    column="delay_instructions"    />
+        <result property="updateTime"    column="update_time"    />
+
+        <association property="busiQuotation" javaType="com.ruoyi.busi.domain.BusiQuotation">
+            <result property="quotationId"    column="quotation_id"    />
+            <result property="projectName"    column="project_name"    />
+            <result property="projectAddress"    column="project_address"    />
+            <result property="quotationNo"    column="quotation_no"    />
+            <result property="customerId"    column="customer_id"    />
+            <result property="officeAddress"    column="office_address"    />
+            <result property="officeStaffName"    column="office_staff_name"    />
+            <result property="technicalStaffId"    column="technical_staff_id"    />
+            <result property="quotationType"    column="quotation_type"    />
+            <result property="sumPrice"    column="sumPrice"    />
+            <result property="createTime"    column="create_time"    />
+            <result property="customerName"    column="customer_name"    />
+            <result property="customerIndustry"    column="customer_industry"    />
+            <result property="customerAddress"    column="customer_address"    />
+        </association>
+
+    </resultMap>
+
+    <sql id="selectBusiContractVo">
+        select contract_id, qutation_id, contract_price, product_composition, component_price, payment_method, delivery_time, signing_date, remake, progress_statement, principal, delay_warning, delay_instructions, update_time from busi_contract
+    </sql>
+
+    <select id="selectBusiContractList" parameterType="BusiContract" resultMap="BusiContractResult">
+        SELECT
+        quotation_id,
+        project_name,
+        project_address,
+        quotation_no,
+        customer_id,
+        (SELECT bc.customer_name FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_name,
+        (SELECT bc.customer_industry FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_industry,
+        (SELECT bc.contact_address FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_address,
+        office_address,
+        office_staff_name,
+        technical_staff_id,
+        quotation_type,
+        create_time,
+        (SELECT IFNULL(ROUND(SUM(details_price*coefficient * number),2),0) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  sumPrice,
+        bc.*
+        FROM
+        busi_contract bc , busi_quotation bq
+        WHERE bc.qutation_id =bq.quotation_id
+        <where>
+            <if test="params.beginSigningDate != null and params.beginSigningDate != '' and params.endSigningDate != null and params.endSigningDate != ''"> and bc.signing_date between #{params.beginSigningDate} and #{params.endSigningDate}</if>
+        </where>
+    </select>
+
+    <select id="selectBusiContractById" parameterType="Long" resultMap="BusiContractResult">
+        <include refid="selectBusiContractVo"/>
+        where contract_id = #{contractId}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(1) from busi_contract
+    </select>
+
+    <insert id="insertBusiContract" parameterType="BusiContract" useGeneratedKeys="true" keyProperty="contractId">
+        insert into busi_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="qutationId != null">qutation_id,</if>
+            <if test="contractPrice != null">contract_price,</if>
+            <if test="productComposition != null">product_composition,</if>
+            <if test="componentPrice != null">component_price,</if>
+            <if test="paymentMethod != null and paymentMethod != ''">payment_method,</if>
+            <if test="deliveryTime != null">delivery_time,</if>
+            <if test="signingDate != null">signing_date,</if>
+            <if test="remake != null">remake,</if>
+            <if test="progressStatement != null">progress_statement,</if>
+            <if test="principal != null">principal,</if>
+            <if test="delayWarning != null">delay_warning,</if>
+            <if test="delayInstructions != null">delay_instructions,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="contractNo != null">contract_no,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="qutationId != null">#{qutationId},</if>
+            <if test="contractPrice != null">#{contractPrice},</if>
+            <if test="productComposition != null">#{productComposition},</if>
+            <if test="componentPrice != null">#{componentPrice},</if>
+            <if test="paymentMethod != null and paymentMethod != ''">#{paymentMethod},</if>
+            <if test="deliveryTime != null">#{deliveryTime},</if>
+            <if test="signingDate != null">#{signingDate},</if>
+            <if test="remake != null">#{remake},</if>
+            <if test="progressStatement != null">#{progressStatement},</if>
+            <if test="principal != null">#{principal},</if>
+            <if test="delayWarning != null">#{delayWarning},</if>
+            <if test="delayInstructions != null">#{delayInstructions},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBusiContract" parameterType="BusiContract">
+        update busi_contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="qutationId != null">qutation_id = #{qutationId},</if>
+            <if test="contractPrice != null">contract_price = #{contractPrice},</if>
+            <if test="productComposition != null">product_composition = #{productComposition},</if>
+            <if test="componentPrice != null">component_price = #{componentPrice},</if>
+            <if test="paymentMethod != null and paymentMethod != ''">payment_method = #{paymentMethod},</if>
+            <if test="deliveryTime != null">delivery_time = #{deliveryTime},</if>
+            <if test="signingDate != null">signing_date = #{signingDate},</if>
+            <if test="remake != null">remake = #{remake},</if>
+            <if test="progressStatement != null">progress_statement = #{progressStatement},</if>
+            <if test="principal != null">principal = #{principal},</if>
+            <if test="delayWarning != null">delay_warning = #{delayWarning},</if>
+            <if test="delayInstructions != null">delay_instructions = #{delayInstructions},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="contractNo != null">contract_no = #{contractNo},</if>
+        </trim>
+        where contract_id = #{contractId}
+    </update>
+
+    <delete id="deleteBusiContractById" parameterType="Long">
+        delete from busi_contract where contract_id = #{contractId}
+    </delete>
+
+    <delete id="deleteBusiContractByIds" parameterType="String">
+        delete from busi_contract where contract_id in
+        <foreach item="contractId" collection="array" open="(" separator="," close=")">
+            #{contractId}
+        </foreach>
+    </delete>
+
+</mapper>

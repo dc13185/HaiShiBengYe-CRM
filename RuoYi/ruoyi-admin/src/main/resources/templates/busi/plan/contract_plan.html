@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('合同进度列表')" />
+    <th:block th:include="include :: bootstrap-editable-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+     <th:block th:include="include :: bootstrap-table-editable-js" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('busi.plan:plan:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('busi.plan:plan:remove')}]];
+        var prefix = ctx + "busi.plan/plan";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "合同进度",
+                pageSize: 20,
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'planId',
+                    title: '',
+                    visible: false
+                },
+                {
+                    title: '序号',
+                    formatter: function(value, row, index) {
+                        return index + 1;
+                    }
+                },
+                {
+                    field: 'planName',
+                    title: '步骤名'
+                },
+                {
+                    field: 'plannedTime',
+                    title: '计划完成时间',
+                    editable: {
+                        type: 'date',
+                        title: '计划完成时间',
+                        placement: 'left'
+                    },
+                },
+                {
+                    field: 'actualTime',
+                    title: '实际完成时间',
+                    editable: {
+                        type: 'date',
+                        title: '实际完成时间',
+                        placement: 'left'
+                    },
+                },
+                {
+                    title: '是否延期',
+                    formatter: function(value, row, index) {
+                        return "否";
+                    }
+                },
+
+                ]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,10 +1,10 @@
 /*this is basic form validation using for validation person's basic information author:Clara Guo data:2017/07/20*/
 $(document).ready(function(){
-	$.validator.setDefaults({       
-		  submitHandler: function(form) {    
-		 		form.submit();    
-		}       
-	});  
+	$.validator.setDefaults({
+		  submitHandler: function(form) {
+		 		form.submit();
+		}
+	});
 	//手机号码验证身份证正则合并：(^\d{15}$)|(^\d{17}([0-9]|X)$)
 	jQuery.validator.addMethod("isPhone",function(value,element){
 		var length = value.length;
@@ -26,7 +26,13 @@ $(document).ready(function(){
 		var userName=/^[a-zA-Z0-9]{2,13}$/;
 		return this.optional(element) || (userName).test(value);
 	},'请输入数字或者字母,不包含特殊字符');
-	
+
+
+	jQuery.validator.addMethod("isNumber",function(value,element){
+		var userName=/^[0-9]*([.][0-9]+)?$/;
+		return this.optional(element) || (userName).test(value);
+	},'请输入正确的数字');
+
 	//校验身份证
 	jQuery.validator.addMethod("isIdentity",function(value,element){
 		var id= /^(\d{15}$|^\d{18}$|^\d{17}(\d|X))$/;
@@ -108,12 +114,12 @@ $(document).ready(function(){
 				email:"请填写正确的邮箱格式"
 			}
 		},
-	
+
 		errorPlacement:function(error,element){
 			element.next().remove();
 			element.closest('.gg-formGroup').append(error);
 		},
-		
+
 		highlight:function(element){
 			$(element).closest('.gg-formGroup').addClass('has-error has-feedback');
 		},
@@ -127,7 +133,7 @@ $(document).ready(function(){
 			alert("保存成功!");
 		}
 	});
-	
+
 	//校验修改密码表单
 	$("#modifyPwd").validate({
 		onfocusout: function(element) { $(element).valid()},
@@ -149,7 +155,7 @@ $(document).ready(function(){
 			  minlength:6,
 			  issame:true,
 			}
-		  
+
 		   },
 		messages:{
 			 	pwdOld : {
@@ -160,19 +166,19 @@ $(document).ready(function(){
 				   required:'必填',
 				   minlength:$.validator.format('密码长度要大于6'),
 				   isdiff:'原密码与新密码不能重复',
-				  
+
 			   },
 				confirm_password:{
 				   required:'必填',
 				   minlength:$.validator.format('密码长度要大于6'),
 				   issame:'新密码要与确认新密码一致',
 				}
-		
+
 		},
 		errorElement:"mes",
 		errorClass:"gg-star",
-		errorPlacement: function(error, element) 
-		{ 
+		errorPlacement: function(error, element)
+		{
 			element.closest('.gg-formGroup').append(error);
 
 		}

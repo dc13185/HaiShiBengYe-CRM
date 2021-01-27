@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiMachineSealMapper">
+    
+    <resultMap type="BusiMachineSeal" id="BusiMachineSealResult">
+        <result property="machineId"    column="machine_id"    />
+        <result property="machineSealModel"    column="machine_seal_model"    />
+        <result property="machineSealPrice"    column="machine_seal_price"    />
+        <result property="rinseSolution"    column="rinse_solution"    />
+        <result property="rinseSolutionPrice"    column="rinse_solution_price"    />
+        <result property="systemModel"    column="system_model"    />
+        <result property="systemPrice"    column="system_price"    />
+        <result property="supplierId"    column="supplier_id"    />
+    </resultMap>
+
+    <sql id="selectBusiMachineSealVo">
+        select machine_id, machine_seal_model, machine_seal_price, rinse_solution, rinse_solution_price, system_model, system_price, supplier_id from busi_machine_seal
+    </sql>
+
+    <select id="selectBusiMachineSealList" parameterType="BusiMachineSeal" resultMap="BusiMachineSealResult">
+        <include refid="selectBusiMachineSealVo"/>
+        <where>  
+            <if test="machineSealModel != null  and machineSealModel != ''"> and machine_seal_model = #{machineSealModel}</if>
+            <if test="rinseSolution != null  and rinseSolution != ''"> and rinse_solution = #{rinseSolution}</if>
+            <if test="systemModel != null  and systemModel != ''"> and system_model = #{systemModel}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiMachineSealById" parameterType="Long" resultMap="BusiMachineSealResult">
+        <include refid="selectBusiMachineSealVo"/>
+        where machine_id = #{machineId}
+    </select>
+        
+    <insert id="insertBusiMachineSeal" parameterType="BusiMachineSeal" useGeneratedKeys="true" keyProperty="machineId">
+        insert into busi_machine_seal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="machineSealModel != null and machineSealModel != ''">machine_seal_model,</if>
+            <if test="machineSealPrice != null">machine_seal_price,</if>
+            <if test="rinseSolution != null and rinseSolution != ''">rinse_solution,</if>
+            <if test="rinseSolutionPrice != null">rinse_solution_price,</if>
+            <if test="systemModel != null and systemModel != ''">system_model,</if>
+            <if test="systemPrice != null">system_price,</if>
+            <if test="supplierId != null">supplier_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="machineSealModel != null and machineSealModel != ''">#{machineSealModel},</if>
+            <if test="machineSealPrice != null">#{machineSealPrice},</if>
+            <if test="rinseSolution != null and rinseSolution != ''">#{rinseSolution},</if>
+            <if test="rinseSolutionPrice != null">#{rinseSolutionPrice},</if>
+            <if test="systemModel != null and systemModel != ''">#{systemModel},</if>
+            <if test="systemPrice != null">#{systemPrice},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiMachineSeal" parameterType="BusiMachineSeal">
+        update busi_machine_seal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="machineSealModel != null and machineSealModel != ''">machine_seal_model = #{machineSealModel},</if>
+            <if test="machineSealPrice != null">machine_seal_price = #{machineSealPrice},</if>
+            <if test="rinseSolution != null and rinseSolution != ''">rinse_solution = #{rinseSolution},</if>
+            <if test="rinseSolutionPrice != null">rinse_solution_price = #{rinseSolutionPrice},</if>
+            <if test="systemModel != null and systemModel != ''">system_model = #{systemModel},</if>
+            <if test="systemPrice != null">system_price = #{systemPrice},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+        </trim>
+        where machine_id = #{machineId}
+    </update>
+
+    <delete id="deleteBusiMachineSealById" parameterType="Long">
+        delete from busi_machine_seal where machine_id = #{machineId}
+    </delete>
+
+    <delete id="deleteBusiMachineSealByIds" parameterType="String">
+        delete from busi_machine_seal where machine_id in 
+        <foreach item="machineId" collection="array" open="(" separator="," close=")">
+            #{machineId}
+        </foreach>
+    </delete>
+
+</mapper>

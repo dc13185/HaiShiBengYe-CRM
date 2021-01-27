@@ -17,9 +17,9 @@
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
 #if($parentheseIndex != -1)
 #set($comment=$column.columnComment.substring(0, $parentheseIndex))
-#else  
+#else
 #set($comment=$column.columnComment)
-#end  
+#end
 #if($column.htmlType == "input")
                             <li>
                                 <label>${comment}：</label>
@@ -129,7 +129,7 @@
                     field: '${javaField}',
                     title: '${comment}'
                 },
-#end                
+#end
 #end
                 {
                     title: '操作',

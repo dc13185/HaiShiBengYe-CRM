@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiSystemMapper">
+
+    <resultMap type="BusiSystem" id="BusiSystemResult">
+        <result property="systemId"    column="system_id"    />
+        <result property="systemModel"    column="system_model"    />
+        <result property="systemPrice"    column="system_price"    />
+        <result property="supplierId"    column="supplier_id"    />
+    </resultMap>
+
+    <sql id="selectBusiSystemVo">
+        select system_id, system_model, system_price, supplier_id from busi_system
+    </sql>
+
+    <select id="selectBusiSystemList" parameterType="BusiSystem" resultMap="BusiSystemResult">
+        <include refid="selectBusiSystemVo"/>
+        <where>
+            <if test="systemModel != null  and systemModel != ''"> and system_model like concat('%', #{systemModel}, '%')</if>
+            <if test="supplierId != null  and supplierId != ''"> and supplier_id like concat('%', #{supplierId}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectBusiSystemById" parameterType="Long" resultMap="BusiSystemResult">
+        <include refid="selectBusiSystemVo"/>
+        where system_id = #{systemId}
+    </select>
+
+    <insert id="insertBusiSystem" parameterType="BusiSystem" useGeneratedKeys="true" keyProperty="systemId">
+        insert into busi_system
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="systemModel != null and systemModel != ''">system_model,</if>
+            <if test="systemPrice != null">system_price,</if>
+            <if test="supplierId != null">supplier_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="systemModel != null and systemModel != ''">#{systemModel},</if>
+            <if test="systemPrice != null">#{systemPrice},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiSystem" parameterType="BusiSystem">
+        update busi_system
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="systemModel != null and systemModel != ''">system_model = #{systemModel},</if>
+            <if test="systemPrice != null">system_price = #{systemPrice},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+        </trim>
+        where system_id = #{systemId}
+    </update>
+
+    <delete id="deleteBusiSystemById" parameterType="Long">
+        delete from busi_system where system_id = #{systemId}
+    </delete>
+
+    <delete id="deleteBusiSystemByIds" parameterType="String">
+        delete from busi_system where system_id in
+        <foreach item="systemId" collection="array" open="(" separator="," close=")">
+            #{systemId}
+        </foreach>
+    </delete>
+
+</mapper>

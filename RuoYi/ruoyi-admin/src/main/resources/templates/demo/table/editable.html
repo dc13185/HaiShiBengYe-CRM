@@ -20,10 +20,10 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: bootstrap-table-editable-js" />
-	
+
     <script th:inline="javascript">
         var prefix = ctx + "demo/table";
         var datas = [[${@dict.getType('sys_normal_disable')}]];
@@ -41,16 +41,16 @@
 		            checkbox: true
 		        },
 				{
-					field : 'userId', 
+					field : 'userId',
 					title : '用户ID'
 				},
 				{
-					field : 'userCode', 
+					field : 'userCode',
 					title : '用户编号',
 					editable: true
 				},
 				{
-					field : 'userName', 
+					field : 'userName',
 					title : '用户姓名',
 					editable : {
 						type : 'text',
@@ -67,11 +67,11 @@
 					}
 				},
 				{
-					field : 'userPhone', 
+					field : 'userPhone',
 					title : '用户手机'
 				},
 				{
-					field : 'userEmail', 
+					field : 'userEmail',
 					title : '用户邮箱'
 				},
 				{
@@ -94,6 +94,20 @@
 						}]
 					}
                 },
+
+				{
+					align: 'center',
+					title: '商品日期',
+					editable: {
+						type: 'date',
+						title: '日期',
+						placement: 'left'
+					},
+					/*formatter: function(value, row, index) {
+						var html = $.common.sprintf("<input class='form-control' type='text' name='goods[%s].date' value='%s' placeholder='yyyy-MM-dd'>", index, value);
+						return html;
+					}*/
+				},
 		        {
 		            title: '操作',
 		            align: 'center',
@@ -107,17 +121,18 @@
             };
             $.table.init(options);
         });
-        
+
         function onEditableSave (field, row, rowIndex, oldValue, $el) {
+        	debugger;
         	alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
         }
-        
+
         /* 查询表格所有数据值 */
         function getData(){
         	var data = $("#" + table.options.id).bootstrapTable('getData');
             alert(JSON.stringify(data))
         }
-        
+
         /* 查询表格选择行数据值 */
         function getSelections(){
         	var data = $("#" + table.options.id).bootstrapTable('getSelections');

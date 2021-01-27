@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiSealMapper">
+    
+    <resultMap type="BusiSeal" id="BusiSealResult">
+        <result property="sealId"    column="seal_id"    />
+        <result property="sealModel"    column="seal_model"    />
+        <result property="sealPrice"    column="seal_price"    />
+        <result property="supplierId"    column="supplier_id"    />
+    </resultMap>
+
+    <sql id="selectBusiSealVo">
+        select seal_id, seal_model, seal_price, supplier_id from busi_seal
+    </sql>
+
+    <select id="selectBusiSealList" parameterType="BusiSeal" resultMap="BusiSealResult">
+        <include refid="selectBusiSealVo"/>
+        <where>  
+            <if test="sealModel != null  and sealModel != ''"> and seal_model = #{sealModel}</if>
+            <if test="sealPrice != null "> and seal_price = #{sealPrice}</if>
+            <if test="supplierId != null  and supplierId != ''"> and supplier_id = #{supplierId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiSealById" parameterType="Long" resultMap="BusiSealResult">
+        <include refid="selectBusiSealVo"/>
+        where seal_id = #{sealId}
+    </select>
+        
+    <insert id="insertBusiSeal" parameterType="BusiSeal" useGeneratedKeys="true" keyProperty="sealId">
+        insert into busi_seal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sealModel != null">seal_model,</if>
+            <if test="sealPrice != null">seal_price,</if>
+            <if test="supplierId != null">supplier_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sealModel != null">#{sealModel},</if>
+            <if test="sealPrice != null">#{sealPrice},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiSeal" parameterType="BusiSeal">
+        update busi_seal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sealModel != null">seal_model = #{sealModel},</if>
+            <if test="sealPrice != null">seal_price = #{sealPrice},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+        </trim>
+        where seal_id = #{sealId}
+    </update>
+
+    <delete id="deleteBusiSealById" parameterType="Long">
+        delete from busi_seal where seal_id = #{sealId}
+    </delete>
+
+    <delete id="deleteBusiSealByIds" parameterType="String">
+        delete from busi_seal where seal_id in 
+        <foreach item="sealId" collection="array" open="(" separator="," close=")">
+            #{sealId}
+        </foreach>
+    </delete>
+
+</mapper>

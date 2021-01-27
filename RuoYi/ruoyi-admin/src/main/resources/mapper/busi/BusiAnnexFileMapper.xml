@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiAnnexFileMapper">
+
+    <resultMap type="BusiAnnexFile" id="BusiAnnexFileResult">
+        <result property="annexId"    column="annex_id"    />
+        <result property="annexFileSuffix"    column="annex_file_suffix"    />
+        <result property="annexFileName"    column="annex_file_name"    />
+        <result property="annexFileSize"    column="annex_file_size"    />
+        <result property="annexFilePath"    column="annex_file_path"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="annexFileSrcName"    column="annex_file_src_name"    />
+    </resultMap>
+
+    <sql id="selectBusiAnnexFileVo">
+        select annex_id, annex_file_suffix, annex_file_name, annex_file_size, annex_file_path, create_time , annex_file_src_name from busi_annex_file
+    </sql>
+
+    <select id="selectBusiAnnexFileList" parameterType="BusiAnnexFile" resultMap="BusiAnnexFileResult">
+        <include refid="selectBusiAnnexFileVo"/>
+        <where>
+            <if test="annexFileSuffix != null  and annexFileSuffix != ''"> and annex_file_suffix = #{annexFileSuffix}</if>
+            <if test="annexFileName != null  and annexFileName != ''"> and annex_file_name like concat('%', #{annexFileName}, '%')</if>
+            <if test="annexFileSize != null "> and annex_file_size = #{annexFileSize}</if>
+            <if test="annexFilePath != null  and annexFilePath != ''"> and annex_file_path = #{annexFilePath}</if>
+            <if test="annexFileSrcName != null  and annexFileSrcName != ''"> and annex_file_src_name = #{annexFileSrcName}</if>
+        </where>
+    </select>
+
+    <select id="selectBusiAnnexFileById" parameterType="Long" resultMap="BusiAnnexFileResult">
+        <include refid="selectBusiAnnexFileVo"/>
+        where annex_id = #{annexId}
+    </select>
+
+    <select id="selectBusiAnnexFileBySupplierId" parameterType="String" resultMap="BusiAnnexFileResult">
+       SELECT f.*  FROM busi_annex_file  f
+        INNER JOIN busi_supplier_annex b ON f.annex_id = b.annex_id
+        WHERE b.supplier_id = #{supplierId}
+    </select>
+
+
+
+    <insert id="insertBusiAnnexFile" parameterType="BusiAnnexFile" keyProperty="annexId"  keyColumn="annex_id">
+        insert into busi_annex_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="annexId != null">annex_id,</if>
+            <if test="annexFileSuffix != null and annexFileSuffix != ''">annex_file_suffix,</if>
+            <if test="annexFileName != null and annexFileName != ''">annex_file_name,</if>
+            <if test="annexFileSize != null">annex_file_size,</if>
+            <if test="annexFilePath != null">annex_file_path,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="annexFileSrcName != null">annex_file_src_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="annexId != null">#{annexId},</if>
+            <if test="annexFileSuffix != null and annexFileSuffix != ''">#{annexFileSuffix},</if>
+            <if test="annexFileName != null and annexFileName != ''">#{annexFileName},</if>
+            <if test="annexFileSize != null">#{annexFileSize},</if>
+            <if test="annexFilePath != null">#{annexFilePath},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="annexFileSrcName != null">#{annexFileSrcName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiAnnexFile" parameterType="BusiAnnexFile">
+        update busi_annex_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="annexFileSuffix != null and annexFileSuffix != ''">annex_file_suffix = #{annexFileSuffix},</if>
+            <if test="annexFileName != null and annexFileName != ''">annex_file_name = #{annexFileName},</if>
+            <if test="annexFileSize != null">annex_file_size = #{annexFileSize},</if>
+            <if test="annexFilePath != null">annex_file_path = #{annexFilePath},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where annex_id = #{annexId}
+    </update>
+
+    <delete id="deleteBusiAnnexFileById" parameterType="Long">
+        delete from busi_annex_file where annex_id = #{annexId}
+    </delete>
+
+    <delete id="deleteBusiAnnexFileByIds" parameterType="String">
+        delete from busi_annex_file where annex_id in
+        <foreach item="annexId" collection="array" open="(" separator="," close=")">
+            #{annexId}
+        </foreach>
+    </delete>
+
+</mapper>

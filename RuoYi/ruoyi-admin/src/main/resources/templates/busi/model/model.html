@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('产品模型管理列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <input name="productLineId" id="productLineId" th:value="${productLineId}" type="hidden">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>型号：</label>
+                                <input type="text" name="modelName"/>
+                            </li>
+                            <li>
+                                <label>扬程：</label>
+                                <input type="text" name="lift"/>
+                            </li>
+                            <li>
+                                <label>温度：</label>
+                                <input type="text" name="temperature"/>
+                            </li>
+                            <li>
+                                <label>入口压力：</label>
+                                <input type="text" name="pressure"/>
+                            </li>
+                            <li>
+                                <label>汽蚀余量：</label>
+                                <input type="text" name="npsh"/>
+                            </li>
+
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="busi:model:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="busi:model:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="busi:model:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:model:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('busi:model:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('busi:model:remove')}]];
+        var prefix = ctx + "busi/model";
+        var productLineId = $("#productLineId").val();
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add?productLineId="+productLineId,
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "产品模型管理",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'modelId',
+                    title: '',
+                    visible: false
+                },
+                {
+                    field: 'modelName',
+                    title: '型号'
+                },
+                {
+                    field: 'flow',
+                    title: '流量'
+                },
+                {
+                    field: 'lift',
+                    title: '扬程'
+                },
+                {
+                    field: 'temperature',
+                    title: '温度'
+                },
+                {
+                    field: 'pressure',
+                    title: '入口压力'
+                },
+                {
+                    field: 'npsh',
+                    title: '汽蚀余量'
+                },
+                {
+                    field: 'lowMaterialCost',
+                    title: '低值物料成本'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.modelId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.modelId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openParameter(\'' + row.modelId + '\')"><i class="fa fa-eye"></i>生产参数管理</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function openParameter(modelId){
+            $.modal.openTab("生产参数管理",ctx+"busi/parameter?modelId="+modelId);
+        }
+
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var column = $.table.selectColumns('modelName');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#modelId').val(rows);
+            parent.$('#modelName').val(column);
+        }
+
+
+    </script>
+</body>
+</html>

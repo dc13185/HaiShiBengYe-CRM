@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('材料供应商列表')" />
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-12 animated fadeInRight">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="file-box" th:each="busiAnnexFile : ${busiAnnexFiles}">
+                            <div class="file">
+                                <a href="javascript:void(0)">
+                                    <span class="corner"></span>
+                                    <div class="icon">
+                                        <i class="fa fa-file"></i>
+                                    </div>
+                                    <div class="file-name">
+                                        <p th:text="${busiAnnexFile.annexFileSrcName}"></p>
+                                        <br/>
+                                        <small th:text="上传时间 + ${#dates.format(busiAnnexFile.createTime,'yyyy-MM-dd HH:mm:ss')}"></small>
+                                        <button type="button" class="btn btn-primary btn-xs" th:onclick="download([[${busiAnnexFile.annexFileName}]])">下载</button>
+                                        <button type="button" class="btn  btn-danger btn-xs">删除</button>
+
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('.file-box').each(function () {
+                animationHover(this, 'pulse');
+            });
+        });
+
+        function submitHandler() {
+            $.modal.close();
+        }
+
+        function download(fileName){
+            window.location.href = ctx+"common/download/resource?resource="+fileName+"&delete=false";
+        }
+
+    </script>
+
+    <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+    <!--统计代码，可删除-->
+
+</body>
+
+</html>

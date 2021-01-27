@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiCouplingMapper">
+    
+    <resultMap type="BusiCoupling" id="BusiCouplingResult">
+        <result property="couplingId"    column="coupling_id"    />
+        <result property="couplingModel"    column="coupling_model"    />
+        <result property="couplingPrice"    column="coupling_price"    />
+        <result property="supplierId"    column="supplier_id"    />
+    </resultMap>
+
+    <sql id="selectBusiCouplingVo">
+        select coupling_id, coupling_model, coupling_price, supplier_id from busi_coupling
+    </sql>
+
+    <select id="selectBusiCouplingList" parameterType="BusiCoupling" resultMap="BusiCouplingResult">
+        <include refid="selectBusiCouplingVo"/>
+        <where>  
+            <if test="couplingModel != null  and couplingModel != ''"> and coupling_model = #{couplingModel}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiCouplingById" parameterType="Long" resultMap="BusiCouplingResult">
+        <include refid="selectBusiCouplingVo"/>
+        where coupling_id = #{couplingId}
+    </select>
+        
+    <insert id="insertBusiCoupling" parameterType="BusiCoupling" useGeneratedKeys="true" keyProperty="couplingId">
+        insert into busi_coupling
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="couplingModel != null and couplingModel != ''">coupling_model,</if>
+            <if test="couplingPrice != null">coupling_price,</if>
+            <if test="supplierId != null">supplier_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="couplingModel != null and couplingModel != ''">#{couplingModel},</if>
+            <if test="couplingPrice != null">#{couplingPrice},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiCoupling" parameterType="BusiCoupling">
+        update busi_coupling
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="couplingModel != null and couplingModel != ''">coupling_model = #{couplingModel},</if>
+            <if test="couplingPrice != null">coupling_price = #{couplingPrice},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+        </trim>
+        where coupling_id = #{couplingId}
+    </update>
+
+    <delete id="deleteBusiCouplingById" parameterType="Long">
+        delete from busi_coupling where coupling_id = #{couplingId}
+    </delete>
+
+    <delete id="deleteBusiCouplingByIds" parameterType="String">
+        delete from busi_coupling where coupling_id in 
+        <foreach item="couplingId" collection="array" open="(" separator="," close=")">
+            #{couplingId}
+        </foreach>
+    </delete>
+
+</mapper>

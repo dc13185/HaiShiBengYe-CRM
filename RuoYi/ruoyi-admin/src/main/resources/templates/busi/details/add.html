@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增报价明细')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-details-add">
+            <input name="quotationId" id="quotationId" th:value="${quotationId}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">设备位号：</label>
+                <div class="col-sm-8">
+                    <input name="equipmentNum" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">产品系列：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectProductLine()" id="productLineName" readonly="true" required>
+                        <input name="productLineId" id="productLineId" th:value="${productLineId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">产品规格型号：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectProductModel()" id="modelName" readonly="true" required>
+                        <input name="modelId" id="modelId" th:value="${modelId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">过流部件品牌：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectSupplier('material')" id="materialSupplierName" readonly="true" required>
+                        <input name="materialSupplierId" id="materialSupplierId" th:value="${materialSupplierId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">过流部件材质：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectMateria()" id="materialName" readonly="true" required>
+                        <input name="materialId" id="materialId" th:value="${materialId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">数量：</label>
+                <div class="col-sm-8">
+                    <input name="number" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">冲洗方案：</label>
+                <div class="col-sm-8">
+                    <input name="rinseSolutionId" class="form-control"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">额定流量(m3/h)：</label>
+                <div class="col-sm-8">
+                    <input name="ratedFlow" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">扬程(m)：</label>
+                <div class="col-sm-8">
+                    <input name="lift" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">工况温度(℃)：</label>
+                <div class="col-sm-8">
+                    <input name="operatingTemperature" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">流体密度(Kg/m³)：</label>
+                <div class="col-sm-8">
+                    <input name="fluidDensity" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">入口压力(Mpa)：</label>
+                <div class="col-sm-8">
+                    <input name="inletPressure" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">汽蚀余量(m)：</label>
+                <div class="col-sm-8">
+                    <input name="npsh" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">电机品牌：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectSupplier('motor')" id="motorSupplierName" readonly="true" required>
+                        <input name="motorSupplierId" id="motorSupplierId" th:value="${motorSupplierId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">电机型号：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectMotor()" id="motorName" readonly="true" required>
+                        <input name="motorId" id="motorId" th:value="${motorId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他电机：</label>
+                <div class="col-sm-8">
+                    <input name="otherMotor" class="form-control"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他电机价格：</label>
+                <div class="col-sm-8">
+                    <input name="otherMotorPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">机封品牌：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectSupplier('seal')" id="machineSupplierName" readonly="true" required>
+                        <input name="machineSupplierId" id="machineSupplierId" th:value="${machineSupplierId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">机封型号：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectMachine()" id="machineName" readonly="true" required>
+                        <input name="machineId" id="machineId" th:value="${machineId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他机封：</label>
+                <div class="col-sm-8">
+                    <input name="otherMachine" class="form-control"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他机封价格：</label>
+                <div class="col-sm-8">
+                    <input name="otherMachinePrice" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">轴承品牌：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectSupplier('bearing')" id="bearingSupplierName" readonly="true" required>
+                        <input name="bearingSupplierId" id="bearingSupplierId" th:value="${bearingSupplierId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">轴承型号：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectBearing()" id="bearingName" readonly="true" required>
+                        <input name="bearingId" id="bearingId" th:value="${bearingId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他轴承：</label>
+                <div class="col-sm-8">
+                    <input name="otherBearing" class="form-control"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他轴承价格：</label>
+                <div class="col-sm-8">
+                    <input name="otherBearingPrice" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联轴器品牌：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectSupplier('coupling')" id="couplingSupplierName" readonly="true" required>
+                        <input name="couplingSupplierId" id="couplingSupplierId" th:value="${couplingSupplierId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联轴器型号：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input class="form-control" type="text" onclick="selectCoupling()" id="couplingName" readonly="true" required>
+                        <input name="couplingId" id="couplingId" th:value="${couplingId}" type="hidden">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他联轴器：</label>
+                <div class="col-sm-8">
+                    <input name="otherCoupling" class="form-control"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他联轴器价格：</label>
+                <div class="col-sm-8">
+                    <input name="otherCouplingPrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他费用：</label>
+                <div class="col-sm-8">
+                    <input name="otherExpenses" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">其他费用说明：</label>
+                <div class="col-sm-8">
+                    <input name="otherExpensesDescription" class="form-control"></input>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">单价系数：</label>
+                <div class="col-sm-8">
+                    <input name="coefficient" class="form-control" type="text" required>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "busi/details";
+        $("#form-details-add").validate({
+            focusCleanup: true,
+            rules:{
+                number:{
+                    isNumber:true
+                },
+                otherExpenses:{
+                    isNumber:true
+                },
+                ratedFlow:{
+                    isNumber:true
+                },
+                operatingTemperature:{
+                    isNumber:true
+                },
+                fluidDensity:{
+                    isNumber:true
+                },
+                inletPressure:{
+                    isNumber:true
+                },
+                npsh:{
+                    isNumber:true
+                },
+                otherMotorPrice:{
+                    isNumber:true
+                },
+                otherCouplingPrice:{
+                    isNumber:true
+                },
+                coefficient:{
+                    isNumber:true
+                },
+            }
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-details-add').serialize(),submitCallback);
+            }
+        }
+
+        function submitCallback(result){
+            parent.$('#sumPrice').html(result.msg)
+        }
+
+        function selectProductLine(){
+            $.modal.open("选择产品系列", ctx + "busi/line");
+        }
+
+        function selectProductModel(){
+            var productLineId = $("#productLineId").val();
+            if (!productLineId){
+                $.modal.alertError("请先选择产品系列");
+            }else{
+                $.modal.open("选择产品系列", ctx + "busi/model?productLineId="+productLineId);
+            }
+        }
+
+        function selectSupplier(supplierType){
+            if (supplierType == "material") {
+                $.modal.open("选择材料品牌", ctx + "busi/supplier?supplierType=" + supplierType);
+            }else if (supplierType == "motor"){
+                $.modal.open("选择材料品牌", ctx + "busi/supplier?supplierType="+supplierType);
+            }else if(supplierType == "seal"){
+                $.modal.open("选择机封品牌", ctx + "busi/supplier?supplierType="+supplierType);
+            }else if(supplierType == 'coupling'){
+                $.modal.open("选择联轴器品牌", ctx + "busi/supplier?supplierType="+supplierType);
+            }else if(supplierType == 'bearing'){
+                $.modal.open("选择承轴品牌", ctx + "busi/supplier?supplierType="+supplierType);
+            }
+
+        }
+
+        function selectMateria(){
+            var materialSupplierId = $("#materialSupplierId").val();
+            if(!materialSupplierId){
+                $.modal.alertError("请先选择材料品牌");
+            }else{
+                $.modal.open("选择材料产品", ctx + "busi/production?supplierId="+materialSupplierId);
+            }
+        }
+
+        function selectMotor(){
+            var motorSupplierId = $("#motorSupplierId").val();
+            if (!motorSupplierId){
+                $.modal.alertError("请先选择电机品牌");
+            }else{
+                $.modal.open("选择电机产品", ctx + "busi/motor?supplierId="+motorSupplierId);
+            }
+        }
+
+        function selectMachine(){
+            var machineSupplierId = $("#machineSupplierId").val();
+            if (!machineSupplierId){
+                $.modal.alertError("请先选择机封品牌");
+            }else{
+                $.modal.open("选择机封产品", ctx + "busi/machine?supplierId="+machineSupplierId);
+            }
+        }
+
+
+        function selectCoupling(){
+            var couplingSupplierId = $("#couplingSupplierId").val();
+            if (!couplingSupplierId){
+                $.modal.alertError("请先选择联轴器品牌");
+            }else{
+                $.modal.open("选择机封产品", ctx + "busi/coupling?supplierId="+couplingSupplierId);
+            }
+        }
+
+
+        function  selectBearing() {
+            var bearingSupplierId = $("#bearingSupplierId").val();
+            if (!bearingSupplierId){
+                $.modal.alertError("请先选择承轴器品牌");
+            }else{
+                $.modal.open("选择承轴产品", ctx + "busi/bearing?supplierId="+bearingSupplierId);
+            }
+        }
+
+
+    </script>
+</body>
+</html>

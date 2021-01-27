@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.plan.mapper.BusiContractPlanMapper">
+
+    <resultMap type="BusiContractPlan" id="BusiContractPlanResult">
+        <result property="planId"    column="plan_id"    />
+        <result property="contractId"    column="contract_id"    />
+        <result property="planName"    column="plan_name"    />
+        <result property="plannedTime"    column="planned_time"    />
+        <result property="actualTime"    column="actual_time"    />
+    </resultMap>
+
+    <sql id="selectBusiContractPlanVo">
+        select plan_id, contract_id, plan_name, planned_time, actual_time from busi_contract_plan
+    </sql>
+
+    <select id="selectBusiContractPlanList" parameterType="BusiContractPlan" resultMap="BusiContractPlanResult">
+        <include refid="selectBusiContractPlanVo"/>
+        <where>
+            contract_id is null
+        </where>
+    </select>
+
+    <select id="selectBusiContractPlanById" parameterType="Long" resultMap="BusiContractPlanResult">
+        <include refid="selectBusiContractPlanVo"/>
+        where plan_id = #{planId}
+    </select>
+
+    <insert id="insertBusiContractPlan" parameterType="BusiContractPlan" useGeneratedKeys="true" keyProperty="planId">
+        insert into busi_contract_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contractId != null">contract_id,</if>
+            <if test="planName != null and planName != ''">plan_name,</if>
+            <if test="plannedTime != null">planned_time,</if>
+            <if test="actualTime != null">actual_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contractId != null">#{contractId},</if>
+            <if test="planName != null and planName != ''">#{planName},</if>
+            <if test="plannedTime != null">#{plannedTime},</if>
+            <if test="actualTime != null">#{actualTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiContractPlan" parameterType="BusiContractPlan">
+        update busi_contract_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contractId != null">contract_id = #{contractId},</if>
+            <if test="planName != null and planName != ''">plan_name = #{planName},</if>
+            <if test="plannedTime != null">planned_time = #{plannedTime},</if>
+            <if test="actualTime != null">actual_time = #{actualTime},</if>
+        </trim>
+        where plan_id = #{planId}
+    </update>
+
+    <delete id="deleteBusiContractPlanById" parameterType="Long">
+        delete from busi_contract_plan where plan_id = #{planId}
+    </delete>
+
+    <delete id="deleteBusiContractPlanByIds" parameterType="String">
+        delete from busi_contract_plan where plan_id in
+        <foreach item="planId" collection="array" open="(" separator="," close=")">
+            #{planId}
+        </foreach>
+    </delete>
+
+
+    <insert id="insertBatch" parameterType="List">
+        INSERT INTO busi_contract_plan(contract_id,plan_name)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.contractId},
+            #{item.planName}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

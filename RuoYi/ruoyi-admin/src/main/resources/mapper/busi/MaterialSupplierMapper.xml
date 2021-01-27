@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.MaterialSupplierMapper">
+
+    <resultMap type="MaterialSupplier" id="MaterialSupplierResult">
+        <result property="supplierId"    column="supplier_id"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="materialAddress"    column="material_address"    />
+        <result property="purchaseCategory"    column="purchase_category"    />
+        <result property="contacts"    column="contacts"    />
+        <result property="contactTitle"    column="contact_title"    />
+        <result property="contactInformation"    column="contact_information"    />
+        <result property="contactAddress"    column="contact_address"    />
+        <result property="qualification"    column="qualification"    />
+        <result property="supplierLevel"    column="supplier_level"    />
+        <result property="profile"    column="profile"    />
+        <result property="material"    column="material"    />
+        <result property="supplierType"    column="supplier_type"    />
+    </resultMap>
+
+    <sql id="selectMaterialSupplierVo">
+        select supplier_id, material_name, material_address, purchase_category, contacts, contact_title, contact_information, contact_address, qualification, supplier_level, profile, material,supplier_type from material_supplier
+    </sql>
+
+    <select id="selectMaterialSupplierList" parameterType="MaterialSupplier" resultMap="MaterialSupplierResult">
+        <include refid="selectMaterialSupplierVo"/>
+        <where>
+            <if test="supplierId != null  and supplierId != ''"> and supplier_id like concat('%', #{supplierId}, '%')</if>
+            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
+            <if test="supplierLevel != null "> and supplier_level = #{supplierLevel}</if>
+            <if test="supplierType != null "> and supplier_type = #{supplierType}</if>
+        </where>
+    </select>
+
+    <select id="selectMaterialSupplierById" parameterType="String" resultMap="MaterialSupplierResult">
+        <include refid="selectMaterialSupplierVo"/>
+        where supplier_id = #{supplierId}
+    </select>
+
+    <insert id="insertMaterialSupplier" parameterType="MaterialSupplier">
+        insert into material_supplier
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="supplierId != null and supplierId != ''">supplier_id,</if>
+            <if test="materialName != null and materialName != ''">material_name,</if>
+            <if test="materialAddress != null and materialAddress != ''">material_address,</if>
+            <if test="purchaseCategory != null and purchaseCategory != ''">purchase_category,</if>
+            <if test="contacts != null and contacts != ''">contacts,</if>
+            <if test="contactTitle != null">contact_title,</if>
+            <if test="contactInformation != null">contact_information,</if>
+            <if test="contactAddress != null">contact_address,</if>
+            <if test="qualification != null">qualification,</if>
+            <if test="supplierLevel != null">supplier_level,</if>
+            <if test="profile != null">profile,</if>
+            <if test="material != null">material,</if>
+            <if test="supplierType != null">supplier_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="supplierId != null and supplierId != ''">#{supplierId},</if>
+            <if test="materialName != null and materialName != ''">#{materialName},</if>
+            <if test="materialAddress != null and materialAddress != ''">#{materialAddress},</if>
+            <if test="purchaseCategory != null and purchaseCategory != ''">#{purchaseCategory},</if>
+            <if test="contacts != null and contacts != ''">#{contacts},</if>
+            <if test="contactTitle != null">#{contactTitle},</if>
+            <if test="contactInformation != null">#{contactInformation},</if>
+            <if test="contactAddress != null">#{contactAddress},</if>
+            <if test="qualification != null">#{qualification},</if>
+            <if test="supplierLevel != null">#{supplierLevel},</if>
+            <if test="profile != null">#{profile},</if>
+            <if test="material != null">#{material},</if>
+            <if test="supplierType != null">#{supplierType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMaterialSupplier" parameterType="MaterialSupplier">
+        update material_supplier
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="materialName != null and materialName != ''">material_name = #{materialName},</if>
+            <if test="materialAddress != null and materialAddress != ''">material_address = #{materialAddress},</if>
+            <if test="purchaseCategory != null and purchaseCategory != ''">purchase_category = #{purchaseCategory},</if>
+            <if test="contacts != null and contacts != ''">contacts = #{contacts},</if>
+            <if test="contactTitle != null">contact_title = #{contactTitle},</if>
+            <if test="contactInformation != null">contact_information = #{contactInformation},</if>
+            <if test="contactAddress != null">contact_address = #{contactAddress},</if>
+            <if test="qualification != null">qualification = #{qualification},</if>
+            <if test="supplierLevel != null">supplier_level = #{supplierLevel},</if>
+            <if test="profile != null">profile = #{profile},</if>
+            <if test="material != null">material = #{material},</if>
+        </trim>
+        where supplier_id = #{supplierId}
+    </update>
+
+    <delete id="deleteMaterialSupplierById" parameterType="String">
+        delete from material_supplier where supplier_id = #{supplierId}
+    </delete>
+
+    <delete id="deleteMaterialSupplierByIds" parameterType="String">
+        delete from material_supplier where supplier_id in
+        <foreach item="supplierId" collection="array" open="(" separator="," close=")">
+            #{supplierId}
+        </foreach>
+    </delete>
+
+</mapper>

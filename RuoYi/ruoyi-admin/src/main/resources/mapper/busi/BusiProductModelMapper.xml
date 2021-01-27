@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiProductModelMapper">
+
+    <resultMap type="BusiProductModel" id="BusiProductModelResult">
+        <result property="modelId"    column="model_id"    />
+        <result property="modelName"    column="model_name"    />
+        <result property="flow"    column="flow"    />
+        <result property="lift"    column="lift"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="pressure"    column="pressure"    />
+        <result property="npsh"    column="npsh"    />
+        <result property="productLineId"    column="product_line_id"    />
+        <result property="lowMaterialCost" column="low_material_cost" />
+    </resultMap>
+
+    <sql id="selectBusiProductModelVo">
+        select model_id, model_name, flow, lift, temperature, pressure, npsh, product_line_id ,low_material_cost from busi_product_model
+    </sql>
+
+    <select id="selectBusiProductModelList" parameterType="BusiProductModel" resultMap="BusiProductModelResult">
+        <include refid="selectBusiProductModelVo"/>
+        <where>
+            <if test="modelName != null  and modelName != ''"> and model_name like concat('%', #{modelName}, '%')</if>
+            <if test="lift != null "> and lift = #{lift}</if>
+            <if test="temperature != null "> and temperature = #{temperature}</if>
+            <if test="pressure != null "> and pressure = #{pressure}</if>
+            <if test="npsh != null "> and npsh = #{npsh}</if>
+            <if test="productLineId != null "> and product_line_id = #{productLineId}</if>
+        </where>
+    </select>
+
+    <select id="selectBusiProductModelById" parameterType="Long" resultMap="BusiProductModelResult">
+        <include refid="selectBusiProductModelVo"/>
+        where model_id = #{modelId}
+    </select>
+
+    <insert id="insertBusiProductModel" parameterType="BusiProductModel" useGeneratedKeys="true" keyProperty="modelId">
+        insert into busi_product_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="modelName != null and modelName != ''">model_name,</if>
+            <if test="flow != null">flow,</if>
+            <if test="lift != null">lift,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="pressure != null">pressure,</if>
+            <if test="npsh != null">npsh,</if>
+            <if test="productLineId != null">product_line_id,</if>
+            <if test="lowMaterialCost != null">low_material_cost,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="modelName != null and modelName != ''">#{modelName},</if>
+            <if test="flow != null">#{flow},</if>
+            <if test="lift != null">#{lift},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="pressure != null">#{pressure},</if>
+            <if test="npsh != null">#{npsh},</if>
+            <if test="productLineId != null">#{productLineId},</if>
+            <if test="lowMaterialCost != null">#{lowMaterialCost},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiProductModel" parameterType="BusiProductModel">
+        update busi_product_model
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelName != null and modelName != ''">model_name = #{modelName},</if>
+            <if test="flow != null">flow = #{flow},</if>
+            <if test="lift != null">lift = #{lift},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="pressure != null">pressure = #{pressure},</if>
+            <if test="npsh != null">npsh = #{npsh},</if>
+            <if test="productLineId != null">product_line_id = #{productLineId},</if>
+            <if test="lowMaterialCost != null"> low_material_cost = #{lowMaterialCost},</if>
+        </trim>
+        where model_id = #{modelId}
+    </update>
+
+    <delete id="deleteBusiProductModelById" parameterType="Long">
+        delete from busi_product_model where model_id = #{modelId}
+    </delete>
+
+    <delete id="deleteBusiProductModelByIds" parameterType="String">
+        delete from busi_product_model where model_id in
+        <foreach item="modelId" collection="array" open="(" separator="," close=")">
+            #{modelId}
+        </foreach>
+    </delete>
+
+</mapper>
