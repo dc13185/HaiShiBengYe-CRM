@@ -31,9 +31,10 @@
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
                 modalName: "合同进度",
-                pageSize: 25,
+                pageSize: 30,
                 showToggle: false,
                 showColumns: false,
+                pagination: false,
                 search: false,
                 onEditableSave: onEditableSave,
                 columns: [{
@@ -96,6 +97,7 @@
             var dateFrom = {};
             dateFrom["planId"]=row.planId;
             dateFrom[fieldName]=row[field];
+            dateFrom["contractId"]=row.contractId;
             $.ajax({
                 url: prefix + "/edit",
                 data: JSON.stringify(dateFrom),
@@ -126,6 +128,12 @@
                 }
             }
         }
+
+        function submitHandler() {
+            $.modal.close();
+        }
+
+
     </script>
 </body>
 </html>

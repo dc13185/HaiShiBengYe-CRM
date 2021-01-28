@@ -3,19 +3,18 @@ package com.ruoyi.busi.controller;
 import java.util.List;
 
 import com.ruoyi.busi.domain.BusiQuotation;
+import com.ruoyi.busi.mapper.BusiContractMapper;
 import com.ruoyi.busi.plan.domain.BusiContractPlan;
 import com.ruoyi.busi.plan.service.IBusiContractPlanService;
 import com.ruoyi.busi.service.IBusiQuotationService;
+import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.busi.domain.BusiContract;
@@ -46,11 +45,27 @@ public class BusiContractController extends BaseController
     @Autowired
     private IBusiContractPlanService busiContractPlanService;
 
+
+    @Autowired
+    private BusiContractMapper busiContractMapper;
+
+
+
+
     @RequiresPermissions("busi:contract:view")
     @GetMapping()
     public String contract()
     {
         return prefix + "/contract";
+    }
+
+
+    @RequiresPermissions("busi:contract:view")
+    @GetMapping("/toHistory")
+    public String toHistory(String contractId,ModelMap modelMap)
+    {
+        modelMap.put("contractId",contractId);
+        return prefix + "/contract_history";
     }
 
     /**
@@ -63,6 +78,16 @@ public class BusiContractController extends BaseController
     {
         startPage();
         List<BusiContract> list = busiContractService.selectBusiContractList(busiContract);
+        return getDataTable(list);
+    }
+
+
+    @RequiresPermissions("busi:contract:list")
+    @PostMapping("/historyList")
+    @ResponseBody
+    public TableDataInfo historyList(BusiContract busiContract)
+    {
+        List<BusiContract> list = busiContractMapper.selectHistoryBusiContractList(busiContract.getContractId());
         return getDataTable(list);
     }
 
@@ -117,7 +142,6 @@ public class BusiContractController extends BaseController
         List<BusiContractPlan> busiContractPlans =  busiContractPlanService.selectBusiContractPlanList(null);
         busiContractPlans.forEach(p -> p.setContractId(busiContract.getContractId()));
         busiContractPlanService.insertBatch(busiContractPlans);
-
         return toAjax(1);
     }
 
@@ -141,9 +165,31 @@ public class BusiContractController extends BaseController
     @ResponseBody
     public AjaxResult editSave(BusiContract busiContract)
     {
-        return toAjax(busiContractService.updateBusiContract(busiContract));
+        BusiContract historyBusiContract = busiContractService.selectBusiContractById(busiContract.getContractId());
+        busiContractMapper.saveHistory(historyBusiContract);
+        //版本号发生变化
+        String contractNo = historyBusiContract.getContractNo();
+        String versionChar =  StringUtils.substringAfterLast(contractNo,"-");
+        String prefix =  StringUtils.substringBeforeLast(contractNo,"-");
+        char nextVersion = Constants.getVersion(versionChar.charAt(0));
+        busiContract.setContractNo(prefix+"-"+nextVersion);
+        busiContractService.updateBusiContract(busiContract);
+
+        return toAjax(1);
     }
 
+
+    /**
+     * 修改保存合同管理
+     */
+    @RequiresPermissions("busi:contract:edit")
+    @Log(title = "合同管理", businessType = BusinessType.UPDATE)
+    @PostMapping("/editForType")
+    @ResponseBody
+    public AjaxResult editForType(@RequestBody BusiContract busiContract)
+    {
+        return toAjax(busiContractService.updateBusiContract(busiContract));
+    }
     /**
      * 删除合同管理
      */

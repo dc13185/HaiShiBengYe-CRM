@@ -1,6 +1,10 @@
 package com.ruoyi.busi.plan.controller;
 
+import java.util.Date;
 import java.util.List;
+
+import com.ruoyi.busi.domain.BusiContract;
+import com.ruoyi.busi.service.IBusiContractService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +33,9 @@ public class BusiContractPlanController extends BaseController
 
     @Autowired
     private IBusiContractPlanService busiContractPlanService;
+
+    @Autowired
+    private IBusiContractService busiContractService;
 
     @RequiresPermissions("busi.plan:plan:view")
     @GetMapping()
@@ -127,6 +134,23 @@ public class BusiContractPlanController extends BaseController
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(@RequestBody BusiContractPlan busiContractPlan)
+    {
+        BusiContract busiContract = new BusiContract();
+        busiContract.setContractId(busiContractPlan.getContractId());
+        busiContract.setUpdateTime(new Date());
+        busiContractService.updateBusiContract(busiContract);
+        return toAjax(busiContractPlanService.updateBusiContractPlan(busiContractPlan));
+    }
+
+
+    /**
+     * 修改保存合同进度
+     */
+    @RequiresPermissions("busi.plan:plan:edit")
+    @Log(title = "合同进度", businessType = BusinessType.UPDATE)
+    @PostMapping("/editForNull")
+    @ResponseBody
+    public AjaxResult editForNull(BusiContractPlan busiContractPlan)
     {
         return toAjax(busiContractPlanService.updateBusiContractPlan(busiContractPlan));
     }

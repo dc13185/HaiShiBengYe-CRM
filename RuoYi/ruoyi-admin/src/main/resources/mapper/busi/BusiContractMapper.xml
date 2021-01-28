@@ -20,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="delayWarning"    column="delay_warning"    />
         <result property="delayInstructions"    column="delay_instructions"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="contractType"    column="contract_type"    />
 
         <association property="busiQuotation" javaType="com.ruoyi.busi.domain.BusiQuotation">
             <result property="quotationId"    column="quotation_id"    />
@@ -41,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBusiContractVo">
-        select contract_id, qutation_id, contract_price, product_composition, component_price, payment_method, delivery_time, signing_date, remake, progress_statement, principal, delay_warning, delay_instructions, update_time from busi_contract
+        select contract_id, qutation_id, contract_price, product_composition, component_price, payment_method, delivery_time, signing_date, remake, progress_statement, principal, delay_warning, delay_instructions, update_time,contract_no from busi_contract
     </sql>
 
     <select id="selectBusiContractList" parameterType="BusiContract" resultMap="BusiContractResult">
@@ -64,10 +65,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM
         busi_contract bc , busi_quotation bq
         WHERE bc.qutation_id =bq.quotation_id
-        <where>
-            <if test="params.beginSigningDate != null and params.beginSigningDate != '' and params.endSigningDate != null and params.endSigningDate != ''"> and bc.signing_date between #{params.beginSigningDate} and #{params.endSigningDate}</if>
-        </where>
+        <if test="params.beginSigningDate != null and params.beginSigningDate != ''"><!-- 开始时间检索 -->
+            and date_format(signing_date,'%y-%m-%d') &gt;= date_format(#{params.beginSigningDate},'%y-%m-%d')
+        </if>
+        <if test="params.endSigningDate != null and params.endSigningDate != ''"><!-- 结束时间检索 -->
+            and date_format(signing_date,'%y-%m-%d') &lt;= date_format(#{params.endSigningDate},'%y-%m-%d')
+        </if>
     </select>
+
+
+    <select id="selectHistoryBusiContractList" parameterType="java.lang.Long" resultMap="BusiContractResult">
+       SELECT
+        quotation_id,
+        project_name,
+        project_address,
+        quotation_no,
+        customer_id,
+        (SELECT bc.customer_name FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_name,
+        (SELECT bc.customer_industry FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_industry,
+        (SELECT bc.contact_address FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_address,
+        office_address,
+        office_staff_name,
+        technical_staff_id,
+        quotation_type,
+        create_time,
+        (SELECT IFNULL(ROUND(SUM(details_price*coefficient * number),2),0) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  sumPrice,
+        bc.*
+        FROM
+        busi_contract_history bc , busi_quotation bq
+        WHERE bc.qutation_id =bq.quotation_id
+        AND bc.contract_id = #{contractId}
+    </select>
+
 
     <select id="selectBusiContractById" parameterType="Long" resultMap="BusiContractResult">
         <include refid="selectBusiContractVo"/>
@@ -95,6 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="delayInstructions != null">delay_instructions,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="contractNo != null">contract_no,</if>
+            <if test="contractType != null">contract_type,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="qutationId != null">#{qutationId},</if>
@@ -111,6 +141,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="delayInstructions != null">#{delayInstructions},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="contractNo != null">#{contractNo},</if>
+            <if test="contractType != null">#{contractType},</if>
+        </trim>
+    </insert>
+
+
+    <insert id="saveHistory" parameterType="BusiContract" useGeneratedKeys="true" keyProperty="contractId">
+        insert into busi_contract_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contractId != null">contract_id,</if>
+            <if test="qutationId != null">qutation_id,</if>
+            <if test="contractPrice != null">contract_price,</if>
+            <if test="productComposition != null">product_composition,</if>
+            <if test="componentPrice != null">component_price,</if>
+            <if test="paymentMethod != null and paymentMethod != ''">payment_method,</if>
+            <if test="deliveryTime != null">delivery_time,</if>
+            <if test="signingDate != null">signing_date,</if>
+            <if test="remake != null">remake,</if>
+            <if test="progressStatement != null">progress_statement,</if>
+            <if test="principal != null">principal,</if>
+            <if test="delayWarning != null">delay_warning,</if>
+            <if test="delayInstructions != null">delay_instructions,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="contractNo != null">contract_no,</if>
+            <if test="contractType != null">contract_type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contractId != null">#{contractId},</if>
+            <if test="qutationId != null">#{qutationId},</if>
+            <if test="contractPrice != null">#{contractPrice},</if>
+            <if test="productComposition != null">#{productComposition},</if>
+            <if test="componentPrice != null">#{componentPrice},</if>
+            <if test="paymentMethod != null and paymentMethod != ''">#{paymentMethod},</if>
+            <if test="deliveryTime != null">#{deliveryTime},</if>
+            <if test="signingDate != null">#{signingDate},</if>
+            <if test="remake != null">#{remake},</if>
+            <if test="progressStatement != null">#{progressStatement},</if>
+            <if test="principal != null">#{principal},</if>
+            <if test="delayWarning != null">#{delayWarning},</if>
+            <if test="delayInstructions != null">#{delayInstructions},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="contractType != null">#{contractType},</if>
         </trim>
     </insert>
 
@@ -131,6 +203,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="delayInstructions != null">delay_instructions = #{delayInstructions},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="contractNo != null">contract_no = #{contractNo},</if>
+            <if test="contractType != null">contract_type = #{contractType},</if>
         </trim>
         where contract_id = #{contractId}
     </update>

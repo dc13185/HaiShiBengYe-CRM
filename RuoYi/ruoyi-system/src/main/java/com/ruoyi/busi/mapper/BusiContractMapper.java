@@ -27,6 +27,10 @@ public interface BusiContractMapper
      */
     public List<BusiContract> selectBusiContractList(BusiContract busiContract);
 
+
+    public List<BusiContract> selectHistoryBusiContractList(Long contractId);
+
+
     /**
      * 新增合同管理
      *
@@ -60,5 +64,7 @@ public interface BusiContractMapper
     public int deleteBusiContractByIds(String[] contractIds);
 
     public int selectCount();
+
+    public int saveHistory(BusiContract busiContract);
 }
 

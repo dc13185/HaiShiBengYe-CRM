@@ -54,8 +54,6 @@ public class BusiContract extends BaseEntity
     @Excel(name = "备注")
     private String remake;
 
-
-
     /** 整体进度说明 */
     @Excel(name = "整体进度说明")
     private String progressStatement;
@@ -73,6 +71,9 @@ public class BusiContract extends BaseEntity
     private String delayInstructions;
 
     private BusiQuotation busiQuotation;
+    /** 项目状态 */
+    @Excel(name = "项目状态")
+    private Long contractType;
 
     public void setContractId(Long contractId)
     {
@@ -202,6 +203,14 @@ public class BusiContract extends BaseEntity
 
     public void setContractNo(String contractNo) {
         this.contractNo = contractNo;
+    }
+
+    public Long getContractType() {
+        return contractType;
+    }
+
+    public void setContractType(Long contractType) {
+        this.contractType = contractType;
     }
 
     @Override

@@ -47,7 +47,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
             <if test="quotationNo != null  and quotationNo != ''"> and quotation_no = #{quotationNo}</if>
             <if test="quotationType != null "> and quotation_type = #{quotationType}</if>
-            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始时间检索 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{params.beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="params.endCreateTime != null and params.endCreateTime != ''"><!-- 结束时间检索 -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{params.endCreateTime},'%y-%m-%d')
+            </if>
         </where>
     </select>
 

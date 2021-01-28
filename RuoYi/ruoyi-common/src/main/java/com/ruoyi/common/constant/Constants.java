@@ -99,4 +99,17 @@ public class Constants
 
 
     private static final String SUPPLIER_MATERIAL = "MATERIAL";
+
+
+    public static final char[] LETTER_CHARS = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+
+
+    public static char getVersion(char up){
+        for (int i = 0; i < LETTER_CHARS.length; i++) {
+            if (up == LETTER_CHARS[i]){
+                return LETTER_CHARS[i+1];
+            }
+        }
+        return 'A';
+    }
 }
