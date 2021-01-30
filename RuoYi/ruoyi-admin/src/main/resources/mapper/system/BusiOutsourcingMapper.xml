@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.outsourcing.mapper.BusiOutsourcingMapper">
+
+    <resultMap type="BusiOutsourcing" id="BusiOutsourcingResult">
+        <result property="outsourcingId"    column="outsourcing_id"    />
+        <result property="outsourcingModel"    column="outsourcing_model"    />
+        <result property="outsourcingMaterial"    column="outsourcing_material"    />
+        <result property="outsourcingPrice"    column="outsourcing_price"    />
+        <result property="outsourcingLineId"    column="outsourcing_line_id"    />
+    </resultMap>
+
+    <sql id="selectBusiOutsourcingVo">
+        select outsourcing_id, outsourcing_model, outsourcing_material, outsourcing_price, outsourcing_line_id from busi_outsourcing
+    </sql>
+
+    <select id="selectBusiOutsourcingList" parameterType="BusiOutsourcing" resultMap="BusiOutsourcingResult">
+        <include refid="selectBusiOutsourcingVo"/>
+        <where>
+            <if test="outsourcingModel != null  and outsourcingModel != ''"> and outsourcing_model = #{outsourcingModel}</if>
+            <if test="outsourcingMaterial != null  and outsourcingMaterial != ''"> and outsourcing_material = #{outsourcingMaterial}</if>
+            <if test="outsourcingPrice != null "> and outsourcing_price = #{outsourcingPrice}</if>
+            <if test="outsourcingLineId != null  and outsourcingLineId != ''"> and outsourcing_line_id = #{outsourcingLineId}</if>
+        </where>
+    </select>
+
+    <select id="selectBusiOutsourcingById" parameterType="Long" resultMap="BusiOutsourcingResult">
+        <include refid="selectBusiOutsourcingVo"/>
+        where outsourcing_id = #{outsourcingId}
+    </select>
+
+    <insert id="insertBusiOutsourcing" parameterType="BusiOutsourcing" useGeneratedKeys="true" keyProperty="outsourcingId">
+        insert into busi_outsourcing
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="outsourcingModel != null and outsourcingModel != ''">outsourcing_model,</if>
+            <if test="outsourcingMaterial != null">outsourcing_material,</if>
+            <if test="outsourcingPrice != null">outsourcing_price,</if>
+            <if test="outsourcingLineId != null">outsourcing_line_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="outsourcingModel != null and outsourcingModel != ''">#{outsourcingModel},</if>
+            <if test="outsourcingMaterial != null">#{outsourcingMaterial},</if>
+            <if test="outsourcingPrice != null">#{outsourcingPrice},</if>
+            <if test="outsourcingLineId != null">#{outsourcingLineId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiOutsourcing" parameterType="BusiOutsourcing">
+        update busi_outsourcing
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="outsourcingModel != null and outsourcingModel != ''">outsourcing_model = #{outsourcingModel},</if>
+            <if test="outsourcingMaterial != null">outsourcing_material = #{outsourcingMaterial},</if>
+            <if test="outsourcingPrice != null">outsourcing_price = #{outsourcingPrice},</if>
+            <if test="outsourcingLineId != null">outsourcing_line_id = #{outsourcingLineId},</if>
+        </trim>
+        where outsourcing_id = #{outsourcingId}
+    </update>
+
+    <delete id="deleteBusiOutsourcingById" parameterType="Long">
+        delete from busi_outsourcing where outsourcing_id = #{outsourcingId}
+    </delete>
+
+    <delete id="deleteBusiOutsourcingByIds" parameterType="String">
+        delete from busi_outsourcing where outsourcing_id in
+        <foreach item="outsourcingId" collection="array" open="(" separator="," close=")">
+            #{outsourcingId}
+        </foreach>
+    </delete>
+
+</mapper>

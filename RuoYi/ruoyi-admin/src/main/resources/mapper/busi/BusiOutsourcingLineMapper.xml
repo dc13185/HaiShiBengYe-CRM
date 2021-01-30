@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.line.mapper.BusiOutsourcingLineMapper">
+    
+    <resultMap type="BusiOutsourcingLine" id="BusiOutsourcingLineResult">
+        <result property="outsourcingLineId"    column="outsourcing_line_id"    />
+        <result property="outsourcingLine"    column="outsourcing_line"    />
+        <result property="supplierId"    column="supplier_id"    />
+    </resultMap>
+
+    <sql id="selectBusiOutsourcingLineVo">
+        select outsourcing_line_id, outsourcing_line, supplier_id from busi_outsourcing_line
+    </sql>
+
+    <select id="selectBusiOutsourcingLineList" parameterType="BusiOutsourcingLine" resultMap="BusiOutsourcingLineResult">
+        <include refid="selectBusiOutsourcingLineVo"/>
+        <where>  
+            <if test="outsourcingLine != null  and outsourcingLine != ''"> and outsourcing_line = #{outsourcingLine}</if>
+            <if test="supplierId != null "> and supplier_id = #{supplierId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBusiOutsourcingLineById" parameterType="Long" resultMap="BusiOutsourcingLineResult">
+        <include refid="selectBusiOutsourcingLineVo"/>
+        where outsourcing_line_id = #{outsourcingLineId}
+    </select>
+        
+    <insert id="insertBusiOutsourcingLine" parameterType="BusiOutsourcingLine" useGeneratedKeys="true" keyProperty="outsourcingLineId">
+        insert into busi_outsourcing_line
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="outsourcingLine != null and outsourcingLine != ''">outsourcing_line,</if>
+            <if test="supplierId != null">supplier_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="outsourcingLine != null and outsourcingLine != ''">#{outsourcingLine},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiOutsourcingLine" parameterType="BusiOutsourcingLine">
+        update busi_outsourcing_line
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="outsourcingLine != null and outsourcingLine != ''">outsourcing_line = #{outsourcingLine},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+        </trim>
+        where outsourcing_line_id = #{outsourcingLineId}
+    </update>
+
+    <delete id="deleteBusiOutsourcingLineById" parameterType="Long">
+        delete from busi_outsourcing_line where outsourcing_line_id = #{outsourcingLineId}
+    </delete>
+
+    <delete id="deleteBusiOutsourcingLineByIds" parameterType="String">
+        delete from busi_outsourcing_line where outsourcing_line_id in 
+        <foreach item="outsourcingLineId" collection="array" open="(" separator="," close=")">
+            #{outsourcingLineId}
+        </foreach>
+    </delete>
+
+</mapper>

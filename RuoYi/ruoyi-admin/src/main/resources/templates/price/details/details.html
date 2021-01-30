@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('报价单报价明细列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>报价单号：</label>
+                                <input type="text" name="quotationNo" id="quotationNo"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchDetails()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <div class="wrapper wrapper-content animated fadeInRight ibox-content self-made" style="display: none">
+                    <h3>自制报价费用明细：</h3>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">低值物料成本：</label>
+                            <div class="col-sm-9">
+                                <p id="bengtouCb" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">泵头材料成本：</label>
+                            <div class="col-sm-9">
+                                <p id="bengtouclCb" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">泵头人工成本：</label>
+                            <div class="col-sm-9">
+                                <p id="bengtouRgCb" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">制造费用成本：</label>
+                            <div class="col-sm-9">
+                                <p id="bengtouFyCb" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">泵头成本合计：</label>
+                            <div class="col-sm-9">
+                                <p id="bengtouhj" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">电机成本：</label>
+                            <div class="col-sm-9">
+                                <p id="motorCb" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">机封及系统成本：</label>
+                            <div class="col-sm-9">
+                                <p id="jfCb" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">轴承成本：</label>
+                            <div class="col-sm-9">
+                                <p id="zcCb" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">联轴器成本：</label>
+                            <div class="col-sm-9">
+                                <p id="zlqCb" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">额外配置成本：</label>
+                            <div class="col-sm-9">
+                                <p id="ewCb" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">外购成本合计：</label>
+                            <div class="col-sm-9">
+                                <p id="wghj" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                        <!--
+                        <div class="form-group">
+                            <label class="col-sm-6 control-label">额外配置成本：</label>
+                            <div class="col-sm-6">
+                                <small id="ewCb">13.67</small>
+                            </div>
+                        </div>
+                    </div>-->
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('busi:details:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('busi:details:remove')}]];
+        var prefix = ctx + "busi/price/details";
+
+        $(function() {
+
+        });
+
+        function searchDetails(){
+            var quotationNo = $("#quotationNo").val();
+            if (!quotationNo || quotationNo == ''){
+                $.modal.alertWarning("请输入订单号");
+                return
+            }
+            $.ajax({
+                url: prefix + "/searchDetails",
+                data: quotationNo,
+                type: "post",
+                processData: false,
+                contentType: "application/json",
+                success: function(result) {
+                    if (result.data){
+                        $("#bengtouCb").html(result.data.bengtouCb);
+                        $("#bengtouclCb").html(result.data.bengtouclCb);
+                        $("#bengtouRgCb").html(result.data.bengtouRgCb);
+                        $("#bengtouFyCb").html(result.data.bengtouFyCb);
+                        //泵头成本合计
+                        $("#bengtouhj").html(result.data.bengtouCb+result.data.bengtouclCb+result.data.bengtouRgCb+result.data.bengtouFyCb);
+                        //外购成本
+                        $("#motorCb").html(result.data.motorCb);
+                        $("#jfCb").html(result.data.jfCb);
+                        $("#zlqCb").html(result.data.zlqCb);
+                        $("#ewCb").html(result.data.ewCb);
+                        $("#wghj").html(result.data.motorCb + result.data.jfCb + result.data.zlqCb + result.data.ewCb);
+                        $(".self-made").show();
+
+                    }
+
+
+
+                }
+            });
+
+        }
+
+    </script>
+</body>
+</html>

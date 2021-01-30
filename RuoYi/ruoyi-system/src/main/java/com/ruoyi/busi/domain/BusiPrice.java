@@ -22,14 +22,14 @@ public class BusiPrice extends BaseEntity
     @Excel(name = "报价变量说明")
     private String priceName;
 
-    /** 数据 */
-    @Excel(name = "数据")
-    private Float priceDate;
-
     public void setPriceId(Long priceId)
     {
         this.priceId = priceId;
     }
+
+    /** 数据 */
+    @Excel(name = "数据")
+    private Double priceDate;
 
     public Long getPriceId()
     {
@@ -45,11 +45,12 @@ public class BusiPrice extends BaseEntity
         return priceName;
     }
 
-    public Float getPriceDate() {
+
+    public Double getPriceDate() {
         return priceDate;
     }
 
-    public void setPriceDate(Float priceDate) {
+    public void setPriceDate(Double priceDate) {
         this.priceDate = priceDate;
     }
 

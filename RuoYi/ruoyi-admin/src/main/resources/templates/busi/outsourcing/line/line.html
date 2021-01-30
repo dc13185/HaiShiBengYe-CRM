@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('变价变量列表')" />
+    <th:block th:include="include :: header('外购泵系列列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -9,11 +9,11 @@
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
                     <div class="select-list">
-                        <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
                         <ul>
+                            <input name="supplierId" id="supplierId" th:value="${supplierId}" type="hidden">
                             <li>
-                                <label>报价变量说明：</label>
-                                <input type="text" name="priceName"/>
+                                <label>泵系列：</label>
+                                <input type="text" name="outsourcingLine"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -25,16 +25,16 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="busi:price:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="busi:line:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="busi:price:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="busi:line:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <!--<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="busi:price:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="busi:line:remove">
                     <i class="fa fa-remove"></i> 删除
-                </a>-->
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:price:export">
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:line:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
             </div>
@@ -45,10 +45,11 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('busi:price:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('busi:price:remove')}]];
-        var prefix = ctx + "busi/price";
+        var editFlag = [[${@permission.hasPermi('busi:line:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('busi:line:remove')}]];
+        var prefix = ctx + "busi/outsourcing/line";
         var supplierId = $("#supplierId").val();
+
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -56,36 +57,37 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                modalName: "变价变量",
+                modalName: "外购泵系列",
                 columns: [{
                     checkbox: true
                 },
                 {
-                    field: 'priceId',
+                    field: 'outsourcingLineId',
                     title: '',
                     visible: false
                 },
                 {
-                    field: 'priceName',
-                    title: '报价变量说明'
-                },
-                {
-                    field: 'priceDate',
-                    title: '数据'
+                    field: 'outsourcingLine',
+                    title: '泵系列'
                 },
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.priceId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        /*actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.priceId + '\')"><i class="fa fa-remove"></i>删除</a>');*/
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.outsourcingLineId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.outsourcingLineId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs btn-right' + removeFlag + '" href="javascript:void(0)" onclick="openProduct(\'' + row.outsourcingLineId + '\')"><i class="fa fa-eye"></i>查看型号</a>');
                         return actions.join('');
                     }
                 }]
             };
             $.table.init(options);
         });
+
+        function openProduct(outsourcingLineId){
+            $.modal.openTab("查看规格",ctx+"system/outsourcing?outsourcingLineId="+outsourcingLineId);
+        }
     </script>
 </body>
 </html>

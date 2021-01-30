@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.mapper.BusiPriceDetailsMapper">
+
+    <resultMap type="BusiPriceDetails" id="BusiPriceDetailsResult">
+        <result property="priceDetailsId"    column="price_details_id"    />
+        <result property="bengtouCb"    column="bengtou_cb"    />
+        <result property="bengtouclCb"    column="bengtoucl_cb"    />
+        <result property="bengtouRgCb"    column="bengtou_rg_cb"    />
+        <result property="bengtouFyCb"    column="bengtou_fy_cb"    />
+        <result property="motorCb"    column="motor_cb"    />
+        <result property="jfCb"    column="jf_cb"    />
+        <result property="zcCb"    column="zc_cb"    />
+        <result property="zlqCb"    column="zlq_cb"    />
+        <result property="ewCb"    column="ew_cb"    />
+        <result property="quotationId"    column="quotation_id"    />
+    </resultMap>
+
+    <sql id="selectBusiPriceDetailsVo">
+        select price_details_id, bengtou_cb, bengtoucl_cb, bengtou_rg_cb, bengtou_fy_cb, motor_cb, jf_cb, zc_cb, zlq_cb, ew_cb, quotation_id from busi_price_details
+    </sql>
+
+    <select id="selectBusiPriceDetailsList" parameterType="BusiPriceDetails" resultMap="BusiPriceDetailsResult">
+        <include refid="selectBusiPriceDetailsVo"/>
+        <where>
+            <if test="bengtouCb != null "> and bengtou_cb = #{bengtouCb}</if>
+            <if test="bengtouclCb != null "> and bengtoucl_cb = #{bengtouclCb}</if>
+            <if test="bengtouRgCb != null "> and bengtou_rg_cb = #{bengtouRgCb}</if>
+            <if test="bengtouFyCb != null "> and bengtou_fy_cb = #{bengtouFyCb}</if>
+            <if test="motorCb != null "> and motor_cb = #{motorCb}</if>
+            <if test="jfCb != null "> and jf_cb = #{jfCb}</if>
+            <if test="zcCb != null "> and zc_cb = #{zcCb}</if>
+            <if test="zlqCb != null "> and zlq_cb = #{zlqCb}</if>
+            <if test="ewCb != null "> and ew_cb = #{ewCb}</if>
+            <if test="quotationId != null "> and quotation_id = #{quotationId}</if>
+        </where>
+    </select>
+
+    <select id="selectBusiPriceDetailsByQuotationNo" parameterType="String" resultMap="BusiPriceDetailsResult">
+        SELECT
+          price_details_id,
+          bengtou_cb,
+          bengtoucl_cb,
+          bengtou_rg_cb,
+          bengtou_fy_cb,
+          motor_cb,
+          jf_cb,
+          zc_cb,
+          zlq_cb,
+          ew_cb,
+          bpd.quotation_id
+    FROM
+      busi_price_details bpd  INNER JOIN busi_quotation bq ON bpd.quotation_id = bq.quotation_id
+      WHERE bq.quotation_no = #{quotationNo};
+    </select>
+
+
+
+
+    <select id="selectBusiPriceDetailsById" parameterType="Long" resultMap="BusiPriceDetailsResult">
+        <include refid="selectBusiPriceDetailsVo"/>
+        where quotation_id = #{quotationId}
+    </select>
+
+    <insert id="insertBusiPriceDetails" parameterType="BusiPriceDetails" useGeneratedKeys="true" keyProperty="priceDetailsId">
+        insert into busi_price_details
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bengtouCb != null">bengtou_cb,</if>
+            <if test="bengtouclCb != null">bengtoucl_cb,</if>
+            <if test="bengtouRgCb != null">bengtou_rg_cb,</if>
+            <if test="bengtouFyCb != null">bengtou_fy_cb,</if>
+            <if test="motorCb != null">motor_cb,</if>
+            <if test="jfCb != null">jf_cb,</if>
+            <if test="zcCb != null">zc_cb,</if>
+            <if test="zlqCb != null">zlq_cb,</if>
+            <if test="ewCb != null">ew_cb,</if>
+            <if test="quotationId != null">quotation_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bengtouCb != null">#{bengtouCb},</if>
+            <if test="bengtouclCb != null">#{bengtouclCb},</if>
+            <if test="bengtouRgCb != null">#{bengtouRgCb},</if>
+            <if test="bengtouFyCb != null">#{bengtouFyCb},</if>
+            <if test="motorCb != null">#{motorCb},</if>
+            <if test="jfCb != null">#{jfCb},</if>
+            <if test="zcCb != null">#{zcCb},</if>
+            <if test="zlqCb != null">#{zlqCb},</if>
+            <if test="ewCb != null">#{ewCb},</if>
+            <if test="quotationId != null">#{quotationId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiPriceDetails" parameterType="BusiPriceDetails">
+        update busi_price_details
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bengtouCb != null">bengtou_cb = #{bengtouCb},</if>
+            <if test="bengtouclCb != null">bengtoucl_cb = #{bengtouclCb},</if>
+            <if test="bengtouRgCb != null">bengtou_rg_cb = #{bengtouRgCb},</if>
+            <if test="bengtouFyCb != null">bengtou_fy_cb = #{bengtouFyCb},</if>
+            <if test="motorCb != null">motor_cb = #{motorCb},</if>
+            <if test="jfCb != null">jf_cb = #{jfCb},</if>
+            <if test="zcCb != null">zc_cb = #{zcCb},</if>
+            <if test="zlqCb != null">zlq_cb = #{zlqCb},</if>
+            <if test="ewCb != null">ew_cb = #{ewCb},</if>
+            <if test="quotationId != null">quotation_id = #{quotationId},</if>
+        </trim>
+        where price_details_id = #{priceDetailsId}
+    </update>
+
+    <delete id="deleteBusiPriceDetailsById" parameterType="Long">
+        delete from busi_price_details where price_details_id = #{priceDetailsId}
+    </delete>
+
+    <delete id="deleteBusiPriceDetailsByIds" parameterType="String">
+        delete from busi_price_details where price_details_id in
+        <foreach item="priceDetailsId" collection="array" open="(" separator="," close=")">
+            #{priceDetailsId}
+        </foreach>
+    </delete>
+
+</mapper>

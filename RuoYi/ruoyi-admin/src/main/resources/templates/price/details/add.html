@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增报价单报价明细')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-details-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">泵头成本：</label>
+                <div class="col-sm-8">
+                    <input name="bengtouCb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">泵头材料成本：</label>
+                <div class="col-sm-8">
+                    <input name="bengtouclCb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">泵头人工成本：</label>
+                <div class="col-sm-8">
+                    <input name="bengtouRgCb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">制造费用成本：</label>
+                <div class="col-sm-8">
+                    <input name="bengtouFyCb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">电机成本：</label>
+                <div class="col-sm-8">
+                    <input name="motorCb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">机封及系统成本：</label>
+                <div class="col-sm-8">
+                    <input name="jfCb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">轴承成本：</label>
+                <div class="col-sm-8">
+                    <input name="zcCb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">联轴器成本：</label>
+                <div class="col-sm-8">
+                    <input name="zlqCb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">额外配置成本：</label>
+                <div class="col-sm-8">
+                    <input name="ewCb" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">：</label>
+                <div class="col-sm-8">
+                    <input name="quotationId" class="form-control" type="text" required>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "busi/details"
+        $("#form-details-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-details-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>
