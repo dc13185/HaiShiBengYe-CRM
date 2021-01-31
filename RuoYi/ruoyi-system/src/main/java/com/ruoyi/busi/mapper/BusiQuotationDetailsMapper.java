@@ -1,6 +1,8 @@
 package com.ruoyi.busi.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.busi.domain.BusiQuotationDetails;
 import com.ruoyi.busi.domain.PriceSum;
 
@@ -71,4 +73,8 @@ public interface BusiQuotationDetailsMapper
     public Double getBearingPrice(Long bearingId);
 
     public Double getSumPrice(Long quotationId);
+
+    public Double getOutsourcingSumPrice(Long quotationId);
+
+    public Map<String,Long> getDetilsFalg(Long quotationId);
 }

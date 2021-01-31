@@ -293,4 +293,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
+    <select id="getOutsourcingSumPrice" parameterType="java.lang.Long" resultType="java.lang.Double">
+        SELECT SUM(details_price*coefficient * number)  FROM busi_outsourcing_details WHERE  quotation_id = #{quotationId}
+    </select>
+
+    <select id="getDetilsFalg" parameterType="java.lang.Long"  resultType="java.util.Map">
+        SELECT COUNT(1) AS bod_count,
+        (SELECT COUNT(1)  FROM busi_quotation_details bqd WHERE bqd.quotation_id = #{quotationId} ) AS bqd_count
+        FROM busi_outsourcing_details bod   WHERE bod.`quotation_id` = #{quotationId}
+    </select>
+
+
 </mapper>

@@ -32,7 +32,7 @@ public class BusiMotor extends BaseEntity
 
     /** 价格 */
     @Excel(name = "价格")
-    private Float price;
+    private Double price;
 
 
     private String supplierId;
@@ -74,11 +74,11 @@ public class BusiMotor extends BaseEntity
         return motorType;
     }
 
-    public Float getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

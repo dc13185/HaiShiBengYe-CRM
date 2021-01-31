@@ -86,10 +86,6 @@
                     title: '价格'
                 },
                 {
-                    field: 'supplierId',
-                    title: ''
-                },
-                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
@@ -102,6 +98,19 @@
             };
             $.table.init(options);
         });
+
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var column = $.table.selectColumns('outsourcingModel');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#modelId').val(rows);
+            parent.$('#modelName').val(column);
+        }
     </script>
 </body>
 </html>

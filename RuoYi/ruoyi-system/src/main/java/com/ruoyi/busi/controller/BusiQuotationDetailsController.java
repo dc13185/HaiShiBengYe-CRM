@@ -3,14 +3,14 @@ package com.ruoyi.busi.controller;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import com.ruoyi.busi.domain.*;
 import com.ruoyi.busi.mapper.BusiQuotationDetailsMapper;
-import com.ruoyi.busi.service.IBusiPriceDetailsService;
-import com.ruoyi.busi.service.IBusiPriceService;
-import com.ruoyi.busi.service.IBusiProductModelService;
+import com.ruoyi.busi.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.busi.service.IBusiQuotationDetailsService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -46,24 +45,57 @@ public class BusiQuotationDetailsController extends BaseController
     private BusiQuotationDetailsMapper quotationDetailsMapper;
     @Autowired
     private IBusiProductModelService busiProductModelService;
-
     @Autowired
     private IBusiPriceDetailsService busiPriceDetailsService;
-
     @Autowired
     private IBusiPriceService busiPriceService;
+    @Autowired
+    private IBusiQuotationService quotationService;
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
-    public String details(String quotationId,ModelMap modelMap)
+    public String details(Long quotationId,ModelMap modelMap)
     {
-        Double sumPrice =  quotationDetailsMapper.getSumPrice(Long.parseLong(quotationId));
+        BusiQuotation quotation = quotationService.selectBusiQuotationById(quotationId);
+        Map<String,Long> map =  quotationDetailsMapper.getDetilsFalg(quotationId);
         modelMap.put("quotationId",quotationId);
-        if (sumPrice != null){
-            modelMap.put("sumPrice", format(sumPrice));
-        }else{
-            modelMap.put("sumPrice", 0);
+        //整机报价单标识
+        Long bodCount =  map.get("bod_count");
+        Long bqdCount =  map.get("bqd_count");
+        //整机报价单
+        if (quotation.getQuotationType() == 0L){
+            Double sumPrice =  quotationDetailsMapper.getSumPrice(quotationId);
+            if (sumPrice != null){
+                modelMap.put("sumPrice", format(sumPrice));
+            }else{
+                modelMap.put("sumPrice", 0);
+            }
+            //如果该报价单含有 外购报价单明细
+            if (bodCount > 0){
+                Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
+                modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+                modelMap.put("quotationFlag", 1);
+            }
+        }else if(quotation.getQuotationType() == 1L){
+            Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
+            if (sumOutsourcingPrice!=null){
+                modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+            }else{
+                modelMap.put("sumOutsourcingPrice", 0);
+            }
+            if (bqdCount > 0){
+                Double sumPrice =  quotationDetailsMapper.getSumPrice(quotationId);
+                if (sumPrice != null){
+                    modelMap.put("sumPrice", format(sumPrice));
+                }else{
+                    modelMap.put("sumPrice", 0);
+                }
+                modelMap.put("quotationFlag", 1);
+            }
+            return "busi/outsourcing/details/details";
         }
+
+
         return prefix + "/details";
     }
 

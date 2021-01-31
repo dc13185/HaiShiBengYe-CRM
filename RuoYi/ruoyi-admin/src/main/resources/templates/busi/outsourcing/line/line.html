@@ -88,6 +88,19 @@
         function openProduct(outsourcingLineId){
             $.modal.openTab("查看规格",ctx+"system/outsourcing?outsourcingLineId="+outsourcingLineId);
         }
+
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var column = $.table.selectColumns('outsourcingLine');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#productLineId').val(rows);
+            parent.$('#productLineName').val(column);
+        }
     </script>
 </body>
 </html>

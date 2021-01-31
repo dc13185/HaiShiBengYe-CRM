@@ -24,6 +24,8 @@
             var quotationId = $("#quotationId").val();
             if( quotationType == 0){
                 window.location.href = ctx+"busi/details/addDetails?quotationId="+quotationId;
+            }else if(quotationType == 1){
+                window.location.href = ctx+"busi/outsourcing/details/add?quotationId="+quotationId;
             }
         }
 

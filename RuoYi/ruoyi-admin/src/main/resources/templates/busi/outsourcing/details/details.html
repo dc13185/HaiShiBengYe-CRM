@@ -12,17 +12,9 @@
                         <input name="quotationId" id="quotationId" th:value="${quotationId}" type="hidden">
                         <ul>
                             <li>
-                                <label>类型：</label>
-                                <select name="supplierLevel" >
-                                    <option value="">整机</option>
-                                    <option value="outsourcing">外购</option>
-                                </select>
-                            </li>
-
-                          <!--<li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>-->
+                            </li>
                         </ul>
                     </div>
                 </form>
@@ -46,18 +38,9 @@
                 <table id="bootstrap-table"></table>
             </div>
 
-            <div class="col-sm-3 search-collapse" th:if="${quotationFlag == null}">
-              <small> 费用合计:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
+            <div class="col-sm-3 search-collapse">
+              <small id="sumPrice1"> 费用合计:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
             </div>
-
-
-            <div class="col-sm-3 search-collapse" th:if="${quotationFlag != null}">
-                <small>整机报价单费用合计:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
-                <br>
-                <small> 外购报价单合计:</small><small id="sumOutsourcingPrice" th:text="${sumOutsourcingPrice}"></small>
-                <br>
-                <small> 费用合计:</small><small  th:text="${sumOutsourcingPrice + sumPrice}"></small>
-             </div>
 
         </div>
     </div>
@@ -66,7 +49,7 @@
         var editFlag = [[${@permission.hasPermi('busi:details:edit')}]];
         var removeFlag = [[${@permission.hasPermi('busi:details:remove')}]];
         var project_type = [[${@dict.getType('project_type')}]];
-        var prefix = ctx + "busi/details";
+        var prefix = ctx + "busi/outsourcing/details";
         var supplierId = $("#supplierId").val();
         $(function() {
             var options = {
@@ -90,19 +73,29 @@
                     title: '设备位号'
                 },
                 {
+                    field: 'equipmentName',
+                    align: 'center',
+                    title: '设备名称'
+                },
+                {
                     field: 'number',
                     align: 'center',
                     title: '数量'
                 },
                 {
-                    field: 'modelName',
+                    field: 'productSupplierName',
                     align: 'center',
-                    title: '泵型号'
+                    title: '产品供应商'
                 },
                 {
-                    field: 'materialName',
+                    field: 'productLineName',
                     align: 'center',
-                    title: '过流部件材质'
+                    title: '产品系列'
+                },
+                {
+                    field: 'modelName',
+                    align: 'center',
+                    title: '产品规格型号'
                 },
                 {
                     field: 'ratedFlow',
@@ -135,6 +128,11 @@
                     title: '汽蚀余量(m)'
                 },
                 {
+                    field: 'rinseSolutionId',
+                    align: 'center',
+                    title: '冲洗方案'
+                },
+                {
                     field: 'motorSupplierId',
                     align: 'center',
                     title: '电机品牌'
@@ -145,9 +143,14 @@
                     title: '电机型号'
                 },
                 {
-                    field: 'rinseSolutionId',
+                    field: 'otherMotor',
                     align: 'center',
-                    title: '冲洗方案'
+                    title: '其他电机'
+                },
+                {
+                    field: 'otherMotorPrice',
+                    align: 'center',
+                    title: '其他电机价格'
                 },
                 {
                     field: 'detailsPrice',
