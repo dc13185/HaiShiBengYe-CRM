@@ -12,6 +12,14 @@
                         <input name="quotationId" id="quotationId" th:value="${quotationId}" type="hidden">
                         <ul>
                             <li>
+                                <label>类型：</label>
+                                <select name="supplierLevel"  class="supplierLevel" onchange="toOutsourcing()">
+                                    <option value="">外购</option>
+                                    <option value="outsourcing"  th:if="${zhengjiFlag != null}">整机</option>
+                                </select>
+                            </li>
+
+                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
@@ -38,9 +46,25 @@
                 <table id="bootstrap-table"></table>
             </div>
 
-            <div class="col-sm-3 search-collapse">
+           <!-- <div class="col-sm-3 search-collapse">
               <small id="sumPrice1"> 费用合计:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
+            </div>-->
+
+
+            <div class="col-sm-3 search-collapse" th:if="${zhengjiFlag == null}">
+                <small> 费用合计:</small>   <small id="sumOutsourcingPrice" th:text="${sumOutsourcingPrice}"></small>
             </div>
+
+            <div class="col-sm-3 search-collapse" th:if="${zhengjiFlag != null}">
+                <small>整机报价单费用合计:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
+                <br>
+                <small> 外购报价单合计:</small><small id="sumOutsourcingPrice" th:text="${sumOutsourcingPrice}"></small>
+                <br>
+                <small> 费用合计:</small><small  th:text="${sumOutsourcingPrice + sumPrice}"></small>
+            </div>
+
+
+
 
         </div>
     </div>
@@ -187,8 +211,8 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.detailsId + '\')"><i class="fa fa-eye"></i>查看</a> ');
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.detailsId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+
+                      /*  actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.detailsId + '\')"><i class="fa fa-edit"></i>编辑</a> ');*/
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.detailsId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
@@ -202,6 +226,11 @@
             $.modal.openFull("添加报价单明细",ctx+"busi/details/add?quotationId="+quotationId)
         }
 
+
+        function toOutsourcing(){
+            var quotationId = $("#quotationId").val();
+            window.location.href = ctx + "busi/details/toZhengJiDetils?quotationId="+quotationId;
+        }
 
 
 

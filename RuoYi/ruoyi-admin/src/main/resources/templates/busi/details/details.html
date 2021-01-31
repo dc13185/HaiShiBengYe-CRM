@@ -13,9 +13,9 @@
                         <ul>
                             <li>
                                 <label>类型：</label>
-                                <select name="supplierLevel" >
+                                <select name="supplierLevel"  class="supplierLevel" onchange="toOutsourcing()">
                                     <option value="">整机</option>
-                                    <option value="outsourcing">外购</option>
+                                    <option value="outsourcing"  th:if="${sumOutsourcingPrice != null}">外购</option>
                                 </select>
                             </li>
 
@@ -198,6 +198,14 @@
             var quotationId = $("#quotationId").val();
             $.modal.openFull("添加报价单明细",ctx+"busi/details/add?quotationId="+quotationId)
         }
+
+        function toOutsourcing(){
+            var quotationId = $("#quotationId").val();
+            window.location.href = ctx + "busi/details/toOutsourcingDetils?quotationId="+quotationId;
+        }
+
+
+
 
 
 

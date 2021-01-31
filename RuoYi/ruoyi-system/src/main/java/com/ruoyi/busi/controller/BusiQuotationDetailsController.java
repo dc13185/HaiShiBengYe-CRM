@@ -90,13 +90,65 @@ public class BusiQuotationDetailsController extends BaseController
                 }else{
                     modelMap.put("sumPrice", 0);
                 }
-                modelMap.put("quotationFlag", 1);
+                modelMap.put("zhengjiFlag", 1);
             }
             return "busi/outsourcing/details/details";
         }
-
-
         return prefix + "/details";
+    }
+
+
+    @RequiresPermissions("busi:details:view")
+    @GetMapping("toZhengJiDetils")
+    public String toZhengJiDetils(Long quotationId,ModelMap modelMap)
+    {
+        Map<String,Long> map =  quotationDetailsMapper.getDetilsFalg(quotationId);
+        modelMap.put("quotationId",quotationId);
+        //整机报价单标识
+        Long bodCount =  map.get("bod_count");
+        Long bqdCount =  map.get("bqd_count");
+        Double sumPrice =  quotationDetailsMapper.getSumPrice(quotationId);
+        if (sumPrice != null){
+            modelMap.put("sumPrice", format(sumPrice));
+        }else{
+            modelMap.put("sumPrice", 0);
+        }
+        //如果该报价单含有 外购报价单明细
+        if (bodCount > 0){
+            Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
+            modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+            modelMap.put("quotationFlag", 1);
+        }
+        return prefix + "/details";
+    }
+
+
+
+    @RequiresPermissions("busi:details:view")
+    @GetMapping("toOutsourcingDetils")
+    public String toOutsourcingDetils(Long quotationId,ModelMap modelMap)
+    {
+        Map<String,Long> map =  quotationDetailsMapper.getDetilsFalg(quotationId);
+        modelMap.put("quotationId",quotationId);
+        //整机报价单标识
+        Long bodCount =  map.get("bod_count");
+        Long bqdCount =  map.get("bqd_count");
+        Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
+        if (sumOutsourcingPrice!=null){
+            modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+        }else{
+            modelMap.put("sumOutsourcingPrice", 0);
+        }
+        if (bqdCount > 0){
+            Double sumPrice =  quotationDetailsMapper.getSumPrice(quotationId);
+            if (sumPrice != null){
+                modelMap.put("sumPrice", format(sumPrice));
+            }else{
+                modelMap.put("sumPrice", 0);
+            }
+            modelMap.put("zhengjiFlag", 1);
+        }
+        return "busi/outsourcing/details/details";
     }
 
     /**

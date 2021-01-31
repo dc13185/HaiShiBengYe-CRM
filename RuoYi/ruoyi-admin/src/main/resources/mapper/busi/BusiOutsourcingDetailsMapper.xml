@@ -39,9 +39,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT details_id, quotation_id,
         equipment_num,
         equipment_name,
-            (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.product_supplier_id ) AS  productSupplierName,
-            (SELECT bol.outsourcing_line FROM busi_outsourcing_line bol WHERE bol.outsourcing_line_id = bqd.product_line_id ) AS  productLineName,
-            (SELECT bo.outsourcing_model FROM busi_outsourcing bo WHERE bo.outsourcing_id = bqd.model_id ) AS modelName,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.product_supplier_id ) AS  productSupplierName,
+        (SELECT bol.outsourcing_line FROM busi_outsourcing_line bol WHERE bol.outsourcing_line_id = bqd.product_line_id ) AS  productLineName,
+        (SELECT bo.outsourcing_model FROM busi_outsourcing bo WHERE bo.outsourcing_id = bqd.model_id ) AS modelName,
         number,
         rinse_solution_id,
         other_expenses,
@@ -58,7 +58,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT motor_model FROM busi_motor bu WHERE bu.motor_id = bqd.motor_id) AS motor_name,
         other_motor,
         other_motor_price,
-
         quotation_type,
         coefficient,
         details_price
