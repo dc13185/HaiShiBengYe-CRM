@@ -62,6 +62,12 @@ public class BusiQuotation extends BaseEntity
     @Excel(name = "合计数量")
     private Double allCount;
 
+    @Excel(name = "整机单价格")
+    private Double quotationPrice;
+
+    @Excel(name = "外购单价格")
+    private Double outsourcingPrice;
+
     @Excel(name = "合计价格")
     private Double sumPrice;
 
@@ -186,6 +192,23 @@ public class BusiQuotation extends BaseEntity
 
     public void setCustomerAddress(String customerAddress) {
         this.customerAddress = customerAddress;
+    }
+
+
+    public Double getQuotationPrice() {
+        return quotationPrice;
+    }
+
+    public void setQuotationPrice(Double quotationPrice) {
+        this.quotationPrice = quotationPrice;
+    }
+
+    public Double getOutsourcingPrice() {
+        return outsourcingPrice;
+    }
+
+    public void setOutsourcingPrice(Double outsourcingPrice) {
+        this.outsourcingPrice = outsourcingPrice;
     }
 
     @Override

@@ -21,37 +21,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBusiQuotationVo">
-        SELECT
-            quotation_id,
-            project_name,
-            project_address,
-            quotation_no,
-            customer_id,
-            (SELECT bc.customer_name FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_name,
-            (SELECT bc.customer_industry FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_industry,
-            (SELECT bc.contact_address FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_address,
-            office_address,
-            office_staff_name,
-            technical_staff_id,
-            quotation_type,
-            create_time,
-            (SELECT COUNT(1) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  allCount,
-            (SELECT IFNULL(ROUND(SUM(details_price*coefficient * number),2),0) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  sumPrice
-            FROM
-            busi_quotation bq
+     SELECT
+                *
+                FROM
+                busi_quotation bq
     </sql>
 
     <select id="selectBusiQuotationList" parameterType="BusiQuotation" resultMap="BusiQuotationResult">
-        <include refid="selectBusiQuotationVo"/>
+        SELECT
+        bq.quotation_id,
+        bq.project_name,
+        bq.project_address,
+        bq.quotation_no,
+        bq.customer_id,
+        (SELECT bc.customer_name FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_name,
+        (SELECT bc.customer_industry FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_industry,
+        (SELECT bc.contact_address FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_address,
+        bq.office_address,
+        bq.office_staff_name,
+        bq.technical_staff_id,
+        bq.quotation_type,
+        bq.create_time,
+        IFNULL(ROUND(SUM(bqd.details_price*bqd.coefficient * bqd.number),2),0) AS quotationPrice,
+        IFNULL(ROUND(SUM(bod.details_price*bod.coefficient * bod.number),2),0) AS outsourcingPrice,
+        SUM(IFNULL(bqd.`number`,0)+IFNULL(bod.`number`,0)) AS  allCount
+        FROM
+        busi_quotation bq
+        LEFT JOIN busi_quotation_details bqd ON bqd.`quotation_id`  = bq.`quotation_id`
+        LEFT JOIN busi_outsourcing_details bod ON bod.`quotation_id`  = bq.`quotation_id`
         <where>
-            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
-            <if test="quotationNo != null  and quotationNo != ''"> and quotation_no = #{quotationNo}</if>
-            <if test="quotationType != null "> and quotation_type = #{quotationType}</if>
+            <if test="projectName != null  and projectName != ''"> and bq.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="quotationNo != null  and quotationNo != ''"> and bq.quotation_no = #{quotationNo}</if>
+            <if test="quotationType != null "> and bq.quotation_type = #{quotationType}</if>
             <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始时间检索 -->
-                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{params.beginCreateTime},'%y-%m-%d')
+                and bq.date_format(create_time,'%y-%m-%d') &gt;= date_format(#{params.beginCreateTime},'%y-%m-%d')
             </if>
             <if test="params.endCreateTime != null and params.endCreateTime != ''"><!-- 结束时间检索 -->
-                and date_format(create_time,'%y-%m-%d')&lt;=  date_format(#{params.endCreateTime},'%y-%m-%d')
+                and bq.date_format(create_time,'%y-%m-%d')&lt;=  date_format(#{params.endCreateTime},'%y-%m-%d')
             </if>
         </where>
     </select>

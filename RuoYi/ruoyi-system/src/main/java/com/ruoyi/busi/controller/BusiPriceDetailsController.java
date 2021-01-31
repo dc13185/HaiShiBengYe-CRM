@@ -1,6 +1,8 @@
 package com.ruoyi.busi.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.busi.mapper.BusiPriceDetailsMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -132,6 +134,11 @@ public class BusiPriceDetailsController extends BaseController
     @ResponseBody
     public AjaxResult searchDetails(@RequestBody  String  quotationNo){
         BusiPriceDetails busiPriceDetails =  busiPriceDetailsMapper.selectBusiPriceDetailsByQuotationNo(quotationNo);
-        return  AjaxResult.success(busiPriceDetails);
+        Map outsourcingMap = busiPriceDetailsMapper.selectoutsourcingPriceDetailsByQuotationNo(quotationNo);
+        HashMap hashMap = new HashMap();
+        hashMap.put("busiPriceDetails",busiPriceDetails);
+        hashMap.put("outsourcingMap",outsourcingMap);
+
+        return  AjaxResult.success(hashMap);
     }
 }

@@ -27,7 +27,7 @@
                     <h3>自制报价费用明细：</h3>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">低值物料成本：</label>
+                            <label class="col-sm-3 control-label">低值物料成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="bengtouCb" class="form-control-static">0</p>
                             </div>
@@ -36,7 +36,7 @@
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">泵头材料成本：</label>
+                            <label class="col-sm-3 control-label">泵头材料成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="bengtouclCb" class="form-control-static">0</p>
                             </div>
@@ -45,7 +45,7 @@
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">泵头人工成本：</label>
+                            <label class="col-sm-3 control-label">泵头人工成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="bengtouRgCb" class="form-control-static">0</p>
                             </div>
@@ -54,7 +54,7 @@
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">制造费用成本：</label>
+                            <label class="col-sm-3 control-label">制造费用成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="bengtouFyCb" class="form-control-static">0</p>
                             </div>
@@ -73,7 +73,7 @@
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">电机成本：</label>
+                            <label class="col-sm-3 control-label">电机成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="motorCb" class="form-control-static">0</p>
                             </div>
@@ -81,7 +81,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">机封及系统成本：</label>
+                            <label class="col-sm-3 control-label">机封及系统成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="jfCb" class="form-control-static">0</p>
                             </div>
@@ -89,7 +89,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">轴承成本：</label>
+                            <label class="col-sm-3 control-label">轴承成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="zcCb" class="form-control-static">0</p>
                             </div>
@@ -97,7 +97,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">联轴器成本：</label>
+                            <label class="col-sm-3 control-label">联轴器成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="zlqCb" class="form-control-static">0</p>
                             </div>
@@ -106,7 +106,7 @@
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">额外配置成本：</label>
+                            <label class="col-sm-3 control-label">额外配置成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="ewCb" class="form-control-static">0</p>
                             </div>
@@ -122,15 +122,41 @@
                         </div>
                     </div>
 
-                        <!--
+                    <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-6 control-label">额外配置成本：</label>
-                            <div class="col-sm-6">
-                                <small id="ewCb">13.67</small>
+                            <label class="col-sm-3 control-label">合计总成本：</label>
+                            <div class="col-sm-9">
+                                <p id="allPrice" class="form-control-static">0</p>
                             </div>
                         </div>
-                    </div>-->
+                    </div>
             </div>
+
+
+
+            <div class="wrapper wrapper-content animated fadeInRight ibox-content waigou-made"  style="display: none">
+                <h3>外购报价明细：</h3>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">泵头成本合计：</label>
+                        <div class="col-sm-9">
+                            <p id="outsourcingPrice" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">电机成本合计：</label>
+                        <div class="col-sm-9">
+                            <p id="motorPrice" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
     <th:block th:include="include :: footer" />
@@ -156,21 +182,30 @@
                 processData: false,
                 contentType: "application/json",
                 success: function(result) {
-                    if (result.data){
-                        $("#bengtouCb").html(result.data.bengtouCb);
-                        $("#bengtouclCb").html(result.data.bengtouclCb);
-                        $("#bengtouRgCb").html(result.data.bengtouRgCb);
-                        $("#bengtouFyCb").html(result.data.bengtouFyCb);
+                    debugger;
+                    var busiPriceDetails = result.data.busiPriceDetails;
+                    if (busiPriceDetails){
+                        $("#bengtouCb").html(busiPriceDetails.bengtouCb);
+                        $("#bengtouclCb").html(busiPriceDetails.bengtouclCb);
+                        $("#bengtouRgCb").html(busiPriceDetails.bengtouRgCb);
+                        $("#bengtouFyCb").html(busiPriceDetails.bengtouFyCb);
                         //泵头成本合计
-                        $("#bengtouhj").html(result.data.bengtouCb+result.data.bengtouclCb+result.data.bengtouRgCb+result.data.bengtouFyCb);
+                        $("#bengtouhj").html(busiPriceDetails.bengtouCb+busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb);
                         //外购成本
-                        $("#motorCb").html(result.data.motorCb);
-                        $("#jfCb").html(result.data.jfCb);
-                        $("#zlqCb").html(result.data.zlqCb);
-                        $("#ewCb").html(result.data.ewCb);
-                        $("#wghj").html(result.data.motorCb + result.data.jfCb + result.data.zlqCb + result.data.ewCb);
+                        $("#motorCb").html(busiPriceDetails.motorCb);
+                        $("#jfCb").html(busiPriceDetails.jfCb);
+                        $("#zlqCb").html(busiPriceDetails.zlqCb);
+                        $("#ewCb").html(busiPriceDetails.ewCb);
+                        $("#wghj").html(busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb);
+                        var allSum = busiPriceDetails.bengtouCb+busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb+busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb;
+                        $("#allPrice").html(allSum.toFixed(2))
                         $(".self-made").show();
-
+                    }
+                    var outsourcingMap = result.data.outsourcingMap;
+                    if (outsourcingMap){
+                        $("#outsourcingPrice").html(outsourcingMap.outsourcingPrice);
+                        $("#motorPrice").html(outsourcingMap.motorPrice);
+                        $(".waigou-made").show();
                     }
 
 

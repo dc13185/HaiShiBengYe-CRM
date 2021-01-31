@@ -2,6 +2,7 @@ package com.ruoyi.busi.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ruoyi.busi.domain.BusiCustomer;
 import com.ruoyi.busi.service.IBusiCustomerService;
@@ -60,6 +61,9 @@ public class BusiQuotationController extends BaseController
     {
         startPage();
         List<BusiQuotation> list = busiQuotationService.selectBusiQuotationList(busiQuotation);
+        list = list.parallelStream().peek(b -> {
+            b.setSumPrice(b.getOutsourcingPrice() + b.getQuotationPrice());
+        }).collect(Collectors.toList());
         return getDataTable(list);
     }
 

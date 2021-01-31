@@ -1,6 +1,8 @@
 package com.ruoyi.busi.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.busi.domain.BusiPriceDetails;
 
 /**
@@ -60,4 +62,6 @@ public interface BusiPriceDetailsMapper
     public int deleteBusiPriceDetailsByIds(String[] priceDetailsIds);
 
     public BusiPriceDetails selectBusiPriceDetailsByQuotationNo(String quotationNo);
+
+    public Map selectoutsourcingPriceDetailsByQuotationNo(String quotationNo);
 }
