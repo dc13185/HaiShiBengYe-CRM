@@ -33,6 +33,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <result property="technicalStaffId"    column="technical_staff_id"    />
             <result property="quotationType"    column="quotation_type"    />
             <result property="sumPrice"    column="sumPrice"    />
+            <result property="quotationPrice"    column="quotationPrice"    />
+            <result property="outsourcingPrice"    column="outsourcingPrice"    />
+            <result property="partsPrice"    column="partsPrice"    />
             <result property="createTime"    column="create_time"    />
             <result property="customerName"    column="customer_name"    />
             <result property="customerIndustry"    column="customer_industry"    />
@@ -60,9 +63,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         technical_staff_id,
         quotation_type,
         create_time,
-        (SELECT IFNULL(ROUND(SUM(details_price*coefficient * number),2),0) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  sumPrice,
+        (SELECT IFNULL(ROUND(SUM(details_price*coefficient * number),2),0) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  quotationPrice,
+        (SELECT  IFNULL(ROUND(SUM(bod.details_price*bod.coefficient * bod.number),2),0) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.`quotation_id` )  AS outsourcingPrice,
+        (SELECT   IFNULL(ROUND(SUM(bpd.details_price * bpd.number),2),0)  FROM busi_parts_details bpd WHERE bpd.quotation_id = bq.`quotation_id` ) AS partsPrice,
         bc.*
-        FROM
+        from
         busi_contract bc , busi_quotation bq
         WHERE bc.qutation_id =bq.quotation_id
         <if test="params.beginSigningDate != null and params.beginSigningDate != ''"><!-- 开始时间检索 -->

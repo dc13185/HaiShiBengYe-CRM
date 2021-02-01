@@ -44,11 +44,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         bq.create_time,
         IFNULL(ROUND(SUM(bqd.details_price*bqd.coefficient * bqd.number),2),0) AS quotationPrice,
         IFNULL(ROUND(SUM(bod.details_price*bod.coefficient * bod.number),2),0) AS outsourcingPrice,
-        SUM(IFNULL(bqd.`number`,0)+IFNULL(bod.`number`,0)) AS  allCount
+        IFNULL(ROUND(SUM(bpd.details_price * bpd.number),2),0) AS partsPrice,
+        SUM(IFNULL(bqd.`number`,0)+IFNULL(bod.`number`,0)+IFNULL(bpd.number,0)) AS  allCount
         FROM
         busi_quotation bq
         LEFT JOIN busi_quotation_details bqd ON bqd.`quotation_id`  = bq.`quotation_id`
         LEFT JOIN busi_outsourcing_details bod ON bod.`quotation_id`  = bq.`quotation_id`
+        LEFT JOIN busi_parts_details bpd  ON bpd.`quotation_id` = bq.`quotation_id`
         <where>
             <if test="projectName != null  and projectName != ''"> and bq.project_name like concat('%', #{projectName}, '%')</if>
             <if test="quotationNo != null  and quotationNo != ''"> and bq.quotation_no = #{quotationNo}</if>

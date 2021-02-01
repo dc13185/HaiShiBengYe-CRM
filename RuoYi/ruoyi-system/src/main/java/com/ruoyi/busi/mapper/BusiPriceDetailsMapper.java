@@ -61,7 +61,9 @@ public interface BusiPriceDetailsMapper
      */
     public int deleteBusiPriceDetailsByIds(String[] priceDetailsIds);
 
-    public BusiPriceDetails selectBusiPriceDetailsByQuotationNo(String quotationNo);
+    public BusiPriceDetails selectBusiPriceDetailsByQuotationNo(String contractNo);
 
-    public Map selectoutsourcingPriceDetailsByQuotationNo(String quotationNo);
+    public Map selectoutsourcingPriceDetailsByQuotationNo(String contractNo);
+
+
 }

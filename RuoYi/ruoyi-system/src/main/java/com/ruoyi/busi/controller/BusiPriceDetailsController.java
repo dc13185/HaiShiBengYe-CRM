@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.busi.mapper.BusiPriceDetailsMapper;
+import com.ruoyi.busi.mapper.BusiProductParameterMapper;
+import com.ruoyi.busi.parts.domain.BusiPartsDetails;
+import com.ruoyi.busi.parts.mapper.BusiPartsDetailsMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,6 +39,12 @@ public class BusiPriceDetailsController extends BaseController
 
     @Autowired
     private BusiPriceDetailsMapper busiPriceDetailsMapper;
+
+    @Autowired
+    private BusiPartsDetailsMapper busiPartsDetailsMapper;
+
+    @Autowired
+    private BusiProductParameterMapper busiProductParameterMapper;
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
@@ -138,6 +147,9 @@ public class BusiPriceDetailsController extends BaseController
         HashMap hashMap = new HashMap();
         hashMap.put("busiPriceDetails",busiPriceDetails);
         hashMap.put("outsourcingMap",outsourcingMap);
+        //配件管理
+        Map busiPartsDetails = busiPartsDetailsMapper.selectPartsPriceDetailsByQuotationNo(quotationNo);
+        hashMap.put("busiPartsDetails",busiPartsDetails);
 
         return  AjaxResult.success(hashMap);
     }

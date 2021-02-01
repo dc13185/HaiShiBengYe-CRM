@@ -54,6 +54,9 @@ public class BusiPriceDetails extends BaseEntity
     @Excel(name = "额外配置成本")
     private Double ewCb;
 
+    @Excel(name = "合同报价金额")
+    private Double contractPrice;
+
     /**  */
     @Excel(name = "")
     private Long quotationId;
@@ -156,6 +159,14 @@ public class BusiPriceDetails extends BaseEntity
     public Long getQuotationId()
     {
         return quotationId;
+    }
+
+    public Double getContractPrice() {
+        return contractPrice;
+    }
+
+    public void setContractPrice(Double contractPrice) {
+        this.contractPrice = contractPrice;
     }
 
     @Override

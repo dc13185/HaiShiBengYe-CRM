@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectBusiPriceDetailsByQuotationNo" parameterType="String" resultMap="BusiPriceDetailsResult">
-        SELECT
+      SELECT
           price_details_id,
           bengtou_cb,
           bengtoucl_cb,
@@ -50,19 +50,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           zc_cb,
           zlq_cb,
           ew_cb,
+           bc.`contract_price` AS contractPrice,
           bpd.quotation_id
     FROM
-      busi_price_details bpd  INNER JOIN busi_quotation bq ON bpd.quotation_id = bq.quotation_id
-      WHERE bq.quotation_no = #{quotationNo}
+      busi_price_details bpd  INNER JOIN busi_contract bc ON bpd.quotation_id = bc.qutation_id
+      WHERE  bc.`contract_no` = #{contractNo}
     </select>
 
     <select id="selectoutsourcingPriceDetailsByQuotationNo" parameterType="String" resultType="java.util.Map">
-        SELECT
-        (SELECT bo.outsourcing_price*bob.`number`  FROM  busi_outsourcing bo WHERE bo.outsourcing_id = bob.model_id) AS outsourcingPrice,
-         (SELECT bm.price*bob.`number` FROM  busi_motor bm WHERE bm.motor_id = bob.motor_id) AS motorPrice
-          FROM busi_outsourcing_details bob LEFT JOIN  busi_quotation bq ON bob.quotation_id = bq.quotation_id
-          WHERE bq.quotation_no = #{quotationNo}
+           SELECT
+             (SELECT bo.outsourcing_price * bob.`number`  FROM  busi_outsourcing bo WHERE bo.outsourcing_id = bob.model_id) AS outsourcingPrice,
+            (SELECT bm.price*bob.`number` FROM  busi_motor bm WHERE bm.motor_id = bob.motor_id) AS motorPrice,
+            bc.contract_price AS contractPrice
+            FROM busi_outsourcing_details bob
+            LEFT JOIN  busi_contract bc ON bob.quotation_id = bc.qutation_id
+          WHERE bc.contract_no = #{contractNo}
     </select>
+
+
 
 
 

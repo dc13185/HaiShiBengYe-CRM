@@ -1,6 +1,7 @@
 package com.ruoyi.busi.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.ruoyi.busi.domain.BusiQuotation;
 import com.ruoyi.busi.mapper.BusiContractMapper;
@@ -78,6 +79,11 @@ public class BusiContractController extends BaseController
     {
         startPage();
         List<BusiContract> list = busiContractService.selectBusiContractList(busiContract);
+        list = list.parallelStream().filter(b -> b.getContractId() != null).peek(b -> {
+            BusiQuotation busiQuotation = b.getBusiQuotation();
+            busiQuotation.setSumPrice(busiQuotation.getOutsourcingPrice() + busiQuotation.getPartsPrice() + busiQuotation.getQuotationPrice());
+            b.setBusiQuotation(busiQuotation);
+        }).collect(Collectors.toList());
         return getDataTable(list);
     }
 

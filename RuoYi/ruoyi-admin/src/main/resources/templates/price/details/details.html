@@ -25,6 +25,16 @@
             <div class="col-sm-12 select-table table-striped">
                 <div class="wrapper wrapper-content animated fadeInRight ibox-content self-made" style="display: none">
                     <h3>自制报价费用明细：</h3>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">报价金额：</label>
+                            <div class="col-sm-9">
+                                <p id="zzContractPrice" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">低值物料成本合计：</label>
@@ -130,12 +140,31 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">毛利：</label>
+                            <div class="col-sm-9">
+                                <p id="zzMl" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
             </div>
 
 
 
             <div class="wrapper wrapper-content animated fadeInRight ibox-content waigou-made"  style="display: none">
                 <h3>外购报价明细：</h3>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报价金额：</label>
+                        <div class="col-sm-9">
+                            <p id="wgContractPrice" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-12">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">泵头成本合计：</label>
@@ -145,7 +174,6 @@
                     </div>
                 </div>
 
-
                 <div class="col-md-12">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">电机成本合计：</label>
@@ -154,6 +182,57 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">总计成本：</label>
+                        <div class="col-sm-9">
+                            <p id="wgCb" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">毛利：</label>
+                        <div class="col-sm-9">
+                            <p id="wgMl" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="wrapper wrapper-content animated fadeInRight ibox-content peijian-made"  style="display: none">
+                <h3>配件报价明细：</h3>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报价金额：</label>
+                        <div class="col-sm-9">
+                            <p id="pjBusiPartsPrice" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">成本合计：</label>
+                        <div class="col-sm-9">
+                            <p id="busiPartsPrice" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">毛利：</label>
+                        <div class="col-sm-9">
+                            <p id="pjMl" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
 
         </div>
@@ -195,13 +274,29 @@
                         $("#wghj").html(busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb);
                         var allSum = busiPriceDetails.bengtouCb+busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb+busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb;
                         $("#allPrice").html(allSum.toFixed(2))
+                        $("#zzContractPrice").html(busiPriceDetails.contractPrice)
+                        $("#zzMl").html((allSum- busiPriceDetails.contractPrice).toFixed(2));
                         $(".self-made").show();
                     }
                     var outsourcingMap = result.data.outsourcingMap;
                     if (outsourcingMap){
                         $("#outsourcingPrice").html(outsourcingMap.outsourcingPrice);
                         $("#motorPrice").html(outsourcingMap.motorPrice);
+                        $("#wgContractPrice").html(outsourcingMap.contractPrice);
+                        var cb = outsourcingMap.outsourcingPrice + outsourcingMap.motorPrice;
+                        $("#wgCb").html(cb.toFixed(2));
+                        var wgMl =  outsourcingMap.contractPrice - cb
+                        $("#wgMl").html(wgMl.toFixed(2));
                         $(".waigou-made").show();
+                    }
+                    //配件
+                    var busiPartsDetails = result.data.busiPartsDetails;
+                    if (busiPartsDetails){
+                        $("#busiPartsPrice").html(busiPartsDetails.busiPartsPrice);
+                        $("#pjBusiPartsPrice").html(busiPartsDetails.contractPrice);
+                        var pjMl=  busiPartsDetails.contractPrice - busiPartsDetails.busiPartsPrice;
+                        $("#pjMl").html(pjMl);
+                        $(".peijian-made").show();
                     }
                 }
             });
