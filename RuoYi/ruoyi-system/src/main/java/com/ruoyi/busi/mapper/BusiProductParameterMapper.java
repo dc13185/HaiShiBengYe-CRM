@@ -1,19 +1,22 @@
 package com.ruoyi.busi.mapper;
 
 import java.util.List;
+
+import com.ruoyi.busi.domain.BusiPrice;
 import com.ruoyi.busi.domain.BusiProductParameter;
+import com.ruoyi.busi.domain.PriceSum;
 
 /**
  * 生产参数Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2021-01-10
  */
-public interface BusiProductParameterMapper 
+public interface BusiProductParameterMapper
 {
     /**
      * 查询生产参数
-     * 
+     *
      * @param parameterId 生产参数ID
      * @return 生产参数
      */
@@ -21,7 +24,7 @@ public interface BusiProductParameterMapper
 
     /**
      * 查询生产参数列表
-     * 
+     *
      * @param busiProductParameter 生产参数
      * @return 生产参数集合
      */
@@ -29,7 +32,7 @@ public interface BusiProductParameterMapper
 
     /**
      * 新增生产参数
-     * 
+     *
      * @param busiProductParameter 生产参数
      * @return 结果
      */
@@ -37,7 +40,7 @@ public interface BusiProductParameterMapper
 
     /**
      * 修改生产参数
-     * 
+     *
      * @param busiProductParameter 生产参数
      * @return 结果
      */
@@ -45,7 +48,7 @@ public interface BusiProductParameterMapper
 
     /**
      * 删除生产参数
-     * 
+     *
      * @param parameterId 生产参数ID
      * @return 结果
      */
@@ -53,9 +56,11 @@ public interface BusiProductParameterMapper
 
     /**
      * 批量删除生产参数
-     * 
+     *
      * @param parameterIds 需要删除的数据ID
      * @return 结果
      */
     public int deleteBusiProductParameterByIds(String[] parameterIds);
+
+    public PriceSum selectPriceDetil(Long parameterId);
 }

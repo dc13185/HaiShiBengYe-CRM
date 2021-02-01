@@ -76,5 +76,8 @@ public interface BusiQuotationDetailsMapper
 
     public Double getOutsourcingSumPrice(Long quotationId);
 
+    public Double getPartsgSumPrice(Long quotationId);
+
+
     public Map<String,Long> getDetilsFalg(Long quotationId);
 }

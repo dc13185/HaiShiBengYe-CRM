@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.ruoyi.busi.domain.BusiCustomer;
 import com.ruoyi.busi.service.IBusiCustomerService;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,7 +62,7 @@ public class BusiQuotationController extends BaseController
     {
         startPage();
         List<BusiQuotation> list = busiQuotationService.selectBusiQuotationList(busiQuotation);
-        list = list.parallelStream().peek(b -> {
+        list = list.parallelStream().filter(b -> b.getQuotationId() != null).peek(b -> {
             b.setSumPrice(b.getOutsourcingPrice() + b.getQuotationPrice());
         }).collect(Collectors.toList());
         return getDataTable(list);

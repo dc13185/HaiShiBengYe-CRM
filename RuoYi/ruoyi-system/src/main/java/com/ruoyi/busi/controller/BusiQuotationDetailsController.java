@@ -62,6 +62,7 @@ public class BusiQuotationDetailsController extends BaseController
         //整机报价单标识
         Long bodCount =  map.get("bod_count");
         Long bqdCount =  map.get("bqd_count");
+        Long bpdCount =  map.get("bpd_count");
         //整机报价单
         if (quotation.getQuotationType() == 0L){
             Double sumPrice =  quotationDetailsMapper.getSumPrice(quotationId);
@@ -75,6 +76,12 @@ public class BusiQuotationDetailsController extends BaseController
                 Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
                 modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
                 modelMap.put("quotationFlag", 1);
+            }
+            //如果有配件单
+            if (bpdCount > 0){
+                Double partsgSum = quotationDetailsMapper.getPartsgSumPrice(quotationId);
+                modelMap.put("partsPrice", partsgSum);
+                modelMap.put("partsFlag", 1);
             }
         }else if(quotation.getQuotationType() == 1L){
             Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
@@ -92,8 +99,42 @@ public class BusiQuotationDetailsController extends BaseController
                 }
                 modelMap.put("zhengjiFlag", 1);
             }
+            //如果有配件单
+            if (bpdCount > 0){
+                Double partsgSum = quotationDetailsMapper.getPartsgSumPrice(quotationId);
+                modelMap.put("partsPrice", partsgSum);
+                modelMap.put("partsFlag", 1);
+            }
+
             return "busi/outsourcing/details/details";
+        }else if(quotation.getQuotationType() == 3L){
+            Double partsgSum = quotationDetailsMapper.getPartsgSumPrice(quotationId);
+            if (partsgSum!=null){
+                modelMap.put("sumOutsourcingPrice", partsgSum);
+            }else{
+                modelMap.put("sumOutsourcingPrice", 0);
+            }
+
+            if (bqdCount > 0){
+                Double sumPrice =  quotationDetailsMapper.getSumPrice(quotationId);
+                if (sumPrice != null){
+                    modelMap.put("sumPrice", format(sumPrice));
+                }else{
+                    modelMap.put("sumPrice", 0);
+                }
+                modelMap.put("zhengjiFlag", 1);
+            }
+
+            //如果该报价单含有 外购报价单明细
+            if (bodCount > 0){
+                Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
+                modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+                modelMap.put("quotationFlag", 1);
+            }
+
+            return "busi/parts/parts";
         }
+
         return prefix + "/details";
     }
 
@@ -107,6 +148,7 @@ public class BusiQuotationDetailsController extends BaseController
         //整机报价单标识
         Long bodCount =  map.get("bod_count");
         Long bqdCount =  map.get("bqd_count");
+        Long bpdCount =  map.get("bpd_count");
         Double sumPrice =  quotationDetailsMapper.getSumPrice(quotationId);
         if (sumPrice != null){
             modelMap.put("sumPrice", format(sumPrice));
@@ -119,8 +161,15 @@ public class BusiQuotationDetailsController extends BaseController
             modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
             modelMap.put("quotationFlag", 1);
         }
+        if (bpdCount > 0){
+            Double partsgSum = quotationDetailsMapper.getPartsgSumPrice(quotationId);
+            modelMap.put("partsPrice", partsgSum);
+            modelMap.put("partsFlag", 1);
+        }
         return prefix + "/details";
     }
+
+
 
 
 
@@ -133,6 +182,7 @@ public class BusiQuotationDetailsController extends BaseController
         //整机报价单标识
         Long bodCount =  map.get("bod_count");
         Long bqdCount =  map.get("bqd_count");
+        Long bpdCount =  map.get("bpd_count");
         Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
         if (sumOutsourcingPrice!=null){
             modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
@@ -148,6 +198,11 @@ public class BusiQuotationDetailsController extends BaseController
             }
             modelMap.put("zhengjiFlag", 1);
         }
+        if (bpdCount > 0){
+            Double partsgSum = quotationDetailsMapper.getPartsgSumPrice(quotationId);
+            modelMap.put("partsPrice", partsgSum);
+            modelMap.put("partsFlag", 1);
+        }
         return "busi/outsourcing/details/details";
     }
 
@@ -159,7 +214,6 @@ public class BusiQuotationDetailsController extends BaseController
     @ResponseBody
     public TableDataInfo list(BusiQuotationDetails busiQuotationDetails)
     {
-
         startPage();
         List<BusiQuotationDetails> list = busiQuotationDetailsService.selectBusiQuotationDetailsList(busiQuotationDetails);
         return getDataTable(list);
