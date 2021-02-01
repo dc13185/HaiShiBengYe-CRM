@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.parts.mapper.BusiPartsDetailsMapper">
+
+    <resultMap type="BusiPartsDetails" id="BusiPartsDetailsResult">
+        <result property="detailsId"    column="details_id"    />
+        <result property="quotationId"    column="quotation_id"    />
+        <result property="equipmentNum"    column="equipment_num"    />
+        <result property="productLineId"    column="product_line_id"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="parameterId"    column="parameter_id"    />
+        <result property="number"    column="number"    />
+        <result property="detailsPrice"    column="details_price"    />
+    </resultMap>
+
+    <sql id="selectBusiPartsDetailsVo">
+        select details_id, quotation_id, equipment_num, product_line_id, model_id, parameter_id, details_price,number from busi_parts_details
+    </sql>
+
+    <select id="selectBusiPartsDetailsList" parameterType="BusiPartsDetails" resultMap="BusiPartsDetailsResult">
+            SELECT * ,
+            product_line_id,
+            (SELECT product_line_name FROM busi_product_line bpl WHERE bpl.product_line_id = bpd.product_line_id) AS productLineName ,
+            model_id,
+            (SELECT model_name FROM busi_product_model bpm WHERE bpm.model_id = bpd.model_id) AS modelName ,
+            (SELECT bpp.`item_number` FROM `busi_product_parameter` bpp WHERE bpp.`parameter_id` = bpd.`parameter_id`) AS parameterName
+            FROM `busi_parts_details` bpd
+        <where>
+            bpd.quotation_id = #{quotationId}
+        </where>
+    </select>
+
+    <select id="selectBusiPartsDetailsById" parameterType="Long" resultMap="BusiPartsDetailsResult">
+        <include refid="selectBusiPartsDetailsVo"/>
+        where details_id = #{detailsId}
+    </select>
+
+    <insert id="insertBusiPartsDetails" parameterType="BusiPartsDetails" useGeneratedKeys="true" keyProperty="detailsId">
+        insert into busi_parts_details
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="quotationId != null">quotation_id,</if>
+            <if test="equipmentNum != null and equipmentNum != ''">equipment_num,</if>
+            <if test="productLineId != null">product_line_id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="parameterId != null">parameter_id,</if>
+            <if test="number != null">number,</if>
+            <if test="detailsPrice != null">details_price,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="quotationId != null">#{quotationId},</if>
+            <if test="equipmentNum != null and equipmentNum != ''">#{equipmentNum},</if>
+            <if test="productLineId != null">#{productLineId},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="parameterId != null">#{parameterId},</if>
+            <if test="number != null">#{number},</if>
+            <if test="detailsPrice != null">#{detailsPrice},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiPartsDetails" parameterType="BusiPartsDetails">
+        update busi_parts_details
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="quotationId != null">quotation_id = #{quotationId},</if>
+            <if test="equipmentNum != null and equipmentNum != ''">equipment_num = #{equipmentNum},</if>
+            <if test="productLineId != null">product_line_id = #{productLineId},</if>
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="parameterId != null">parameter_id = #{parameterId},</if>
+            <if test="number != null">number = #{number},</if>
+        </trim>
+        where details_id = #{detailsId}
+    </update>
+
+    <delete id="deleteBusiPartsDetailsById" parameterType="Long">
+        delete from busi_parts_details where details_id = #{detailsId}
+    </delete>
+
+    <delete id="deleteBusiPartsDetailsByIds" parameterType="String">
+        delete from busi_parts_details where details_id in
+        <foreach item="detailsId" collection="array" open="(" separator="," close=")">
+            #{detailsId}
+        </foreach>
+    </delete>
+
+</mapper>

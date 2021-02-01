@@ -127,6 +127,18 @@
             };
             $.table.init(options);
         });
+
+        function submitHandler() {
+            var rows = $.table.selectFirstColumns();
+            var column = $.table.selectColumns('itemNumber');
+            if (rows.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#parameterId').val(rows);
+            parent.$('#parameterName').val(column);
+        }
     </script>
 </body>
 </html>

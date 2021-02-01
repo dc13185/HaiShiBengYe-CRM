@@ -15,7 +15,8 @@
                                 <label>类型：</label>
                                 <select name="supplierLevel"  class="supplierLevel" onchange="toOutsourcing()">
                                     <option value="">外购</option>
-                                    <option value="outsourcing"  th:if="${zhengjiFlag != null}">整机</option>
+                                    <option value="zhengji"  th:if="${zhengjiFlag != null}">整机</option>
+                                    <option value="parts"  th:if="${partsPrice != null}">配件</option>
                                 </select>
                             </li>
 
@@ -51,16 +52,14 @@
             </div>-->
 
 
-            <div class="col-sm-3 search-collapse" th:if="${zhengjiFlag == null}">
-                <small> 费用合计:</small>   <small id="sumOutsourcingPrice" th:text="${sumOutsourcingPrice}"></small>
-            </div>
 
-            <div class="col-sm-3 search-collapse" th:if="${zhengjiFlag != null}">
-                <small>整机报价单费用合计:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
+
+            <div class="col-sm-3 search-collapse" >
+                <small  th:if="${zhengjiFlag != null}"> 整机报价单费用合计:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
                 <br>
-                <small> 外购报价单合计:</small><small id="sumOutsourcingPrice" th:text="${sumOutsourcingPrice}"></small>
+                <small > 外购报价单合计:</small><small id="sumOutsourcingPrice"  th:text="${sumOutsourcingPrice}"></small>
                 <br>
-                <small> 费用合计:</small><small  th:text="${sumOutsourcingPrice + sumPrice}"></small>
+                <small th:if="${partsFlag != null}"> 外购报价单合计:</small><small id="quotationPrice"   th:text="${partsPrice}"></small>
             </div>
 
 
@@ -228,8 +227,15 @@
 
 
         function toOutsourcing(){
+            var type = $(".supplierLevel").val();
             var quotationId = $("#quotationId").val();
-            window.location.href = ctx + "busi/details/toZhengJiDetils?quotationId="+quotationId;
+            if(type == 'outsourcing'){
+                window.location.href = ctx + "busi/details/toOutsourcingDetils?quotationId="+quotationId;
+            }else if (type == 'parts'){
+                window.location.href = ctx + "parts/parts?quotationId="+quotationId;
+            }else if(type == 'zhengji'){
+                window.location.href = ctx + "busi/details/toZhengJiDetils?quotationId="+quotationId;
+            }
         }
 
 

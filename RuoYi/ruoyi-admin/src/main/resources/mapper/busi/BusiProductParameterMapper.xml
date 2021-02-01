@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectBusiProductParameterVo">
            SELECT parameter_id, item_number, weight, TIME, is_current, model_id  , bpp.texture_id,texture_name AS material , texture_type  AS materialForm
-    FROM busi_product_parameter  bpp LEFT JOIN busi_texture bt ON bpp.texture_id = bt.texture_id
+           FROM busi_product_parameter  bpp LEFT JOIN busi_texture bt ON bpp.texture_id = bt.texture_id
     </sql>
 
     <select id="selectBusiProductParameterList" parameterType="BusiProductParameter" resultMap="BusiProductParameterResult">
@@ -30,6 +30,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isCurrent != null "> and is_current = #{isCurrent}</if>
             <if test="modelId != null "> and model_id = #{modelId}</if>
         </where>
+    </select>
+
+
+    <select id="selectPriceDetil" parameterType="java.lang.Long" resultType="com.ruoyi.busi.domain.PriceSum">
+          SELECT bpp.*, bpp.weight ,bt.`mass_ratio` AS massRatio ,bmp.`price` AS materialPrice,bpp.time
+        FROM   `busi_product_parameter` bpp  LEFT JOIN  busi_texture bt ON bpp.`texture_id` = bt.`texture_id`
+        LEFT JOIN `busi_material_production` bmp ON bt.`texture_id` = bmp.`texture_id`
+        WHERE bpp.parameter_id = #{parameterId}
     </select>
 
     <select id="selectBusiProductParameterById" parameterType="Long" resultMap="BusiProductParameterResult">

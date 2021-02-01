@@ -119,7 +119,9 @@
                 {
                     title: '报价日期',
                     formatter: function(value, row, index) {
-                        return row.createTime.substring(0,10);
+                        if (row.createTime){
+                            return row.createTime.substring(0,10);
+                        }
                     }
                 },
                 {
