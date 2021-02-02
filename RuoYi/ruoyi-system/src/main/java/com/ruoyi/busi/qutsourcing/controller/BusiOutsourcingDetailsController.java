@@ -1,8 +1,11 @@
 package com.ruoyi.busi.qutsourcing.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.busi.domain.BusiMotor;
+import com.ruoyi.busi.mapper.BusiPriceDetailsMapper;
 import com.ruoyi.busi.outsourcing.domain.BusiOutsourcing;
 import com.ruoyi.busi.outsourcing.service.IBusiOutsourcingService;
 import com.ruoyi.busi.service.IBusiMotorService;
@@ -45,6 +48,9 @@ public class BusiOutsourcingDetailsController extends BaseController
 
     @Autowired
     private IBusiMotorService busiMotorService;
+
+    @Autowired
+    private BusiPriceDetailsMapper busiPriceDetailsMapper;
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
@@ -100,24 +106,23 @@ public class BusiOutsourcingDetailsController extends BaseController
     @ResponseBody
     public AjaxResult addSave(BusiOutsourcingDetails busiOutsourcingDetails)
     {
-        Double busiPrice = 0d , otherPrice = 0d;
+        Double motorPrice = 0d ;
         BusiOutsourcing busiOutsourcing = busiOutsourcingService.selectBusiOutsourcingById(busiOutsourcingDetails.getModelId());
         //电机成本
         if (busiOutsourcingDetails.getMotorId() != null){
             BusiMotor busiMotor = busiMotorService.selectBusiMotorById(busiOutsourcingDetails.getMotorId());
-            busiPrice =  busiPrice + busiMotor.getPrice();
+            motorPrice =  motorPrice + busiMotor.getPrice();
         }
         if (busiOutsourcingDetails.getOtherMotorPrice() != null){
-            busiPrice = busiPrice + busiOutsourcingDetails.getOtherMotorPrice();
+            motorPrice = motorPrice + busiOutsourcingDetails.getOtherMotorPrice();
         }
-        //其他费用
-        if (busiOutsourcingDetails.getOtherMotorPrice() != null){
-            otherPrice = otherPrice + busiOutsourcingDetails.getOtherMotorPrice();
-        }
-        //总计费用 泵头成本 + 电机成本 + 其他费用
-        Double allPrice = busiOutsourcing.getOutsourcingPrice() + busiPrice + otherPrice ;
+        //总计费用 泵头成本 + 电机成本
+        Double allPrice = motorPrice + busiOutsourcing.getOutsourcingPrice() ;
         busiOutsourcingDetails.setDetailsPrice(allPrice);
         busiOutsourcingDetails.setQuotationType(1L);
+        //保存完后重新统计
+        Map map = busiPriceDetailsMapper.selectoutsourcingPriceDetailsByQuotationNo(busiOutsourcingDetails.getQuotationId());
+        
         return toAjax(busiOutsourcingDetailsService.insertBusiOutsourcingDetails(busiOutsourcingDetails));
     }
 

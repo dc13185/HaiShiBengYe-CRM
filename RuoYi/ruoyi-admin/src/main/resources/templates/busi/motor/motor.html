@@ -17,10 +17,7 @@
                             </li>
                             <li>
                                 <label>电机种类：</label>
-                                <select name="motorType" th:with="type=${@dict.getType('motor_type')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
+                                <input type="text" name="motorType"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -84,9 +81,6 @@
                 {
                     field: 'motorType',
                     title: '电机种类',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(motorTypeDatas, value);
-                    }
                 },
                 {
                     field: 'price',

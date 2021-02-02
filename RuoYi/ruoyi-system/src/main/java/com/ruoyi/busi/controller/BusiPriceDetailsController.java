@@ -143,10 +143,10 @@ public class BusiPriceDetailsController extends BaseController
     @ResponseBody
     public AjaxResult searchDetails(@RequestBody  String  quotationNo){
         BusiPriceDetails busiPriceDetails =  busiPriceDetailsMapper.selectBusiPriceDetailsByQuotationNo(quotationNo);
-        Map outsourcingMap = busiPriceDetailsMapper.selectoutsourcingPriceDetailsByQuotationNo(quotationNo);
+        //Map outsourcingMap = busiPriceDetailsMapper.selectoutsourcingPriceDetailsByQuotationNo(quotationNo);
         HashMap hashMap = new HashMap();
         hashMap.put("busiPriceDetails",busiPriceDetails);
-        hashMap.put("outsourcingMap",outsourcingMap);
+        //hashMap.put("outsourcingMap",outsourcingMap);
         //配件管理
         Map busiPartsDetails = busiPartsDetailsMapper.selectPartsPriceDetailsByQuotationNo(quotationNo);
         hashMap.put("busiPartsDetails",busiPartsDetails);

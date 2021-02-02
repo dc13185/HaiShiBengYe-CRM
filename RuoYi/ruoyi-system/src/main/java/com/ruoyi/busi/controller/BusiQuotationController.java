@@ -2,9 +2,12 @@ package com.ruoyi.busi.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.ruoyi.busi.domain.BusiCustomer;
+import com.ruoyi.busi.mapper.BusiPriceDetailsMapper;
+import com.ruoyi.busi.parts.mapper.BusiPartsDetailsMapper;
 import com.ruoyi.busi.service.IBusiCustomerService;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -43,6 +46,9 @@ public class BusiQuotationController extends BaseController
 
     @Autowired
     private IBusiCustomerService customerService;
+
+    @Autowired
+    private BusiPriceDetailsMapper busiPriceDetailsMapper;
 
     @RequiresPermissions("busi:quotation:view")
     @GetMapping()

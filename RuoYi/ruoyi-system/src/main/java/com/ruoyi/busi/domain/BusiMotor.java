@@ -24,7 +24,7 @@ public class BusiMotor extends BaseEntity
 
     /** 功率/KW */
     @Excel(name = "功率/KW")
-    private Long motorPower;
+    private Double motorPower;
 
     /** 电机种类 */
     @Excel(name = "电机种类")
@@ -55,19 +55,7 @@ public class BusiMotor extends BaseEntity
     {
         return motorModel;
     }
-    public void setMotorPower(Long motorPower)
-    {
-        this.motorPower = motorPower;
-    }
 
-    public Long getMotorPower()
-    {
-        return motorPower;
-    }
-    public void setMotorType(String motorType)
-    {
-        this.motorType = motorType;
-    }
 
     public String getMotorType()
     {
@@ -88,6 +76,18 @@ public class BusiMotor extends BaseEntity
 
     public void setSupplierId(String supplierId) {
         this.supplierId = supplierId;
+    }
+
+    public Double getMotorPower() {
+        return motorPower;
+    }
+
+    public void setMotorPower(Double motorPower) {
+        this.motorPower = motorPower;
+    }
+
+    public void setMotorType(String motorType) {
+        this.motorType = motorType;
     }
 
     @Override
