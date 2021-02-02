@@ -42,10 +42,10 @@ public class BusiOutsourcingCost extends BaseEntity
 
     private Double quotationAmount;
 
+
     /** 毛利 */
     @Excel(name = "毛利")
     private Double profit;
-
     /** 实际毛利 */
     @Excel(name = "实际毛利")
     private Double actualProfit;

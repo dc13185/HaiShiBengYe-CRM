@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectBusiPartsCostByQuotationNo" parameterType="String" resultMap="BusiPartsCostResult">
-        select cost_id, cost_price, actual_price, quotation_amount, profit, actual_profit, bpc.quotation_id from busi_parts_cost bpc inner join busi_quotation bq on bpc.quotation_id = bq.quotation_id
+        select bpc.* from busi_parts_cost bpc inner join busi_quotation bq on bpc.quotation_id = bq.quotation_id
         where bq.quotation_no = #{quotationNo}
     </select>
 

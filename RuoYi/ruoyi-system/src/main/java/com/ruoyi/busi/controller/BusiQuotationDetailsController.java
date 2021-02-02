@@ -459,11 +459,22 @@ public class BusiQuotationDetailsController extends BaseController
             busiPriceDetails.setJfCb(machineProce);
             busiPriceDetails.setZlqCb(couplingPrice);
             busiPriceDetails.setZcCb(bearingPrice);
-            busiPriceDetails.setQuotationId(quotationId);
             busiPriceDetails.setEwCb(otherPrice);
+            busiPriceDetails.setQuotationId(quotationId);
             //报价金额
-            Double quotationAmount =  busiQuotationDetailList.parallelStream().mapToDouble(BusiQuotationDetails::getDetailsPrice).sum();
+            Double quotationAmount =  busiQuotationDetailList.parallelStream().mapToDouble(b ->  b.getDetailsPrice()* b.getNumber()).sum();
             busiPriceDetails.setContractPrice(format(quotationAmount));
+            Double sumPrice = busiPriceDetails.getBengtouclCb()
+                    + busiPriceDetails.getBengtouRgCb()
+                    + busiPriceDetails.getBengtouFyCb()
+                    + busiPriceDetails.getMotorCb()
+                    + busiPriceDetails.getJfCb()
+                    + busiPriceDetails.getZlqCb()
+                    + busiPriceDetails.getZcCb()
+                    + busiPriceDetails.getEwCb();
+            //获取总毛利
+            Double profit = quotationAmount - sumPrice;
+            busiPriceDetails.setProfit(format(profit));
 
             if (busiPriceDetails.getPriceDetailsId() != null){
                 busiPriceDetailsService.updateBusiPriceDetails(busiPriceDetails);

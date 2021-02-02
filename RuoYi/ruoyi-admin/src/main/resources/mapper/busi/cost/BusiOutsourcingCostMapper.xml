@@ -86,7 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <select id="selectBusiOutsourcingCostByQuotationNo" parameterType="String" resultMap="BusiOutsourcingCostResult">
-         select cost_id, co.quotation_id, product_price, actual_product_price, motor_price, actual_motor_price ,quotationAmount
+         select co.*
          from busi_outsourcing_cost co inner join busi_quotation bq ON co.quotation_id = bq.quotation_id
         where bq.quotation_no = #{quotationNo}
     </select>

@@ -11,7 +11,7 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>合同号：</label>
+                                <label>报价单号：</label>
                                 <input type="text" name="quotationNo" id="quotationNo"/>
                             </li>
                             <li>
@@ -262,10 +262,10 @@
                         $("#zlqCb").html(busiPriceDetails.zlqCb);
                         $("#ewCb").html(busiPriceDetails.ewCb);
                         $("#wghj").html(busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb);
-                        var allSum = busiPriceDetails.bengtouCb+busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb+busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb;
+                        var allSum = busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb+busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb;
                         $("#allPrice").html(allSum.toFixed(2))
                         $("#zzContractPrice").html(busiPriceDetails.contractPrice)
-                        $("#zzMl").html((allSum- busiPriceDetails.contractPrice).toFixed(2));
+                        $("#zzMl").html(busiPriceDetails.profit.toFixed(2));
                         $(".self-made").show();
                     }else{
                         $(".self-made").hide();
@@ -277,8 +277,7 @@
                         $("#wgContractPrice").html(outsourcingMap.quotationAmount);
                         var cb = outsourcingMap.productPrice + outsourcingMap.motorPrice;
                         $("#wgCb").html(cb.toFixed(2));
-                        var wgMl =  outsourcingMap.quotationAmount - cb
-                        $("#wgMl").html(wgMl.toFixed(2));
+                        $("#wgMl").html(outsourcingMap.profit.toFixed(2));
                         $(".waigou-made").show();
                     }else{
                         $(".waigou-made").hide();
@@ -288,8 +287,10 @@
                     if (busiPartsDetails){
                         $("#busiPartsPrice").html(busiPartsDetails.costPrice);
                         $("#pjBusiPartsPrice").html(busiPartsDetails.quotationAmount);
-                        $("#pjMl").html(busiPartsDetails.profit);
+                        $("#pjMl").html(busiPartsDetails.profit.toFixed(2));
                         $(".peijian-made").show();
+                    }else{
+                        $(".peijian-made").hide();
                     }
                 }
             });

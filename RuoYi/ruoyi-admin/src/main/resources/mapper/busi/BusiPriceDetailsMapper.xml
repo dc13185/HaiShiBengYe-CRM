@@ -6,28 +6,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="BusiPriceDetails" id="BusiPriceDetailsResult">
         <result property="priceDetailsId"    column="price_details_id"    />
-        <result property="bengtouCb"    column="bengtou_cb"    />
         <result property="bengtouclCb"    column="bengtoucl_cb"    />
+        <result property="actualBengtouclCb"    column="actual_bengtoucl_cb"    />
         <result property="bengtouRgCb"    column="bengtou_rg_cb"    />
         <result property="bengtouFyCb"    column="bengtou_fy_cb"    />
+        <result property="actualBengtouRgCb"    column="actual_bengtou_rg_cb"    />
         <result property="motorCb"    column="motor_cb"    />
+        <result property="actualBengtouFyCb"    column="actual_bengtou_fy_cb"    />
         <result property="jfCb"    column="jf_cb"    />
         <result property="zcCb"    column="zc_cb"    />
         <result property="zlqCb"    column="zlq_cb"    />
+        <result property="actualMotorCb"    column="actual_motor_cb"    />
         <result property="ewCb"    column="ew_cb"    />
         <result property="quotationId"    column="quotation_id"    />
+        <result property="actualJfCb"    column="actual_jf_cb"    />
+        <result property="actualZcCb"    column="actual_zc_cb"    />
+        <result property="actualZlqCb"    column="actual_zlq_cb"    />
+        <result property="actualEwCb"    column="actual_ew_cb"    />
         <result property="contractPrice"    column="contractPrice"    />
+        <result property="actualContractprice"    column="actual_contractPrice"    />
+        <result property="profit"    column="profit"    />
+        <result property="actualProfit"    column="actual_profit"    />
 
     </resultMap>
 
     <sql id="selectBusiPriceDetailsVo">
-        select price_details_id, bengtou_cb, bengtoucl_cb, bengtou_rg_cb, bengtou_fy_cb, motor_cb, jf_cb, zc_cb, zlq_cb, ew_cb, quotation_id,contractPrice from busi_price_details
+        select price_details_id, bengtoucl_cb, bengtou_rg_cb, bengtou_fy_cb, motor_cb, jf_cb, zc_cb, zlq_cb, ew_cb, quotation_id,contractPrice from busi_price_details
     </sql>
 
     <select id="selectBusiPriceDetailsList" parameterType="BusiPriceDetails" resultMap="BusiPriceDetailsResult">
         <include refid="selectBusiPriceDetailsVo"/>
         <where>
-            <if test="bengtouCb != null "> and bengtou_cb = #{bengtouCb}</if>
             <if test="bengtouclCb != null "> and bengtoucl_cb = #{bengtouclCb}</if>
             <if test="bengtouRgCb != null "> and bengtou_rg_cb = #{bengtouRgCb}</if>
             <if test="bengtouFyCb != null "> and bengtou_fy_cb = #{bengtouFyCb}</if>
@@ -44,20 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectBusiPriceDetailsByQuotationNo" parameterType="String" resultMap="BusiPriceDetailsResult">
-      SELECT
-          price_details_id,
-          bengtou_cb,
-          bengtoucl_cb,
-          bengtou_rg_cb,
-          bengtou_fy_cb,
-          motor_cb,
-          jf_cb,
-          zc_cb,
-          zlq_cb,
-          ew_cb,
-          bpd.quotation_id,
-          contractPrice
-    FROM
+     select bpd.* from
         busi_price_details bpd  INNER JOIN busi_quotation bq ON bpd.quotation_id = bq.quotation_id
           WHERE bq.quotation_no = #{quotationNo};
     </select>
@@ -87,48 +83,77 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertBusiPriceDetails" parameterType="BusiPriceDetails" useGeneratedKeys="true" keyProperty="priceDetailsId">
         insert into busi_price_details
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="bengtouCb != null">bengtou_cb,</if>
             <if test="bengtouclCb != null">bengtoucl_cb,</if>
+            <if test="actualBengtouclCb != null">actual_bengtoucl_cb,</if>
             <if test="bengtouRgCb != null">bengtou_rg_cb,</if>
             <if test="bengtouFyCb != null">bengtou_fy_cb,</if>
+            <if test="actualBengtouRgCb != null">actual_bengtou_rg_cb,</if>
             <if test="motorCb != null">motor_cb,</if>
+            <if test="actualBengtouFyCb != null">actual_bengtou_fy_cb,</if>
             <if test="jfCb != null">jf_cb,</if>
             <if test="zcCb != null">zc_cb,</if>
             <if test="zlqCb != null">zlq_cb,</if>
+            <if test="actualMotorCb != null">actual_motor_cb,</if>
             <if test="ewCb != null">ew_cb,</if>
             <if test="quotationId != null">quotation_id,</if>
+            <if test="actualJfCb != null">actual_jf_cb,</if>
+            <if test="actualZcCb != null">actual_zc_cb,</if>
+            <if test="actualZlqCb != null">actual_zlq_cb,</if>
+            <if test="actualEwCb != null">actual_ew_cb,</if>
             <if test="contractPrice != null">contractPrice,</if>
-
-         </trim>
+            <if test="actualContractprice != null">actual_contractPrice,</if>
+            <if test="profit != null">profit,</if>
+            <if test="actualProfit != null">actual_profit,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="bengtouCb != null">#{bengtouCb},</if>
             <if test="bengtouclCb != null">#{bengtouclCb},</if>
+            <if test="actualBengtouclCb != null">#{actualBengtouclCb},</if>
             <if test="bengtouRgCb != null">#{bengtouRgCb},</if>
             <if test="bengtouFyCb != null">#{bengtouFyCb},</if>
+            <if test="actualBengtouRgCb != null">#{actualBengtouRgCb},</if>
             <if test="motorCb != null">#{motorCb},</if>
+            <if test="actualBengtouFyCb != null">#{actualBengtouFyCb},</if>
             <if test="jfCb != null">#{jfCb},</if>
             <if test="zcCb != null">#{zcCb},</if>
             <if test="zlqCb != null">#{zlqCb},</if>
+            <if test="actualMotorCb != null">#{actualMotorCb},</if>
             <if test="ewCb != null">#{ewCb},</if>
             <if test="quotationId != null">#{quotationId},</if>
+            <if test="actualJfCb != null">#{actualJfCb},</if>
+            <if test="actualZcCb != null">#{actualZcCb},</if>
+            <if test="actualZlqCb != null">#{actualZlqCb},</if>
+            <if test="actualEwCb != null">#{actualEwCb},</if>
             <if test="contractPrice != null">#{contractPrice},</if>
-         </trim>
+            <if test="actualContractprice != null">#{actualContractprice},</if>
+            <if test="profit != null">#{profit},</if>
+            <if test="actualProfit != null">#{actualProfit},</if>
+        </trim>
     </insert>
 
     <update id="updateBusiPriceDetails" parameterType="BusiPriceDetails">
         update busi_price_details
         <trim prefix="SET" suffixOverrides=",">
-            <if test="bengtouCb != null">bengtou_cb = #{bengtouCb},</if>
             <if test="bengtouclCb != null">bengtoucl_cb = #{bengtouclCb},</if>
+            <if test="actualBengtouclCb != null">actual_bengtoucl_cb = #{actualBengtouclCb},</if>
             <if test="bengtouRgCb != null">bengtou_rg_cb = #{bengtouRgCb},</if>
             <if test="bengtouFyCb != null">bengtou_fy_cb = #{bengtouFyCb},</if>
+            <if test="actualBengtouRgCb != null">actual_bengtou_rg_cb = #{actualBengtouRgCb},</if>
             <if test="motorCb != null">motor_cb = #{motorCb},</if>
+            <if test="actualBengtouFyCb != null">actual_bengtou_fy_cb = #{actualBengtouFyCb},</if>
             <if test="jfCb != null">jf_cb = #{jfCb},</if>
             <if test="zcCb != null">zc_cb = #{zcCb},</if>
             <if test="zlqCb != null">zlq_cb = #{zlqCb},</if>
+            <if test="actualMotorCb != null">actual_motor_cb = #{actualMotorCb},</if>
             <if test="ewCb != null">ew_cb = #{ewCb},</if>
-            <if test="contractPrice != null"> contractPrice = #{contractPrice},</if>
             <if test="quotationId != null">quotation_id = #{quotationId},</if>
+            <if test="actualJfCb != null">actual_jf_cb = #{actualJfCb},</if>
+            <if test="actualZcCb != null">actual_zc_cb = #{actualZcCb},</if>
+            <if test="actualZlqCb != null">actual_zlq_cb = #{actualZlqCb},</if>
+            <if test="actualEwCb != null">actual_ew_cb = #{actualEwCb},</if>
+            <if test="contractPrice != null">contractPrice = #{contractPrice},</if>
+            <if test="actualContractprice != null">actual_contractPrice = #{actualContractprice},</if>
+            <if test="profit != null">profit = #{profit},</if>
+            <if test="actualProfit != null">actual_profit = #{actualProfit},</if>
         </trim>
         where price_details_id = #{priceDetailsId}
     </update>
