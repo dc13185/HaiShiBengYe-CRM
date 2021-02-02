@@ -124,6 +124,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where details_id = #{detailsId}
     </select>
 
+
+
     <insert id="insertBusiQuotationDetails" parameterType="BusiQuotationDetails" useGeneratedKeys="true" keyProperty="detailsId">
         insert into busi_quotation_details
         <trim prefix="(" suffix=")" suffixOverrides=",">

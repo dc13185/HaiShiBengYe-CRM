@@ -37,15 +37,6 @@
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">低值物料成本合计：</label>
-                            <div class="col-sm-9">
-                                <p id="bengtouCb" class="form-control-static">0</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="form-group">
                             <label class="col-sm-3 control-label">泵头材料成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="bengtouclCb" class="form-control-static">0</p>
@@ -260,12 +251,11 @@
                     debugger;
                     var busiPriceDetails = result.data.busiPriceDetails;
                     if (busiPriceDetails){
-                        $("#bengtouCb").html(busiPriceDetails.bengtouCb);
                         $("#bengtouclCb").html(busiPriceDetails.bengtouclCb);
                         $("#bengtouRgCb").html(busiPriceDetails.bengtouRgCb);
                         $("#bengtouFyCb").html(busiPriceDetails.bengtouFyCb);
                         //泵头成本合计
-                        $("#bengtouhj").html(busiPriceDetails.bengtouCb+busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb);
+                        $("#bengtouhj").html(busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb);
                         //外购成本
                         $("#motorCb").html(busiPriceDetails.motorCb);
                         $("#jfCb").html(busiPriceDetails.jfCb);
@@ -277,17 +267,21 @@
                         $("#zzContractPrice").html(busiPriceDetails.contractPrice)
                         $("#zzMl").html((allSum- busiPriceDetails.contractPrice).toFixed(2));
                         $(".self-made").show();
+                    }else{
+                        $(".self-made").hide();
                     }
                     var outsourcingMap = result.data.outsourcingMap;
                     if (outsourcingMap){
-                        $("#outsourcingPrice").html(outsourcingMap.outsourcingPrice);
+                        $("#outsourcingPrice").html(outsourcingMap.productPrice);
                         $("#motorPrice").html(outsourcingMap.motorPrice);
-                        $("#wgContractPrice").html(outsourcingMap.contractPrice);
-                        var cb = outsourcingMap.outsourcingPrice + outsourcingMap.motorPrice;
+                        $("#wgContractPrice").html(outsourcingMap.quotationAmount);
+                        var cb = outsourcingMap.productPrice + outsourcingMap.motorPrice;
                         $("#wgCb").html(cb.toFixed(2));
-                        var wgMl =  outsourcingMap.contractPrice - cb
+                        var wgMl =  outsourcingMap.quotationAmount - cb
                         $("#wgMl").html(wgMl.toFixed(2));
                         $(".waigou-made").show();
+                    }else{
+                        $(".waigou-made").hide();
                     }
                     //配件
                     var busiPartsDetails = result.data.busiPartsDetails;

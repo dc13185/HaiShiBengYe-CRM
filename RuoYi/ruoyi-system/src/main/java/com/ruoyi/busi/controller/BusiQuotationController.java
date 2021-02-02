@@ -68,9 +68,9 @@ public class BusiQuotationController extends BaseController
     {
         startPage();
         List<BusiQuotation> list = busiQuotationService.selectBusiQuotationList(busiQuotation);
-        list = list.parallelStream().filter(b -> b.getQuotationId() != null).peek(b -> {
+/*        list = list.parallelStream().filter(b -> b.getQuotationId() != null).peek(b -> {
             b.setSumPrice(b.getOutsourcingPrice() + b.getQuotationPrice() + b.getPartsPrice());
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList());*/
         return getDataTable(list);
     }
 

@@ -19,7 +19,6 @@ public class BusiPriceDetails extends BaseEntity
     private Double priceDetailsId;
 
     /** 泵头成本 */
-    @Excel(name = "泵头成本")
     private Double bengtouCb;
 
     /** 泵头材料成本 */
@@ -54,7 +53,7 @@ public class BusiPriceDetails extends BaseEntity
     @Excel(name = "额外配置成本")
     private Double ewCb;
 
-    @Excel(name = "合同报价金额")
+    @Excel(name = "报价金额")
     private Double contractPrice;
 
     /**  */

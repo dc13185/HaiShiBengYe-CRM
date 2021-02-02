@@ -49,7 +49,7 @@ public interface BusiOutsourcingCostMapper
      * @param costId 外购电机成本明细ID
      * @return 结果
      */
-    public int deleteBusiOutsourcingCostById(Long costId);
+    public int deleteBusiOutsourcingCostById(Long quotationId);
 
     /**
      * 批量删除外购电机成本明细
@@ -58,4 +58,6 @@ public interface BusiOutsourcingCostMapper
      * @return 结果
      */
     public int deleteBusiOutsourcingCostByIds(String[] costIds);
+
+    public BusiOutsourcingCost selectBusiOutsourcingCostByQuotationNo(String quotationNo);
 }

@@ -16,10 +16,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="zlqCb"    column="zlq_cb"    />
         <result property="ewCb"    column="ew_cb"    />
         <result property="quotationId"    column="quotation_id"    />
+        <result property="contractPrice"    column="contractPrice"    />
+
     </resultMap>
 
     <sql id="selectBusiPriceDetailsVo">
-        select price_details_id, bengtou_cb, bengtoucl_cb, bengtou_rg_cb, bengtou_fy_cb, motor_cb, jf_cb, zc_cb, zlq_cb, ew_cb, quotation_id from busi_price_details
+        select price_details_id, bengtou_cb, bengtoucl_cb, bengtou_rg_cb, bengtou_fy_cb, motor_cb, jf_cb, zc_cb, zlq_cb, ew_cb, quotation_id,contractPrice from busi_price_details
     </sql>
 
     <select id="selectBusiPriceDetailsList" parameterType="BusiPriceDetails" resultMap="BusiPriceDetailsResult">
@@ -35,6 +37,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="zlqCb != null "> and zlq_cb = #{zlqCb}</if>
             <if test="ewCb != null "> and ew_cb = #{ewCb}</if>
             <if test="quotationId != null "> and quotation_id = #{quotationId}</if>
+            <if test="contractPrice != null "> and contractPrice = #{contractPrice}</if>
+
+
         </where>
     </select>
 
@@ -50,19 +55,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           zc_cb,
           zlq_cb,
           ew_cb,
-           bc.`contract_price` AS contractPrice,
-          bpd.quotation_id
+          bpd.quotation_id,
+          contractPrice
     FROM
-      busi_price_details bpd  INNER JOIN busi_contract bc ON bpd.quotation_id = bc.qutation_id
-      WHERE  bc.`contract_no` = #{contractNo}
+        busi_price_details bpd  INNER JOIN busi_quotation bq ON bpd.quotation_id = bq.quotation_id
+          WHERE bq.quotation_no = #{quotationNo};
     </select>
 
 
     <select id="selectoutsourcingPriceDetailsByQuotationNo" parameterType="Long" resultType="java.util.Map">
-              SELECT
-                (SELECT bo.outsourcing_price * bob.`number`  FROM  busi_outsourcing bo WHERE bo.outsourcing_id = bob.model_id) AS outsourcingPrice,
-                (SELECT bm.price*bob.`number` FROM  busi_motor bm WHERE bm.motor_id = bob.motor_id) AS motorPrice,
-                bob.`other_motor_price` * bob.`number` AS  otherMotorPrice
+             SELECT SUM((SELECT bo.outsourcing_price * bob.`number` FROM busi_outsourcing bo WHERE bo.outsourcing_id = bob.model_id)) AS outsourcingPrice,
+                SUM((SELECT bm.price*bob.`number` FROM busi_motor bm WHERE bm.motor_id = bob.motor_id)) AS motorPrice,
+                SUM(bob.`other_motor_price` * bob.`number` )  AS otherMotorPrice,
+
+                 SUM(bob.details_price * bob.number) AS quotationAmount
                 FROM busi_outsourcing_details bob
                 where bob.quotation_id =#{quotation_id}
     </select>
@@ -91,6 +97,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="zlqCb != null">zlq_cb,</if>
             <if test="ewCb != null">ew_cb,</if>
             <if test="quotationId != null">quotation_id,</if>
+            <if test="contractPrice != null">contractPrice,</if>
+
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bengtouCb != null">#{bengtouCb},</if>
@@ -103,6 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="zlqCb != null">#{zlqCb},</if>
             <if test="ewCb != null">#{ewCb},</if>
             <if test="quotationId != null">#{quotationId},</if>
+            <if test="contractPrice != null">#{contractPrice},</if>
          </trim>
     </insert>
 
@@ -118,6 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="zcCb != null">zc_cb = #{zcCb},</if>
             <if test="zlqCb != null">zlq_cb = #{zlqCb},</if>
             <if test="ewCb != null">ew_cb = #{ewCb},</if>
+            <if test="contractPrice != null"> contractPrice = #{contractPrice},</if>
             <if test="quotationId != null">quotation_id = #{quotationId},</if>
         </trim>
         where price_details_id = #{priceDetailsId}

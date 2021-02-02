@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import com.ruoyi.busi.Constant;
 import com.ruoyi.busi.domain.BusiPrice;
+import com.ruoyi.busi.domain.BusiProductLine;
 import com.ruoyi.busi.domain.BusiProductParameter;
 import com.ruoyi.busi.domain.PriceSum;
 import com.ruoyi.busi.mapper.BusiProductParameterMapper;
 import com.ruoyi.busi.mapper.BusiQuotationDetailsMapper;
 import com.ruoyi.busi.service.IBusiPriceService;
+import com.ruoyi.busi.service.IBusiProductLineService;
 import com.ruoyi.busi.service.IBusiProductParameterService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +48,7 @@ public class BusiPartsDetailsController extends BaseController
     private IBusiPartsDetailsService busiPartsDetailsService;
 
     @Autowired
-    private IBusiProductParameterService busiProductParameterService;
+    private IBusiProductLineService busiProductLineService;
 
     @Autowired
     private BusiProductParameterMapper busiProductParameterMapper;
@@ -53,8 +56,6 @@ public class BusiPartsDetailsController extends BaseController
     @Autowired
     private BusiQuotationDetailsMapper quotationDetailsMapper;
 
-    @Autowired
-    private IBusiPriceService busiPriceService;
 
     @RequiresPermissions("parts:parts:view")
     @GetMapping()
@@ -140,18 +141,19 @@ public class BusiPartsDetailsController extends BaseController
     @ResponseBody
     public AjaxResult addSave(BusiPartsDetails busiPartsDetails)
     {
+
+        BusiProductLine busiProductLine = busiProductLineService.selectBusiProductLineById(busiPartsDetails.getProductLineId());
         PriceSum priceSum = busiProductParameterMapper.selectPriceDetil(busiPartsDetails.getParameterId());
-        List<BusiPrice> busiPrices = busiPriceService.selectBusiPriceList(new BusiPrice());
-        Double laborCostCoefficient = busiPrices.get(0).getPriceDate();
-        Double makeCoefficient = busiPrices.get(1).getPriceDate();
         //返回材料成本费用
         Double materialCosts =  Double.valueOf(priceSum.getWeight() * priceSum.getMaterialPrice()* priceSum.getMassRatio());
         //返回人工成本费用
-        Double laborCost = priceSum.getTime()*laborCostCoefficient;
+        Double laborCost = priceSum.getTime()* Constant.LABOR_COSTCOE_FFICIENT;
         //返回制造成本费用
-        Double makeCost = priceSum.getTime()*makeCoefficient;
-        //合计成本
-        busiPartsDetails.setDetailsPrice(format(materialCosts+laborCost+makeCost));
+        Double makeCost = priceSum.getTime()*Constant.MAKE_COEFFICIENT;
+        //合计报价费用
+        Double allSum = (materialCosts+laborCost+makeCost) / (1 - busiProductLine.getGrossProfitRate());
+
+        busiPartsDetails.setDetailsPrice(format(allSum));
         return toAjax(busiPartsDetailsService.insertBusiPartsDetails(busiPartsDetails));
     }
 
@@ -192,7 +194,7 @@ public class BusiPartsDetailsController extends BaseController
 
 
     public Double format(Double d){
-        BigDecimal b   =   new  BigDecimal(d);
+        BigDecimal b  = new  BigDecimal(d);
         return b.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 }

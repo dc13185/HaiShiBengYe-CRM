@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.ruoyi.busi.Constant;
 import com.ruoyi.busi.domain.*;
 import com.ruoyi.busi.mapper.BusiQuotationDetailsMapper;
 import com.ruoyi.busi.service.*;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +28,9 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+
+import static com.ruoyi.busi.Constant.PACKING_AND_TRANSPORTATION_COSTS;
+import static com.ruoyi.busi.Constant.TAX_AND_ADDITIONAL_RATIO;
 
 /**
  * 报价明细Controller
@@ -45,6 +50,8 @@ public class BusiQuotationDetailsController extends BaseController
     private BusiQuotationDetailsMapper quotationDetailsMapper;
     @Autowired
     private IBusiProductModelService busiProductModelService;
+    @Autowired
+    private IBusiProductLineService busiProductLineService;
     @Autowired
     private IBusiPriceDetailsService busiPriceDetailsService;
     @Autowired
@@ -268,23 +275,22 @@ public class BusiQuotationDetailsController extends BaseController
     {
         //获取数量
         Long number = busiQuotationDetails.getNumber();
-        Double  motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice=0d;
+        Double  motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice=0d ,otherPrice=0d;
 
-        List<BusiPrice> busiPrices = busiPriceService.selectBusiPriceList(new BusiPrice());
-        Double laborCostCoefficient = busiPrices.get(0).getPriceDate();
-        Double makeCoefficient = busiPrices.get(1).getPriceDate();
         List<PriceSum> priceSums = quotationDetailsMapper.selectPriceDetil(busiQuotationDetails);
         //返回材料成本费用
         Double materialCosts = format(priceSums.parallelStream().mapToDouble(p -> p.getWeight() * p.getMaterialPrice()* p.getMassRatio()).sum());
         //返回人工成本费用
-        Double laborCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * laborCostCoefficient).sum());
+        Double laborCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum());
         //返回制造成本费用
-        Double makeCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * makeCoefficient).sum());
+        Double makeCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.MAKE_COEFFICIENT).sum());
         //低值物料成本
         Double  lowMaterialCost = busiProductModelService.selectBusiProductModelById(busiQuotationDetails.getModelId()).getLowMaterialCost();
         if (lowMaterialCost == null){
             lowMaterialCost = 0d;
         }
+        materialCosts = lowMaterialCost + lowMaterialCost;
+
         //电机价格
         if (busiQuotationDetails.getMotorId() != null){
             motorPrice = quotationDetailsMapper.getMotorPrice(busiQuotationDetails.getMotorId());
@@ -303,7 +309,7 @@ public class BusiQuotationDetailsController extends BaseController
         if (busiQuotationDetails.getCouplingId() != null){
             couplingPrice = quotationDetailsMapper.getCouplingPrice(busiQuotationDetails.getCouplingId());
         }
-        if (busiQuotationDetails.getOtherMachinePrice() != null){
+        if (busiQuotationDetails.getOtherCouplingPrice() != null){
             couplingPrice = format(couplingPrice + busiQuotationDetails.getOtherCouplingPrice());
         }
         //轴承成本
@@ -313,49 +319,22 @@ public class BusiQuotationDetailsController extends BaseController
         if (busiQuotationDetails.getOtherBearingPrice() != null){
             bearingPrice = format(bearingPrice + busiQuotationDetails.getOtherBearingPrice());
         }
-        //保存报价单明细
-        BusiPriceDetails  busiPriceDetails = busiPriceDetailsService.selectBusiPriceDetailsById(busiQuotationDetails.getQuotationId());
-        if (busiPriceDetails == null){
-            busiPriceDetails = new BusiPriceDetails();
-            busiPriceDetails.setBengtouCb(lowMaterialCost*number);
-            busiPriceDetails.setBengtouclCb(materialCosts*number);
-            busiPriceDetails.setBengtouRgCb(laborCost*number);
-            busiPriceDetails.setBengtouFyCb(makeCost*number);
-            busiPriceDetails.setMotorCb(motorPrice*number);
-            busiPriceDetails.setJfCb(machineProce*number);
-            busiPriceDetails.setZlqCb(couplingPrice*number);
-            busiPriceDetails.setZcCb(bearingPrice*number);
-            if(busiQuotationDetails.getOtherExpenses() != null){
-                busiPriceDetails.setEwCb(busiQuotationDetails.getOtherExpenses()*number);
-            }
-            busiPriceDetails.setQuotationId(busiQuotationDetails.getQuotationId());
-            busiPriceDetailsService.insertBusiPriceDetails(busiPriceDetails);
-        }else {
-            busiPriceDetails.setQuotationId(busiQuotationDetails.getQuotationId());
-            busiPriceDetails.setBengtouCb(busiPriceDetails.getBengtouCb()+(lowMaterialCost*number));
-            busiPriceDetails.setBengtouclCb((materialCosts*number) + busiPriceDetails.getBengtouCb());
-            busiPriceDetails.setBengtouRgCb((laborCost*number) + busiPriceDetails.getBengtouCb());
-            busiPriceDetails.setBengtouFyCb((makeCost*number) + busiPriceDetails.getBengtouFyCb());
-            busiPriceDetails.setMotorCb((motorPrice*number) + busiPriceDetails.getMotorCb());
-            busiPriceDetails.setJfCb((machineProce*number) + busiPriceDetails.getJfCb());
-            busiPriceDetails.setZlqCb((couplingPrice*number) + busiPriceDetails.getZlqCb());
-            busiPriceDetails.setZcCb((bearingPrice*number) + busiPriceDetails.getZcCb());
-            if(busiQuotationDetails.getOtherExpenses() != null) {
-                busiPriceDetails.setEwCb((busiQuotationDetails.getOtherExpenses() * number) + busiPriceDetails.getEwCb());
-            }
-            busiPriceDetailsService.updateBusiPriceDetails(busiPriceDetails);
+        if(busiQuotationDetails.getOtherExpenses() != null){
+            otherPrice = busiQuotationDetails.getOtherExpenses();
         }
 
-        //基准单价
-        Double quotationDetailsPrice =  format(materialCosts + laborCost + makeCost + lowMaterialCost + motorPrice + machineProce + couplingPrice + bearingPrice);
-        if (busiQuotationDetails.getOtherExpenses() != null){
-            quotationDetailsPrice = format(quotationDetailsPrice + busiQuotationDetails.getOtherExpenses());
-        }
-        busiQuotationDetails.setDetailsPrice(quotationDetailsPrice);
-
+        BusiProductLine busiProductLine = busiProductLineService.selectBusiProductLineById(busiQuotationDetails.getProductLineId());
+        //泵头价格=（材料成本+人工成本+制造费用）/（1-毛利率）
+        Double bengTouPrice = (materialCosts + laborCost + makeCost) / (1 - busiProductLine.getGrossProfitRate()) ;
+        //外购加个 （电机采购成本+机封采购成本+轴承采购成本+联轴器采购成本+特殊配置费用）×（1+外购件配套管理费比例）
+        Double waiGouPrice = ( motorPrice + machineProce + couplingPrice + bearingPrice + otherPrice) * (1+ Constant.PROPORTION_MANAGEMENT);
+        // 整机价格（泵头价格+外购件价格）×（1+包装运输费比例）×（1+税金及附加比例）
+        Double allPrice =  (bengTouPrice + waiGouPrice) * (1+PACKING_AND_TRANSPORTATION_COSTS) * (1+ TAX_AND_ADDITIONAL_RATIO);
+        busiQuotationDetails.setDetailsPrice(format(allPrice));
         busiQuotationDetails.setQuotationType(0L);
         busiQuotationDetailsService.insertBusiQuotationDetails(busiQuotationDetails);
         Double sumPrice =  quotationDetailsMapper.getSumPrice(busiQuotationDetails.getQuotationId());
+        reset(busiQuotationDetails.getQuotationId());
         return success(format(sumPrice).toString());
     }
 
@@ -391,7 +370,11 @@ public class BusiQuotationDetailsController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(busiQuotationDetailsService.deleteBusiQuotationDetailsByIds(ids));
+        String id = ids.split(",")[0];
+        BusiQuotationDetails busiQuotationDetails =  busiQuotationDetailsService.selectBusiQuotationDetailsById(Long.parseLong(id));
+        busiQuotationDetailsService.deleteBusiQuotationDetailsByIds(ids);
+         reset(busiQuotationDetails.getQuotationId());
+        return toAjax(1);
     }
 
     private Function<Double,Double> format = (d -> {
@@ -404,7 +387,93 @@ public class BusiQuotationDetailsController extends BaseController
     });
 
     public Double format(Double d){
-        BigDecimal b   =   new  BigDecimal(d);
+        BigDecimal b = new  BigDecimal(d);
         return b.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+    //重新核算价格
+    private void reset(Long quotationId){
+        //人工成本
+        BusiQuotationDetails sear = new BusiQuotationDetails();
+        sear.setQuotationId(quotationId);
+        //查到所有重新核算
+        List<BusiQuotationDetails>  busiQuotationDetailList = busiQuotationDetailsService.selectBusiQuotationDetailsList(sear);
+        if (busiQuotationDetailList == null){
+            busiPriceDetailsService.deleteBusiPriceDetailsById(quotationId);
+        }else{
+            BusiPriceDetails busiPriceDetails = busiPriceDetailsService.selectBusiPriceDetailsById(quotationId);
+            Double   motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice=0d ,otherPrice=0d ,materialCosts =0d,laborCost=0d,makeCost=0d ,lowMaterialCost=0d;
+            for (BusiQuotationDetails quotationDetails : busiQuotationDetailList) {
+                    Long number = quotationDetails.getNumber();
+
+                    List<PriceSum> priceSums = quotationDetailsMapper.selectPriceDetil(quotationDetails);
+                    //返回材料成本费用
+                    materialCosts += format(priceSums.parallelStream().mapToDouble(p -> p.getWeight() * p.getMaterialPrice()* p.getMassRatio()).sum()) * number;
+                    //返回人工成本费用
+                    laborCost += format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum()) * number;
+                    //返回制造成本费用
+                    makeCost += format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.MAKE_COEFFICIENT).sum()) * number;
+                    //低值物料成本
+                    lowMaterialCost += busiProductModelService.selectBusiProductModelById(quotationDetails.getModelId()).getLowMaterialCost() * number;
+
+                    //电机价格
+                    if (quotationDetails.getMotorId() != null){
+                        motorPrice += quotationDetailsMapper.getMotorPrice(quotationDetails.getMotorId()) * number;
+                    }
+                    if (quotationDetails.getOtherMotorPrice() != null){
+                        motorPrice +=  format(motorPrice + quotationDetails.getOtherMotorPrice()) * number;
+                    }
+                    //机封成本
+                    if (quotationDetails.getMachineId() != null){
+                        machineProce += quotationDetailsMapper.getMachinePrice(quotationDetails.getMachineId()) * number;
+                    }
+                    if (quotationDetails.getOtherMachinePrice() != null){
+                        machineProce += format(machineProce + quotationDetails.getOtherMachinePrice()) * number;
+                    }
+                    //联轴器成本
+                    if (quotationDetails.getCouplingId() != null){
+                        couplingPrice += quotationDetailsMapper.getCouplingPrice(quotationDetails.getCouplingId()) * number;
+                    }
+                    if (quotationDetails.getOtherCouplingPrice() != null){
+                        couplingPrice += format(couplingPrice + quotationDetails.getOtherCouplingPrice()) * number;
+                    }
+                    //轴承成本
+                    if (quotationDetails.getBearingId() != null){
+                        bearingPrice +=  quotationDetailsMapper.getBearingPrice(quotationDetails.getBearingId()) * number;
+                    }
+                    if (quotationDetails.getOtherBearingPrice() != null){
+                        bearingPrice += format(bearingPrice + quotationDetails.getOtherBearingPrice()) * number;
+                    }
+                    if(quotationDetails.getOtherExpenses() != null){
+                        otherPrice += quotationDetails.getOtherExpenses() * number;
+                    }
+                }
+            if (busiPriceDetails == null){
+                busiPriceDetails = new BusiPriceDetails();
+            }
+            //泵头材料成本  = 材料成本+ 低值物料成本
+            busiPriceDetails.setBengtouclCb(format(lowMaterialCost + materialCosts));
+            busiPriceDetails.setBengtouRgCb(laborCost);
+            busiPriceDetails.setBengtouFyCb(makeCost);
+            busiPriceDetails.setMotorCb(motorPrice);
+            busiPriceDetails.setJfCb(machineProce);
+            busiPriceDetails.setZlqCb(couplingPrice);
+            busiPriceDetails.setZcCb(bearingPrice);
+            busiPriceDetails.setQuotationId(quotationId);
+            busiPriceDetails.setEwCb(otherPrice);
+            //报价金额
+            Double quotationAmount =  busiQuotationDetailList.parallelStream().mapToDouble(BusiQuotationDetails::getDetailsPrice).sum();
+            busiPriceDetails.setContractPrice(format(quotationAmount));
+
+            if (busiPriceDetails.getPriceDetailsId() != null){
+                busiPriceDetailsService.updateBusiPriceDetails(busiPriceDetails);
+            }else{
+                busiPriceDetailsService.insertBusiPriceDetails(busiPriceDetails);
+            }
+        }
+
+
+        //
+
     }
 }

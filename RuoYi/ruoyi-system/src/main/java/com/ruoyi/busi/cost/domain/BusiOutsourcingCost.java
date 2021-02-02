@@ -40,6 +40,8 @@ public class BusiOutsourcingCost extends BaseEntity
     @Excel(name = "实际电机成本")
     private Double actualMotorPrice;
 
+    private Double quotationAmount;
+
     public void setCostId(Long costId)
     {
         this.costId = costId;
@@ -89,6 +91,14 @@ public class BusiOutsourcingCost extends BaseEntity
 
     public void setActualMotorPrice(Double actualMotorPrice) {
         this.actualMotorPrice = actualMotorPrice;
+    }
+
+    public Double getQuotationAmount() {
+        return quotationAmount;
+    }
+
+    public void setQuotationAmount(Double quotationAmount) {
+        this.quotationAmount = quotationAmount;
     }
 
     @Override

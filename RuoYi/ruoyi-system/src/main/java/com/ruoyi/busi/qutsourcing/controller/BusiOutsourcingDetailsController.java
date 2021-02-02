@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ruoyi.busi.Constant;
 import com.ruoyi.busi.cost.domain.BusiOutsourcingCost;
 import com.ruoyi.busi.cost.service.IBusiOutsourcingCostService;
 import com.ruoyi.busi.domain.BusiMotor;
@@ -122,9 +123,9 @@ public class BusiOutsourcingDetailsController extends BaseController
         if (busiOutsourcingDetails.getOtherMotorPrice() != null){
             motorPrice = motorPrice + busiOutsourcingDetails.getOtherMotorPrice();
         }
-        //总计费用 泵头成本 + 电机成本
-        Double allPrice = motorPrice + busiOutsourcing.getOutsourcingPrice() ;
-        busiOutsourcingDetails.setDetailsPrice(allPrice);
+        //外购报价 外购泵泵头采购成本×（1+外购泵配套管理费比例）+电机采购成本×（1+外购件配套管理费比例）
+        Double allPrice = (motorPrice + busiOutsourcing.getOutsourcingPrice()) * (1 + Constant.PROPORTION_OF_MANAGEMENT_FEE_PURCHASED) * (1 + Constant.PROPORTION_MANAGEMENT);
+        busiOutsourcingDetails.setDetailsPrice(StringUtils.doubleFormat(allPrice));
         busiOutsourcingDetails.setQuotationType(1L);
         //先进行保存 保存完毕重新统计
         int i = busiOutsourcingDetailsService.insertBusiOutsourcingDetails(busiOutsourcingDetails);
@@ -188,8 +189,18 @@ public class BusiOutsourcingDetailsController extends BaseController
             }
             //电机成本
             busiOutsourcingCost.setQuotationId(busiOutsourcingDetails.getQuotationId());
-            busiOutsourcingCost.setMotorPrice(StringUtils.doubleFormat(map.get("motorPrice") + map.get("otherMotorPrice")));
+
+            double motorPrice = 0d;
+            if ( map.containsKey("motorPrice")){
+                motorPrice = map.get("motorPrice");
+            }
+            double otherMotorPrice = 0d;
+            if ( map.containsKey("otherMotorPrice")){
+                motorPrice = map.get("otherMotorPrice");
+            }
+            busiOutsourcingCost.setMotorPrice(StringUtils.doubleFormat( motorPrice+otherMotorPrice ));
             busiOutsourcingCost.setProductPrice(map.get("outsourcingPrice"));
+            busiOutsourcingCost.setQuotationAmount(map.get("quotationAmount"));
             if (busiOutsourcingCost.getCostId() != null){
                 busiOutsourcingCostService.updateBusiOutsourcingCost(busiOutsourcingCost);
             }else{
@@ -197,8 +208,7 @@ public class BusiOutsourcingDetailsController extends BaseController
             }
         }else{
             //为空的话就删除
-            busiPriceDetailsMapper.deleteBusiPriceDetailsById(busiOutsourcingDetails.getQuotationId());
-
+            busiOutsourcingCostService.deleteBusiOutsourcingCostById(busiOutsourcingDetails.getQuotationId());
         }
 
 

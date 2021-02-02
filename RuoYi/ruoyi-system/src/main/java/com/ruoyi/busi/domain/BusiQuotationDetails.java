@@ -176,6 +176,8 @@ public class BusiQuotationDetails extends BaseEntity
     /** 调整系数 */
     private Double coefficient;
 
+
+    @Excel(name = "基准单价")
     private Double detailsPrice;
 
 
