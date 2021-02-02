@@ -201,6 +201,10 @@ public class BusiOutsourcingDetailsController extends BaseController
             busiOutsourcingCost.setMotorPrice(StringUtils.doubleFormat( motorPrice+otherMotorPrice ));
             busiOutsourcingCost.setProductPrice(map.get("outsourcingPrice"));
             busiOutsourcingCost.setQuotationAmount(map.get("quotationAmount"));
+            //报价金额 - (电机成本 + 泵头成本)
+            Double profit = busiOutsourcingCost.getQuotationAmount() - (busiOutsourcingCost.getProductPrice() + busiOutsourcingCost.getMotorPrice());
+            busiOutsourcingCost.setProfit(profit);
+
             if (busiOutsourcingCost.getCostId() != null){
                 busiOutsourcingCostService.updateBusiOutsourcingCost(busiOutsourcingCost);
             }else{

@@ -78,7 +78,7 @@ public class BusiOutsourcingCostController extends BaseController
      * 新增保存外购电机成本明细
      */
     @Log(title = "外购电机成本明细", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
+    @PostMapping("/addSave")
     @ResponseBody
     public AjaxResult addSave(BusiOutsourcingCost busiOutsourcingCost)
     {

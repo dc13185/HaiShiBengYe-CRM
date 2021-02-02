@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.busi.Constant;
+import com.ruoyi.busi.cost.domain.BusiPartsCost;
+import com.ruoyi.busi.cost.mapper.BusiPartsCostMapper;
 import com.ruoyi.busi.domain.BusiPrice;
 import com.ruoyi.busi.domain.BusiProductLine;
 import com.ruoyi.busi.domain.BusiProductParameter;
 import com.ruoyi.busi.domain.PriceSum;
 import com.ruoyi.busi.mapper.BusiProductParameterMapper;
 import com.ruoyi.busi.mapper.BusiQuotationDetailsMapper;
+import com.ruoyi.busi.parts.mapper.BusiPartsDetailsMapper;
 import com.ruoyi.busi.service.IBusiPriceService;
 import com.ruoyi.busi.service.IBusiProductLineService;
 import com.ruoyi.busi.service.IBusiProductParameterService;
@@ -55,6 +58,12 @@ public class BusiPartsDetailsController extends BaseController
 
     @Autowired
     private BusiQuotationDetailsMapper quotationDetailsMapper;
+
+    @Autowired
+    private BusiPartsDetailsMapper busiPartsDetailsMapper;
+
+    @Autowired
+    private BusiPartsCostMapper partsCostMapper;
 
 
     @RequiresPermissions("parts:parts:view")
@@ -141,7 +150,6 @@ public class BusiPartsDetailsController extends BaseController
     @ResponseBody
     public AjaxResult addSave(BusiPartsDetails busiPartsDetails)
     {
-
         BusiProductLine busiProductLine = busiProductLineService.selectBusiProductLineById(busiPartsDetails.getProductLineId());
         PriceSum priceSum = busiProductParameterMapper.selectPriceDetil(busiPartsDetails.getParameterId());
         //返回材料成本费用
@@ -150,11 +158,14 @@ public class BusiPartsDetailsController extends BaseController
         Double laborCost = priceSum.getTime()* Constant.LABOR_COSTCOE_FFICIENT;
         //返回制造成本费用
         Double makeCost = priceSum.getTime()*Constant.MAKE_COEFFICIENT;
-        //合计报价费用
+        //（配件重量×材料单价+配件工时×机加工工时单价）/（1-配件毛利率）
         Double allSum = (materialCosts+laborCost+makeCost) / (1 - busiProductLine.getGrossProfitRate());
-
         busiPartsDetails.setDetailsPrice(format(allSum));
-        return toAjax(busiPartsDetailsService.insertBusiPartsDetails(busiPartsDetails));
+        int i = busiPartsDetailsService.insertBusiPartsDetails(busiPartsDetails);
+        if (i > 0){
+            restart(busiPartsDetails.getQuotationId());
+        }
+        return toAjax(i);
     }
 
     /**
@@ -189,7 +200,57 @@ public class BusiPartsDetailsController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(busiPartsDetailsService.deleteBusiPartsDetailsByIds(ids));
+        BusiPartsDetails busiPartsDetails = busiPartsDetailsMapper.selectBusiPartsDetailsById(Long.parseLong(ids.split(",")[0]));
+        int i = busiPartsDetailsService.deleteBusiPartsDetailsByIds(ids);
+        if (i > 0){
+            restart(busiPartsDetails.getQuotationId());
+        }
+        return toAjax(i);
+    }
+
+
+    //核酸成本
+    public void restart(Long quotationId){
+        BusiPartsDetails busiPartsDetail = new BusiPartsDetails();
+        busiPartsDetail.setQuotationId(quotationId);
+        List<BusiPartsDetails> busiPartsDetails = busiPartsDetailsMapper.selectBusiPartsDetailsList(busiPartsDetail);
+        if (busiPartsDetails != null){
+            Double allSum = 0d;
+            for (BusiPartsDetails partsDetail : busiPartsDetails) {
+                BusiProductLine busiProductLine = busiProductLineService.selectBusiProductLineById(partsDetail.getProductLineId());
+                PriceSum priceSum = busiProductParameterMapper.selectPriceDetil(partsDetail.getParameterId());
+                //返回材料成本费用
+                Double materialCosts =  (Double.valueOf(priceSum.getWeight() * priceSum.getMaterialPrice()* priceSum.getMassRatio())) * partsDetail.getNumber();
+                //返回人工成本费用
+                Double laborCost = priceSum.getTime()* Constant.LABOR_COSTCOE_FFICIENT * partsDetail.getNumber();
+                //返回制造成本费用
+                Double makeCost = priceSum.getTime()*Constant.MAKE_COEFFICIENT * partsDetail.getNumber();
+                //（配件重量×材料单价+配件工时×机加工工时单价）
+                allSum +=  format(materialCosts+laborCost+makeCost);
+            }
+            BusiPartsCost busiPartsCost =  partsCostMapper.selectBusiPartsCostById(quotationId);
+            if (busiPartsCost == null){
+                busiPartsCost = new BusiPartsCost();
+            }
+
+            Double quotationAmount = busiPartsDetails.parallelStream().mapToDouble(b -> b.getDetailsPrice() * b.getNumber()).sum();
+            busiPartsCost.setQuotationAmount(format(quotationAmount));
+            busiPartsCost.setQuotationId(quotationId);
+            busiPartsCost.setCostPrice(format(allSum));
+            //毛利
+            busiPartsCost.setProfit(format(busiPartsCost.getQuotationAmount() - busiPartsCost.getCostPrice()));
+            if (busiPartsCost.getCostId() != null){
+                partsCostMapper.updateBusiPartsCost(busiPartsCost);
+            }else{
+                partsCostMapper.insertBusiPartsCost(busiPartsCost);
+            }
+
+        }else{
+            partsCostMapper.deleteBusiPartsCostById(quotationId);
+        }
+
+
+
     }
 
 

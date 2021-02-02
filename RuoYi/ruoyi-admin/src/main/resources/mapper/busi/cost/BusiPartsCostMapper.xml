@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.cost.mapper.BusiPartsCostMapper">
+
+    <resultMap type="BusiPartsCost" id="BusiPartsCostResult">
+        <result property="costId"    column="cost_id"    />
+        <result property="costPrice"    column="cost_price"    />
+        <result property="actualPrice"    column="actual_price"    />
+        <result property="quotationAmount"    column="quotation_amount"    />
+        <result property="profit"    column="profit"    />
+        <result property="actualProfit"    column="actual_profit"    />
+        <result property="quotationId"    column="quotation_id"    />
+    </resultMap>
+
+    <sql id="selectBusiPartsCostVo">
+        select cost_id, cost_price, actual_price, quotation_amount, profit, actual_profit, quotation_id from busi_parts_cost
+    </sql>
+
+    <select id="selectBusiPartsCostList" parameterType="BusiPartsCost" resultMap="BusiPartsCostResult">
+        <include refid="selectBusiPartsCostVo"/>
+        <where>
+            <if test="costPrice != null "> and cost_price = #{costPrice}</if>
+            <if test="actualPrice != null "> and actual_price = #{actualPrice}</if>
+            <if test="quotationAmount != null "> and quotation_amount = #{quotationAmount}</if>
+            <if test="profit != null "> and profit = #{profit}</if>
+            <if test="actualProfit != null "> and actual_profit = #{actualProfit}</if>
+            <if test="quotationId != null "> and quotation_id = #{quotationId}</if>
+        </where>
+    </select>
+
+    <select id="selectBusiPartsCostById" parameterType="Long" resultMap="BusiPartsCostResult">
+        <include refid="selectBusiPartsCostVo"/>
+        where quotation_id = #{costId}
+    </select>
+
+    <insert id="insertBusiPartsCost" parameterType="BusiPartsCost" useGeneratedKeys="true" keyProperty="costId">
+        insert into busi_parts_cost
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="costPrice != null">cost_price,</if>
+            <if test="actualPrice != null">actual_price,</if>
+            <if test="quotationAmount != null">quotation_amount,</if>
+            <if test="profit != null">profit,</if>
+            <if test="actualProfit != null">actual_profit,</if>
+            <if test="quotationId != null">quotation_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="costPrice != null">#{costPrice},</if>
+            <if test="actualPrice != null">#{actualPrice},</if>
+            <if test="quotationAmount != null">#{quotationAmount},</if>
+            <if test="profit != null">#{profit},</if>
+            <if test="actualProfit != null">#{actualProfit},</if>
+            <if test="quotationId != null">#{quotationId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiPartsCost" parameterType="BusiPartsCost">
+        update busi_parts_cost
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="costPrice != null">cost_price = #{costPrice},</if>
+            <if test="actualPrice != null">actual_price = #{actualPrice},</if>
+            <if test="quotationAmount != null">quotation_amount = #{quotationAmount},</if>
+            <if test="profit != null">profit = #{profit},</if>
+            <if test="actualProfit != null">actual_profit = #{actualProfit},</if>
+            <if test="quotationId != null">quotation_id = #{quotationId},</if>
+        </trim>
+        where cost_id = #{costId}
+    </update>
+
+    <delete id="deleteBusiPartsCostById" parameterType="Long">
+        delete from busi_parts_cost where quotation_id = #{costId}
+    </delete>
+
+    <delete id="deleteBusiPartsCostByIds" parameterType="String">
+        delete from busi_parts_cost where cost_id in
+        <foreach item="costId" collection="array" open="(" separator="," close=")">
+            #{costId}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -37,6 +37,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where details_id = #{detailsId}
     </select>
 
+    <select id="selectBusiPartsDetailsByQuotationId" parameterType="Long" resultMap="BusiPartsDetailsResult">
+        <include refid="selectBusiPartsDetailsVo"/>
+        where quotation_id = #{quotationId}
+    </select>
+
     <insert id="insertBusiPartsDetails" parameterType="BusiPartsDetails" useGeneratedKeys="true" keyProperty="detailsId">
         insert into busi_parts_details
         <trim prefix="(" suffix=")" suffixOverrides=",">

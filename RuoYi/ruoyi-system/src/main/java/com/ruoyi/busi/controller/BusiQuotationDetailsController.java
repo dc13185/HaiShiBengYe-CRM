@@ -114,7 +114,7 @@ public class BusiQuotationDetailsController extends BaseController
             }
 
             return "busi/outsourcing/details/details";
-        }else if(quotation.getQuotationType() == 3L){
+        }else if(quotation.getQuotationType() == 2L){
             Double partsgSum = quotationDetailsMapper.getPartsgSumPrice(quotationId);
             if (partsgSum!=null){
                 modelMap.put("sumOutsourcingPrice", partsgSum);

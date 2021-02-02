@@ -21,6 +21,10 @@ public interface BusiPartsDetailsMapper
      */
     public BusiPartsDetails selectBusiPartsDetailsById(Long detailsId);
 
+
+    public BusiPartsDetails selectBusiPartsDetailsByQuotationId(Long quotationId);
+
+
     /**
      * 查询配件报价列表
      *

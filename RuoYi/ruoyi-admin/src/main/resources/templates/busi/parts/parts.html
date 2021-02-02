@@ -47,12 +47,12 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('parts:parts:edit')}]];
         var removeFlag = [[${@permission.hasPermi('parts:parts:remove')}]];
+        var quotationId = $("#quotationId").val();
         var prefix = ctx + "parts/parts";
-
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add",
+                createUrl: prefix + "/add?quotationId="+quotationId,
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",

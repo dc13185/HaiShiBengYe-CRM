@@ -42,6 +42,14 @@ public class BusiOutsourcingCost extends BaseEntity
 
     private Double quotationAmount;
 
+    /** 毛利 */
+    @Excel(name = "毛利")
+    private Double profit;
+
+    /** 实际毛利 */
+    @Excel(name = "实际毛利")
+    private Double actualProfit;
+
     public void setCostId(Long costId)
     {
         this.costId = costId;
@@ -99,6 +107,22 @@ public class BusiOutsourcingCost extends BaseEntity
 
     public void setQuotationAmount(Double quotationAmount) {
         this.quotationAmount = quotationAmount;
+    }
+
+    public Double getProfit() {
+        return profit;
+    }
+
+    public void setProfit(Double profit) {
+        this.profit = profit;
+    }
+
+    public Double getActualProfit() {
+        return actualProfit;
+    }
+
+    public void setActualProfit(Double actualProfit) {
+        this.actualProfit = actualProfit;
     }
 
     @Override
