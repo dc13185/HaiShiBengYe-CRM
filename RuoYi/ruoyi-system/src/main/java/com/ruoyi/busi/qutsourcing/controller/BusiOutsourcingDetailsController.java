@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ruoyi.busi.cost.domain.BusiOutsourcingCost;
+import com.ruoyi.busi.cost.service.IBusiOutsourcingCostService;
 import com.ruoyi.busi.domain.BusiMotor;
 import com.ruoyi.busi.mapper.BusiPriceDetailsMapper;
 import com.ruoyi.busi.outsourcing.domain.BusiOutsourcing;
 import com.ruoyi.busi.outsourcing.service.IBusiOutsourcingService;
 import com.ruoyi.busi.service.IBusiMotorService;
 import com.ruoyi.busi.service.IBusiQuotationService;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,6 +54,9 @@ public class BusiOutsourcingDetailsController extends BaseController
 
     @Autowired
     private BusiPriceDetailsMapper busiPriceDetailsMapper;
+
+    @Autowired
+    private IBusiOutsourcingCostService busiOutsourcingCostService;
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
@@ -120,10 +126,12 @@ public class BusiOutsourcingDetailsController extends BaseController
         Double allPrice = motorPrice + busiOutsourcing.getOutsourcingPrice() ;
         busiOutsourcingDetails.setDetailsPrice(allPrice);
         busiOutsourcingDetails.setQuotationType(1L);
-        //保存完后重新统计
-        Map map = busiPriceDetailsMapper.selectoutsourcingPriceDetailsByQuotationNo(busiOutsourcingDetails.getQuotationId());
-        
-        return toAjax(busiOutsourcingDetailsService.insertBusiOutsourcingDetails(busiOutsourcingDetails));
+        //先进行保存 保存完毕重新统计
+        int i = busiOutsourcingDetailsService.insertBusiOutsourcingDetails(busiOutsourcingDetails);
+        if (i > 0){
+            reStatistics(busiOutsourcingDetails);
+        }
+        return toAjax(1);
     }
 
     /**
@@ -160,6 +168,39 @@ public class BusiOutsourcingDetailsController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
-        return toAjax(busiOutsourcingDetailsService.deleteBusiOutsourcingDetailsByIds(ids));
+        BusiOutsourcingDetails busiOutsourcingDetails = busiOutsourcingDetailsService.selectBusiOutsourcingDetailsById(Long.parseLong(ids));
+        int i = busiOutsourcingDetailsService.deleteBusiOutsourcingDetailsByIds(ids);
+        if (i > 0){
+            reStatistics(busiOutsourcingDetails);
+        }
+        return toAjax(1);
+    }
+
+
+    private void reStatistics(BusiOutsourcingDetails busiOutsourcingDetails){
+        //保存完后重新统计
+        Map<String,Double> map = busiPriceDetailsMapper.selectoutsourcingPriceDetailsByQuotationNo(busiOutsourcingDetails.getQuotationId());
+        //查询之前有没有对应价格
+        BusiOutsourcingCost busiOutsourcingCost = busiOutsourcingCostService.selectBusiOutsourcingCostById(busiOutsourcingDetails.getQuotationId());
+        if (map != null){
+            if (busiOutsourcingCost == null){
+                busiOutsourcingCost = new BusiOutsourcingCost();
+            }
+            //电机成本
+            busiOutsourcingCost.setQuotationId(busiOutsourcingDetails.getQuotationId());
+            busiOutsourcingCost.setMotorPrice(StringUtils.doubleFormat(map.get("motorPrice") + map.get("otherMotorPrice")));
+            busiOutsourcingCost.setProductPrice(map.get("outsourcingPrice"));
+            if (busiOutsourcingCost.getCostId() != null){
+                busiOutsourcingCostService.updateBusiOutsourcingCost(busiOutsourcingCost);
+            }else{
+                busiOutsourcingCostService.insertBusiOutsourcingCost(busiOutsourcingCost);
+            }
+        }else{
+            //为空的话就删除
+            busiPriceDetailsMapper.deleteBusiPriceDetailsById(busiOutsourcingDetails.getQuotationId());
+
+        }
+
+
     }
 }

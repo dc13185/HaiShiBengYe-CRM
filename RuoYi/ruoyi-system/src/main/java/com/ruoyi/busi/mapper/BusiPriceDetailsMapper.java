@@ -63,7 +63,7 @@ public interface BusiPriceDetailsMapper
 
     public BusiPriceDetails selectBusiPriceDetailsByQuotationNo(String contractNo);
 
-    public Map selectoutsourcingPriceDetailsByQuotationNo(Long quotationId);
+    public Map<String,Double> selectoutsourcingPriceDetailsByQuotationNo(Long quotationId);
 
 
 }

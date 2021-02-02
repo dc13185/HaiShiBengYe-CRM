@@ -5,23 +5,23 @@ import com.ruoyi.busi.cost.domain.BusiOutsourcingCost;
 
 /**
  * 外购电机成本明细Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2021-02-02
  */
-public interface BusiOutsourcingCostMapper 
+public interface BusiOutsourcingCostMapper
 {
     /**
      * 查询外购电机成本明细
-     * 
+     *
      * @param costId 外购电机成本明细ID
      * @return 外购电机成本明细
      */
-    public BusiOutsourcingCost selectBusiOutsourcingCostById(Long costId);
+    public BusiOutsourcingCost selectBusiOutsourcingCostById(Long quotationId);
 
     /**
      * 查询外购电机成本明细列表
-     * 
+     *
      * @param busiOutsourcingCost 外购电机成本明细
      * @return 外购电机成本明细集合
      */
@@ -29,7 +29,7 @@ public interface BusiOutsourcingCostMapper
 
     /**
      * 新增外购电机成本明细
-     * 
+     *
      * @param busiOutsourcingCost 外购电机成本明细
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface BusiOutsourcingCostMapper
 
     /**
      * 修改外购电机成本明细
-     * 
+     *
      * @param busiOutsourcingCost 外购电机成本明细
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface BusiOutsourcingCostMapper
 
     /**
      * 删除外购电机成本明细
-     * 
+     *
      * @param costId 外购电机成本明细ID
      * @return 结果
      */
@@ -53,7 +53,7 @@ public interface BusiOutsourcingCostMapper
 
     /**
      * 批量删除外购电机成本明细
-     * 
+     *
      * @param costIds 需要删除的数据ID
      * @return 结果
      */

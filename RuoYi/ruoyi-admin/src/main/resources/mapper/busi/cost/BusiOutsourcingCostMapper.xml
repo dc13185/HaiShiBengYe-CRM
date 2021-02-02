@@ -3,10 +3,9 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.busi.cost.mapper.BusiOutsourcingCostMapper">
-    
+
     <resultMap type="BusiOutsourcingCost" id="BusiOutsourcingCostResult">
         <result property="costId"    column="cost_id"    />
-        <result property="outsourcingId"    column="outsourcing_id"    />
         <result property="quotationId"    column="quotation_id"    />
         <result property="productPrice"    column="product_price"    />
         <result property="actualProductPrice"    column="actual_product_price"    />
@@ -15,13 +14,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBusiOutsourcingCostVo">
-        select cost_id, outsourcing_id, quotation_id, product_price, actual_product_price, motor_price, actual_motor_price from busi_outsourcing_cost
+        select cost_id, quotation_id, product_price, actual_product_price, motor_price, actual_motor_price from busi_outsourcing_cost
     </sql>
 
     <select id="selectBusiOutsourcingCostList" parameterType="BusiOutsourcingCost" resultMap="BusiOutsourcingCostResult">
         <include refid="selectBusiOutsourcingCostVo"/>
-        <where>  
-            <if test="outsourcingId != null "> and outsourcing_id = #{outsourcingId}</if>
+        <where>
             <if test="quotationId != null "> and quotation_id = #{quotationId}</if>
             <if test="productPrice != null "> and product_price = #{productPrice}</if>
             <if test="actualProductPrice != null "> and actual_product_price = #{actualProductPrice}</if>
@@ -29,17 +27,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actualMotorPrice != null "> and actual_motor_price = #{actualMotorPrice}</if>
         </where>
     </select>
-    
+
     <select id="selectBusiOutsourcingCostById" parameterType="Long" resultMap="BusiOutsourcingCostResult">
         <include refid="selectBusiOutsourcingCostVo"/>
-        where cost_id = #{costId}
+        where quotation_id = #{quotationId}
     </select>
-        
+
     <insert id="insertBusiOutsourcingCost" parameterType="BusiOutsourcingCost">
         insert into busi_outsourcing_cost
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="costId != null">cost_id,</if>
-            <if test="outsourcingId != null">outsourcing_id,</if>
             <if test="quotationId != null">quotation_id,</if>
             <if test="productPrice != null">product_price,</if>
             <if test="actualProductPrice != null">actual_product_price,</if>
@@ -48,7 +45,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="costId != null">#{costId},</if>
-            <if test="outsourcingId != null">#{outsourcingId},</if>
             <if test="quotationId != null">#{quotationId},</if>
             <if test="productPrice != null">#{productPrice},</if>
             <if test="actualProductPrice != null">#{actualProductPrice},</if>
@@ -60,7 +56,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateBusiOutsourcingCost" parameterType="BusiOutsourcingCost">
         update busi_outsourcing_cost
         <trim prefix="SET" suffixOverrides=",">
-            <if test="outsourcingId != null">outsourcing_id = #{outsourcingId},</if>
             <if test="quotationId != null">quotation_id = #{quotationId},</if>
             <if test="productPrice != null">product_price = #{productPrice},</if>
             <if test="actualProductPrice != null">actual_product_price = #{actualProductPrice},</if>
@@ -75,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBusiOutsourcingCostByIds" parameterType="String">
-        delete from busi_outsourcing_cost where cost_id in 
+        delete from busi_outsourcing_cost where cost_id in
         <foreach item="costId" collection="array" open="(" separator="," close=")">
             #{costId}
         </foreach>

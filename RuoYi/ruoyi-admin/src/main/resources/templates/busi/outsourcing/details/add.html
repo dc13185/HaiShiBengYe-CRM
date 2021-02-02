@@ -191,17 +191,17 @@
 
         function selectSupplier(supplierType){
             if (supplierType == "material") {
-                $.modal.open("选择材料品牌", ctx + "busi/supplier?supplierType=" + supplierType);
+                $.modal.openFull("选择材料品牌", ctx + "busi/supplier?supplierType=" + supplierType);
             }else if (supplierType == "motor"){
-                $.modal.open("选择材料品牌", ctx + "busi/supplier?supplierType="+supplierType);
+                $.modal.openFull("选择材料品牌", ctx + "busi/supplier?supplierType="+supplierType);
             }else if(supplierType == "seal"){
-                $.modal.open("选择机封品牌", ctx + "busi/supplier?supplierType="+supplierType);
+                $.modal.openFull("选择机封品牌", ctx + "busi/supplier?supplierType="+supplierType);
             }else if(supplierType == 'coupling'){
-                $.modal.open("选择联轴器品牌", ctx + "busi/supplier?supplierType="+supplierType);
+                $.modal.openFull("选择联轴器品牌", ctx + "busi/supplier?supplierType="+supplierType);
             }else if(supplierType == 'bearing'){
-                $.modal.open("选择承轴品牌", ctx + "busi/supplier?supplierType="+supplierType);
+                $.modal.openFull("选择承轴品牌", ctx + "busi/supplier?supplierType="+supplierType);
             }else if (supplierType == "outsourcing") {
-                $.modal.open("选择材料品牌", ctx + "busi/supplier?supplierType="+supplierType);
+                $.modal.openFull("选择材料品牌", ctx + "busi/supplier?supplierType="+supplierType);
             }
         }
 
@@ -211,7 +211,7 @@
                 $.modal.alertError("请先选择供应商");
                 return;
             }
-            $.modal.open("选择产品系列", ctx + "busi/outsourcing/line?supplierId="+productSupplierId);
+            $.modal.openFull("选择产品系列", ctx + "busi/outsourcing/line?supplierId="+productSupplierId);
         }
 
         function selectProductModel(){
@@ -219,7 +219,7 @@
             if (!productLineId){
                 $.modal.alertError("请先选择产品系列");
             }else{
-                $.modal.open("选择产品规格型号", ctx + "system/outsourcing?outsourcingLineId="+productLineId);
+                $.modal.openFull("选择产品规格型号", ctx + "system/outsourcing?outsourcingLineId="+productLineId);
             }
         }
 
@@ -230,7 +230,7 @@
             if(!materialSupplierId){
                 $.modal.alertError("请先选择材料品牌");
             }else{
-                $.modal.open("选择材料产品", ctx + "busi/production?supplierId="+materialSupplierId);
+                $.modal.openFull("选择材料产品", ctx + "busi/production?supplierId="+materialSupplierId);
             }
         }
 
@@ -239,7 +239,7 @@
             if (!motorSupplierId){
                 $.modal.alertError("请先选择电机品牌");
             }else{
-                $.modal.open("选择电机产品", ctx + "busi/motor?supplierId="+motorSupplierId);
+                $.modal.openFull("选择电机产品", ctx + "busi/motor?supplierId="+motorSupplierId);
             }
         }
 
@@ -248,7 +248,7 @@
             if (!machineSupplierId){
                 $.modal.alertError("请先选择机封品牌");
             }else{
-                $.modal.open("选择机封产品", ctx + "busi/machine?supplierId="+machineSupplierId);
+                $.modal.openFull("选择机封产品", ctx + "busi/machine?supplierId="+machineSupplierId);
             }
         }
 
@@ -258,7 +258,7 @@
             if (!couplingSupplierId){
                 $.modal.alertError("请先选择联轴器品牌");
             }else{
-                $.modal.open("选择机封产品", ctx + "busi/coupling?supplierId="+couplingSupplierId);
+                $.modal.openFull("选择机封产品", ctx + "busi/coupling?supplierId="+couplingSupplierId);
             }
         }
 
@@ -268,7 +268,7 @@
             if (!bearingSupplierId){
                 $.modal.alertError("请先选择承轴器品牌");
             }else{
-                $.modal.open("选择承轴产品", ctx + "busi/bearing?supplierId="+bearingSupplierId);
+                $.modal.openFull("选择承轴产品", ctx + "busi/bearing?supplierId="+bearingSupplierId);
             }
         }
 
