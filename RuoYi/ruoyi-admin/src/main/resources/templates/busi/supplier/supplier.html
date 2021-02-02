@@ -21,7 +21,7 @@
                                 <input type="text" name="supplierId"/>
                             </li>
                             <li>
-                                <label>材料供应商名称：</label>
+                                <label id="typeName">供应商名称：</label>
                                 <input type="text" name="materialName"/>
                             </li>
                             <li>
@@ -67,6 +67,19 @@
         var procurement_type = [[${@dict.getType('procurement_type')}]];
         var prefix = ctx + "busi/supplier";
         var supplierType = $("#supplierType").val();
+        var supplierValue;
+       if (supplierType == 'material'){
+           supplierValue = "材料供应商";
+       }else if(supplierType == 'motor'){
+           supplierValue = "电机供应商";
+       }else if(supplierType == 'seal'){
+           supplierValue = "机封及系统供应商";
+       }else if(supplierType == 'coupling'){
+           supplierValue = "轴联器供应商";
+       }else if(supplierType == 'outsourcing'){
+           supplierValue = "外购供应商";
+       }
+
         $(function() {
             var options = {
                 url: prefix + "/list?",
@@ -84,7 +97,8 @@
                 },
                 {
                     field: 'materialName',
-                    title: '材料供应商名称'
+                    title: '材料供应商名称',
+                    class: 'materialName'
                 },
                 {
                     field: 'materialAddress',
@@ -143,6 +157,7 @@
                 }]
             };
             $.table.init(options);
+            $(".materialName").find(".th-inner").html(supplierValue)
         });
 
 
