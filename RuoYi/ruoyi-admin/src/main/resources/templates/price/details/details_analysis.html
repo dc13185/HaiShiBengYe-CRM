@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('报价单报价明细列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>报价单号：</label>
+                                <input type="text" name="quotationNo" id="quotationNo"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchDetails()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <div class="wrapper wrapper-content animated fadeInRight ibox-content self-made" style="display: none">
+                    <form class="self-made-from">
+                        <input type="hidden" name="quotationId" class="quotationId" />
+                        <h3>自制报价费用明细：</h3>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">泵头材料成本合计:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="bengtouclCb" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际泵头材料成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualBengtouclCb" class="form-control actualBengtouclCb" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">泵头人工成本合计:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="bengtouRgCb" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际泵头人工成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualBengtouRgCb" class="form-control actualBengtouRgCb " type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">制造费用成本合计:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="bengtouFyCb" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际制造费用成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualBengtouFyCb" class="form-control actualBengtouFyCb" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                               <div class="col-sm-2" ><p class="form-control-static">泵头成本合计:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="bengtouhj" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际泵头成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualBengtouCb" class="form-control actualBengtouCb" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">电机成本合计:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="motorCb" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际电机成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualMotorCb" class="form-control actualMotorCb" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">机封及系统成本合计:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="jfCb" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际机封及系统成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualJfCb" class="form-control actualJfCb" type="text">
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">轴承成本合计:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="zcCb" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际轴承成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualZcCb" class="form-control actualZcCb" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">联轴器成本合计:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="zlqCb" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际联轴器成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualZlqCb" class="form-control actualZlqCb" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">额外配置成本合计:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="ewCb" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际额外配置成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualEwCb" class="form-control actualEwCb" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">外购成本合计:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="wghj" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际外购成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualWghj" class="form-control actualWghj" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">合计总成本:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="allPrice" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际合计总成本合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualContractprice" class="form-control actualContractprice" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <div class="col-sm-2" ><p class="form-control-static">毛利:</p></div>
+                                <div class="col-sm-3">
+                                    <p id="zzMl" class="form-control-static">0</p>
+                                </div>
+                                <div class="col-sm-2 " ><p class="form-control-static">实际毛利合计数据:</p></div>
+                                <div class="col-sm-3">
+                                    <input name="actualProfit" class="form-control actualProfit" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+            </div>
+                <div class="wrapper wrapper-content animated fadeInRight ibox-content waigou-made" style="display: none">
+                <h3>外购报价明细：</h3>
+                <form class="waigou-made-from">
+                    <input type="hidden" name="quotationId" class="quotationId" />
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-2" ><p class="form-control-static">泵头成本合计:</p></div>
+                            <div class="col-sm-3">
+                                <p id="outsourcingPrice" class="form-control-static">0</p>
+                            </div>
+                            <div class="col-sm-2 " ><p class="form-control-static">实际泵头成本数据:</p></div>
+                            <div class="col-sm-3">
+                                <input name="actualProductPrice"  class="form-control actualProductPrice" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-2" ><p class="form-control-static">电机成本合计:</p></div>
+                            <div class="col-sm-3">
+                                <p id="motorPrice" class="form-control-static">0</p>
+                            </div>
+                            <div class="col-sm-2 " ><p class="form-control-static">实际电机成本合计数据:</p></div>
+                            <div class="col-sm-3">
+                                <input name="actualMotorPrice"  class="form-control actualMotorPrice" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-2" ><p class="form-control-static">总计成本:</p></div>
+                            <div class="col-sm-3">
+                                <p id="wgCb" class="form-control-static">0</p>
+                            </div>
+                            <div class="col-sm-2 " ><p class="form-control-static">实际总计成本数据:</p></div>
+                            <div class="col-sm-3">
+                                <input name="actualAllPrice" class="form-control actualAllPrice" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-2" ><p class="form-control-static">毛利:</p></div>
+                            <div class="col-sm-3">
+                                <p id="wgMl" class="form-control-static">0</p>
+                            </div>
+                            <div class="col-sm-2 " ><p class="form-control-static">实际毛利数据:</p></div>
+                            <div class="col-sm-3">
+                                <input name="actualProfit" class="form-control actualProfit" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="wrapper wrapper-content animated fadeInRight ibox-content peijian-made"  style="display: none">
+                <h3>配件报价明细：</h3>
+                <form class="peijian-made-form">
+                    <input type="hidden" name="quotationId" class="quotationId" />
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-2" ><p class="form-control-static">成本合计:</p></div>
+                            <div class="col-sm-3">
+                                <p id="busiPartsPrice" class="form-control-static">0</p>
+                            </div>
+                            <div class="col-sm-2 " ><p class="form-control-static">实际成本合计数据:</p></div>
+                            <div class="col-sm-3">
+                                <input name="actualPrice"  class="form-control actualPrice" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="col-sm-2" ><p class="form-control-static">毛利:</p></div>
+                            <div class="col-sm-3">
+                                <p id="pjMl" class="form-control-static">0</p>
+                            </div>
+                            <div class="col-sm-2 " ><p class="form-control-static">实际毛利数据:</p></div>
+                            <div class="col-sm-3">
+                                <input  name="actualProfit" class="form-control actualProfit" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <a class="btn btn-success col-sm-push-10 save-btn" onclick="save()" style="display:none;"> 确定</a>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+</body>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('busi:details:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('busi:details:remove')}]];
+    var prefix = ctx + "busi/price/details";
+
+
+    function searchDetails(){
+        var quotationNo = $("#quotationNo").val();
+        if (!quotationNo || quotationNo == ''){
+            $.modal.alertWarning("请输入订单号");
+            return
+        }
+        $.ajax({
+            url: prefix + "/searchDetails",
+            data: quotationNo,
+            type: "post",
+            processData: false,
+            contentType: "application/json",
+            success: function(result) {
+                var busiPriceDetails = result.data.busiPriceDetails;
+                if (busiPriceDetails){
+                    $("#bengtouclCb").html(busiPriceDetails.bengtouclCb);
+                    $("#bengtouRgCb").html(busiPriceDetails.bengtouRgCb);
+                    $("#bengtouFyCb").html(busiPriceDetails.bengtouFyCb);
+                    //泵头成本合计
+                    $("#bengtouhj").html(busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb);
+                    //外购成本
+                    $("#motorCb").html(busiPriceDetails.motorCb);
+                    $("#jfCb").html(busiPriceDetails.jfCb);
+                    $("#zlqCb").html(busiPriceDetails.zlqCb);
+                    $("#ewCb").html(busiPriceDetails.ewCb);
+                    $("#wghj").html(busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb);
+                    var allSum = busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb+busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb;
+                    $("#allPrice").html(allSum.toFixed(2))
+                    $("#zzContractPrice").html(busiPriceDetails.contractPrice)
+                    if (busiPriceDetails.profit){
+                        $("#zzMl").html(busiPriceDetails.profit.toFixed(2));
+                    }
+                    $(".quotationId").val(busiPriceDetails.quotationId);
+                    //实际成本
+                    $(".self-made").find(".actualContractprice").val(busiPriceDetails.actualContractprice);
+                    $(".self-made").find(".actualBengtouclCb").val(busiPriceDetails.actualBengtouclCb);
+                    $(".self-made").find(".actualBengtouRgCb").val(busiPriceDetails.actualBengtouRgCb);
+                    $(".self-made").find(".actualBengtouFyCb").val(busiPriceDetails.actualBengtouFyCb);
+                    $(".self-made").find(".actualMotorCb").val(busiPriceDetails.actualMotorCb);
+                    $(".self-made").find(".actualJfCb").val(busiPriceDetails.actualJfCb);
+                    $(".self-made").find(".actualZlqCb").val(busiPriceDetails.actualZlqCb);
+                    $(".self-made").find(".actualEwCb").val(busiPriceDetails.actualEwCb);
+                    $(".self-made").find(".actualContractprice").val(busiPriceDetails.actualContractprice);
+                    $(".self-made").find(".actualProfit").val(busiPriceDetails.actualProfit);
+                    $(".self-made").find(".actualWghj").val(busiPriceDetails.actualWghj);
+                    $(".self-made").find(".actualBengtouCb").val(busiPriceDetails.actualBengtouCb);
+                    $(".self-made").find(".actualZcCb").val(busiPriceDetails.actualZcCb);
+
+                    $(".self-made").show();
+                    $(".save-btn").shou();
+                }else{
+                    $(".self-made").hide();
+                }
+                var outsourcingMap = result.data.outsourcingMap;
+                if (outsourcingMap){
+                    $("#outsourcingPrice").html(outsourcingMap.productPrice);
+                    $("#motorPrice").html(outsourcingMap.motorPrice);
+                    $("#wgContractPrice").html(outsourcingMap.quotationAmount);
+                    var cb = outsourcingMap.productPrice + outsourcingMap.motorPrice;
+                    $("#wgCb").html(cb.toFixed(2));
+                    if(outsourcingMap.profit){
+                        $("#wgMl").html(outsourcingMap.profit.toFixed(2));
+                    }
+                    $(".quotationId").val(outsourcingMap.quotationId);
+                    //实际数据
+                    $(".waigou-made").find(".actualProductPrice").val(outsourcingMap.actualProductPrice);
+                    $(".waigou-made").find(".actualMotorPrice").val(outsourcingMap.actualMotorPrice);
+                    $(".waigou-made").find(".actualProfit").val(outsourcingMap.actualProfit);
+                    $(".waigou-made").find(".actualAllPrice").val(outsourcingMap.actualAllPrice);
+                    $(".waigou-made").show();
+                    $(".save-btn").shou();
+                }else{
+                    $(".waigou-made").hide();
+                }
+                //配件
+                var busiPartsDetails = result.data.busiPartsDetails;
+                if (busiPartsDetails){
+                    $("#busiPartsPrice").html(busiPartsDetails.costPrice);
+                    $("#pjBusiPartsPrice").html(busiPartsDetails.quotationAmount);
+                    if(busiPartsDetails.profit){
+                        $("#pjMl").html(busiPartsDetails.profit.toFixed(2));
+                    }
+                    $(".quotationId").val(busiPartsDetails.quotationId);
+                    $(".peijian-made").find(".actualPrice").val(busiPartsDetails.actualPrice);
+                    $(".peijian-made").find(".actualProfit").val(busiPartsDetails.actualProfit);
+                    $(".peijian-made").show();
+                    $(".save-btn").shou();
+                }else{
+                    $(".peijian-made").hide();
+                }
+            }
+        });
+
+    }
+
+
+    function save(){
+        var selfDisplay = $(".self-made").css("display");
+        var code;
+        if (selfDisplay != 'none'){
+            $.ajax({
+                url: ctx+"busi/price/details/edit",
+                data: $(".self-made-from").serialize(),
+                type:"post",
+                dataType: "json",
+                success: function(result) {
+                    code = result.code;
+                }
+            })
+        }
+
+        var wgDisplay = $(".waigou-made").css("display");
+        if (wgDisplay != 'none'){
+            $.ajax({
+                url: ctx+"busi/cost/edit",
+                data: $(".waigou-made-from").serialize(),
+                type:"post",
+                dataType: "json",
+                success: function(result) {
+                    code = result.code;
+                }
+            })
+        }
+        if (code != 500){
+            $.modal.alertSuccess("保存成功!");
+        }
+
+
+        var peijian = $(".peijian-made").css("display");
+        if (peijian != 'none'){
+            $.ajax({
+                url: ctx+"busi/partsCost/edit",
+                data: $(".peijian-made-form").serialize(),
+                type:"post",
+                dataType: "json",
+                success: function(result) {
+                    code = result.code;
+                }
+            })
+        }
+        if (code != 500){
+            $.modal.alertSuccess("保存成功!");
+        }
+
+
+
+
+
+
+
+    }
+</script>
+</html>

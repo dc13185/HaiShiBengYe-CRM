@@ -12,13 +12,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="motorPrice"    column="motor_price"    />
         <result property="actualMotorPrice"    column="actual_motor_price"    />
         <result property="quotationAmount"    column="quotationAmount"    />
-
         <result property="profit"    column="profit"    />
         <result property="actualProfit"    column="actualProfit"    />
+        <result property="actualAllPrice"    column="actualAllPrice"    />
     </resultMap>
 
     <sql id="selectBusiOutsourcingCostVo">
-        select cost_id, quotation_id, product_price, actual_product_price,quotationAmount, motor_price, actual_motor_price ,profit , actualProfit from busi_outsourcing_cost
+        select cost_id, quotation_id, product_price, actual_product_price,quotationAmount, motor_price, actual_motor_price ,profit ,actualAllPrice , actualProfit from busi_outsourcing_cost
     </sql>
 
     <select id="selectBusiOutsourcingCostList" parameterType="BusiOutsourcingCost" resultMap="BusiOutsourcingCostResult">
@@ -76,8 +76,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quotationAmount != null">quotationAmount = #{quotationAmount},</if>
             <if test="profit != null"> profit = #{profit},</if>
             <if test="actualProfit != null"> actualProfit =#{actualProfit},</if>
+            <if test="actualAllPrice != null"> actualAllPrice =#{actualAllPrice},</if>
         </trim>
-        where cost_id = #{costId}
+        where quotation_id = #{quotationId}
     </update>
 
     <delete id="deleteBusiOutsourcingCostById" parameterType="Long">

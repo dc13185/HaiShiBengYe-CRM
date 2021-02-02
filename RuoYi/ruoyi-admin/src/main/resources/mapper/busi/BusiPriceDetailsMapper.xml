@@ -27,11 +27,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="actualContractprice"    column="actual_contractPrice"    />
         <result property="profit"    column="profit"    />
         <result property="actualProfit"    column="actual_profit"    />
+        <result property="actualBengtouCb"    column="actualBengtouCb"    />
+        <result property="actualWghj"    column="actualWghj"    />
 
     </resultMap>
 
     <sql id="selectBusiPriceDetailsVo">
-        select price_details_id, bengtoucl_cb, bengtou_rg_cb, bengtou_fy_cb, motor_cb, jf_cb, zc_cb, zlq_cb, ew_cb, quotation_id,contractPrice from busi_price_details
+        select price_details_id, bengtoucl_cb, bengtou_rg_cb, bengtou_fy_cb, motor_cb, jf_cb, zc_cb, zlq_cb, ew_cb,actualBengtouCb, actualWghj,quotation_id,contractPrice from busi_price_details
     </sql>
 
     <select id="selectBusiPriceDetailsList" parameterType="BusiPriceDetails" resultMap="BusiPriceDetailsResult">
@@ -47,8 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ewCb != null "> and ew_cb = #{ewCb}</if>
             <if test="quotationId != null "> and quotation_id = #{quotationId}</if>
             <if test="contractPrice != null "> and contractPrice = #{contractPrice}</if>
-
-
+            <if test="actualBengtouCb != null "> and actualBengtouCb = #{contractPrice}</if>
         </where>
     </select>
 
@@ -104,6 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actualContractprice != null">actual_contractPrice,</if>
             <if test="profit != null">profit,</if>
             <if test="actualProfit != null">actual_profit,</if>
+            <if test="actualBengtouCb != null">actualBengtouCb,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bengtouclCb != null">#{bengtouclCb},</if>
@@ -127,6 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actualContractprice != null">#{actualContractprice},</if>
             <if test="profit != null">#{profit},</if>
             <if test="actualProfit != null">#{actualProfit},</if>
+            <if test="actualBengtouCb != null">#{actualBengtouCb},</if>
         </trim>
     </insert>
 
@@ -145,7 +148,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="zlqCb != null">zlq_cb = #{zlqCb},</if>
             <if test="actualMotorCb != null">actual_motor_cb = #{actualMotorCb},</if>
             <if test="ewCb != null">ew_cb = #{ewCb},</if>
-            <if test="quotationId != null">quotation_id = #{quotationId},</if>
+            <!--<if test="quotationId != null">quotation_id = #{quotationId},</if>-->
             <if test="actualJfCb != null">actual_jf_cb = #{actualJfCb},</if>
             <if test="actualZcCb != null">actual_zc_cb = #{actualZcCb},</if>
             <if test="actualZlqCb != null">actual_zlq_cb = #{actualZlqCb},</if>
@@ -154,8 +157,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actualContractprice != null">actual_contractPrice = #{actualContractprice},</if>
             <if test="profit != null">profit = #{profit},</if>
             <if test="actualProfit != null">actual_profit = #{actualProfit},</if>
+            <if test="actualBengtouCb != null">actualBengtouCb = #{actualBengtouCb},</if>
+            <if test="actualWghj != null">actualWghj = #{actualWghj},</if>
         </trim>
-        where price_details_id = #{priceDetailsId}
+        where quotation_id = #{quotationId}
     </update>
 
     <delete id="deleteBusiPriceDetailsById" parameterType="Long">
