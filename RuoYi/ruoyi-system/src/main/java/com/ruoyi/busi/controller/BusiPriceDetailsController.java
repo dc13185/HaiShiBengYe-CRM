@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.busi.cost.domain.BusiOutsourcingCost;
+import com.ruoyi.busi.cost.domain.BusiPartsCost;
 import com.ruoyi.busi.cost.mapper.BusiOutsourcingCostMapper;
+import com.ruoyi.busi.cost.mapper.BusiPartsCostMapper;
 import com.ruoyi.busi.mapper.BusiPriceDetailsMapper;
 import com.ruoyi.busi.mapper.BusiProductParameterMapper;
 import com.ruoyi.busi.parts.domain.BusiPartsDetails;
@@ -49,7 +51,7 @@ public class BusiPriceDetailsController extends BaseController
     private BusiOutsourcingCostMapper busiOutsourcingCostMapper;
 
     @Autowired
-    private BusiProductParameterMapper busiProductParameterMapper;
+    private BusiPartsCostMapper busiPartsCostMapper;
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
@@ -151,13 +153,13 @@ public class BusiPriceDetailsController extends BaseController
         BusiPriceDetails busiPriceDetails =  busiPriceDetailsMapper.selectBusiPriceDetailsByQuotationNo(quotationNo);
         //外购报价
         BusiOutsourcingCost busiOutsourcingCost = busiOutsourcingCostMapper.selectBusiOutsourcingCostByQuotationNo(quotationNo);
+        //配件报价
+        BusiPartsCost busiPartsCost = busiPartsCostMapper.selectBusiPartsCostByQuotationNo(quotationNo);
+
         HashMap hashMap = new HashMap();
         hashMap.put("busiPriceDetails",busiPriceDetails);
         hashMap.put("outsourcingMap",busiOutsourcingCost);
-   /*     //配件管理
-        Map busiPartsDetails = busiPartsDetailsMapper.selectPartsPriceDetailsByQuotationNo(quotationNo);
-        hashMap.put("busiPartsDetails",busiPartsDetails);*/
-
+        hashMap.put("busiPartsDetails",busiPartsCost);
         return  AjaxResult.success(hashMap);
     }
 }

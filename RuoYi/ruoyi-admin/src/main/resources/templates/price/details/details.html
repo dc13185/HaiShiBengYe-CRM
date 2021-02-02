@@ -286,10 +286,9 @@
                     //配件
                     var busiPartsDetails = result.data.busiPartsDetails;
                     if (busiPartsDetails){
-                        $("#busiPartsPrice").html(busiPartsDetails.busiPartsPrice);
-                        $("#pjBusiPartsPrice").html(busiPartsDetails.contractPrice);
-                        var pjMl=  busiPartsDetails.contractPrice - busiPartsDetails.busiPartsPrice;
-                        $("#pjMl").html(pjMl);
+                        $("#busiPartsPrice").html(busiPartsDetails.costPrice);
+                        $("#pjBusiPartsPrice").html(busiPartsDetails.quotationAmount);
+                        $("#pjMl").html(busiPartsDetails.profit);
                         $(".peijian-made").show();
                     }
                 }
