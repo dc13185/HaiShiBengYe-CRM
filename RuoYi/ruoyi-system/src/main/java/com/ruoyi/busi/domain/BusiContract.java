@@ -1,6 +1,9 @@
 package com.ruoyi.busi.domain;
 
 import java.util.Date;
+import java.util.List;
+
+import com.ruoyi.busi.contract.domain.BusiContractProduct;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -74,6 +77,10 @@ public class BusiContract extends BaseEntity
     /** 项目状态 */
     @Excel(name = "项目状态")
     private Long contractType;
+
+    private Double repaymentAmount;
+
+    private List<BusiContractProduct> busiContractProducts;
 
     public void setContractId(Long contractId)
     {
@@ -211,6 +218,22 @@ public class BusiContract extends BaseEntity
 
     public void setContractType(Long contractType) {
         this.contractType = contractType;
+    }
+
+    public List<BusiContractProduct> getBusiContractProducts() {
+        return busiContractProducts;
+    }
+
+    public void setBusiContractProducts(List<BusiContractProduct> busiContractProducts) {
+        this.busiContractProducts = busiContractProducts;
+    }
+
+    public Double getRepaymentAmount() {
+        return repaymentAmount;
+    }
+
+    public void setRepaymentAmount(Double repaymentAmount) {
+        this.repaymentAmount = repaymentAmount;
     }
 
     @Override

@@ -87,10 +87,6 @@
                     title: '业务员'
                 },
                 {
-                    field: 'productComposition',
-                    title: '产品组成'
-                },
-                {
                     title: '签约时间',
                     formatter: function(value, row, index) {
                         return row.signingDate.substring(0,10);
@@ -111,10 +107,18 @@
                     title: '合同金额'
                 },
                 {
+                    field: 'repaymentAmount',
+                    title: '回款金额'
+                },
+                {
                     title: '折扣率',
                     formatter: function(value, row, index) {
                         var number = row.contractPrice / row.busiQuotation.sumPrice;
-                        return number.toFixed(2)
+                        if (number){
+                            return number.toFixed(2);
+                        } else{
+                            return 0;
+                        }
                     }
                 },
                 {
@@ -145,6 +149,15 @@
                     title: '更进时间'
                 },
                 {
+                    title: '产品组成',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="viewRroduct(\'' + row.contractId + '\')"><i class="fa fa-eye"></i>查看</a> ');
+                        return actions.join('');
+                    }
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
@@ -171,6 +184,10 @@
 
         function viewHistory(contractId){
             $.modal.openFull("查看历史合同",ctx+"busi/contract/toHistory?contractId="+contractId);
+        }
+
+        function viewRroduct(contractId){
+            $.modal.openFull("查看产品组成",ctx+"contract/product?contractId="+contractId);
         }
 
         function complete(contractId,type){

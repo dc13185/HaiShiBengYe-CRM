@@ -72,7 +72,7 @@
             </div>
         </form>
     </div>
-      
+
     <div class="row">
         <div class="col-sm-offset-5 col-sm-10">
             <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
@@ -99,7 +99,7 @@
 		        	align: 'center',
 		        	title: "序号",
                     formatter: function (value, row, index) {
-                    	var columnIndex = $.common.sprintf("<input type='hidden' name='index' value='%s'>", $.table.serialNumber(index));
+                    	var columnIndex = $.common.sprintf("<input type='hidden' name='index' value='%s' required>", $.table.serialNumber(index));
                     	return columnIndex + $.table.serialNumber(index);
                     }
                 },
@@ -151,19 +151,19 @@
 		    };
 		    $.table.init(options);
 		});
-	    
+
 	    /* 主子表-提交 */
         function submitHandler(index, layero){
         	var data = $("#form-add").serializeArray();
 			$.operate.saveModal("/demo/operate/customer/add", data);
         }
-	    
+
         $("input[name='birthday']").datetimepicker({
             format: "yyyy-mm-dd",
             minView: "month",
             autoclose: true
         });
-        
+
         function addColumn() {
         	var row = {
             	name: "",
@@ -174,7 +174,7 @@
             }
         	sub.addColumn(row);
         }
-        
+
         $("#bootstrap-table").on("post-body.bs.table", function (e, args) {
         	$("input[name$='date']").datetimepicker({
 	            format: "yyyy-mm-dd",

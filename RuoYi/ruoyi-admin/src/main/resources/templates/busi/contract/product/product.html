@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('合同产品组成列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse" style="display: none">
+                <form id="formId">
+                    <input name="contractId" type="hidden" th:value="${contractId}"  >
+                    <div class="select-list">
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('contract:product:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('contract:product:remove')}]];
+        var prefix = ctx + "contract/product";
+        $(function() {
+            var options = {
+                pagination: false,
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "合同产品组成",
+                columns: [
+                {
+                    field: 'productName',
+                    title: '产品组成'
+                },
+                {
+                    field: 'productPrice',
+                    title: '产品价格'
+                },
+                {
+                    field: 'productNumber',
+                    title: '产品数量'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

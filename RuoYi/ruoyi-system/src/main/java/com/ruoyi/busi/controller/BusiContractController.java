@@ -3,6 +3,7 @@ package com.ruoyi.busi.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ruoyi.busi.contract.service.IBusiContractProductService;
 import com.ruoyi.busi.domain.BusiQuotation;
 import com.ruoyi.busi.mapper.BusiContractMapper;
 import com.ruoyi.busi.plan.domain.BusiContractPlan;
@@ -46,9 +47,11 @@ public class BusiContractController extends BaseController
     @Autowired
     private IBusiContractPlanService busiContractPlanService;
 
-
     @Autowired
     private BusiContractMapper busiContractMapper;
+
+    @Autowired
+    private IBusiContractProductService busiContractProductService;
 
 
 
@@ -81,7 +84,7 @@ public class BusiContractController extends BaseController
         List<BusiContract> list = busiContractService.selectBusiContractList(busiContract);
         list = list.parallelStream().filter(b -> b.getContractId() != null).peek(b -> {
             BusiQuotation busiQuotation = b.getBusiQuotation();
-            busiQuotation.setSumPrice(StringUtils.doubleFormat(busiQuotation.getOutsourcingPrice() + busiQuotation.getPartsPrice() + busiQuotation.getQuotationPrice()));
+            busiQuotation.setSumPrice(StringUtils.doubleFormat(busiQuotation.getOutsourcingPrice()  + busiQuotation.getPartsPrice() + busiQuotation.getQuotationPrice()));
             b.setBusiQuotation(busiQuotation);
         }).collect(Collectors.toList());
         return getDataTable(list);
@@ -148,6 +151,13 @@ public class BusiContractController extends BaseController
         List<BusiContractPlan> busiContractPlans =  busiContractPlanService.selectBusiContractPlanList(null);
         busiContractPlans.forEach(p -> p.setContractId(busiContract.getContractId()));
         busiContractPlanService.insertBatch(busiContractPlans);
+        //插入产品组成
+        if (busiContract.getBusiContractProducts() != null){
+            busiContract.getBusiContractProducts().forEach( busiContractProduct -> {
+                busiContractProduct.setContractId(busiContract.getContractId());
+                busiContractProductService.insertBusiContractProduct(busiContractProduct);
+            });
+        }
         return toAjax(1);
     }
 

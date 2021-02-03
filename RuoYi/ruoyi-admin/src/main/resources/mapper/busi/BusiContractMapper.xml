@@ -21,6 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="delayInstructions"    column="delay_instructions"    />
         <result property="updateTime"    column="update_time"    />
         <result property="contractType"    column="contract_type"    />
+        <result property="repaymentAmount"    column="repaymentAmount"    />
 
         <association property="busiQuotation" javaType="com.ruoyi.busi.domain.BusiQuotation">
             <result property="quotationId"    column="quotation_id"    />
@@ -45,7 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBusiContractVo">
-        select contract_id, qutation_id, contract_price, product_composition, component_price, payment_method, delivery_time, signing_date, remake, progress_statement, principal, delay_warning, delay_instructions, update_time,contract_no from busi_contract
+        select * from busi_contract
     </sql>
 
     <select id="selectBusiContractList" parameterType="BusiContract" resultMap="BusiContractResult">
@@ -55,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         project_address,
         quotation_no,
         customer_id,
+        repaymentAmount,
         (SELECT bc.customer_name FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_name,
         (SELECT bc.customer_industry FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_industry,
         (SELECT bc.contact_address FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_address,
@@ -130,6 +132,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
             <if test="contractNo != null">contract_no,</if>
             <if test="contractType != null">contract_type,</if>
+            <if test="repaymentAmount != null">repaymentAmount,</if>
+
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="qutationId != null">#{qutationId},</if>
@@ -147,6 +151,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
             <if test="contractNo != null">#{contractNo},</if>
             <if test="contractType != null">#{contractType},</if>
+            <if test="repaymentAmount != null">#{repaymentAmount},</if>
         </trim>
     </insert>
 
@@ -170,6 +175,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
             <if test="contractNo != null">contract_no,</if>
             <if test="contractType != null">contract_type,</if>
+            <if test="repaymentAmount != null">repaymentAmount,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="contractId != null">#{contractId},</if>
@@ -188,6 +194,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
             <if test="contractNo != null">#{contractNo},</if>
             <if test="contractType != null">#{contractType},</if>
+            <if test="repaymentAmount != null">#{repaymentAmount},</if>
         </trim>
     </insert>
 
@@ -209,6 +216,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="contractNo != null">contract_no = #{contractNo},</if>
             <if test="contractType != null">contract_type = #{contractType},</if>
+            <if test="repaymentAmount != null">repaymentAmount = #{repaymentAmount},</if>
         </trim>
         where contract_id = #{contractId}
     </update>
