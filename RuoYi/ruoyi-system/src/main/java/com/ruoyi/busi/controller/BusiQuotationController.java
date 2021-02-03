@@ -118,7 +118,7 @@ public class BusiQuotationController extends BaseController
             }
             endCountStr =    qz + endCountStr;
         }
-        String quotationNo = DateUtils.dateTimeNow("YYYY_MM")+"_"+customer.getContactAddress()+"_"+endCountStr+"_A";
+        String quotationNo = DateUtils.dateTimeNow("YYYY_MM")+"_"+customer.getContactAddress()+"_"+endCountStr;
         busiQuotation.setQuotationNo(quotationNo);
         busiQuotation.setCreateTime(new Date());
         busiQuotationService.insertBusiQuotation(busiQuotation);

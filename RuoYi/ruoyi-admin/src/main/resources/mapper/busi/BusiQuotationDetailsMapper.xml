@@ -113,15 +113,66 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         details_price
         FROM
         busi_quotation_details bqd
-
         <where>
             <if test="quotationId != null  and quotationId != ''"> and bqd.quotation_id = #{quotationId}</if>
         </where>
     </select>
 
     <select id="selectBusiQuotationDetailsById" parameterType="Long" resultMap="BusiQuotationDetailsResult">
-        <include refid="selectBusiQuotationDetailsVo"/>
-        where details_id = #{detailsId}
+        SELECT details_id, quotation_id,
+        equipment_num,
+        product_line_id,
+        (SELECT product_line_name FROM busi_product_line bpl WHERE bpl.product_line_id = bqd.product_line_id) AS product_line_name ,
+        model_id,
+        (SELECT model_name FROM busi_product_model bpm WHERE bpm.model_id = bqd.model_id) AS model_name ,
+        material_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.material_supplier_id ) AS  material_supplier_name,
+        motor_id,
+        material_id,
+        (SELECT bt.texture_name FROM busi_material_production bmp
+        LEFT JOIN  busi_texture bt ON bmp.`texture_id` = bt.texture_id
+        WHERE bmp.material_id = bqd.material_id) AS material_name ,
+        number,
+        rinse_solution_id,
+        other_expenses,
+        other_expenses_description,
+        rated_flow,
+        lift,
+        operating_temperature,
+        fluid_density,
+        inlet_pressure,
+        npsh,
+        motor_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.motor_supplier_id ) AS  motor_supplier_name,
+        motor_id,
+        (SELECT motor_model FROM busi_motor bu WHERE bu.motor_id = bqd.motor_id) AS motor_name,
+        other_motor,
+        other_motor_price,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.machine_supplier_id ) AS  machine_supplier_name,
+        machine_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.machine_supplier_id ) AS  machine_supplier_name,
+        machine_id,
+        (SELECT machine_model FROM busi_machine bm WHERE bm.machine_id = bqd.machine_id) AS machine_model,
+        other_machine,
+        other_machine_price,
+        coupling_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.coupling_supplier_id ) AS  coupling_supplier_name,
+        coupling_id,
+        (SELECT coupling_model FROM busi_coupling bc WHERE bc.coupling_id = bqd.coupling_id) AS coupling_name,
+        other_coupling,
+        other_coupling_price,
+        bearing_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.bearing_supplier_id ) AS  bearing_supplier_name,
+        bearing_id,
+        (SELECT bearing_model FROM busi_bearing bb WHERE bb.bearing_id = bqd.bearing_id) AS bearing_name,
+        other_bearing,
+        other_bearing_price,
+        quotation_type,
+        coefficient,
+        details_price
+        FROM
+        busi_quotation_details bqd
+        where bqd.details_id = #{detailsId}
     </select>
 
 

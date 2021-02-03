@@ -369,7 +369,78 @@ public class BusiQuotationDetailsController extends BaseController
     @ResponseBody
     public AjaxResult editSave(BusiQuotationDetails busiQuotationDetails)
     {
-        return toAjax(busiQuotationDetailsService.updateBusiQuotationDetails(busiQuotationDetails));
+        //获取数量
+        Double  motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice=0d ,otherPrice=0d;
+
+        List<PriceSum> priceSums = quotationDetailsMapper.selectPriceDetil(busiQuotationDetails);
+        // 如果过流部件材质存在的话
+        BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionById(busiQuotationDetails.getMaterialId());
+        //返回材料成本费用
+        Double materialCosts = format(priceSums.parallelStream().mapToDouble(p -> {
+            //如果为过流部件的话，需要将 生产参数为过流部件的材料单价替换为过流部件的单价 和质量比
+            if (p.getIsCurrent() == 1 && busiMaterialProduction != null){
+                return  p.getWeight() * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
+            }else {
+                return  p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
+            }
+        }).sum());
+        //返回人工成本费用
+        Double laborCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum());
+        //返回制造成本费用
+        Double makeCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.MAKE_COEFFICIENT).sum());
+        //低值物料成本
+        Double  lowMaterialCost = busiProductModelService.selectBusiProductModelById(busiQuotationDetails.getModelId()).getLowMaterialCost();
+        if (lowMaterialCost == null){
+            lowMaterialCost = 0d;
+        }
+        materialCosts = materialCosts + lowMaterialCost;
+
+        //电机价格
+        if (busiQuotationDetails.getMotorId() != null){
+            motorPrice = quotationDetailsMapper.getMotorPrice(busiQuotationDetails.getMotorId());
+        }
+        if (busiQuotationDetails.getOtherMotorPrice() != null){
+            motorPrice =  format(motorPrice + busiQuotationDetails.getOtherMotorPrice());
+        }
+        //机封成本
+        if (busiQuotationDetails.getMachineId() != null){
+            machineProce = quotationDetailsMapper.getMachinePrice(busiQuotationDetails.getMachineId());
+        }
+        if (busiQuotationDetails.getOtherMachinePrice() != null){
+            machineProce = format(machineProce + busiQuotationDetails.getOtherMachinePrice());
+        }
+        //联轴器成本
+        if (busiQuotationDetails.getCouplingId() != null){
+            couplingPrice = quotationDetailsMapper.getCouplingPrice(busiQuotationDetails.getCouplingId());
+        }
+        if (busiQuotationDetails.getOtherCouplingPrice() != null){
+            couplingPrice = format(couplingPrice + busiQuotationDetails.getOtherCouplingPrice());
+        }
+        //轴承成本
+        if (busiQuotationDetails.getBearingId() != null){
+            bearingPrice =  quotationDetailsMapper.getBearingPrice(busiQuotationDetails.getBearingId());
+        }
+        if (busiQuotationDetails.getOtherBearingPrice() != null){
+            bearingPrice = format(bearingPrice + busiQuotationDetails.getOtherBearingPrice());
+        }
+        if(busiQuotationDetails.getOtherExpenses() != null){
+            otherPrice = busiQuotationDetails.getOtherExpenses();
+        }
+
+        BusiProductLine busiProductLine = busiProductLineService.selectBusiProductLineById(busiQuotationDetails.getProductLineId());
+        //泵头价格=（材料成本+人工成本+制造费用）/（1-毛利率）
+        Double bengTouPrice = (materialCosts + laborCost + makeCost) / (1 - busiProductLine.getGrossProfitRate()) ;
+        //外购加个 （电机采购成本+机封采购成本+轴承采购成本+联轴器采购成本+特殊配置费用）×（1+外购件配套管理费比例）
+        Double waiGouPrice = ( motorPrice + machineProce + couplingPrice + bearingPrice + otherPrice) * (1+ Constant.PROPORTION_MANAGEMENT);
+        // 整机价格（泵头价格+外购件价格）×（1+包装运输费比例）×（1+税金及附加比例）
+        Double allPrice =  (bengTouPrice + waiGouPrice) * (1+PACKING_AND_TRANSPORTATION_COSTS) * (1+ TAX_AND_ADDITIONAL_RATIO);
+        busiQuotationDetails.setDetailsPrice(format(allPrice));
+        busiQuotationDetails.setQuotationType(0L);
+        busiQuotationDetailsService.updateBusiQuotationDetails(busiQuotationDetails);
+        Double sumPrice =  quotationDetailsMapper.getSumPrice(busiQuotationDetails.getQuotationId());
+        reset(busiQuotationDetails.getQuotationId());
+
+        return success(format(sumPrice).toString());
     }
 
     /**
