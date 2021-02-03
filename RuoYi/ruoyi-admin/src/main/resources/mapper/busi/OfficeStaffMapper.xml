@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.busi.mapper.OfficeStaffMapper">
-    
+
     <resultMap type="OfficeStaff" id="OfficeStaffResult">
         <result property="officeStaffId"    column="office_staff_id"    />
         <result property="officeAddress"    column="office_address"    />
@@ -15,26 +15,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="residence"    column="residence"    />
         <result property="information"    column="information"    />
         <result property="mail"    column="mail"    />
+        <result property="education"    column="education"    />
     </resultMap>
 
     <sql id="selectOfficeStaffVo">
-        select office_staff_id, office_address, office_staff_name, position, birth, school, major, residence, information, mail from office_staff
+        select office_staff_id, office_address, office_staff_name, position, birth, school, major, residence, information, education,mail from office_staff
     </sql>
 
     <select id="selectOfficeStaffList" parameterType="OfficeStaff" resultMap="OfficeStaffResult">
         <include refid="selectOfficeStaffVo"/>
-        <where>  
+        <where>
             <if test="officeAddress != null  and officeAddress != ''"> and office_address = #{officeAddress}</if>
             <if test="officeStaffName != null  and officeStaffName != ''"> and office_staff_name like concat('%', #{officeStaffName}, '%')</if>
             <if test="school != null  and school != ''"> and school = #{school}</if>
         </where>
     </select>
-    
+
     <select id="selectOfficeStaffById" parameterType="Long" resultMap="OfficeStaffResult">
         <include refid="selectOfficeStaffVo"/>
         where office_staff_id = #{officeStaffId}
     </select>
-        
+
     <insert id="insertOfficeStaff" parameterType="OfficeStaff" useGeneratedKeys="true" keyProperty="officeStaffId">
         insert into office_staff
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -47,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="residence != null">residence,</if>
             <if test="information != null">information,</if>
             <if test="mail != null">mail,</if>
+            <if test="education != null">education,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="officeAddress != null and officeAddress != ''">#{officeAddress},</if>
@@ -58,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="residence != null">#{residence},</if>
             <if test="information != null">#{information},</if>
             <if test="mail != null">#{mail},</if>
+            <if test="education != null">#{education},</if>
          </trim>
     </insert>
 
@@ -73,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="residence != null">residence = #{residence},</if>
             <if test="information != null">information = #{information},</if>
             <if test="mail != null">mail = #{mail},</if>
+            <if test="education != null">education = #{education},</if>
         </trim>
         where office_staff_id = #{officeStaffId}
     </update>
@@ -82,7 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteOfficeStaffByIds" parameterType="String">
-        delete from office_staff where office_staff_id in 
+        delete from office_staff where office_staff_id in
         <foreach item="officeStaffId" collection="array" open="(" separator="," close=")">
             #{officeStaffId}
         </foreach>

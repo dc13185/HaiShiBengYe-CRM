@@ -47,19 +47,10 @@ public class Constant {
 
     @PostConstruct
     public void init(){
-        restart();
+        busiPriceService.restart();
     }
 
-    private void restart(){
-        List<BusiPrice> busiPrices = busiPriceService.selectBusiPriceList(new BusiPrice());
-        LABOR_COSTCOE_FFICIENT = busiPrices.get(0).getPriceDate();
-        MAKE_COEFFICIENT = busiPrices.get(1).getPriceDate();
-        PROPORTION_MANAGEMENT = busiPrices.get(2).getPriceDate();
-        TAX_AND_ADDITIONAL_RATIO = busiPrices.get(3).getPriceDate();
-        PACKING_AND_TRANSPORTATION_COSTS = busiPrices.get(4).getPriceDate();
-        ACCESSORIES_GROSS_MARGIN = busiPrices.get(5).getPriceDate();
-        PROPORTION_OF_MANAGEMENT_FEE_PURCHASED = busiPrices.get(6).getPriceDate();
-    }
+
 
 
 }

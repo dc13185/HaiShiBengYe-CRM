@@ -155,8 +155,6 @@ public class BusiOutsourcingDetailsController extends BaseController
     @ResponseBody
     public AjaxResult editSave(BusiOutsourcingDetails busiOutsourcingDetails)
     {
-
-
         return toAjax(busiOutsourcingDetailsService.updateBusiOutsourcingDetails(busiOutsourcingDetails));
     }
 

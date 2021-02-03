@@ -5,15 +5,15 @@ import com.ruoyi.busi.domain.BusiPrice;
 
 /**
  * 变价变量Service接口
- * 
+ *
  * @author ruoyi
  * @date 2021-01-20
  */
-public interface IBusiPriceService 
+public interface IBusiPriceService
 {
     /**
      * 查询变价变量
-     * 
+     *
      * @param priceId 变价变量ID
      * @return 变价变量
      */
@@ -21,7 +21,7 @@ public interface IBusiPriceService
 
     /**
      * 查询变价变量列表
-     * 
+     *
      * @param busiPrice 变价变量
      * @return 变价变量集合
      */
@@ -29,7 +29,7 @@ public interface IBusiPriceService
 
     /**
      * 新增变价变量
-     * 
+     *
      * @param busiPrice 变价变量
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface IBusiPriceService
 
     /**
      * 修改变价变量
-     * 
+     *
      * @param busiPrice 变价变量
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface IBusiPriceService
 
     /**
      * 批量删除变价变量
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -53,9 +53,11 @@ public interface IBusiPriceService
 
     /**
      * 删除变价变量信息
-     * 
+     *
      * @param priceId 变价变量ID
      * @return 结果
      */
     public int deleteBusiPriceById(Long priceId);
+
+    public void restart();
 }

@@ -18,6 +18,9 @@ public class BusiPriceDetails extends BaseEntity
     /**  */
     private Long priceDetailsId;
 
+    @Excel(name = "实际泵头合计成本")
+    private Double actualBengtouCb;
+
     /** 泵头材料成本 */
     @Excel(name = "泵头材料成本")
     private Double bengtouclCb;
@@ -100,6 +103,10 @@ public class BusiPriceDetails extends BaseEntity
     /** 实际毛利 */
     @Excel(name = "实际毛利")
     private Double actualProfit;
+
+
+    @Excel(name = "实际外购合计")
+    private Double actualWghj;
 
     public void setBengtouclCb(Double bengtouclCb)
     {
@@ -297,6 +304,22 @@ public class BusiPriceDetails extends BaseEntity
 
     public void setQuotationId(Long quotationId) {
         this.quotationId = quotationId;
+    }
+
+    public Double getActualBengtouCb() {
+        return actualBengtouCb;
+    }
+
+    public void setActualBengtouCb(Double actualBengtouCb) {
+        this.actualBengtouCb = actualBengtouCb;
+    }
+
+    public Double getActualWghj() {
+        return actualWghj;
+    }
+
+    public void setActualWghj(Double actualWghj) {
+        this.actualWghj = actualWghj;
     }
 
     @Override

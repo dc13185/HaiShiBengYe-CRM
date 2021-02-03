@@ -8,7 +8,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 办事处及人员对象 office_staff
- * 
+ *
  * @author ruoyi
  * @date 2021-01-06
  */
@@ -56,95 +56,107 @@ public class OfficeStaff extends BaseEntity
     @Excel(name = "邮箱")
     private String mail;
 
-    public void setOfficeStaffId(Long officeStaffId) 
+    @Excel(name = "学历")
+    private Long education;
+
+    public void setOfficeStaffId(Long officeStaffId)
     {
         this.officeStaffId = officeStaffId;
     }
 
-    public Long getOfficeStaffId() 
+    public Long getOfficeStaffId()
     {
         return officeStaffId;
     }
-    public void setOfficeAddress(String officeAddress) 
+    public void setOfficeAddress(String officeAddress)
     {
         this.officeAddress = officeAddress;
     }
 
-    public String getOfficeAddress() 
+    public String getOfficeAddress()
     {
         return officeAddress;
     }
-    public void setOfficeStaffName(String officeStaffName) 
+    public void setOfficeStaffName(String officeStaffName)
     {
         this.officeStaffName = officeStaffName;
     }
 
-    public String getOfficeStaffName() 
+    public String getOfficeStaffName()
     {
         return officeStaffName;
     }
-    public void setPosition(String position) 
+    public void setPosition(String position)
     {
         this.position = position;
     }
 
-    public String getPosition() 
+    public String getPosition()
     {
         return position;
     }
-    public void setBirth(Date birth) 
+    public void setBirth(Date birth)
     {
         this.birth = birth;
     }
 
-    public Date getBirth() 
+    public Date getBirth()
     {
         return birth;
     }
-    public void setSchool(String school) 
+    public void setSchool(String school)
     {
         this.school = school;
     }
 
-    public String getSchool() 
+    public String getSchool()
     {
         return school;
     }
-    public void setMajor(String major) 
+    public void setMajor(String major)
     {
         this.major = major;
     }
 
-    public String getMajor() 
+    public String getMajor()
     {
         return major;
     }
-    public void setResidence(String residence) 
+    public void setResidence(String residence)
     {
         this.residence = residence;
     }
 
-    public String getResidence() 
+    public String getResidence()
     {
         return residence;
     }
-    public void setInformation(String information) 
+    public void setInformation(String information)
     {
         this.information = information;
     }
 
-    public String getInformation() 
+    public String getInformation()
     {
         return information;
     }
-    public void setMail(String mail) 
+    public void setMail(String mail)
     {
         this.mail = mail;
     }
 
-    public String getMail() 
+    public String getMail()
     {
         return mail;
+    }
+
+
+    public Long getEducation() {
+        return education;
+    }
+
+    public void setEducation(Long education) {
+        this.education = education;
     }
 
     @Override

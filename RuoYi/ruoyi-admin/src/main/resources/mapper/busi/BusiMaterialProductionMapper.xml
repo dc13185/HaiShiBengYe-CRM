@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBusiMaterialProductionVo">
-         SELECT bmp.material_id, bmp.texture_id,bmp.material_level, bmp.price,bmp.supplier_id ,bmp.texture_id ,bt.texture_name AS materialName ,bt.texture_type AS form
+         SELECT bmp.material_id, bmp.texture_id,bmp.material_level, bmp.price,bmp.supplier_id ,bmp.texture_id ,bt.texture_name AS materialName ,bt.texture_type   AS form,   bt.`mass_ratio` AS massRatio
             FROM busi_material_production bmp LEFT JOIN busi_texture bt ON bmp.texture_id = bt.texture_id
     </sql>
 

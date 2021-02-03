@@ -111,7 +111,11 @@ public class BusiPriceController extends BaseController
     @ResponseBody
     public AjaxResult editSave(BusiPrice busiPrice)
     {
-        return toAjax(busiPriceService.updateBusiPrice(busiPrice));
+        int i = busiPriceService.updateBusiPrice(busiPrice);
+        if (i > 0){
+            busiPriceService.restart();
+        }
+        return toAjax(i);
     }
 
     /**

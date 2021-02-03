@@ -40,6 +40,8 @@ public class BusiMaterialProduction extends BaseEntity
 
     private String supplierId;
 
+    private Double massRatio;
+
     public void setMaterialId(Long materialId)
     {
         this.materialId = materialId;
@@ -99,6 +101,14 @@ public class BusiMaterialProduction extends BaseEntity
 
     public void setTextureId(Long textureId) {
         this.textureId = textureId;
+    }
+
+    public Double getMassRatio() {
+        return massRatio;
+    }
+
+    public void setMassRatio(Double massRatio) {
+        this.massRatio = massRatio;
     }
 
     @Override

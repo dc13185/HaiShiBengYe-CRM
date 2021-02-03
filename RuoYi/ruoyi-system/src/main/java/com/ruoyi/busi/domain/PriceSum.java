@@ -25,6 +25,10 @@ public class PriceSum {
     private Double lowMaterialCost;
 
 
+    /** 是否为过流材质 */
+    private Long isCurrent;
+
+
     public Float getWeight() {
         return weight;
     }
@@ -63,5 +67,14 @@ public class PriceSum {
 
     public void setLowMaterialCost(Double lowMaterialCost) {
         this.lowMaterialCost = lowMaterialCost;
+    }
+
+
+    public Long getIsCurrent() {
+        return isCurrent;
+    }
+
+    public void setIsCurrent(Long isCurrent) {
+        this.isCurrent = isCurrent;
     }
 }

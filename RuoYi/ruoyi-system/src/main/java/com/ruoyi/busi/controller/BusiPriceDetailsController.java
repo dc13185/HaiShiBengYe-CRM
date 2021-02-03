@@ -155,11 +155,20 @@ public class BusiPriceDetailsController extends BaseController
         BusiOutsourcingCost busiOutsourcingCost = busiOutsourcingCostMapper.selectBusiOutsourcingCostByQuotationNo(quotationNo);
         //配件报价
         BusiPartsCost busiPartsCost = busiPartsCostMapper.selectBusiPartsCostByQuotationNo(quotationNo);
-
         HashMap hashMap = new HashMap();
         hashMap.put("busiPriceDetails",busiPriceDetails);
         hashMap.put("outsourcingMap",busiOutsourcingCost);
         hashMap.put("busiPartsDetails",busiPartsCost);
         return  AjaxResult.success(hashMap);
     }
+
+
+
+    @GetMapping("/toAnalysis")
+    public String toAnalysis()
+    {
+        return prefix + "/details_analysis";
+    }
+
+
 }

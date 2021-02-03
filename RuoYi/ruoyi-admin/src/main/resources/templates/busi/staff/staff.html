@@ -54,6 +54,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('busi:staff:edit')}]];
         var removeFlag = [[${@permission.hasPermi('busi:staff:remove')}]];
+        var educationDatas = [[${@dict.getType('education_status')}]];
         var prefix = ctx + "busi/staff";
 
         $(function() {
@@ -109,6 +110,13 @@
                 {
                     field: 'mail',
                     title: '邮箱'
+                },
+                {
+                    field: 'education',
+                    title: '学历',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(educationDatas, value);
+                    }
                 },
                 {
                     title: '操作',

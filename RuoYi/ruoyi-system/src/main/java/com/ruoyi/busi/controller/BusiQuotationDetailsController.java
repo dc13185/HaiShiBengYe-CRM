@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.ruoyi.busi.Constant;
 import com.ruoyi.busi.domain.*;
 import com.ruoyi.busi.mapper.BusiQuotationDetailsMapper;
 import com.ruoyi.busi.service.*;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,6 +50,8 @@ public class BusiQuotationDetailsController extends BaseController
     private BusiQuotationDetailsMapper quotationDetailsMapper;
     @Autowired
     private IBusiProductModelService busiProductModelService;
+    @Autowired
+    private IBusiMaterialProductionService busiMaterialProductionService;
     @Autowired
     private IBusiProductLineService busiProductLineService;
     @Autowired
@@ -278,8 +280,17 @@ public class BusiQuotationDetailsController extends BaseController
         Double  motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice=0d ,otherPrice=0d;
 
         List<PriceSum> priceSums = quotationDetailsMapper.selectPriceDetil(busiQuotationDetails);
+        // 如果过流部件材质存在的话
+        BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionById(busiQuotationDetails.getMaterialId());
         //返回材料成本费用
-        Double materialCosts = format(priceSums.parallelStream().mapToDouble(p -> p.getWeight() * p.getMaterialPrice()* p.getMassRatio()).sum());
+        Double materialCosts = format(priceSums.parallelStream().mapToDouble(p -> {
+            //如果为过流部件的话，需要将 生产参数为过流部件的材料单价替换为过流部件的单价 和质量比
+            if (p.getIsCurrent() == 1 && busiMaterialProduction != null){
+                return  p.getWeight() * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
+            }else {
+                return  p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
+            }
+        }).sum());
         //返回人工成本费用
         Double laborCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum());
         //返回制造成本费用
@@ -289,7 +300,7 @@ public class BusiQuotationDetailsController extends BaseController
         if (lowMaterialCost == null){
             lowMaterialCost = 0d;
         }
-        materialCosts = lowMaterialCost + lowMaterialCost;
+        materialCosts = materialCosts + lowMaterialCost;
 
         //电机价格
         if (busiQuotationDetails.getMotorId() != null){
@@ -405,12 +416,21 @@ public class BusiQuotationDetailsController extends BaseController
             Double   motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice=0d ,otherPrice=0d ,materialCosts =0d,laborCost=0d,makeCost=0d ,lowMaterialCost=0d;
             for (BusiQuotationDetails quotationDetails : busiQuotationDetailList) {
                     Long number = quotationDetails.getNumber();
-
                     List<PriceSum> priceSums = quotationDetailsMapper.selectPriceDetil(quotationDetails);
-                    //返回材料成本费用
-                    materialCosts += format(priceSums.parallelStream().mapToDouble(p -> p.getWeight() * p.getMaterialPrice()* p.getMassRatio()).sum()) * number;
+                     BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionById(quotationDetails.getMaterialId());
+                     //返回材料成本费用
+                     materialCosts += format(priceSums.parallelStream().mapToDouble(p -> {
+                        //如果为过流部件的话，需要将 生产参数为过流部件的材料单价替换为过流部件的单价 和质量比
+                        if (p.getIsCurrent() == 1 && busiMaterialProduction != null){
+                            return  p.getWeight()  * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
+                        }else {
+                            return  p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
+                        }
+                    }).sum()) * number;
+                   /* //返回材料成本费用
+                    materialCosts += format(priceSums.parallelStream().mapToDouble(p -> p.getWeight() * p.getMaterialPrice()* p.getMassRatio()).sum()) * number;*/
                     //返回人工成本费用
-                    laborCost += format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum()) * number;
+                    laborCost += format(priceSums.stream().mapToDouble(p -> p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum()) * number;
                     //返回制造成本费用
                     makeCost += format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.MAKE_COEFFICIENT).sum()) * number;
                     //低值物料成本

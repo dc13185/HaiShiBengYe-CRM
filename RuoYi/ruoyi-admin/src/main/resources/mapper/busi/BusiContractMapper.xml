@@ -109,7 +109,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectCount" resultType="java.lang.Integer">
-        select count(1) from busi_contract
+       SELECT bc.contract_id FROM busi_contract bc ORDER BY bc.contract_id DESC LIMIT 1
     </select>
 
     <insert id="insertBusiContract" parameterType="BusiContract" useGeneratedKeys="true" keyProperty="contractId">

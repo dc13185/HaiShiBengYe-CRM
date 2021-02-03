@@ -81,7 +81,7 @@ public class BusiContractController extends BaseController
         List<BusiContract> list = busiContractService.selectBusiContractList(busiContract);
         list = list.parallelStream().filter(b -> b.getContractId() != null).peek(b -> {
             BusiQuotation busiQuotation = b.getBusiQuotation();
-            busiQuotation.setSumPrice(busiQuotation.getOutsourcingPrice() + busiQuotation.getPartsPrice() + busiQuotation.getQuotationPrice());
+            busiQuotation.setSumPrice(StringUtils.doubleFormat(busiQuotation.getOutsourcingPrice() + busiQuotation.getPartsPrice() + busiQuotation.getQuotationPrice()));
             b.setBusiQuotation(busiQuotation);
         }).collect(Collectors.toList());
         return getDataTable(list);

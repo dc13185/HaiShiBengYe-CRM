@@ -41,14 +41,15 @@ public class BusiOutsourcingCost extends BaseEntity
     private Double actualMotorPrice;
 
     private Double quotationAmount;
-
-
     /** 毛利 */
     @Excel(name = "毛利")
     private Double profit;
     /** 实际毛利 */
     @Excel(name = "实际毛利")
     private Double actualProfit;
+
+    @Excel(name = "实际成本总计")
+    private Double actualAllPrice;
 
     public void setCostId(Long costId)
     {
@@ -123,6 +124,15 @@ public class BusiOutsourcingCost extends BaseEntity
 
     public void setActualProfit(Double actualProfit) {
         this.actualProfit = actualProfit;
+    }
+
+
+    public Double getActualAllPrice() {
+        return actualAllPrice;
+    }
+
+    public void setActualAllPrice(Double actualAllPrice) {
+        this.actualAllPrice = actualAllPrice;
     }
 
     @Override

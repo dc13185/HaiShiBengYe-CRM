@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectEndCount" resultType="java.lang.Integer">
-        select count(1) from  busi_quotation order by quotation_id desc limit 1
+        select quotation_id from  busi_quotation order by quotation_id desc limit 1
     </select>
 
 
