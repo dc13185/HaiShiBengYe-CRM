@@ -155,6 +155,7 @@ public class BusiOutsourcingDetailsController extends BaseController
     @ResponseBody
     public AjaxResult editSave(BusiOutsourcingDetails busiOutsourcingDetails)
     {
+
         return toAjax(busiOutsourcingDetailsService.updateBusiOutsourcingDetails(busiOutsourcingDetails));
     }
 
@@ -200,8 +201,10 @@ public class BusiOutsourcingDetailsController extends BaseController
             busiOutsourcingCost.setProductPrice(map.get("outsourcingPrice"));
             busiOutsourcingCost.setQuotationAmount(map.get("quotationAmount"));
             //报价金额 - (电机成本 + 泵头成本)
-            Double profit = busiOutsourcingCost.getQuotationAmount() - (busiOutsourcingCost.getProductPrice() + busiOutsourcingCost.getMotorPrice());
+            Double sumPrice = (busiOutsourcingCost.getProductPrice() + busiOutsourcingCost.getMotorPrice());
+            Double profit = busiOutsourcingCost.getQuotationAmount() - sumPrice;
             busiOutsourcingCost.setProfit(profit);
+            busiOutsourcingCost.setSumPrice(sumPrice);
 
             if (busiOutsourcingCost.getCostId() != null){
                 busiOutsourcingCostService.updateBusiOutsourcingCost(busiOutsourcingCost);

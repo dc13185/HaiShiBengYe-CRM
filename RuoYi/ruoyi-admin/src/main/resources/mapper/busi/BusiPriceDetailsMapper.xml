@@ -106,6 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="profit != null">profit,</if>
             <if test="actualProfit != null">actual_profit,</if>
             <if test="actualBengtouCb != null">actualBengtouCb,</if>
+            <if test="sumPrice != null">sumPrice</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bengtouclCb != null">#{bengtouclCb},</if>
@@ -130,6 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="profit != null">#{profit},</if>
             <if test="actualProfit != null">#{actualProfit},</if>
             <if test="actualBengtouCb != null">#{actualBengtouCb},</if>
+            <if test="sumPrice != null">#{sumPrice}</if>
         </trim>
     </insert>
 
@@ -159,6 +161,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actualProfit != null">actual_profit = #{actualProfit},</if>
             <if test="actualBengtouCb != null">actualBengtouCb = #{actualBengtouCb},</if>
             <if test="actualWghj != null">actualWghj = #{actualWghj},</if>
+            <if test="sumPrice != null">sumPrice = #{sumPrice},</if>
+            <if test="actualAllSumPrice != null">actualAllSumPrice = #{actualAllSumPrice},</if>
         </trim>
         where quotation_id = #{quotationId}
     </update>

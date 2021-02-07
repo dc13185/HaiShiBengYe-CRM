@@ -51,6 +51,16 @@ public class BusiOutsourcingCost extends BaseEntity
     @Excel(name = "实际成本总计")
     private Double actualAllPrice;
 
+    private Double sumPrice;
+
+    public Double getSumPrice() {
+        return sumPrice;
+    }
+
+    public void setSumPrice(Double sumPrice) {
+        this.sumPrice = sumPrice;
+    }
+
     public void setCostId(Long costId)
     {
         this.costId = costId;

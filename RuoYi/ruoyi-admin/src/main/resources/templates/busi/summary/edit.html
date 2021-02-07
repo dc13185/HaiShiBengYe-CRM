@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改历史合同汇总')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-summary-edit" th:object="${busiContractSummary}">
+            <input name="summaryId" th:field="*{summaryId}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户姓名：</label>
+                <div class="col-sm-8">
+                    <input name="customerName" th:field="*{customerName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户性质：</label>
+                <div class="col-sm-8">
+                    <input name="customerNature" th:field="*{customerNature}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">所处行业：</label>
+                <div class="col-sm-8">
+                    <input name="customerIndustry" th:field="*{customerIndustry}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">产品类型：</label>
+                <div class="col-sm-8">
+                    <select name="quotationType" class="form-control m-b" th:with="type=${@dict.getType('project_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{quotationType}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">报价金额：</label>
+                <div class="col-sm-8">
+                    <input name="sumQuotationPrice" th:field="*{sumQuotationPrice}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">合同金额：</label>
+                <div class="col-sm-8">
+                    <input name="contractPrice" th:field="*{contractPrice}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "busi/summary";
+        $("#form-summary-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-summary-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

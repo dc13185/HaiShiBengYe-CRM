@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('历史合同汇总列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>客户姓名：</label>
+                                <input type="text" name="customerName"/>
+                            </li>
+                            <li>
+                                <label>客户性质：</label>
+                                <input type="text" name="customerNature"/>
+                            </li>
+                            <li>
+                                <label>所处行业：</label>
+                                <input type="text" name="customerIndustry"/>
+                            </li>
+                            <li>
+                                <label>产品类型：</label>
+                                <select name="quotationType" th:with="type=${@dict.getType('project_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+   <!--             <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="busi:summary:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="busi:summary:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="busi:summary:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>-->
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:summary:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('busi:summary:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('busi:summary:remove')}]];
+        var quotationTypeDatas = [[${@dict.getType('project_type')}]];
+        var prefix = ctx + "busi/summary";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "历史合同汇总",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'summaryId',
+                    title: '',
+                    visible: false
+                },
+                {
+                    field: 'customerName',
+                    title: '客户姓名'
+                },
+                {
+                    field: 'customerNature',
+                    title: '客户性质'
+                },
+                {
+                    field: 'customerIndustry',
+                    title: '所处行业'
+                },
+                {
+                    field: 'officeAddress',
+                    title: '办事处'
+                },
+                {
+                    field: 'officeStaffName',
+                    title: '业务员'
+                },
+                {
+                    field: 'quotationType',
+                    title: '产品类型',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(quotationTypeDatas, value);
+                    }
+                },
+                {
+                    field: 'sumQuotationPrice',
+                    title: '报价金额'
+                },
+                {
+                    field: 'contractPrice',
+                    title: '合同金额'
+                },
+
+                {
+                    field: 'allSumCost',
+                    title: '报价成本总计'
+                },
+                {
+                    field: 'allSumMargin',
+                    title: '报价毛利率'
+                },
+                {
+                    field: 'actualllSumCost',
+                    title: '实际报价成本总计'
+                },
+                {
+                    field: 'actualAllSumMargin',
+                    title: '实际报价毛利率'
+                },
+                {
+                    title: '折扣率',
+                    formatter: function(value, row, index) {
+                        var num = row.contractPrice / row.sumQuotationPrice;
+                        return num.toFixed(2);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="toDetails(\'' + row.quotationNo + '\')"><i class="fa fa-eye"></i>报价明细</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="toAnalysis(\'' + row.quotationNo + '\')"><i class="fa fa-eye"></i>报价分析</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function toDetails(quotationNo){
+            $.modal.openTab("查看报价明细",ctx+"busi/price/details?quotationNo="+quotationNo)
+        }
+
+        function toAnalysis(quotationNo){
+            $.modal.openTab("查看报价明细",ctx+"busi/price/details/toAnalysis?quotationNo="+quotationNo)
+        }
+
+    </script>
+</body>
+</html>

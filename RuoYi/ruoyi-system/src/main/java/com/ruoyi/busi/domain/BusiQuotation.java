@@ -42,6 +42,8 @@ public class BusiQuotation extends BaseEntity
     @Excel(name = "客户所在地")
     private String customerAddress;
 
+    /** 业务员ID */
+    private Long staffId;
 
     /** 办事处 */
     @Excel(name = "办事处")
@@ -52,8 +54,10 @@ public class BusiQuotation extends BaseEntity
     private String officeStaffName;
 
     /** 选型技术人员 */
-    @Excel(name = "选型技术人员")
     private Long technicalStaffId;
+
+    @Excel(name = "选型技术人员")
+    private String technicalStaffName;
 
     /** 产品类型 */
     @Excel(name = "产品类型")
@@ -73,8 +77,6 @@ public class BusiQuotation extends BaseEntity
 
     @Excel(name = "合计价格")
     private Double sumPrice;
-
-
 
     public void setQuotationId(Long quotationId)
     {
@@ -223,6 +225,23 @@ public class BusiQuotation extends BaseEntity
 
     public void setPartsPrice(Double partsPrice) {
         this.partsPrice = partsPrice;
+    }
+
+    public String getTechnicalStaffName() {
+        return technicalStaffName;
+    }
+
+    public void setTechnicalStaffName(String technicalStaffName) {
+        this.technicalStaffName = technicalStaffName;
+    }
+
+
+    public Long getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(Long staffId) {
+        this.staffId = staffId;
     }
 
     @Override

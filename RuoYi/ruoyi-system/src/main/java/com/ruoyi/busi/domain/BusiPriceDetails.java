@@ -104,9 +104,14 @@ public class BusiPriceDetails extends BaseEntity
     @Excel(name = "实际毛利")
     private Double actualProfit;
 
-
     @Excel(name = "实际外购合计")
     private Double actualWghj;
+
+    @Excel(name = "总计成本")
+    private Double sumPrice;
+
+    @Excel(name = "实际成本")
+    private Double actualAllSumPrice;
 
     public void setBengtouclCb(Double bengtouclCb)
     {
@@ -322,6 +327,14 @@ public class BusiPriceDetails extends BaseEntity
         this.actualWghj = actualWghj;
     }
 
+    public Double getActualAllSumPrice() {
+        return actualAllSumPrice;
+    }
+
+    public void setActualAllSumPrice(Double actualAllSumPrice) {
+        this.actualAllSumPrice = actualAllSumPrice;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -348,5 +361,13 @@ public class BusiPriceDetails extends BaseEntity
             .append("profit", getProfit())
             .append("actualProfit", getActualProfit())
             .toString();
+    }
+
+    public Double getSumPrice() {
+        return sumPrice;
+    }
+
+    public void setSumPrice(Double sumPrice) {
+        this.sumPrice = sumPrice;
     }
 }

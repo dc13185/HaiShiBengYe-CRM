@@ -15,7 +15,7 @@
                                 <input type="text" name="quotationNo" id="quotationNo"/>
                             </li>
                             <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchDetails()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-primary btn-rounded btn-sm search-ts" onclick="searchDetails()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                             </li>
                         </ul>
                     </div>
@@ -277,10 +277,16 @@
     <th:block th:include="include :: footer" />
 </body>
 <script th:inline="javascript">
+    var prefix = ctx + "busi/price/details";
     var editFlag = [[${@permission.hasPermi('busi:details:edit')}]];
     var removeFlag = [[${@permission.hasPermi('busi:details:remove')}]];
-    var prefix = ctx + "busi/price/details";
+    var quotationNo = [[${quotationNo}]];
 
+    if (quotationNo){
+        $("#quotationNo").val(quotationNo);
+        $(".search-ts").click();
+
+    }
 
     function searchDetails(){
         var quotationNo = $("#quotationNo").val();

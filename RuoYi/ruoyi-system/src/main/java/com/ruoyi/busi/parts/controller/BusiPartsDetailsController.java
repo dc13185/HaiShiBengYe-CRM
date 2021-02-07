@@ -159,7 +159,7 @@ public class BusiPartsDetailsController extends BaseController
         //返回制造成本费用
         Double makeCost = priceSum.getTime()*Constant.MAKE_COEFFICIENT;
         //（配件重量×材料单价+配件工时×机加工工时单价）/（1-配件毛利率）
-        Double allSum = (materialCosts+laborCost+makeCost) / (1 - busiProductLine.getGrossProfitRate());
+        Double allSum = (materialCosts+laborCost+makeCost) / (1 - Constant.ACCESSORIES_GROSS_MARGIN);
         busiPartsDetails.setDetailsPrice(format(allSum));
         int i = busiPartsDetailsService.insertBusiPartsDetails(busiPartsDetails);
         if (i > 0){

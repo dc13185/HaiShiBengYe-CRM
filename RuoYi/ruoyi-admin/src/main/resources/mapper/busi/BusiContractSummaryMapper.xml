@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.summary.mapper.BusiContractSummaryMapper">
+
+    <resultMap type="BusiContractSummary" id="BusiContractSummaryResult">
+        <result property="summaryId"    column="summary_id"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="customerNature"    column="customer_nature"    />
+        <result property="customerIndustry"    column="customer_industry"    />
+        <result property="quotationType"    column="quotation_type"    />
+        <result property="sumQuotationPrice"    column="sumQuotationPrice"    />
+        <result property="contractPrice"    column="contract_price"    />
+
+    </resultMap>
+
+    <sql id="selectBusiContractSummaryVo">
+      SELECT
+        bq.`quotation_no` as quotationNo,
+          bi.`contract_no`,
+          bq.`quotation_type`,
+          bc.`customer_name`,
+          bc.`customer_nature`,
+          bc.`customer_industry` ,
+          os.`office_staff_name` as officeStaffName,
+          os.office_address as officeAddress,
+          bq.staff_id,
+          (SELECT bqd.details_price * bqd.`number` FROM busi_quotation_details bqd WHERE bqd.quotation_id = bi.`qutation_id`) AS sumQuotationPrice,
+          bi.`contract_price`,
+           (IFNULL(bpd.`sumPrice`,0) + IFNULL(boc.`sumPrice`,0)  + IFNULL( bpc.`cost_price`,0)) AS allSumCost,
+          (IFNULL(bpd.`actual_contractPrice`,0) + IFNULL(boc.`actualAllPrice`,0)  + IFNULL( bpc.`actual_price`,0)) AS actualllSumCost,
+          (IFNULL(bpd.`profit`,0) + IFNULL(boc.`profit`,0)  + IFNULL( bpc.`profit`,0)) AS allSumMargin,
+          (IFNULL(bpd.`actual_profit`,0) + IFNULL(boc.`actualProfit`,0)  + IFNULL( bpc.`actual_profit`,0)) AS actualAllSumMargin
+        FROM
+          busi_contract bi
+          INNER JOIN busi_quotation bq
+            ON bi.`qutation_id` = bq.`quotation_id`
+          LEFT JOIN busi_price_details bpd  ON bi.`qutation_id` = bpd.`quotation_id`
+          LEFT JOIN busi_outsourcing_cost boc  ON boc.`quotation_id` = bpd.`quotation_id`
+
+          LEFT JOIN busi_parts_cost bpc  ON bpc.`quotation_id` = bpd.`quotation_id`
+          LEFT JOIN `busi_customer` bc
+            ON bc.`customer_id` = bq.`customer_id`
+          LEFT JOIN office_staff os ON os.`office_staff_id` = bq.`staff_id`
+
+    </sql>
+
+    <select id="selectBusiContractSummaryList" parameterType="BusiContractSummary" resultMap="BusiContractSummaryResult">
+        <include refid="selectBusiContractSummaryVo"/>
+        <where>
+            <if test="customerName != null  and customerName != ''"> and bi.customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="customerNature != null  and customerNature != ''"> and bi.customer_nature like concat('%', #{customerNature}, '%')</if>
+            <if test="customerIndustry != null  and customerIndustry != ''"> and bi.customer_industry like concat('%', #{customerIndustry}, '%')</if>
+            <if test="quotationType != null "> and bq.quotation_type like concat('%', #{quotationType}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectBusiContractSummaryById" parameterType="Long" resultMap="BusiContractSummaryResult">
+        <include refid="selectBusiContractSummaryVo"/>
+        where summary_id = #{summaryId}
+    </select>
+
+    <insert id="insertBusiContractSummary" parameterType="BusiContractSummary">
+        insert into busi_contract_summary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="summaryId != null">summary_id,</if>
+            <if test="customerName != null">customer_name,</if>
+            <if test="customerNature != null">customer_nature,</if>
+            <if test="customerIndustry != null">customer_industry,</if>
+            <if test="quotationType != null">quotation_type,</if>
+            <if test="sumQuotationPrice != null">sumQuotationPrice,</if>
+            <if test="contractPrice != null">contract_price,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="summaryId != null">#{summaryId},</if>
+            <if test="customerName != null">#{customerName},</if>
+            <if test="customerNature != null">#{customerNature},</if>
+            <if test="customerIndustry != null">#{customerIndustry},</if>
+            <if test="quotationType != null">#{quotationType},</if>
+            <if test="sumQuotationPrice != null">#{sumQuotationPrice},</if>
+            <if test="contractPrice != null">#{contractPrice},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiContractSummary" parameterType="BusiContractSummary">
+        update busi_contract_summary
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="customerNature != null">customer_nature = #{customerNature},</if>
+            <if test="customerIndustry != null">customer_industry = #{customerIndustry},</if>
+            <if test="quotationType != null">quotation_type = #{quotationType},</if>
+            <if test="sumQuotationPrice != null">sumQuotationPrice = #{sumQuotationPrice},</if>
+            <if test="contractPrice != null">contract_price = #{contractPrice},</if>
+        </trim>
+        where summary_id = #{summaryId}
+    </update>
+
+    <delete id="deleteBusiContractSummaryById" parameterType="Long">
+        delete from busi_contract_summary where summary_id = #{summaryId}
+    </delete>
+
+    <delete id="deleteBusiContractSummaryByIds" parameterType="String">
+        delete from busi_contract_summary where summary_id in
+        <foreach item="summaryId" collection="array" open="(" separator="," close=")">
+            #{summaryId}
+        </foreach>
+    </delete>
+
+</mapper>

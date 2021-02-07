@@ -55,8 +55,9 @@ public class BusiPriceDetailsController extends BaseController
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
-    public String details()
+    public String details(String quotationNo,ModelMap modelMap )
     {
+        modelMap.put("quotationNo",quotationNo);
         return prefix + "/details";
     }
 
@@ -128,6 +129,15 @@ public class BusiPriceDetailsController extends BaseController
     @ResponseBody
     public AjaxResult editSave(BusiPriceDetails busiPriceDetails)
     {
+        Double sumPrice = busiPriceDetails.getActualBengtouclCb()
+                + busiPriceDetails.getActualBengtouRgCb()
+                + busiPriceDetails.getActualBengtouFyCb()
+                + busiPriceDetails.getActualMotorCb()
+                + busiPriceDetails.getActualJfCb()
+                + busiPriceDetails.getActualZlqCb()
+                + busiPriceDetails.getActualZcCb()
+                + busiPriceDetails.getActualEwCb();
+        busiPriceDetails.setActualAllSumPrice(sumPrice);
         return toAjax(busiPriceDetailsService.updateBusiPriceDetails(busiPriceDetails));
     }
 
@@ -165,8 +175,9 @@ public class BusiPriceDetailsController extends BaseController
 
 
     @GetMapping("/toAnalysis")
-    public String toAnalysis()
+    public String toAnalysis(String quotationNo,ModelMap modelMap)
     {
+        modelMap.put("quotationNo",quotationNo);
         return prefix + "/details_analysis";
     }
 

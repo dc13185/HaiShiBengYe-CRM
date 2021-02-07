@@ -13,11 +13,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="officeAddress"    column="office_address"    />
         <result property="officeStaffName"    column="office_staff_name"    />
         <result property="technicalStaffId"    column="technical_staff_id"    />
+        <result property="technicalStaffName"    column="technicalStaffName"    />
+
         <result property="quotationType"    column="quotation_type"    />
         <result property="createTime"    column="create_time"    />
         <result property="customerName"    column="customer_name"    />
         <result property="customerIndustry"    column="customer_industry"    />
         <result property="customerAddress"    column="customer_address"    />
+        <result property="staffId"    column="staff_id"    />
     </resultMap>
 
     <sql id="selectBusiQuotationVo">
@@ -40,17 +43,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         bq.office_address,
         bq.office_staff_name,
         bq.technical_staff_id,
+        (SELECT bt.`technicist_name` FROM busi_technicist bt WHERE bt.`technicist_id` = bq.`technical_staff_id` ) AS technicalStaffName,
         bq.quotation_type,
-        bq.create_time/* ,
-       IFNULL(ROUND(SUM(bqd.details_price*bqd.coefficient * bqd.number),2),0) AS quotationPrice,
-        IFNULL(ROUND(SUM(bod.details_price*bod.coefficient * bod.number),2),0) AS outsourcingPrice,
-        IFNULL(ROUND(SUM(bpd.details_price * bpd.number),2),0) AS partsPrice,
-        SUM(IFNULL(bqd.`number`,0)+IFNULL(bod.`number`,0)+IFNULL(bpd.number,0)) AS  allCount*/
+        bq.create_time
         FROM
         busi_quotation bq
- /*       LEFT JOIN busi_quotation_details bqd ON bqd.`quotation_id`  = bq.`quotation_id`
-        LEFT JOIN busi_outsourcing_details bod ON bod.`quotation_id`  = bq.`quotation_id`
-        LEFT JOIN busi_parts_details bpd  ON bpd.`quotation_id` = bq.`quotation_id`*/
         <where>
             <if test="projectName != null  and projectName != ''"> and bq.project_name like concat('%', #{projectName}, '%')</if>
             <if test="quotationNo != null  and quotationNo != ''"> and bq.quotation_no = #{quotationNo}</if>
@@ -65,8 +62,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectBusiQuotationById" parameterType="Long" resultMap="BusiQuotationResult">
-        <include refid="selectBusiQuotationVo"/>
-        where quotation_id = #{quotationId}
+   SELECT
+        bq.quotation_id,
+        bq.project_name,
+        bq.project_address,
+        bq.quotation_no,
+        bq.customer_id,
+        (SELECT bc.customer_name FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_name,
+        (SELECT bc.customer_industry FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_industry,
+        (SELECT bc.contact_address FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_address,
+        bq.office_address,
+        bq.office_staff_name,
+        bq.technical_staff_id,
+        (SELECT bt.`technicist_name` FROM busi_technicist bt WHERE bt.`technicist_id` = bq.`technical_staff_id` ) AS technicalStaffName,
+        bq.quotation_type,
+        bq.create_time/* ,
+       IFNULL(ROUND(SUM(bqd.details_price*bqd.coefficient * bqd.number),2),0) AS quotationPrice,
+        IFNULL(ROUND(SUM(bod.details_price*bod.coefficient * bod.number),2),0) AS outsourcingPrice,
+        IFNULL(ROUND(SUM(bpd.details_price * bpd.number),2),0) AS partsPrice,
+        SUM(IFNULL(bqd.`number`,0)+IFNULL(bod.`number`,0)+IFNULL(bpd.number,0)) AS  allCount*/
+        FROM
+        busi_quotation bq
+ /*       LEFT JOIN busi_quotation_details bqd ON bqd.`quotation_id`  = bq.`quotation_id`
+        LEFT JOIN busi_outsourcing_details bod ON bod.`quotation_id`  = bq.`quotation_id`
+        LEFT JOIN busi_parts_details bpd  ON bpd.`quotation_id` = bq.`quotation_id`*/
+        where bq.quotation_id = #{quotationId}
     </select>
 
     <select id="selectEndCount" resultType="java.lang.Integer">
@@ -86,6 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="technicalStaffId != null">technical_staff_id,</if>
             <if test="quotationType != null">quotation_type,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="staffId != null">staff_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null and projectName != ''">#{projectName},</if>
@@ -97,6 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="technicalStaffId != null">#{technicalStaffId},</if>
             <if test="quotationType != null">#{quotationType},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="staffId != null">#{staffId},</if>
          </trim>
     </insert>
 
@@ -112,6 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="technicalStaffId != null">technical_staff_id = #{technicalStaffId},</if>
             <if test="quotationType != null">quotation_type = #{quotationType},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="staffId != null">staff_id = #{staffId},</if>
         </trim>
         where quotation_id = #{quotationId}
     </update>
