@@ -62,6 +62,147 @@ public class BusiContractSummary extends BaseEntity
     @Excel(name = "实际毛利率")
     private Double actualAllSumMargin;
 
+    private Double  quotationPrice;
+    private Double  outsourcingPrice;
+    private Double  partsPrice;
+
+    private Double  priceSumPrice;
+    private Double  outSumPrice;
+    private Double  partsSumPrice;
+
+    private Double  priceActualPrice;
+    private Double  outActualPrice;
+    private Double  partsActualPrice;
+
+    private Double  priceProfit;
+    private Double  outProfit;
+    private Double  partsProfit;
+
+    private Double  priceActualProfit;
+    private Double  outActualProfit;
+    private Double  partsActualProfit;
+
+
+    public Double getQuotationPrice() {
+        return quotationPrice;
+    }
+
+    public void setQuotationPrice(Double quotationPrice) {
+        this.quotationPrice = quotationPrice;
+    }
+
+    public Double getOutsourcingPrice() {
+        return outsourcingPrice;
+    }
+
+    public void setOutsourcingPrice(Double outsourcingPrice) {
+        this.outsourcingPrice = outsourcingPrice;
+    }
+
+    public Double getPartsPrice() {
+        return partsPrice;
+    }
+
+    public void setPartsPrice(Double partsPrice) {
+        this.partsPrice = partsPrice;
+    }
+
+    public Double getPriceSumPrice() {
+        return priceSumPrice;
+    }
+
+    public void setPriceSumPrice(Double priceSumPrice) {
+        this.priceSumPrice = priceSumPrice;
+    }
+
+    public Double getOutSumPrice() {
+        return outSumPrice;
+    }
+
+    public void setOutSumPrice(Double outSumPrice) {
+        this.outSumPrice = outSumPrice;
+    }
+
+    public Double getPartsSumPrice() {
+        return partsSumPrice;
+    }
+
+    public void setPartsSumPrice(Double partsSumPrice) {
+        this.partsSumPrice = partsSumPrice;
+    }
+
+    public Double getPriceActualPrice() {
+        return priceActualPrice;
+    }
+
+    public void setPriceActualPrice(Double priceActualPrice) {
+        this.priceActualPrice = priceActualPrice;
+    }
+
+    public Double getOutActualPrice() {
+        return outActualPrice;
+    }
+
+    public void setOutActualPrice(Double outActualPrice) {
+        this.outActualPrice = outActualPrice;
+    }
+
+    public Double getPartsActualPrice() {
+        return partsActualPrice;
+    }
+
+    public void setPartsActualPrice(Double partsActualPrice) {
+        this.partsActualPrice = partsActualPrice;
+    }
+
+    public Double getPriceProfit() {
+        return priceProfit;
+    }
+
+    public void setPriceProfit(Double priceProfit) {
+        this.priceProfit = priceProfit;
+    }
+
+    public Double getOutProfit() {
+        return outProfit;
+    }
+
+    public void setOutProfit(Double outProfit) {
+        this.outProfit = outProfit;
+    }
+
+    public Double getPartsProfit() {
+        return partsProfit;
+    }
+
+    public void setPartsProfit(Double partsProfit) {
+        this.partsProfit = partsProfit;
+    }
+
+    public Double getPriceActualProfit() {
+        return priceActualProfit;
+    }
+
+    public void setPriceActualProfit(Double priceActualProfit) {
+        this.priceActualProfit = priceActualProfit;
+    }
+
+    public Double getOutActualProfit() {
+        return outActualProfit;
+    }
+
+    public void setOutActualProfit(Double outActualProfit) {
+        this.outActualProfit = outActualProfit;
+    }
+
+    public Double getPartsActualProfit() {
+        return partsActualProfit;
+    }
+
+    public void setPartsActualProfit(Double partsActualProfit) {
+        this.partsActualProfit = partsActualProfit;
+    }
+
     public String getQuotationNo() {
         return quotationNo;
     }

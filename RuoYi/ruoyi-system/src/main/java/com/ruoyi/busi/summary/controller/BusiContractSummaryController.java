@@ -1,6 +1,9 @@
 package com.ruoyi.busi.summary.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,6 +54,19 @@ public class BusiContractSummaryController extends BaseController
     {
         startPage();
         List<BusiContractSummary> list = busiContractSummaryService.selectBusiContractSummaryList(busiContractSummary);
+        list = list.parallelStream().peek(s -> {
+            //报价
+            s.setSumQuotationPrice(StringUtils.doubleFormat(s.getQuotationPrice() + s.getOutsourcingPrice() + s.getPartsPrice()));
+            //成本
+            s.setAllSumCost(StringUtils.doubleFormat(s.getPriceSumPrice() + s.getOutSumPrice() + s.getPartsSumPrice()));
+            //真实
+            s.setActualllSumCost(StringUtils.doubleFormat(s.getPriceActualPrice() + s.getOutActualPrice() + s.getPartsActualPrice()));
+            //毛利率
+            s.setAllSumMargin(StringUtils.doubleFormat(s.getPriceProfit() + s.getOutProfit() + s.getPartsProfit()));
+            //真是毛利率
+            s.setActualAllSumMargin(StringUtils.doubleFormat(s.getPriceActualProfit() + s.getOutActualProfit() + s.getPartsActualProfit()));
+
+        }).collect(Collectors.toList());
         return getDataTable(list);
     }
 

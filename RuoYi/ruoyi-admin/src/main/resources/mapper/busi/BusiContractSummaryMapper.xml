@@ -16,32 +16,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBusiContractSummaryVo">
-      SELECT
-        bq.`quotation_no` as quotationNo,
+       SELECT
+ bq.`quotation_id`,
+        bq.`quotation_no` AS quotationNo,
+        bi.`contract_id`,
           bi.`contract_no`,
           bq.`quotation_type`,
           bc.`customer_name`,
           bc.`customer_nature`,
           bc.`customer_industry` ,
-          os.`office_staff_name` as officeStaffName,
-          os.office_address as officeAddress,
-          bq.staff_id,
-          (SELECT bqd.details_price * bqd.`number` FROM busi_quotation_details bqd WHERE bqd.quotation_id = bi.`qutation_id`) AS sumQuotationPrice,
+          os.`office_staff_name` AS officeStaffName,
+          os.office_address AS officeAddress,
           bi.`contract_price`,
-           (IFNULL(bpd.`sumPrice`,0) + IFNULL(boc.`sumPrice`,0)  + IFNULL( bpc.`cost_price`,0)) AS allSumCost,
-          (IFNULL(bpd.`actual_contractPrice`,0) + IFNULL(boc.`actualAllPrice`,0)  + IFNULL( bpc.`actual_price`,0)) AS actualllSumCost,
-          (IFNULL(bpd.`profit`,0) + IFNULL(boc.`profit`,0)  + IFNULL( bpc.`profit`,0)) AS allSumMargin,
-          (IFNULL(bpd.`actual_profit`,0) + IFNULL(boc.`actualProfit`,0)  + IFNULL( bpc.`actual_profit`,0)) AS actualAllSumMargin
+          bq.staff_id,
+          (SELECT IFNULL(ROUND(SUM(details_price*coefficient * number),2),0) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  quotationPrice,
+          (SELECT  IFNULL(ROUND(SUM(bod.details_price*bod.coefficient * bod.number),2),0) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.`quotation_id` )  AS outsourcingPrice,
+          (SELECT   IFNULL(ROUND(SUM(bpd.details_price * bpd.number),2),0)  FROM busi_parts_details bpd WHERE bpd.quotation_id = bq.`quotation_id` ) AS partsPrice,
+
+          -- 成本
+          (SELECT   IFNULL(ROUND(SUM(bpd.sumPrice),2),0)  FROM busi_price_details bpd WHERE bpd.`quotation_id` = bq.`quotation_id` ) AS priceSumPrice,
+	 (SELECT   IFNULL(ROUND(SUM(boc.sumPrice),2),0)  FROM busi_outsourcing_cost boc  WHERE boc.quotation_id = bq.`quotation_id` ) AS outSumPrice,
+	(SELECT   IFNULL(ROUND(SUM(bpc.`cost_price`),2),0)  FROM busi_parts_cost bpc WHERE bpc.quotation_id = bq.`quotation_id` ) AS partsSumPrice,
+
+	    -- 真是成本
+         (SELECT   IFNULL(ROUND(SUM(bpd.actual_contractPrice),2),0)  FROM busi_price_details bpd WHERE bpd.`quotation_id` = bq.`quotation_id` ) AS priceActualPrice,
+	 (SELECT   IFNULL(ROUND(SUM(boc.actualAllPrice),2),0)  FROM busi_outsourcing_cost boc  WHERE boc.quotation_id = bq.`quotation_id` ) AS outActualPrice,
+	(SELECT   IFNULL(ROUND(SUM(bpc.`actual_price`),2),0)  FROM busi_parts_cost bpc WHERE bpc.quotation_id = bq.`quotation_id` ) AS partsActualPrice,
+
+	(SELECT   IFNULL(ROUND(SUM(bpd.profit),2),0)  FROM busi_price_details bpd WHERE bpd.`quotation_id` = bq.`quotation_id` ) AS priceProfit,
+	 (SELECT   IFNULL(ROUND(SUM(boc.profit),2),0)  FROM busi_outsourcing_cost boc  WHERE boc.quotation_id = bq.`quotation_id` ) AS outProfit,
+	(SELECT   IFNULL(ROUND(SUM(bpc.`profit`),2),0)  FROM busi_parts_cost bpc WHERE bpc.quotation_id = bq.`quotation_id` ) AS partsProfit,
+
+	(SELECT   IFNULL(ROUND(SUM(bpd.actual_profit),2),0)  FROM busi_price_details bpd WHERE bpd.`quotation_id` = bq.`quotation_id` ) AS priceActualProfit,
+	 (SELECT   IFNULL(ROUND(SUM(boc.actualProfit),2),0)  FROM busi_outsourcing_cost boc  WHERE boc.quotation_id = bq.`quotation_id` ) AS outActualProfit,
+	(SELECT   IFNULL(ROUND(SUM(bpc.`actual_profit`),2),0)  FROM busi_parts_cost bpc WHERE bpc.quotation_id = bq.`quotation_id` ) AS partsActualProfit
         FROM
           busi_contract bi
-          INNER JOIN busi_quotation bq
-            ON bi.`qutation_id` = bq.`quotation_id`
-          LEFT JOIN busi_price_details bpd  ON bi.`qutation_id` = bpd.`quotation_id`
-          LEFT JOIN busi_outsourcing_cost boc  ON boc.`quotation_id` = bpd.`quotation_id`
-
-          LEFT JOIN busi_parts_cost bpc  ON bpc.`quotation_id` = bpd.`quotation_id`
-          LEFT JOIN `busi_customer` bc
-            ON bc.`customer_id` = bq.`customer_id`
+          INNER JOIN busi_quotation bq ON bi.`qutation_id` = bq.`quotation_id`
+          LEFT JOIN `busi_customer` bc ON bc.`customer_id` = bq.`customer_id`
           LEFT JOIN office_staff os ON os.`office_staff_id` = bq.`staff_id`
 
     </sql>

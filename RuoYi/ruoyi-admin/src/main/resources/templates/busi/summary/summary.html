@@ -109,7 +109,11 @@
                 },
                 {
                     field: 'sumQuotationPrice',
-                    title: '报价金额'
+                    title: '报价金额',
+                    formatter: function(value, row, index) {
+                        var num = row.sumQuotationPrice;
+                        return num.toFixed(2);
+                    }
                 },
                 {
                     field: 'contractPrice',
@@ -118,19 +122,34 @@
 
                 {
                     field: 'allSumCost',
-                    title: '报价成本总计'
+                    title: '报价成本总计',
+                    formatter: function(value, row, index) {
+                        var num = row.allSumCost;
+                        return num.toFixed(2);
+                    }
                 },
                 {
-                    field: 'allSumMargin',
-                    title: '报价毛利率'
+                    title: '报价毛利率',
+                    formatter: function(value, row, index) {
+                        var num = row.allSumMargin;
+                        return num.toFixed(2);
+                    }
                 },
                 {
                     field: 'actualllSumCost',
-                    title: '实际报价成本总计'
+                    title: '实际报价成本总计',
+                    formatter: function(value, row, index) {
+                        var num = row.actualllSumCost;
+                        return num.toFixed(2);
+                    }
                 },
                 {
                     field: 'actualAllSumMargin',
-                    title: '实际报价毛利率'
+                    title: '实际报价毛利率',
+                    formatter: function(value, row, index) {
+                        var num = row.actualAllSumMargin;
+                        return num.toFixed(2);
+                    }
                 },
                 {
                     title: '折扣率',

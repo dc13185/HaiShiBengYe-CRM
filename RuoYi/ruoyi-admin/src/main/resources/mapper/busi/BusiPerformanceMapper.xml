@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.performance.mapper.BusiPerformanceMapper">
+
+    <resultMap type="BusiPerformance" id="BusiPerformanceResult">
+        <result property="performanceId"    column="performance_id"    />
+        <result property="officeAddress"    column="office_address"    />
+        <result property="quotationPrice"    column="quotation_price"    />
+        <result property="officeStaffName"    column="office_staff_name"    />
+        <result property="quotationCount"    column="quotation_count"    />
+        <result property="contractCount"    column="contract_count"    />
+        <result property="contractPrice"    column="contract_price"    />
+        <result property="repaymentAmount"    column="repayment_amount"    />
+        <result property="singQuotationPrice"    column="sing_quotation_price"    />
+    </resultMap>
+
+    <sql id="selectBusiPerformanceVo">
+        SELECT  os.`office_staff_id` , os.`office_address`,os.`office_staff_name`, COUNT(bq.`quotation_id`)  AS quotation_count,COUNT(bc.contract_id) AS contract_count,
+        SUM(IFNULL(bqd.`details_price` * bqd.`number`,0) + IFNULL(bod.`details_price` * bod.number ,0) + IFNULL(bpd.`details_price` * bpd.`number`,0)) AS quotation_price,
+        SUM(bc.`contract_price`) AS contract_price,
+        SUM(bc.`repaymentAmount`) AS repayment_amount,
+        SUM(IFNULL(bqd1.`details_price` * bqd1.`number`,0) + IFNULL(bod1.`details_price` * bod1.number ,0) + IFNULL(bpd1.`details_price` * bpd1.`number`,0)) AS sing_quotation_price
+        FROM office_staff os
+        LEFT JOIN  busi_quotation bq ON bq.`staff_id` = os.`office_staff_id`
+        LEFT JOIN busi_quotation_details bqd ON bqd.quotation_id = bq.`quotation_id`
+        LEFT JOIN busi_outsourcing_details bod ON bod.quotation_id = bq.`quotation_id`
+        LEFT JOIN busi_parts_details  bpd ON bpd.`quotation_id`  = bq.`quotation_id`
+        LEFT JOIN busi_contract bc ON bq.`quotation_id` = bc.`qutation_id`
+        LEFT JOIN  busi_quotation bq1 ON bq1.`quotation_id` = bc.`qutation_id`
+        LEFT JOIN busi_quotation_details bqd1 ON bqd1.quotation_id = bq1.`quotation_id`
+        LEFT JOIN busi_outsourcing_details bod1 ON bod1.quotation_id = bq1.`quotation_id`
+        LEFT JOIN busi_parts_details  bpd1 ON bpd1.`quotation_id`  = bq1.`quotation_id`
+        GROUP BY os.office_staff_id
+        ORDER BY os.`office_address` ASC
+    </sql>
+
+    <select id="selectBusiPerformanceList" parameterType="BusiPerformance" resultMap="BusiPerformanceResult">
+        <include refid="selectBusiPerformanceVo"/>
+        <where>
+        </where>
+    </select>
+
+    <select id="selectBusiPerformanceById" parameterType="Long" resultMap="BusiPerformanceResult">
+        <include refid="selectBusiPerformanceVo"/>
+        where performance_id = #{performanceId}
+    </select>
+
+    <insert id="insertBusiPerformance" parameterType="BusiPerformance">
+        insert into busi_performance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="performanceId != null">performance_id,</if>
+            <if test="officeAddress != null">office_address,</if>
+            <if test="quotationPrice != null">quotation_price,</if>
+            <if test="officeStaffName != null">office_staff_name,</if>
+            <if test="quotationCount != null">quotation_count,</if>
+            <if test="contractCount != null">contract_count,</if>
+            <if test="contractPrice != null">contract_price,</if>
+            <if test="repaymentAmount != null">repayment_amount,</if>
+            <if test="singQuotationPrice != null">sing_quotation_price,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="performanceId != null">#{performanceId},</if>
+            <if test="officeAddress != null">#{officeAddress},</if>
+            <if test="quotationPrice != null">#{quotationPrice},</if>
+            <if test="officeStaffName != null">#{officeStaffName},</if>
+            <if test="quotationCount != null">#{quotationCount},</if>
+            <if test="contractCount != null">#{contractCount},</if>
+            <if test="contractPrice != null">#{contractPrice},</if>
+            <if test="repaymentAmount != null">#{repaymentAmount},</if>
+            <if test="singQuotationPrice != null">#{singQuotationPrice},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiPerformance" parameterType="BusiPerformance">
+        update busi_performance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="officeAddress != null">office_address = #{officeAddress},</if>
+            <if test="quotationPrice != null">quotation_price = #{quotationPrice},</if>
+            <if test="officeStaffName != null">office_staff_name = #{officeStaffName},</if>
+            <if test="quotationCount != null">quotation_count = #{quotationCount},</if>
+            <if test="contractCount != null">contract_count = #{contractCount},</if>
+            <if test="contractPrice != null">contract_price = #{contractPrice},</if>
+            <if test="repaymentAmount != null">repayment_amount = #{repaymentAmount},</if>
+            <if test="singQuotationPrice != null">sing_quotation_price = #{singQuotationPrice},</if>
+        </trim>
+        where performance_id = #{performanceId}
+    </update>
+
+    <delete id="deleteBusiPerformanceById" parameterType="Long">
+        delete from busi_performance where performance_id = #{performanceId}
+    </delete>
+
+    <delete id="deleteBusiPerformanceByIds" parameterType="String">
+        delete from busi_performance where performance_id in
+        <foreach item="performanceId" collection="array" open="(" separator="," close=")">
+            #{performanceId}
+        </foreach>
+    </delete>
+
+</mapper>
