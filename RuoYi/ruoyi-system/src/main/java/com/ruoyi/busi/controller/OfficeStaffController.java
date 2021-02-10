@@ -1,5 +1,6 @@
 package com.ruoyi.busi.controller;
 
+import java.util.Date;
 import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 办事处及人员Controller
- * 
+ *
  * @author ruoyi
  * @date 2021-01-06
  */
@@ -86,6 +87,7 @@ public class OfficeStaffController extends BaseController
     @ResponseBody
     public AjaxResult addSave(OfficeStaff officeStaff)
     {
+        officeStaff.setCreateTime(new Date());
         return toAjax(officeStaffService.insertOfficeStaff(officeStaff));
     }
 

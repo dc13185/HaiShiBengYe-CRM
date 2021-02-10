@@ -65,7 +65,6 @@ public class BusiContractSummaryController extends BaseController
             s.setAllSumMargin(StringUtils.doubleFormat(s.getPriceProfit() + s.getOutProfit() + s.getPartsProfit()));
             //真是毛利率
             s.setActualAllSumMargin(StringUtils.doubleFormat(s.getPriceActualProfit() + s.getOutActualProfit() + s.getPartsActualProfit()));
-
         }).collect(Collectors.toList());
         return getDataTable(list);
     }

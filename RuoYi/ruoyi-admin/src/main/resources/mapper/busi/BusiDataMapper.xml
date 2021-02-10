@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.data.mapper.BusiDataMapper">
+
+    <resultMap type="BusiData" id="BusiDataResult">
+        <result property="officeAddressCount"    column="office_address_count"    />
+        <result property="officeUsersCount"    column="office_users_count"    />
+        <result property="quotationCount"    column="quotation_count"    />
+        <result property="quotationPrice"    column="quotation_price"    />
+        <result property="avgQuotationPrice"    column="avg_quotation_price"    />
+        <result property="contractCount"    column="contract_count"    />
+        <result property="contractPrice"    column="contract_price"    />
+        <result property="avgContractPrice"    column="avg_contract_price"    />
+        <result property="overallDiscountRate"    column="overall_discount_rate"    />
+        <result property="quotationDiscountRate"    column="quotation discount rate"    />
+        <result property="refundAmount"    column="refund_amount"    />
+        <result property="delayContractCount"    column="delay_contract_count"    />
+        <result property="delayContractProportion"    column="delay_contract_proportion"    />
+    </resultMap>
+
+    <sql id="selectBusiDataVo">
+        select office_address_count, office_users_count, quotation_count, quotation_price, avg_quotation_price, contract_count, contract_price, avg_contract_price, overall_discount_rate, quotation discount rate, refund_amount, delay_contract_count, delay_contract_proportion from busi_data
+    </sql>
+
+    <select id="selectBusiDataList" parameterType="BusiData" resultMap="BusiDataResult">
+        <include refid="selectBusiDataVo"/>
+        <where>
+            <if test="officeAddressCount != null "> and office_address_count = #{officeAddressCount}</if>
+            <if test="officeUsersCount != null "> and office_users_count = #{officeUsersCount}</if>
+            <if test="quotationCount != null "> and quotation_count = #{quotationCount}</if>
+            <if test="quotationPrice != null "> and quotation_price = #{quotationPrice}</if>
+            <if test="avgQuotationPrice != null "> and avg_quotation_price = #{avgQuotationPrice}</if>
+            <if test="contractCount != null "> and contract_count = #{contractCount}</if>
+            <if test="contractPrice != null "> and contract_price = #{contractPrice}</if>
+            <if test="avgContractPrice != null "> and avg_contract_price = #{avgContractPrice}</if>
+            <if test="overallDiscountRate != null "> and overall_discount_rate = #{overallDiscountRate}</if>
+            <if test="quotationDiscountRate != null "> and quotation discount rate = #{quotationDiscountRate}</if>
+            <if test="refundAmount != null "> and refund_amount = #{refundAmount}</if>
+            <if test="delayContractCount != null "> and delay_contract_count = #{delayContractCount}</if>
+            <if test="delayContractProportion != null "> and delay_contract_proportion = #{delayContractProportion}</if>
+        </where>
+    </select>
+
+    <select id="selectBusiDataById" parameterType="Long" resultMap="BusiDataResult">
+        <include refid="selectBusiDataVo"/>
+        where office_address_count = #{officeAddressCount}
+    </select>
+
+    <select id="queryOfficeUserStaff"  parameterType="BusiData" resultType="java.lang.Long">
+        SELECT COUNT(os.office_staff_name) FROM office_staff os WHERE  os.`create_time` &gt;=DATE_FORMAT(#{params.beginCreateTime},'%y-%m-%d') AND   os.`create_time` &lt;= DATE_FORMAT(#{params.endCreateTime},'%y-%m-%d')
+    </select>
+    <select id="queryOfficeAddress"  parameterType="BusiData" resultType="java.lang.Long">
+        SELECT COUNT(DISTINCT os.`office_address`) FROM office_staff os WHERE  os.`create_time` &gt;=DATE_FORMAT(#{params.beginCreateTime},'%y-%m-%d') AND   os.`create_time` &lt;= DATE_FORMAT(#{params.endCreateTime},'%y-%m-%d')
+    </select>
+
+    <select id="queryQuotationCount" parameterType="BusiData" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM busi_quotation bq WHERE  bq.`create_time` &gt;=DATE_FORMAT(#{params.beginCreateTime},'%y-%m-%d') AND   bq.`create_time` &lt;= DATE_FORMAT(#{params.endCreateTime},'%y-%m-%d')
+    </select>
+
+    <select id="queryQuotationAllPrice" parameterType="BusiData" resultType="java.lang.Double">
+        SELECT SUM(bqd.`details_price` * bqd.`number`) FROM busi_quotation bq
+        LEFT JOIN busi_quotation_details bqd ON bq.`quotation_id` = bqd.`quotation_id`
+        WHERE  bq.`create_time` &gt;=DATE_FORMAT(#{params.beginCreateTime},'%y-%m-%d') AND   bq.`create_time` &lt;= DATE_FORMAT(#{params.endCreateTime},'%y-%m-%d')
+    </select>
+
+
+    <select id="queryContractAllPrice" parameterType="BusiData" resultType="java.lang.Double">
+        SELECT SUM(bc.`contract_price`) FROM busi_contract bc , busi_quotation bq WHERE bc.qutation_id =bq.quotation_id
+        and  bc.`signing_date` &gt;=DATE_FORMAT(#{params.beginCreateTime},'%y-%m-%d') AND   bc.`signing_date` &lt;= DATE_FORMAT(#{params.endCreateTime},'%y-%m-%d')
+    </select>
+
+    <select id="queryContractCount" parameterType="BusiData" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM busi_contract bc  , busi_quotation bq WHERE bc.qutation_id =bq.quotation_id
+        and  bc.`signing_date` &gt;=DATE_FORMAT(#{params.beginCreateTime},'%y-%m-%d') AND   bc.`signing_date` &lt;= DATE_FORMAT(#{params.endCreateTime},'%y-%m-%d')
+    </select>
+
+    <select id="querySignContractPrice" parameterType="BusiData" resultType="java.lang.Double">
+        SELECT SUM(bqd.`details_price` * bqd.`number`)
+        FROM busi_quotation bq INNER JOIN busi_contract bc ON bq.quotation_id = bc.`qutation_id`
+        LEFT JOIN busi_quotation_details bqd ON bc.`qutation_id` = bqd.`quotation_id`
+        WHERE  bc.`signing_date` &gt;= DATE_FORMAT(#{params.beginCreateTime},'%y-%m-%d') AND   bc.`signing_date` &lt;= DATE_FORMAT(#{params.endCreateTime},'%y-%m-%d')
+    </select>
+
+    <select id="queryRepaymentAmount" parameterType="BusiData" resultType="java.lang.Double">
+        SELECT SUM(bc.`repaymentAmount`) FROM busi_contract bc , busi_quotation bq WHERE bc.qutation_id =bq.quotation_id
+        and  bc.`signing_date` &gt;= DATE_FORMAT(#{params.beginCreateTime},'%y-%m-%d') AND   bc.`signing_date` &lt;= DATE_FORMAT(#{params.endCreateTime},'%y-%m-%d')
+    </select>
+
+    <select id="queryDeilverCount" parameterType="BusiData" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM busi_contract bc , busi_quotation bq WHERE bc.qutation_id =bq.quotation_id
+        and  bc.`signing_date` &gt;=DATE_FORMAT(#{params.beginCreateTime},'%y-%m-%d') AND   bc.`signing_date` &lt;= DATE_FORMAT(#{params.endCreateTime},'%y-%m-%d')
+        AND bc.`delivery_time`  &lt; DATE_FORMAT(#{createTime},'%y-%m-%d') AND bc.`contract_type` = 0
+    </select>
+
+
+    <select id="queryOverCount" parameterType="BusiData" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM busi_contract bc , busi_quotation bq WHERE bc.qutation_id =bq.quotation_id
+        and  bc.`signing_date` &gt;=DATE_FORMAT(#{params.beginCreateTime},'%y-%m-%d') AND   bc.`signing_date` &lt;= DATE_FORMAT(#{params.endCreateTime},'%y-%m-%d')
+        AND bc.`contract_type` = 1
+    </select>
+
+
+    <insert id="insertBusiData" parameterType="BusiData">
+        insert into busi_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="officeAddressCount != null">office_address_count,</if>
+            <if test="officeUsersCount != null">office_users_count,</if>
+            <if test="quotationCount != null">quotation_count,</if>
+            <if test="quotationPrice != null">quotation_price,</if>
+            <if test="avgQuotationPrice != null">avg_quotation_price,</if>
+            <if test="contractCount != null">contract_count,</if>
+            <if test="contractPrice != null">contract_price,</if>
+            <if test="avgContractPrice != null">avg_contract_price,</if>
+            <if test="overallDiscountRate != null">overall_discount_rate,</if>
+            <if test="quotationDiscountRate != null">quotation discount rate,</if>
+            <if test="refundAmount != null">refund_amount,</if>
+            <if test="delayContractCount != null">delay_contract_count,</if>
+            <if test="delayContractProportion != null">delay_contract_proportion,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="officeAddressCount != null">#{officeAddressCount},</if>
+            <if test="officeUsersCount != null">#{officeUsersCount},</if>
+            <if test="quotationCount != null">#{quotationCount},</if>
+            <if test="quotationPrice != null">#{quotationPrice},</if>
+            <if test="avgQuotationPrice != null">#{avgQuotationPrice},</if>
+            <if test="contractCount != null">#{contractCount},</if>
+            <if test="contractPrice != null">#{contractPrice},</if>
+            <if test="avgContractPrice != null">#{avgContractPrice},</if>
+            <if test="overallDiscountRate != null">#{overallDiscountRate},</if>
+            <if test="quotationDiscountRate != null">#{quotationDiscountRate},</if>
+            <if test="refundAmount != null">#{refundAmount},</if>
+            <if test="delayContractCount != null">#{delayContractCount},</if>
+            <if test="delayContractProportion != null">#{delayContractProportion},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiData" parameterType="BusiData">
+        update busi_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="officeUsersCount != null">office_users_count = #{officeUsersCount},</if>
+            <if test="quotationCount != null">quotation_count = #{quotationCount},</if>
+            <if test="quotationPrice != null">quotation_price = #{quotationPrice},</if>
+            <if test="avgQuotationPrice != null">avg_quotation_price = #{avgQuotationPrice},</if>
+            <if test="contractCount != null">contract_count = #{contractCount},</if>
+            <if test="contractPrice != null">contract_price = #{contractPrice},</if>
+            <if test="avgContractPrice != null">avg_contract_price = #{avgContractPrice},</if>
+            <if test="overallDiscountRate != null">overall_discount_rate = #{overallDiscountRate},</if>
+            <if test="quotationDiscountRate != null">quotation discount rate = #{quotationDiscountRate},</if>
+            <if test="refundAmount != null">refund_amount = #{refundAmount},</if>
+            <if test="delayContractCount != null">delay_contract_count = #{delayContractCount},</if>
+            <if test="delayContractProportion != null">delay_contract_proportion = #{delayContractProportion},</if>
+        </trim>
+        where office_address_count = #{officeAddressCount}
+    </update>
+
+    <delete id="deleteBusiDataById" parameterType="Long">
+        delete from busi_data where office_address_count = #{officeAddressCount}
+    </delete>
+
+    <delete id="deleteBusiDataByIds" parameterType="String">
+        delete from busi_data where office_address_count in
+        <foreach item="officeAddressCount" collection="array" open="(" separator="," close=")">
+            #{officeAddressCount}
+        </foreach>
+    </delete>
+
+</mapper>

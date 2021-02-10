@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('经营数据列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <label>报价日期：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endCreateTime]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="searchData()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped" style="display: none">
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">办事处数量：</label>
+                        <div class="col-sm-9">
+                            <p id="officeAddressCount" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">业务员数量：</label>
+                        <div class="col-sm-9">
+                            <p id="officeUsersCount" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报价数量：</label>
+                        <div class="col-sm-9">
+                            <p id="quotationCount" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报价金额合计：</label>
+                        <div class="col-sm-9">
+                            <p id="quotationPrice" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">人均报价金额：</label>
+                        <div class="col-sm-9">
+                            <p id="avgQuotationPrice"  class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">合同数量：</label>
+                        <div class="col-sm-9">
+                            <p id="contractCount" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">合同额合计：</label>
+                        <div class="col-sm-9">
+                            <p id="contractPrice" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">人均合同额：</label>
+                        <div class="col-sm-9">
+                            <p id="avgContractPrice" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">整体折扣率：</label>
+                        <div class="col-sm-9">
+                            <p id="overallDiscountRate" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">报价签约率：</label>
+                        <div class="col-sm-9">
+                            <p id="quotationDiscountRate" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">对应回款额：</label>
+                        <div class="col-sm-9">
+                            <p id="refundAmount" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">延期项目数量：</label>
+                        <div class="col-sm-9">
+                            <p id="delayContractCount" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 centered">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">延期项目比例：</label>
+                        <div class="col-sm-9">
+                            <p id="delayContractProportion" class="form-control-static">0</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('busi:data:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('busi:data:remove')}]];
+        var prefix = ctx + "busi/data";
+
+        function searchData() {
+            $.ajax({
+                url: prefix+"/list",
+                data:$("#formId").serialize(),
+                type: "post",
+                success: function (result) {
+                    var data = result.data;
+                    $("#officeAddressCount").html(data.officeAddressCount);
+                    $("#officeUsersCount").html(data.officeUsersCount);
+                    $("#quotationCount").html(data.quotationCount);
+                    $("#quotationPrice").html(data.quotationPrice);
+                    $("#avgQuotationPrice").html(data.avgQuotationPrice);
+                    $("#contractCount").html(data.contractCount);
+                    $("#contractPrice").html(data.contractPrice);
+                    $("#avgContractPrice").html(data.avgContractPrice);
+                    $("#overallDiscountRate").html(data.overallDiscountRate);
+                    $("#quotationDiscountRate").html(data.quotationDiscountRate);
+                    $("#refundAmount").html(data.refundAmount);
+                    $("#delayContractCount").html(data.delayContractCount);
+                    $("#delayContractProportion").html(data.delayContractProportion);
+                    $(".table-striped").show();
+                }
+            })
+
+        }
+
+    </script>
+</body>
+</html>

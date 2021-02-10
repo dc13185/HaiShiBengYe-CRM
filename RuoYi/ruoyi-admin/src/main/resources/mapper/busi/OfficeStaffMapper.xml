@@ -16,6 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="information"    column="information"    />
         <result property="mail"    column="mail"    />
         <result property="education"    column="education"    />
+        <result property="createTime"    column="create_time"    />
     </resultMap>
 
     <sql id="selectOfficeStaffVo">
@@ -49,6 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="information != null">information,</if>
             <if test="mail != null">mail,</if>
             <if test="education != null">education,</if>
+            <if test="createTime != null">create_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="officeAddress != null and officeAddress != ''">#{officeAddress},</if>
@@ -61,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="information != null">#{information},</if>
             <if test="mail != null">#{mail},</if>
             <if test="education != null">#{education},</if>
+            <if test="createTime != null">#{createTime},</if>
          </trim>
     </insert>
 
@@ -77,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="information != null">information = #{information},</if>
             <if test="mail != null">mail = #{mail},</if>
             <if test="education != null">education = #{education},</if>
+            <if test="createTime != null">createTime = #{createTime},</if>
         </trim>
         where office_staff_id = #{officeStaffId}
     </update>
