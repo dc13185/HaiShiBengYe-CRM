@@ -75,14 +75,12 @@ public class BusiPartsDetailsController extends BaseController
         //整机报价单标识
         Long bodCount =  map.get("bod_count");
         Long bqdCount =  map.get("bqd_count");
-        Long bpdCount =  map.get("bpd_count");
-
 
         Double partsgSum = quotationDetailsMapper.getPartsgSumPrice(quotationId);
         if (partsgSum!=null){
-            modelMap.put("sumOutsourcingPrice", partsgSum);
+            modelMap.put("partsPrice", partsgSum);
         }else{
-            modelMap.put("sumOutsourcingPrice", 0);
+            modelMap.put("partsFlag", 0);
         }
 
         //如果该报价单含有 外购报价单明细

@@ -21,7 +21,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 产品系列管理Controller
- * 
+ *
  * @author ruoyi
  * @date 2021-01-06
  */
@@ -39,6 +39,14 @@ public class BusiProductLineController extends BaseController
     public String line()
     {
         return prefix + "/line";
+    }
+
+
+    @RequiresPermissions("busi:line:view")
+    @GetMapping("chose")
+    public String choseLine()
+    {
+        return prefix + "/line_chose";
     }
 
     /**

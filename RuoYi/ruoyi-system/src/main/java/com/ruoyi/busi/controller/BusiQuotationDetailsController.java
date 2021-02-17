@@ -119,11 +119,16 @@ public class BusiQuotationDetailsController extends BaseController
         }else if(quotation.getQuotationType() == 2L){
             Double partsgSum = quotationDetailsMapper.getPartsgSumPrice(quotationId);
             if (partsgSum!=null){
-                modelMap.put("sumOutsourcingPrice", partsgSum);
+                modelMap.put("partsPrice", partsgSum);
             }else{
-                modelMap.put("sumOutsourcingPrice", 0);
+                modelMap.put("partsFlag", 0);
             }
 
+            if (bodCount > 0){
+                Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
+                modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+                modelMap.put("quotationFlag", 1);
+            }
             if (bqdCount > 0){
                 Double sumPrice =  quotationDetailsMapper.getSumPrice(quotationId);
                 if (sumPrice != null){
@@ -339,8 +344,8 @@ public class BusiQuotationDetailsController extends BaseController
         Double bengTouPrice = (materialCosts + laborCost + makeCost) / (1 - busiProductLine.getGrossProfitRate()) ;
         //外购加个 （电机采购成本+机封采购成本+轴承采购成本+联轴器采购成本+特殊配置费用）×（1+外购件配套管理费比例）
         Double waiGouPrice = ( motorPrice + machineProce + couplingPrice + bearingPrice + otherPrice) * (1+ Constant.PROPORTION_MANAGEMENT);
-        // 整机价格（泵头价格+外购件价格）×（1+包装运输费比例）×（1+税金及附加比例）
-        Double allPrice =  (bengTouPrice + waiGouPrice) * (1 + PACKING_AND_TRANSPORTATION_COSTS) * (1+ TAX_AND_ADDITIONAL_RATIO);
+        // 整机价格（泵头价格+外购件价格）/（1 - 包装运输费比例）/（1 - 税金及附加比例）
+        Double allPrice =  (bengTouPrice + waiGouPrice) * (1 - PACKING_AND_TRANSPORTATION_COSTS) * (1 - TAX_AND_ADDITIONAL_RATIO);
         busiQuotationDetails.setDetailsPrice(format(allPrice));
         busiQuotationDetails.setQuotationType(0L);
         busiQuotationDetailsService.insertBusiQuotationDetails(busiQuotationDetails);

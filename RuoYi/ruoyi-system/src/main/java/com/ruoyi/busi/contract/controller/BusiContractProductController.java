@@ -69,8 +69,9 @@ public class BusiContractProductController extends BaseController
      * 新增合同产品组成
      */
     @GetMapping("/add")
-    public String add()
+    public String add(String contractId,ModelMap modelMap)
     {
+        modelMap.put("contractId",contractId);
         return prefix + "/add";
     }
 

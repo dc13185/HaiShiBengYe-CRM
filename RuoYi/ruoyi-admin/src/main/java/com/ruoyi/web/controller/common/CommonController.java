@@ -109,6 +109,7 @@ public class CommonController
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             return AjaxResult.error(e.getMessage());
         }
     }

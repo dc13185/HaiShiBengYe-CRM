@@ -51,6 +51,61 @@ public class Constant {
     }
 
 
+    private enum Ping {
+//        HB("湖北省","HB"),
+        BJ("北京市","BJ"),
+        TJ("天津市","TJ"),
+        HEB("河北省","HEB"),
+        SX("山西省","SX"),
+        NMG("内蒙古自治区","NMG"),
+        LN("辽宁省","LN"),
+        JL("吉林省","JL"),
+        HLJ("黑龙江省","HLJ"),
+        SH("上海市","SH"),
+        JS("江苏省","JS"),
+        ZJ("浙江省","ZJ"),
+        AH("安徽省","AH"),
+        FJ("福建省","FJ"),
+        JX("江西省","JX"),
+        SD("山东省","SD"),
+        HN("河南省","HN"),
+        HB("湖北省","HB"),
+        HUN("湖南省","HUN"),
+        GD("广东省","GD"),
+        GX("广西壮族自治区","GX"),
+        HAN("海南省","HAN"),
+        CQ("重庆市","CQ"),
+        SC("四川省","SC"),
+        GZ("贵州省","GZ"),
+        YN("云南省","YN"),
+        XZ("西藏自治区","XZ"),
+        SHX("陕西省","SHX"),
+        GS("甘肃省","GS"),
+        QH("青海省","QH"),
+        NX("宁夏回族自治区","NX"),
+        XJ("新疆维吾尔自治区","XJ"),
+        XG("香港特别行政区","XG"),
+        AM("澳门特别行政区","AM"),
+        TW("台湾省","TW");
+        private String name;
+        private String pinyin;
+
+        Ping(String name, String pinyin) {
+            this.name = name;
+            this.pinyin = pinyin;
+        }
+    }
+
+    public static String getSfPinyin(String name){
+        for (Ping value : Ping.values()) {
+            if (value.name.equals(name)){
+                return value.pinyin;
+            }
+        }
+        return null;
+    }
+
+
 
 
 }

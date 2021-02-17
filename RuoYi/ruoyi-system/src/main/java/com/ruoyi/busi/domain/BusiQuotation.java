@@ -1,5 +1,6 @@
 package com.ruoyi.busi.domain;
 
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -64,19 +65,64 @@ public class BusiQuotation extends BaseEntity
     private Long quotationType;
 
     @Excel(name = "合计数量")
-    private Double allCount;
+    private Long allCount;
 
     @Excel(name = "自制报价单价格")
-    private Double quotationPrice;
+    private double quotationPrice;
 
     @Excel(name = "外购单价格")
-    private Double outsourcingPrice;
+    private double outsourcingPrice;
 
     @Excel(name = "配件价格")
-    private Double partsPrice;
+    private double partsPrice;
 
     @Excel(name = "合计价格")
     private Double sumPrice;
+
+    /** 是否签约 */
+    private Long isSing;
+
+    /** 省市区 */
+    private String province;
+
+    private String city;
+
+    private String area;
+
+    /** 整机数量 */
+    private long wholeCount;
+
+    /** 外购数量 */
+    private long outsourcingCount;
+
+    /** 外购数量 */
+    private long partsCount;
+
+
+
+    public long getWholeCount() {
+        return wholeCount;
+    }
+
+    public void setWholeCount(long wholeCount) {
+        this.wholeCount = wholeCount;
+    }
+
+    public long getOutsourcingCount() {
+        return outsourcingCount;
+    }
+
+    public void setOutsourcingCount(long outsourcingCount) {
+        this.outsourcingCount = outsourcingCount;
+    }
+
+    public long getPartsCount() {
+        return partsCount;
+    }
+
+    public void setPartsCount(long partsCount) {
+        this.partsCount = partsCount;
+    }
 
     public void setQuotationId(Long quotationId)
     {
@@ -177,16 +223,16 @@ public class BusiQuotation extends BaseEntity
         this.customerIndustry = customerIndustry;
     }
 
-    public Double getAllCount() {
-        return allCount;
+    public Long getAllCount() {
+        return wholeCount+outsourcingCount+partsCount;
     }
 
-    public void setAllCount(Double allCount) {
+    public void setAllCount(Long allCount) {
         this.allCount = allCount;
     }
 
     public Double getSumPrice() {
-        return sumPrice;
+        return StringUtils.doubleFormat(quotationPrice+outsourcingPrice+partsPrice);
     }
 
     public void setSumPrice(Double sumPrice) {
@@ -242,6 +288,50 @@ public class BusiQuotation extends BaseEntity
 
     public void setStaffId(Long staffId) {
         this.staffId = staffId;
+    }
+
+    public Long getIsSing() {
+        return isSing;
+    }
+
+    public void setIsSing(Long isSing) {
+        this.isSing = isSing;
+    }
+
+    public String getProvince() {
+        if (province != null){
+            return province;
+        }else{
+            return "";
+        }
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        if (city != null){
+            return city;
+        }else{
+            return "";
+        }
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        if (area != null){
+            return area;
+        }else{
+            return "";
+        }
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
     @Override

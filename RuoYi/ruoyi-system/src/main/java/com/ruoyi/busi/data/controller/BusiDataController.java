@@ -96,7 +96,12 @@ public class BusiDataController extends BaseController
         //完成数
         Long overCount = busiDataMapper.queryOverCount(busiData);
         //完成比率
-        resDate.setDelayContractProportion(StringUtils.doubleFormat(delayContractCount.doubleValue()/overCount.doubleValue()));
+        if (overCount != 0L){
+            resDate.setDelayContractProportion(StringUtils.doubleFormat(delayContractCount.doubleValue()/overCount.doubleValue()));
+        }else{
+            resDate.setDelayContractProportion(0d);
+        }
+
 
         return AjaxResult.success(resDate);
     }

@@ -46,7 +46,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         bq.technical_staff_id,
         (SELECT bt.`technicist_name` FROM busi_technicist bt WHERE bt.`technicist_id` = bq.`technical_staff_id` ) AS technicalStaffName,
         bq.quotation_type,
-        bq.create_time
+        bq.create_time,
+        (SELECT COUNT(1) FROM busi_contract bi WHERE bi.`qutation_id` = bq.`quotation_id`)   AS isSing,
+        (SELECT SUM(bpd.number) FROM busi_quotation_details bpd WHERE bpd.quotation_id = bq.quotation_id) AS wholeCount ,
+        (SELECT SUM(bod.number) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.quotation_id) AS outsourcingCount ,
+        (SELECT SUM(bp.number) FROM busi_parts_details bp WHERE bp.quotation_id = bq.quotation_id) AS partsCount,
+        (SELECT SUM(bpd.details_price) FROM busi_quotation_details bpd WHERE bpd.quotation_id = bq.quotation_id) AS quotationPrice ,
+        (SELECT SUM(bod.details_price) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.quotation_id) AS outsourcingPrice ,
+        (SELECT SUM(bp.details_price) FROM busi_parts_details bp WHERE bp.quotation_id = bq.quotation_id) AS partsPrice
+
         FROM
         busi_quotation bq
         <where>
@@ -92,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectEndCount" resultType="java.lang.Integer">
-        select quotation_id from  busi_quotation order by quotation_id desc limit 1
+        SELECT COUNT(1) FROM  busi_quotation
     </select>
 
 

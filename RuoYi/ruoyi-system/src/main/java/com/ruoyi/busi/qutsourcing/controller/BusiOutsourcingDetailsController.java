@@ -123,8 +123,8 @@ public class BusiOutsourcingDetailsController extends BaseController
         if (busiOutsourcingDetails.getOtherMotorPrice() != null){
             motorPrice = motorPrice + busiOutsourcingDetails.getOtherMotorPrice();
         }
-        //外购报价 外购泵泵头采购成本×（1+外购泵配套管理费比例）+电机采购成本×（1+外购件配套管理费比例）
-        Double allPrice = (motorPrice + busiOutsourcing.getOutsourcingPrice()) * (1 + Constant.PROPORTION_OF_MANAGEMENT_FEE_PURCHASED) * (1 + Constant.PROPORTION_MANAGEMENT);
+        //外购报价 泵头成本（来源于供应商）*（1+外购泵配套管理费用）+电机成本*（1+外购件配套管理费比例）
+        Double allPrice = ((busiOutsourcing.getOutsourcingPrice()) * (1 + Constant.PROPORTION_OF_MANAGEMENT_FEE_PURCHASED)) + (motorPrice * (1 + Constant.PROPORTION_MANAGEMENT));
         busiOutsourcingDetails.setDetailsPrice(StringUtils.doubleFormat(allPrice));
         busiOutsourcingDetails.setQuotationType(1L);
         //先进行保存 保存完毕重新统计

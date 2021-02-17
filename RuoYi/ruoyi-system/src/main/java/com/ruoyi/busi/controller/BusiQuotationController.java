@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.ruoyi.busi.Constant;
 import com.ruoyi.busi.domain.BusiCustomer;
 import com.ruoyi.busi.mapper.BusiPriceDetailsMapper;
 import com.ruoyi.busi.parts.mapper.BusiPartsDetailsMapper;
@@ -68,9 +69,6 @@ public class BusiQuotationController extends BaseController
     {
         startPage();
         List<BusiQuotation> list = busiQuotationService.selectBusiQuotationList(busiQuotation);
-/*        list = list.parallelStream().filter(b -> b.getQuotationId() != null).peek(b -> {
-            b.setSumPrice(b.getOutsourcingPrice() + b.getQuotationPrice() + b.getPartsPrice());
-        }).collect(Collectors.toList());*/
         return getDataTable(list);
     }
 
@@ -110,7 +108,7 @@ public class BusiQuotationController extends BaseController
         Long customerId = busiQuotation.getCustomerId();
         BusiCustomer customer = customerService.selectBusiCustomerById(customerId);
         Integer endCount = busiQuotationService.selectEndCount();
-        String endCountStr = endCount != null ? endCount+"":"0";
+        String endCountStr = endCount != null ? (endCount+1)+"":"1";
         if (endCountStr.length() < 3){
             String qz = "";
             for (int i = 0; i < 3 - endCountStr.length(); i++) {
@@ -118,7 +116,9 @@ public class BusiQuotationController extends BaseController
             }
             endCountStr =    qz + endCountStr;
         }
-        String quotationNo = DateUtils.dateTimeNow("YYYY_MM")+"_"+customer.getContactAddress()+"_"+endCountStr;
+        String pinYin = Constant.getSfPinyin(busiQuotation.getProvince());
+        busiQuotation.setProjectAddress(busiQuotation.getProvince()+busiQuotation.getCity()+busiQuotation.getArea());
+        String quotationNo = DateUtils.dateTimeNow("YYYY_MM")+"-"+pinYin+"-"+endCountStr;
         busiQuotation.setQuotationNo(quotationNo);
         busiQuotation.setCreateTime(new Date());
         busiQuotationService.insertBusiQuotation(busiQuotation);

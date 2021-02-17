@@ -41,6 +41,14 @@
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
+
+            <div class="col-sm-3 search-collapse" >
+                <small  th:if="${zhengjiFlag != null}"> 整机报价单费用合计:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
+                <br>
+                <small th:if="${quotationFlag !=null}"> 外购报价单合计:</small><small id="sumOutsourcingPrice"  th:text="${sumOutsourcingPrice}"></small>
+                <br>
+                <small> 配件报价单合计:</small><small id="quotationPrice"   th:text="${partsPrice}"></small>
+            </div>
         </div>
     </div>
     <th:block th:include="include :: footer" />
@@ -84,6 +92,13 @@
                 {
                     field: 'detailsPrice',
                     title: '单价'
+                },
+                {
+                    title: '总价',
+                    formatter: function(value, row, index) {
+                        var allPrice = row.number * row.detailsPrice;
+                        return allPrice.toFixed(2);
+                    }
                 },
                 {
                     title: '操作',
