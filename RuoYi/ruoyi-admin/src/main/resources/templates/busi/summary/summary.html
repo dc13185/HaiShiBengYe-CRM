@@ -81,6 +81,10 @@
                     visible: false
                 },
                 {
+                    field: 'contractNo',
+                    title: '合同号'
+                },
+                {
                     field: 'customerName',
                     title: '客户姓名'
                 },
@@ -101,13 +105,6 @@
                     title: '业务员'
                 },
                 {
-                    field: 'quotationType',
-                    title: '产品类型',
-                    formatter: function(value, row, index) {
-                       return $.table.selectDictLabel(quotationTypeDatas, value);
-                    }
-                },
-                {
                     field: 'sumQuotationPrice',
                     title: '报价金额',
                     formatter: function(value, row, index) {
@@ -119,7 +116,13 @@
                     field: 'contractPrice',
                     title: '合同金额'
                 },
-
+                {
+                    title: '折扣率',
+                    formatter: function(value, row, index) {
+                        var num = row.contractPrice / row.sumQuotationPrice;
+                        return num.toFixed(2);
+                    }
+                },
                 {
                     field: 'allSumCost',
                     title: '报价成本总计',
@@ -129,9 +132,16 @@
                     }
                 },
                 {
-                    title: '报价毛利率',
+                    title: '报价毛利润',
                     formatter: function(value, row, index) {
                         var num = row.allSumMargin;
+                        return num.toFixed(2);
+                    }
+                },
+                {
+                    title: '报价毛利率',
+                    formatter: function(value, row, index) {
+                        var num = row.allSumMargin / (row.allSumMargin + row.allSumCost);
                         return num.toFixed(2);
                     }
                 },
@@ -145,16 +155,16 @@
                 },
                 {
                     field: 'actualAllSumMargin',
-                    title: '实际报价毛利率',
+                    title: '实际报价毛利润',
                     formatter: function(value, row, index) {
                         var num = row.actualAllSumMargin;
                         return num.toFixed(2);
                     }
                 },
                 {
-                    title: '折扣率',
+                    title: '实际报价毛利率',
                     formatter: function(value, row, index) {
-                        var num = row.contractPrice / row.sumQuotationPrice;
+                        var num = row.actualAllSumMargin/(row.actualAllSumMargin + row.actualllSumCost);
                         return num.toFixed(2);
                     }
                 },

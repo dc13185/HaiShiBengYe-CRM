@@ -29,6 +29,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="quotationType"    column="quotation_type"    />
         <result property="coefficient"    column="coefficient"    />
         <result property="detailsPrice"    column="details_price"    />
+
+        <association property="busiOutsourcingCost" javaType="com.ruoyi.busi.cost.domain.BusiOutsourcingCost">
+            <result property="costId"    column="cost_id"    />
+            <result property="quotationId"    column="quotation_id"    />
+            <result property="productPrice"    column="product_price"    />
+            <result property="actualProductPrice"    column="actual_product_price"    />
+            <result property="motorPrice"    column="motor_price"    />
+            <result property="actualMotorPrice"    column="actual_motor_price"    />
+            <result property="quotationAmount"    column="quotationAmount"    />
+            <result property="profit"    column="profit"    />
+            <result property="actualProfit"    column="actualProfit"    />
+            <result property="actualAllPrice"    column="actualAllPrice"    />
+            <result property="sumPrice"    column="sumPrice"    />
+        </association>
     </resultMap>
 
     <sql id="selectBusiOutsourcingDetailsVo">
@@ -36,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectBusiOutsourcingDetailsList" parameterType="BusiOutsourcingDetails" resultMap="BusiOutsourcingDetailsResult">
-        SELECT details_id, quotation_id,
+        SELECT details_id, bqd.quotation_id,
         equipment_num,
         equipment_name,
         (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.product_supplier_id ) AS  productSupplierName,
@@ -60,9 +74,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         other_motor_price,
         quotation_type,
         coefficient,
-        details_price
+        details_price,
+        boc.*
         FROM
-        busi_outsourcing_details bqd
+        busi_outsourcing_details bqd INNER JOIN `busi_outsourcing_cost` boc ON bqd.quotation_id = boc.quotation_id
         <where>
             <if test="quotationId != null  and quotationId != ''"> and bqd.quotation_id = #{quotationId}</if>
         </where>

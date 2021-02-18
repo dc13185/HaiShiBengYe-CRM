@@ -21,11 +21,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectBusiCustomerList" parameterType="BusiCustomer" resultMap="BusiCustomerResult">
-        <include refid="selectBusiCustomerVo"/>
+        SELECT bc.*,
+        (SELECT SUM(bc1.`contract_price`)
+        FROM busi_quotation bq
+        LEFT JOIN busi_contract bc1
+        ON bc1.`qutation_id` = bq.`quotation_id`
+        WHERE  bq.`customer_id` = bc.`customer_id`) AS allContractPrice
+        FROM busi_customer bc
         <where>
-            <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
-            <if test="customerNature != null  and customerNature != ''"> and customer_nature = #{customerNature}</if>
-            <if test="contacts != null  and contacts != ''"> and contacts = #{contacts}</if>
+            <if test="customerName != null  and customerName != ''"> and bc.customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="customerNature != null  and customerNature != ''"> and bc.customer_nature = #{customerNature}</if>
+            <if test="contacts != null  and contacts != ''"> and bc.contacts = #{contacts}</if>
         </where>
     </select>
 

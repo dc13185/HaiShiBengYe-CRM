@@ -49,6 +49,9 @@ public class BusiCustomer extends BaseEntity
     @Excel(name = "联系方式")
     private String contactPhone;
 
+    @Excel(name = "合同金额")
+    private Double allContractPrice;
+
     public void setCustomerId(Long customerId)
     {
         this.customerId = customerId;
@@ -129,6 +132,14 @@ public class BusiCustomer extends BaseEntity
 
     public void setCustomerAddress(String customerAddress) {
         this.customerAddress = customerAddress;
+    }
+
+    public Double getAllContractPrice() {
+        return allContractPrice;
+    }
+
+    public void setAllContractPrice(Double allContractPrice) {
+        this.allContractPrice = allContractPrice;
     }
 
     @Override

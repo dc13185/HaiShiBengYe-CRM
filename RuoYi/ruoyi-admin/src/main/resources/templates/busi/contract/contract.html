@@ -11,6 +11,7 @@
                     <div class="select-list">
                         <ul>
                             <li class="select-time">
+                                <input type="hidden" class="time-input" name="courseId" th:value="${courseId}"/>
                                 <label>合同签订日期：</label>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginSigningDate]"/>
                                 <span>-</span>
@@ -165,6 +166,8 @@
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.contractId + '\')"><i class="fa fa-edit"></i>变更</a> ');
                         actions.push('<a class="btn btn-danger btn-xs' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.contractId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         actions.push('<a class="btn btn-primary btn-xs' + editFlag + '" href="javascript:void(0)" onclick="viewPlan(\'' + row.contractId + '\')"><i class="fa fa-eye"></i>进度</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs' + editFlag + '" href="javascript:void(0)" onclick="openFile(\'' + row.contractId + '\')"><i class="fa fa-eye"></i>上传</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="openFileDetails(\'' + row.contractId + '\')"><i class="fa fa-eye"></i>下载</a>');
                         actions.push('<a class="btn btn-danger btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="viewHistory(\'' + row.contractId + '\')"><i class="fa fa-eye"></i>历史</a> ');
                         if (row.contractType == 0){
                             actions.push('<a class="btn btn-warning btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="complete(\'' + row.contractId + '\',1)"><i class="fa fa-check"></i>完成</a>');
@@ -176,6 +179,15 @@
             };
             $.table.init(options);
         });
+
+
+        function openFile(supplierId){
+            $.modal.openFull("上传附件", ctx + "busi/supplier/toFile?type=1&supplierId="+supplierId);
+        }
+
+        function openFileDetails(supplierId){
+            $.modal.openFull("查看附件",  ctx + "busi/supplier/toFileDetails?type=1&supplierId="+supplierId);
+        }
 
 
         function viewPlan(contractId){

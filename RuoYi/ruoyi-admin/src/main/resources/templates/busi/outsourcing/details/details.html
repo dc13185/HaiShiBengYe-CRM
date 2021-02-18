@@ -49,11 +49,14 @@
 
 
             <div class="col-sm-3 search-collapse" >
-                <small  th:if="${zhengjiFlag != null}"> 整机报价单费用合计:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
+                <small th:if="${quotationFlag != null}"> 整机报价合计金额:</small>   <small id="sumPrice" th:text="${sumPrice}"></small>
+                <small th:if="${quotationFlag != null}"> 整机报价合计数量:</small>   <small th:if="${quotationFlag != null}" th:text="${quotation.wholeCount}"></small>
                 <br>
-                <small > 外购报价单合计:</small><small id="sumOutsourcingPrice"  th:text="${sumOutsourcingPrice}"></small>
+                <small> 外购报价合计金额:</small><small id="sumOutsourcingPrice"  th:text="${sumOutsourcingPrice}"></small>
+                <small> 外购报价合计数量:</small>   <small  th:text="${quotation.outsourcingCount}"></small>
                 <br>
-                <small th:if="${partsFlag != null}"> 配件报价单合计:</small><small id="quotationPrice"   th:text="${partsPrice}"></small>
+                <small th:if="${partsFlag != null}"> 配件报价合计金额:</small><small id="quotationPrice"   th:text="${partsPrice}"></small>
+                <small th:if="${partsFlag != null}"> 配件报价合计数量:</small><small  th:if="${partsFlag != null}" th:text="${quotation.partsCount}"></small>
             </div>
 
 
@@ -77,7 +80,7 @@
                 exportUrl: prefix + "/export",
                 modalName: "报价明细",
                 columns: [{
-                    raido: true
+                    radio: true
                 },
                 {
                     field: 'detailsId',
@@ -99,11 +102,11 @@
                     align: 'center',
                     title: '数量'
                 },
-                {
+         /*       {
                     field: 'productSupplierName',
                     align: 'center',
                     title: '产品供应商'
-                },
+                },*/
                 {
                     field: 'productLineName',
                     align: 'center',
@@ -189,6 +192,27 @@
                     title: '总价',
                     formatter: function(value, row, index) {
                         var num = row.coefficient * row.detailsPrice * row.number;
+                        return  num.toFixed(2);
+                    }
+                },
+                {
+                    title: '成本',
+                    formatter: function(value, row, index) {
+                        var num = row.busiOutsourcingCost.sumPrice;
+                        return  num.toFixed(2);
+                    }
+                },
+                {
+                    title: '泵头成本',
+                    formatter: function(value, row, index) {
+                        var num = row.busiOutsourcingCost.productPrice;
+                        return  num.toFixed(2);
+                    }
+                },
+                {
+                    title: '电机成本',
+                    formatter: function(value, row, index) {
+                        var num = row.busiOutsourcingCost.motorPrice;
                         return  num.toFixed(2);
                     }
                 },

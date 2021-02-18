@@ -7,7 +7,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 供应商附件中间对象 busi_supplier_annex
- * 
+ *
  * @author ruoyi
  * @date 2020-12-29
  */
@@ -26,30 +26,41 @@ public class BusiSupplierAnnex extends BaseEntity
     @Excel(name = "附件ID")
     private Long annexId;
 
-    public void setId(Long id) 
+    private String type;
+
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setSupplierId(String supplierId) 
+    public void setSupplierId(String supplierId)
     {
         this.supplierId = supplierId;
     }
 
-    public String getSupplierId() 
+    public String getSupplierId()
     {
         return supplierId;
     }
-    public void setAnnexId(Long annexId) 
+    public void setAnnexId(Long annexId)
     {
         this.annexId = annexId;
     }
 
-    public Long getAnnexId() 
+    public Long getAnnexId()
     {
         return annexId;
     }

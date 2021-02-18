@@ -32,6 +32,8 @@ public class BusiQuotationDetails extends BaseEntity
     /** 产品规格型号 */
     private Long modelId;
 
+
+
     /** 材料 */
     private Long materialId;
 
@@ -180,6 +182,8 @@ public class BusiQuotationDetails extends BaseEntity
     @Excel(name = "基准单价")
     private Double detailsPrice;
 
+
+    private BusiPriceDetails busiPriceDetails;
 
 
     public void setDetailsId(Long detailsId)
@@ -591,6 +595,14 @@ public class BusiQuotationDetails extends BaseEntity
 
     public void setBearingName(String bearingName) {
         this.bearingName = bearingName;
+    }
+
+    public BusiPriceDetails getBusiPriceDetails() {
+        return busiPriceDetails;
+    }
+
+    public void setBusiPriceDetails(BusiPriceDetails busiPriceDetails) {
+        this.busiPriceDetails = busiPriceDetails;
     }
 
     @Override

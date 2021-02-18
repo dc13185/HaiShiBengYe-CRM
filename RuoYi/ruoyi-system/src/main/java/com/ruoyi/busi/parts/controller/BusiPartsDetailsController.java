@@ -7,16 +7,12 @@ import java.util.Map;
 import com.ruoyi.busi.Constant;
 import com.ruoyi.busi.cost.domain.BusiPartsCost;
 import com.ruoyi.busi.cost.mapper.BusiPartsCostMapper;
-import com.ruoyi.busi.domain.BusiPrice;
-import com.ruoyi.busi.domain.BusiProductLine;
-import com.ruoyi.busi.domain.BusiProductParameter;
-import com.ruoyi.busi.domain.PriceSum;
+import com.ruoyi.busi.domain.*;
 import com.ruoyi.busi.mapper.BusiProductParameterMapper;
 import com.ruoyi.busi.mapper.BusiQuotationDetailsMapper;
 import com.ruoyi.busi.parts.mapper.BusiPartsDetailsMapper;
-import com.ruoyi.busi.service.IBusiPriceService;
-import com.ruoyi.busi.service.IBusiProductLineService;
-import com.ruoyi.busi.service.IBusiProductParameterService;
+import com.ruoyi.busi.service.*;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,11 +61,19 @@ public class BusiPartsDetailsController extends BaseController
     @Autowired
     private BusiPartsCostMapper partsCostMapper;
 
+    @Autowired
+    private IBusiQuotationService quotationService;
+
+    @Autowired
+    private IBusiMaterialProductionService busiMaterialProductionService;
+
 
     @RequiresPermissions("parts:parts:view")
     @GetMapping()
     public String parts(Long quotationId,ModelMap modelMap)
     {
+        BusiQuotation quotation = quotationService.selectBusiQuotationById(quotationId);
+        modelMap.put("quotation",quotation);
         Map<String,Long> map =  quotationDetailsMapper.getDetilsFalg(quotationId);
         modelMap.put("quotationId",quotationId);
         //整机报价单标识
@@ -150,8 +154,18 @@ public class BusiPartsDetailsController extends BaseController
     {
         BusiProductLine busiProductLine = busiProductLineService.selectBusiProductLineById(busiPartsDetails.getProductLineId());
         PriceSum priceSum = busiProductParameterMapper.selectPriceDetil(busiPartsDetails.getParameterId());
+
+        BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionById(busiPartsDetails.getMaterialId());
+
         //返回材料成本费用
-        Double materialCosts =  Double.valueOf(priceSum.getWeight() * priceSum.getMaterialPrice()* priceSum.getMassRatio());
+        Double materialCosts = 0d;
+        if (busiMaterialProduction == null){
+            Double.valueOf(priceSum.getWeight() * priceSum.getMaterialPrice()* priceSum.getMassRatio());
+        }else{
+            //如果材质存在 ,则就是重量*系数* 材质单价
+            Double.valueOf(priceSum.getWeight() * busiMaterialProduction.getPrice()* priceSum.getMassRatio());
+        }
+
         //返回人工成本费用
         Double laborCost = priceSum.getTime()* Constant.LABOR_COSTCOE_FFICIENT;
         //返回制造成本费用

@@ -2,6 +2,7 @@ package com.ruoyi.busi.mapper;
 
 import java.util.List;
 import com.ruoyi.busi.domain.BusiAnnexFile;
+import com.ruoyi.busi.domain.BusiSupplierAnnex;
 
 /**
  * 附件Mapper接口
@@ -19,7 +20,7 @@ public interface BusiAnnexFileMapper
      */
     public BusiAnnexFile selectBusiAnnexFileById(Long annexId);
 
-    public List<BusiAnnexFile> selectBusiAnnexFileBySupplierId(String supplierId);
+    public List<BusiAnnexFile> selectBusiAnnexFileBySupplierId(BusiSupplierAnnex busiSupplierAnnex);
 
 
     /**

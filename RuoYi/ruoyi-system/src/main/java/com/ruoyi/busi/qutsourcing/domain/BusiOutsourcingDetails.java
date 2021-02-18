@@ -1,5 +1,6 @@
 package com.ruoyi.busi.qutsourcing.domain;
 
+import com.ruoyi.busi.cost.domain.BusiOutsourcingCost;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -119,6 +120,17 @@ public class BusiOutsourcingDetails extends BaseEntity
     /** 单条报价单明细总价 */
     @Excel(name = "单条报价单明细总价")
     private Double detailsPrice;
+
+    private BusiOutsourcingCost busiOutsourcingCost;
+
+
+    public BusiOutsourcingCost getBusiOutsourcingCost() {
+        return busiOutsourcingCost;
+    }
+
+    public void setBusiOutsourcingCost(BusiOutsourcingCost busiOutsourcingCost) {
+        this.busiOutsourcingCost = busiOutsourcingCost;
+    }
 
     public void setDetailsId(Long detailsId)
     {

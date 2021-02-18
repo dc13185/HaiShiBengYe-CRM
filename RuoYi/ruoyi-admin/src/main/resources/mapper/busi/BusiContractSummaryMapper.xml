@@ -5,6 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.busi.summary.mapper.BusiContractSummaryMapper">
 
     <resultMap type="BusiContractSummary" id="BusiContractSummaryResult">
+        <result property="contractNo"    column="contract_no"    />
         <result property="summaryId"    column="summary_id"    />
         <result property="customerName"    column="customer_name"    />
         <result property="customerNature"    column="customer_nature"    />

@@ -18,6 +18,9 @@ public class BusiContractSummary extends BaseEntity
     /**  */
     private Long summaryId;
 
+    @Excel(name = "合同号")
+    private String contractNo;
+
     private String quotationNo;
 
     /** 客户姓名 */
@@ -82,6 +85,13 @@ public class BusiContractSummary extends BaseEntity
     private Double  outActualProfit;
     private Double  partsActualProfit;
 
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
 
     public Double getQuotationPrice() {
         return quotationPrice;

@@ -58,15 +58,18 @@ public class BusiContractController extends BaseController
 
     @RequiresPermissions("busi:contract:view")
     @GetMapping()
-    public String contract()
+    public String contract(String courseId,ModelMap modelMap)
     {
+        if(StringUtils.isNotEmpty(courseId)){
+            modelMap.put("courseId",courseId);
+        }
         return prefix + "/contract";
     }
 
 
     @RequiresPermissions("busi:contract:view")
     @GetMapping("/toHistory")
-    public String toHistory(String contractId,ModelMap modelMap)
+    public String toHistory(String contractId,String courseId,ModelMap modelMap)
     {
         modelMap.put("contractId",contractId);
         return prefix + "/contract_history";

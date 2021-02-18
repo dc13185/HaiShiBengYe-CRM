@@ -78,6 +78,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="params.endSigningDate != null and params.endSigningDate != ''"><!-- 结束时间检索 -->
             and date_format(signing_date,'%y-%m-%d') &lt;= date_format(#{params.endSigningDate},'%y-%m-%d')
         </if>
+        <if test="courseId != null"><!-- 结束时间检索 -->
+            and bq.customer_id = #{courseId}
+        </if>
     </select>
 
 

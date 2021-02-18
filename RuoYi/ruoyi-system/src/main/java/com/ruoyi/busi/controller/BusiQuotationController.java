@@ -107,7 +107,8 @@ public class BusiQuotationController extends BaseController
     {
         Long customerId = busiQuotation.getCustomerId();
         BusiCustomer customer = customerService.selectBusiCustomerById(customerId);
-        Integer endCount = busiQuotationService.selectEndCount();
+        String pinYin = Constant.getSfPinyin(busiQuotation.getProvince());
+        Integer endCount = busiQuotationService.selectEndCount(pinYin);
         String endCountStr = endCount != null ? (endCount+1)+"":"1";
         if (endCountStr.length() < 3){
             String qz = "";
@@ -116,9 +117,9 @@ public class BusiQuotationController extends BaseController
             }
             endCountStr =    qz + endCountStr;
         }
-        String pinYin = Constant.getSfPinyin(busiQuotation.getProvince());
         busiQuotation.setProjectAddress(busiQuotation.getProvince()+busiQuotation.getCity()+busiQuotation.getArea());
-        String quotationNo = DateUtils.dateTimeNow("YYYY_MM")+"-"+pinYin+"-"+endCountStr;
+        String quotationNo = DateUtils.dateTimeNow("YYYY-MM")+"-"+pinYin+"-"+endCountStr;
+        busiQuotation.setProvince(pinYin);
         busiQuotation.setQuotationNo(quotationNo);
         busiQuotation.setCreateTime(new Date());
         busiQuotationService.insertBusiQuotation(busiQuotation);

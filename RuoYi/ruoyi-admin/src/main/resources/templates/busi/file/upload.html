@@ -10,6 +10,7 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <input type="hidden" id="sid" th:value="${supplierId}"  >
+                    <input type="hidden" id="type" th:value="${type}"  >
                     <div class="ibox-title">
                         <h5>文件上传控件</h5>
                     </div>
@@ -32,13 +33,18 @@
     $(document).ready(function () {
         var prefix = '/common/upload'
         var sid = $("#sid").val();
+        var type = $("#type").val();
+        if (!type){
+            type = 0;
+        }
+
         $("#fileinput-demo-1").fileinput({
             'theme': 'explorer-fas',
             'uploadUrl': prefix,
             overwriteInitial: false,
             initialPreviewAsData: true,
             maxFileCount: 1,
-            uploadExtraData: {"supplierId":sid}
+            uploadExtraData: {"supplierId":sid,"type":type}
         });
 
         $(".file-drop-zone-title").html("清选择上传文件")

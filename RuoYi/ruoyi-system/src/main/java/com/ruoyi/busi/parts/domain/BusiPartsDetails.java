@@ -1,5 +1,6 @@
 package com.ruoyi.busi.parts.domain;
 
+import com.ruoyi.busi.cost.domain.BusiPartsCost;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -48,6 +49,70 @@ public class BusiPartsDetails extends BaseEntity
     private Long number;
 
     private Double detailsPrice;
+
+    private BusiPartsCost partsCost;
+
+    /** 调整系数 */
+    private Double coefficient;
+
+    /** 材料ID */
+    private Long materialId;
+    /** 供应商ID */
+    private String materialSupplierId;
+
+    private String materialSupplierName;
+
+    @Excel(name = "过流材质")
+    private String materialName;
+
+
+    public Double getCoefficient() {
+        return coefficient;
+    }
+
+    public void setCoefficient(Double coefficient) {
+        this.coefficient = coefficient;
+    }
+
+    public Long getMaterialId() {
+        return materialId;
+    }
+
+    public void setMaterialId(Long materialId) {
+        this.materialId = materialId;
+    }
+
+    public String getMaterialSupplierId() {
+        return materialSupplierId;
+    }
+
+    public void setMaterialSupplierId(String materialSupplierId) {
+        this.materialSupplierId = materialSupplierId;
+    }
+
+    public String getMaterialSupplierName() {
+        return materialSupplierName;
+    }
+
+    public void setMaterialSupplierName(String materialSupplierName) {
+        this.materialSupplierName = materialSupplierName;
+    }
+
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName;
+    }
+
+    public BusiPartsCost getPartsCost() {
+        return partsCost;
+    }
+
+    public void setPartsCost(BusiPartsCost partsCost) {
+        this.partsCost = partsCost;
+    }
 
     public void setDetailsId(Long detailsId)
     {

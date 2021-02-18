@@ -53,6 +53,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="couplingName"    column="coupling_name"    />
         <result property="bearingSupplierName"    column="bearing_supplier_name"    />
         <result property="bearingName"    column="bearing_name"    />
+
+
+        <association property="busiPriceDetails" javaType="com.ruoyi.busi.domain.BusiPriceDetails">
+            <result property="priceDetailsId"    column="price_details_id"    />
+            <result property="bengtouclCb"    column="bengtoucl_cb"    />
+            <result property="actualBengtouclCb"    column="actual_bengtoucl_cb"    />
+            <result property="bengtouRgCb"    column="bengtou_rg_cb"    />
+            <result property="bengtouFyCb"    column="bengtou_fy_cb"    />
+            <result property="actualBengtouRgCb"    column="actual_bengtou_rg_cb"    />
+            <result property="motorCb"    column="motor_cb"    />
+            <result property="actualBengtouFyCb"    column="actual_bengtou_fy_cb"    />
+            <result property="jfCb"    column="jf_cb"    />
+            <result property="zcCb"    column="zc_cb"    />
+            <result property="zlqCb"    column="zlq_cb"    />
+            <result property="actualMotorCb"    column="actual_motor_cb"    />
+            <result property="ewCb"    column="ew_cb"    />
+            <result property="quotationId"    column="quotation_id"    />
+            <result property="actualJfCb"    column="actual_jf_cb"    />
+            <result property="actualZcCb"    column="actual_zc_cb"    />
+            <result property="actualZlqCb"    column="actual_zlq_cb"    />
+            <result property="actualEwCb"    column="actual_ew_cb"    />
+            <result property="contractPrice"    column="contractPrice"    />
+            <result property="actualContractprice"    column="actual_contractPrice"    />
+            <result property="profit"    column="profit"    />
+            <result property="actualProfit"    column="actual_profit"    />
+            <result property="actualBengtouCb"    column="actualBengtouCb"    />
+            <result property="actualWghj"    column="actualWghj"    />
+            <result property="sumPrice"    column="sumPrice"    />
+        </association>
     </resultMap>
 
     <sql id="selectBusiQuotationDetailsVo">
@@ -60,7 +89,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectBusiQuotationDetailsList" parameterType="BusiQuotationDetails" resultMap="BusiQuotationDetailsResult">
-        SELECT details_id, quotation_id,
+        SELECT details_id, bpd.quotation_id,
         equipment_num,
         product_line_id,
         (SELECT product_line_name FROM busi_product_line bpl WHERE bpl.product_line_id = bqd.product_line_id) AS product_line_name ,
@@ -110,9 +139,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         other_bearing_price,
         quotation_type,
         coefficient,
-        details_price
+        details_price,
+        bpd.*
         FROM
-        busi_quotation_details bqd
+        busi_quotation_details bqd INNER JOIN busi_price_details bpd ON bqd.`quotation_id` = bpd.`quotation_id`
         <where>
             <if test="quotationId != null  and quotationId != ''"> and bqd.quotation_id = #{quotationId}</if>
         </where>

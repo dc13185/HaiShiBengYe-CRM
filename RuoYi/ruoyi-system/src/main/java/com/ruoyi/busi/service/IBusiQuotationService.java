@@ -59,5 +59,5 @@ public interface IBusiQuotationService
      */
     public int deleteBusiQuotationById(Long quotationId);
 
-    public Integer selectEndCount();
+    public Integer selectEndCount(String province);
 }

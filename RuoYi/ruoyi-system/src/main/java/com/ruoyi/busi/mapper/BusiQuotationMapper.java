@@ -60,5 +60,5 @@ public interface BusiQuotationMapper
     public int deleteBusiQuotationByIds(String[] quotationIds);
 
 
-    public Integer selectEndCount();
+    public Integer selectEndCount(String province);
 }

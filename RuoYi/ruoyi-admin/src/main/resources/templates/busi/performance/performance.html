@@ -121,6 +121,17 @@
                             return  0;
                         }
                     }
+                },
+                {
+                    title: '回款率',
+                    formatter: function(value, row, index) {
+                        if (row.singQuotationPrice){
+                            var number  = row.singQuotationPrice/row.contractPrice;
+                            return number.toFixed(2);
+                        }else{
+                            return  0;
+                        }
+                    }
                 }]
             };
             $.table.init(options);
@@ -198,7 +209,7 @@
                     },
                     {
                         field: 'singQuotationPrice',
-                        title: '平均回款金额',
+                        title: '平均签约金额',
                         formatter: function(value, row, index) {
                             var number  = row.singQuotationPrice;
                             if (number){
@@ -207,7 +218,19 @@
                                 return  0;
                             }
                         }
-                    }]
+                    },
+                    {
+                        title: '平均签约率',
+                        formatter: function(value, row, index) {
+                            var number  = row.singQuotationPrice;
+                            if (number){
+                                return (number/row.contractPrice).toFixed(2);
+                            }else{
+                                return  0;
+                            }
+                        }
+                    }
+                ]
             };
             $.table.init(options);
         });

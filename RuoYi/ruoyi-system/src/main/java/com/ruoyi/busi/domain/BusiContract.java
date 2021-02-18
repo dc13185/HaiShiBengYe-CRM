@@ -80,6 +80,8 @@ public class BusiContract extends BaseEntity
 
     private Double repaymentAmount;
 
+    private Long courseId;
+
     private List<BusiContractProduct> busiContractProducts;
 
     public void setContractId(Long contractId)
@@ -234,6 +236,15 @@ public class BusiContract extends BaseEntity
 
     public void setRepaymentAmount(Double repaymentAmount) {
         this.repaymentAmount = repaymentAmount;
+    }
+
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
     }
 
     @Override

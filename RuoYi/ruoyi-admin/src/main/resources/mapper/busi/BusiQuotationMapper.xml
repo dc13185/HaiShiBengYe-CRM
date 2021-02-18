@@ -54,7 +54,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT SUM(bpd.details_price) FROM busi_quotation_details bpd WHERE bpd.quotation_id = bq.quotation_id) AS quotationPrice ,
         (SELECT SUM(bod.details_price) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.quotation_id) AS outsourcingPrice ,
         (SELECT SUM(bp.details_price) FROM busi_parts_details bp WHERE bp.quotation_id = bq.quotation_id) AS partsPrice
-
         FROM
         busi_quotation bq
         <where>
@@ -86,7 +85,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         bq.technical_staff_id,
         (SELECT bt.`technicist_name` FROM busi_technicist bt WHERE bt.`technicist_id` = bq.`technical_staff_id` ) AS technicalStaffName,
         bq.quotation_type,
-        bq.create_time/* ,
+        bq.create_time,
+       (SELECT SUM(bpd.number) FROM busi_quotation_details bpd WHERE bpd.quotation_id = bq.quotation_id) AS wholeCount ,
+        (SELECT SUM(bod.number) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.quotation_id) AS outsourcingCount ,
+        (SELECT SUM(bp.number) FROM busi_parts_details bp WHERE bp.quotation_id = bq.quotation_id) AS partsCount,
+        (SELECT SUM(bpd.details_price) FROM busi_quotation_details bpd WHERE bpd.quotation_id = bq.quotation_id) AS quotationPrice ,
+        (SELECT SUM(bod.details_price) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.quotation_id) AS outsourcingPrice ,
+        (SELECT SUM(bp.details_price) FROM busi_parts_details bp WHERE bp.quotation_id = bq.quotation_id) AS partsPrice/* ,
        IFNULL(ROUND(SUM(bqd.details_price*bqd.coefficient * bqd.number),2),0) AS quotationPrice,
         IFNULL(ROUND(SUM(bod.details_price*bod.coefficient * bod.number),2),0) AS outsourcingPrice,
         IFNULL(ROUND(SUM(bpd.details_price * bpd.number),2),0) AS partsPrice,
@@ -100,7 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectEndCount" resultType="java.lang.Integer">
-        SELECT COUNT(1) FROM  busi_quotation
+        SELECT COUNT(1) FROM  busi_quotation where province =#{province}
     </select>
 
 
@@ -117,6 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quotationType != null">quotation_type,</if>
             <if test="createTime != null">create_time,</if>
             <if test="staffId != null">staff_id,</if>
+            <if test="province != null">province,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null and projectName != ''">#{projectName},</if>
@@ -129,6 +135,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quotationType != null">#{quotationType},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="staffId != null">#{staffId},</if>
+            <if test="province != null">#{province},</if>
          </trim>
     </insert>
 

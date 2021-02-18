@@ -93,7 +93,7 @@ public class BusiQuotationServiceImpl implements IBusiQuotationService
     }
 
     @Override
-    public Integer selectEndCount(){
-        return busiQuotationMapper.selectEndCount();
+    public Integer selectEndCount(String province){
+        return busiQuotationMapper.selectEndCount(province);
     }
 }

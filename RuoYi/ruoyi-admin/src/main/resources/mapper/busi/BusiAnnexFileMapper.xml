@@ -38,6 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        SELECT f.*  FROM busi_annex_file  f
         INNER JOIN busi_supplier_annex b ON f.annex_id = b.annex_id
         WHERE b.supplier_id = #{supplierId}
+        <if test="type != null">and type = #{type}</if>
     </select>
 
 

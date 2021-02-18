@@ -23,8 +23,7 @@
                                         <br/>
                                         <small th:text="上传时间 + ${#dates.format(busiAnnexFile.createTime,'yyyy-MM-dd HH:mm:ss')}"></small>
                                         <button type="button" class="btn btn-primary btn-xs" th:onclick="download([[${busiAnnexFile.annexFileName}]])">下载</button>
-                                        <button type="button" class="btn  btn-danger btn-xs">删除</button>
-
+                                       <!-- <button type="button" class="btn  btn-danger btn-xs">删除</button>-->
                                     </div>
                                 </a>
                             </div>

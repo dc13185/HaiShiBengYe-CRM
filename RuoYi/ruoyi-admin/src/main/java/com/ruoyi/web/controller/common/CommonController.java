@@ -79,7 +79,7 @@ public class CommonController
      */
     @PostMapping("/common/upload")
     @ResponseBody
-    public AjaxResult uploadFile(MultipartFile file,String supplierId) throws Exception
+    public AjaxResult uploadFile(MultipartFile file,String supplierId,String type) throws Exception
     {
         try
         {
@@ -100,6 +100,7 @@ public class CommonController
             BusiSupplierAnnex busiSupplierAnnex = new BusiSupplierAnnex();
             busiSupplierAnnex.setAnnexId(busiAnnexFile.getAnnexId());
             busiSupplierAnnex.setSupplierId(supplierId);
+            busiSupplierAnnex.setType(type);
             busiSupplierAnnexService.insertBusiSupplierAnnex(busiSupplierAnnex);
 
             AjaxResult ajax = AjaxResult.success();
