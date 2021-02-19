@@ -73,6 +73,14 @@
                     title: '合同号'
                 },
                 {
+                    field: 'busiQuotation.quotationType',
+                    title: '产品类型',
+                    formatter: function(value, row, index) {
+                        debugger;
+                        return $.table.selectDictLabel(quotationTypeDatas, value);
+                    }
+                },
+                {
                     field: 'busiQuotation.customerName',
                     title: '客户名称'
                 },
@@ -144,14 +152,6 @@
                     title: '项目状态',
                     formatter: function(value, row, index) {
                         return $.table.selectDictLabel(contractTypeDatas, value);
-                    }
-                },
-                {
-                    field: 'busiQuotation.quotationType',
-                    title: '产品类型',
-                    formatter: function(value, row, index) {
-                        debugger;
-                        return $.table.selectDictLabel(quotationTypeDatas, value);
                     }
                 },
 
@@ -227,6 +227,42 @@
             });
         }
 
+
+        function submitHandler() {
+            var contractNo = $.table.selectColumns('contractNo');
+            var quotationNo = $.table.selectColumns('busiQuotation.quotationNo');
+            var staffId = $.table.selectColumns('busiQuotation.staffId');
+            var officeAddress = $.table.selectColumns('busiQuotation.officeAddress');
+            var officeStaffName = $.table.selectColumns('busiQuotation.officeStaffName');
+            var contractPrice = $.table.selectColumns('contractPrice');
+            var sumPrice = $.table.selectColumns('busiQuotation.sumPrice');
+            var quotationId = $.table.selectColumns('qutationId');
+
+            $.ajax({
+                url: prefix+"/queryCostByQuotationId?quotationId="+quotationId ,
+                type: "get",
+                async:false,
+                success:function (result) {
+                    var motorCost = result.motorCost;
+                    var otherCost = result.otherCost;
+                    parent.$('#motorCost').val(motorCost);
+                    parent.$('#otherCost').val(otherCost);
+                }
+            })
+
+            if ( $.table.selectFirstColumns()== 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            $.modal.close();
+            parent.$('#contractNo').val(contractNo);
+            parent.$('#quotationNo').val(quotationNo);
+            parent.$('#staffId').val(staffId);
+            parent.$('#officeAddress').val(officeAddress);
+            parent.$('#officeStaffName').val(officeStaffName);
+            parent.$('#contractPrice').val(contractPrice);
+            parent.$('#quotationPrice').val(sumPrice);
+        }
 
     </script>
 </body>

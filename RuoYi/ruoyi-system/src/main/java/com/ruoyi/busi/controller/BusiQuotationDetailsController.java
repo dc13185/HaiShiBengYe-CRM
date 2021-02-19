@@ -573,7 +573,7 @@ public class BusiQuotationDetailsController extends BaseController
             busiPriceDetails.setEwCb(otherPrice);
             busiPriceDetails.setQuotationId(quotationId);
             //报价金额
-            Double quotationAmount =  busiQuotationDetailList.parallelStream().mapToDouble(b ->  b.getDetailsPrice()* b.getNumber()).sum();
+            Double quotationAmount =  busiQuotationDetailList.parallelStream().mapToDouble(b ->  b.getDetailsPrice()* b.getNumber() * b.getCoefficient()).sum();
             busiPriceDetails.setContractPrice(format(quotationAmount));
             Double sumPrice = busiPriceDetails.getBengtouclCb()
                     + busiPriceDetails.getBengtouRgCb()

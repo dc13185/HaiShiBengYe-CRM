@@ -76,8 +76,11 @@ public class BusiQuotation extends BaseEntity
     @Excel(name = "配件价格")
     private double partsPrice;
 
-    @Excel(name = "合计价格")
+    @Excel(name = "报价合计")
     private Double sumPrice;
+
+
+
 
     /** 是否签约 */
     private Long isSing;

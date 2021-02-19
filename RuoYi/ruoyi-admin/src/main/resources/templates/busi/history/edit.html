@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改业务费用结算历史')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-history-edit" th:object="${busiSettlementHistory}">
+            <input name="basedCommission" th:field="*{basedCommission}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">基础性提成计提比例/%：</label>
+                <div class="col-sm-8">
+                    <input name="basedCommission" th:field="*{basedCommission}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">溢价部分计提比例/%：</label>
+                <div class="col-sm-8">
+                    <input name="premiumCommission" th:field="*{premiumCommission}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">应付业务费合计/元：</label>
+                <div class="col-sm-8">
+                    <input name="businessCommission" th:field="*{businessCommission}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">应付业务费用类型选择：</label>
+                <div class="col-sm-8">
+                    <select name="businessCommissionType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">质保金比例/%：</label>
+                <div class="col-sm-8">
+                    <input name="warrantyCommission" th:field="*{warrantyCommission}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">已回款金额/元：</label>
+                <div class="col-sm-8">
+                    <input name="receivedCommission" th:field="*{receivedCommission}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">已结算业务费：</label>
+                <div class="col-sm-8">
+                    <input name="alreadySettlementBusinessFee" th:field="*{alreadySettlementBusinessFee}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">结算业务费：</label>
+                <div class="col-sm-8">
+                    <input name="settlementBusinessFee" th:field="*{settlementBusinessFee}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">暂扣代缴个人所得税：</label>
+                <div class="col-sm-8">
+                    <input name="individualIncomeTax" th:field="*{individualIncomeTax}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">支付业务费金额：</label>
+                <div class="col-sm-8">
+                    <input name="amountOfBusiness" th:field="*{amountOfBusiness}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">业务结算费用Id：</label>
+                <div class="col-sm-8">
+                    <input name="settlementId" th:field="*{settlementId}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "busi/history";
+        $("#form-history-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-history-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="repaymentAmount"    column="repaymentAmount"    />
 
         <association property="busiQuotation" javaType="com.ruoyi.busi.domain.BusiQuotation">
+            <result property="quotationNo"    column="quotation_no"    />
             <result property="quotationId"    column="quotation_id"    />
             <result property="projectName"    column="project_name"    />
             <result property="projectAddress"    column="project_address"    />
@@ -32,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <result property="officeAddress"    column="office_address"    />
             <result property="officeStaffName"    column="office_staff_name"    />
             <result property="technicalStaffId"    column="technical_staff_id"    />
+            <result property="staffId"    column="staff_id"    />
             <result property="quotationType"    column="quotation_type"    />
             <result property="sumPrice"    column="sumPrice"    />
             <result property="quotationPrice"    column="quotationPrice"    />
@@ -68,7 +70,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT IFNULL(ROUND(SUM(details_price*coefficient * number),2),0) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  quotationPrice,
         (SELECT  IFNULL(ROUND(SUM(bod.details_price*bod.coefficient * bod.number),2),0) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.`quotation_id` )  AS outsourcingPrice,
         (SELECT   IFNULL(ROUND(SUM(bpd.details_price * bpd.number),2),0)  FROM busi_parts_details bpd WHERE bpd.quotation_id = bq.`quotation_id` ) AS partsPrice,
-        bc.*
+        bc.*,
+        bq.quotation_no,
+        bq.staff_id
         from
         busi_contract bc , busi_quotation bq
         WHERE bc.qutation_id =bq.quotation_id
@@ -108,6 +112,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
+    <select id="selectBusiContractByNo" resultMap="BusiContractResult" parameterType="java.lang.String">
+         SELECT
+        quotation_id,
+        project_name,
+        project_address,
+        quotation_no,
+        customer_id,
+        repaymentAmount,
+        (SELECT bc.customer_name FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_name,
+        (SELECT bc.customer_industry FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_industry,
+        (SELECT bc.contact_address FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_address,
+        office_address,
+        office_staff_name,
+        technical_staff_id,
+        quotation_type,
+        create_time,
+        (SELECT IFNULL(ROUND(SUM(details_price*coefficient * number),2),0) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  quotationPrice,
+        (SELECT  IFNULL(ROUND(SUM(bod.details_price*bod.coefficient * bod.number),2),0) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.`quotation_id` )  AS outsourcingPrice,
+        (SELECT   IFNULL(ROUND(SUM(bpd.details_price * bpd.number),2),0)  FROM busi_parts_details bpd WHERE bpd.quotation_id = bq.`quotation_id` ) AS partsPrice,
+        bc.*,
+        bq.quotation_no,
+        bq.staff_id
+        from
+        busi_contract bc , busi_quotation bq
+        WHERE bc.qutation_id =bq.quotation_id
+        and bc.contract_no = #{contractNo}
+    </select>
+
+
     <select id="selectBusiContractById" parameterType="Long" resultMap="BusiContractResult">
         <include refid="selectBusiContractVo"/>
         where contract_id = #{contractId}
@@ -116,6 +149,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectCount" resultType="java.lang.Integer">
        SELECT bc.contract_id FROM busi_contract bc ORDER BY bc.contract_id DESC LIMIT 1
     </select>
+
 
     <insert id="insertBusiContract" parameterType="BusiContract" useGeneratedKeys="true" keyProperty="contractId">
         insert into busi_contract
@@ -234,5 +268,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{contractId}
         </foreach>
     </delete>
+
+
+    <select id="queryCostByQuotationId" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT sum(IFNULL(bqd.`motor_cost`,0)+ IFNULL(bod.`motor_cost`,0) ) AS motorCost,
+        sum(IFNULL(bqd.`other_expenses`,0)+ IFNULL(bod.`other_expenses`,0) ) AS otherCost
+        FROM  busi_quotation bq
+        LEFT JOIN busi_quotation_details bqd ON bq.`quotation_id`= bqd.`quotation_id`
+        LEFT JOIN busi_outsourcing_details bod ON bq.`quotation_id` = bod.`quotation_id`
+        where bq.quotation_id = #{quotationId}
+    </select>
+
 
 </mapper>

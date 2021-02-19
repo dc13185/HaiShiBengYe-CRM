@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.settlement.mapper.BusiSettlementMapper">
+
+    <resultMap type="BusiSettlement" id="BusiSettlementResult">
+        <result property="settlementId"    column="settlement_id"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="quotationNo"    column="quotation_no"    />
+        <result property="staffId"    column="staff_id"    />
+        <result property="contractPrice"    column="contract_price"    />
+        <result property="quotationPrice"    column="quotation_price"    />
+        <result property="motorCost"    column="motor_cost"    />
+        <result property="otherCost"    column="other_cost"    />
+        <result property="basedCommission"    column="based_commission"    />
+        <result property="premiumCommission"    column="premium_commission"    />
+        <result property="businessCommission"    column="business_commission"    />
+        <result property="businessCommissionType"    column="business_commission_type"    />
+        <result property="warrantyCommission"    column="warranty_commission"    />
+        <result property="receivedCommission"    column="received_commission"    />
+        <result property="settlementBusinessFee"    column="settlement_business_fee"    />
+        <result property="individualIncomeTax"    column="individual_income_tax"    />
+        <result property="amountOfBusiness"    column="amount_of_business"    />
+        <result property="officeAddress"    column="office_address"    />
+        <result property="officeStaffName"    column="office_staff_name"    />
+    </resultMap>
+
+    <sql id="selectBusiSettlementVo">
+        select settlement_id, contract_no, quotation_no, staff_id, contract_price, quotation_price, motor_cost, other_cost, based_commission, premium_commission, business_commission, business_commission_type, warranty_commission, received_commission, settlement_business_fee, individual_income_tax, amount_of_business from busi_settlement
+    </sql>
+
+    <select id="selectBusiSettlementList" parameterType="BusiSettlement" resultMap="BusiSettlementResult">
+        SELECT
+        bs.* ,
+        os.`office_address`,
+        os.`office_staff_name`
+        FROM
+        busi_settlement bs INNER JOIN office_staff os ON bs.`staff_id` = os.`office_staff_id`
+        <where>
+            <if test="contractNo != null  and contractNo != ''"> and contract_no = #{contractNo}</if>
+            <if test="quotationNo != null "> and quotation_no = #{quotationNo}</if>
+            <if test="staffId != null "> and staff_id = #{staffId}</if>
+            <if test="contractPrice != null "> and contract_price = #{contractPrice}</if>
+            <if test="quotationPrice != null "> and quotation_price = #{quotationPrice}</if>
+            <if test="motorCost != null "> and motor_cost = #{motorCost}</if>
+            <if test="otherCost != null "> and other_cost = #{otherCost}</if>
+            <if test="basedCommission != null "> and based_commission = #{basedCommission}</if>
+            <if test="premiumCommission != null "> and premium_commission = #{premiumCommission}</if>
+            <if test="businessCommission != null "> and business_commission = #{businessCommission}</if>
+            <if test="businessCommissionType != null "> and business_commission_type = #{businessCommissionType}</if>
+            <if test="warrantyCommission != null "> and warranty_commission = #{warrantyCommission}</if>
+            <if test="receivedCommission != null "> and received_commission = #{receivedCommission}</if>
+            <if test="settlementBusinessFee != null "> and settlement_business_fee = #{settlementBusinessFee}</if>
+            <if test="individualIncomeTax != null "> and individual_income_tax = #{individualIncomeTax}</if>
+            <if test="amountOfBusiness != null "> and amount_of_business = #{amountOfBusiness}</if>
+        </where>
+    </select>
+
+    <select id="selectBusiSettlementById" parameterType="Long" resultMap="BusiSettlementResult">
+           SELECT
+        bs.* ,
+        os.`office_address`,
+        os.`office_staff_name`
+        FROM
+        busi_settlement bs INNER JOIN office_staff os ON bs.`staff_id` = os.`office_staff_id`
+        where bs.settlement_id = #{settlementId}
+    </select>
+
+    <insert id="insertBusiSettlement" parameterType="BusiSettlement" useGeneratedKeys="true" keyProperty="settlementId">
+        insert into busi_settlement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contractNo != null and contractNo != ''">contract_no,</if>
+            <if test="quotationNo != null">quotation_no,</if>
+            <if test="staffId != null">staff_id,</if>
+            <if test="contractPrice != null">contract_price,</if>
+            <if test="quotationPrice != null">quotation_price,</if>
+            <if test="motorCost != null">motor_cost,</if>
+            <if test="otherCost != null">other_cost,</if>
+            <if test="basedCommission != null">based_commission,</if>
+            <if test="premiumCommission != null">premium_commission,</if>
+            <if test="businessCommission != null">business_commission,</if>
+            <if test="businessCommissionType != null">business_commission_type,</if>
+            <if test="warrantyCommission != null">warranty_commission,</if>
+            <if test="receivedCommission != null">received_commission,</if>
+            <if test="settlementBusinessFee != null">settlement_business_fee,</if>
+            <if test="individualIncomeTax != null">individual_income_tax,</if>
+            <if test="amountOfBusiness != null">amount_of_business,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contractNo != null and contractNo != ''">#{contractNo},</if>
+            <if test="quotationNo != null">#{quotationNo},</if>
+            <if test="staffId != null">#{staffId},</if>
+            <if test="contractPrice != null">#{contractPrice},</if>
+            <if test="quotationPrice != null">#{quotationPrice},</if>
+            <if test="motorCost != null">#{motorCost},</if>
+            <if test="otherCost != null">#{otherCost},</if>
+            <if test="basedCommission != null">#{basedCommission},</if>
+            <if test="premiumCommission != null">#{premiumCommission},</if>
+            <if test="businessCommission != null">#{businessCommission},</if>
+            <if test="businessCommissionType != null">#{businessCommissionType},</if>
+            <if test="warrantyCommission != null">#{warrantyCommission},</if>
+            <if test="receivedCommission != null">#{receivedCommission},</if>
+            <if test="settlementBusinessFee != null">#{settlementBusinessFee},</if>
+            <if test="individualIncomeTax != null">#{individualIncomeTax},</if>
+            <if test="amountOfBusiness != null">#{amountOfBusiness},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiSettlement" parameterType="BusiSettlement">
+        update busi_settlement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contractNo != null and contractNo != ''">contract_no = #{contractNo},</if>
+            <if test="quotationNo != null">quotation_no = #{quotationNo},</if>
+            <if test="staffId != null">staff_id = #{staffId},</if>
+            <if test="contractPrice != null">contract_price = #{contractPrice},</if>
+            <if test="quotationPrice != null">quotation_price = #{quotationPrice},</if>
+            <if test="motorCost != null">motor_cost = #{motorCost},</if>
+            <if test="otherCost != null">other_cost = #{otherCost},</if>
+            <if test="basedCommission != null">based_commission = #{basedCommission},</if>
+            <if test="premiumCommission != null">premium_commission = #{premiumCommission},</if>
+            <if test="businessCommission != null">business_commission = #{businessCommission},</if>
+            <if test="businessCommissionType != null">business_commission_type = #{businessCommissionType},</if>
+            <if test="warrantyCommission != null">warranty_commission = #{warrantyCommission},</if>
+            <if test="receivedCommission != null">received_commission = #{receivedCommission},</if>
+            <if test="settlementBusinessFee != null">settlement_business_fee = #{settlementBusinessFee},</if>
+            <if test="individualIncomeTax != null">individual_income_tax = #{individualIncomeTax},</if>
+            <if test="amountOfBusiness != null">amount_of_business = #{amountOfBusiness},</if>
+        </trim>
+        where settlement_id = #{settlementId}
+    </update>
+
+    <delete id="deleteBusiSettlementById" parameterType="Long">
+        delete from busi_settlement where settlement_id = #{settlementId}
+    </delete>
+
+    <delete id="deleteBusiSettlementByIds" parameterType="String">
+        delete from busi_settlement where settlement_id in
+        <foreach item="settlementId" collection="array" open="(" separator="," close=")">
+            #{settlementId}
+        </foreach>
+    </delete>
+
+</mapper>

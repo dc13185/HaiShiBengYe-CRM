@@ -1,6 +1,7 @@
 package com.ruoyi.busi.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.ruoyi.busi.contract.service.IBusiContractProductService;
@@ -219,5 +220,11 @@ public class BusiContractController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(busiContractService.deleteBusiContractByIds(ids));
+    }
+
+    @GetMapping( "/queryCostByQuotationId")
+    @ResponseBody
+    public Map queryCostByQuotationId(String quotationId){
+        return   busiContractMapper.queryCostByQuotationId(quotationId);
     }
 }

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.busi.settlement.mapper.BusiSettlementHistoryMapper">
+
+    <resultMap type="BusiSettlementHistory" id="BusiSettlementHistoryResult">
+        <result property="basedCommission"    column="based_commission"    />
+        <result property="premiumCommission"    column="premium_commission"    />
+        <result property="businessCommission"    column="business_commission"    />
+        <result property="businessCommissionType"    column="business_commission_type"    />
+        <result property="warrantyCommission"    column="warranty_commission"    />
+        <result property="receivedCommission"    column="received_commission"    />
+        <result property="alreadySettlementBusinessFee"    column="already_settlement_business_fee"    />
+        <result property="settlementBusinessFee"    column="settlement_business_fee"    />
+        <result property="individualIncomeTax"    column="individual_income_tax"    />
+        <result property="amountOfBusiness"    column="amount_of_business"    />
+        <result property="settlementId"    column="settlement_id"    />
+    </resultMap>
+
+    <sql id="selectBusiSettlementHistoryVo">
+        select based_commission, premium_commission, business_commission, business_commission_type, warranty_commission, received_commission, already_settlement_business_fee, settlement_business_fee, individual_income_tax, amount_of_business, settlement_id from busi_settlement_history
+    </sql>
+
+    <select id="selectBusiSettlementHistoryList" parameterType="BusiSettlementHistory" resultMap="BusiSettlementHistoryResult">
+        <include refid="selectBusiSettlementHistoryVo"/>
+        <where>
+            <if test="settlementId != null">
+                and settlement_id = #{settlementId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBusiSettlementHistoryById" parameterType="Double" resultMap="BusiSettlementHistoryResult">
+        <include refid="selectBusiSettlementHistoryVo"/>
+        where based_commission = #{basedCommission}
+    </select>
+
+    <insert id="insertBusiSettlementHistory" parameterType="BusiSettlementHistory">
+        insert into busi_settlement_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="basedCommission != null">based_commission,</if>
+            <if test="premiumCommission != null">premium_commission,</if>
+            <if test="businessCommission != null">business_commission,</if>
+            <if test="businessCommissionType != null">business_commission_type,</if>
+            <if test="warrantyCommission != null">warranty_commission,</if>
+            <if test="receivedCommission != null">received_commission,</if>
+            <if test="alreadySettlementBusinessFee != null">already_settlement_business_fee,</if>
+            <if test="settlementBusinessFee != null">settlement_business_fee,</if>
+            <if test="individualIncomeTax != null">individual_income_tax,</if>
+            <if test="amountOfBusiness != null">amount_of_business,</if>
+            <if test="settlementId != null">settlement_id,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="basedCommission != null">#{basedCommission},</if>
+            <if test="premiumCommission != null">#{premiumCommission},</if>
+            <if test="businessCommission != null">#{businessCommission},</if>
+            <if test="businessCommissionType != null">#{businessCommissionType},</if>
+            <if test="warrantyCommission != null">#{warrantyCommission},</if>
+            <if test="receivedCommission != null">#{receivedCommission},</if>
+            <if test="alreadySettlementBusinessFee != null">#{alreadySettlementBusinessFee},</if>
+            <if test="settlementBusinessFee != null">#{settlementBusinessFee},</if>
+            <if test="individualIncomeTax != null">#{individualIncomeTax},</if>
+            <if test="amountOfBusiness != null">#{amountOfBusiness},</if>
+            <if test="settlementId != null">#{settlementId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBusiSettlementHistory" parameterType="BusiSettlementHistory">
+        update busi_settlement_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="premiumCommission != null">premium_commission = #{premiumCommission},</if>
+            <if test="businessCommission != null">business_commission = #{businessCommission},</if>
+            <if test="businessCommissionType != null">business_commission_type = #{businessCommissionType},</if>
+            <if test="warrantyCommission != null">warranty_commission = #{warrantyCommission},</if>
+            <if test="receivedCommission != null">received_commission = #{receivedCommission},</if>
+            <if test="alreadySettlementBusinessFee != null">already_settlement_business_fee = #{alreadySettlementBusinessFee},</if>
+            <if test="settlementBusinessFee != null">settlement_business_fee = #{settlementBusinessFee},</if>
+            <if test="individualIncomeTax != null">individual_income_tax = #{individualIncomeTax},</if>
+            <if test="amountOfBusiness != null">amount_of_business = #{amountOfBusiness},</if>
+            <if test="settlementId != null">settlement_id = #{settlementId},</if>
+        </trim>
+        where based_commission = #{basedCommission}
+    </update>
+
+    <delete id="deleteBusiSettlementHistoryById" parameterType="Double">
+        delete from busi_settlement_history where based_commission = #{basedCommission}
+    </delete>
+
+    <delete id="deleteBusiSettlementHistoryByIds" parameterType="String">
+        delete from busi_settlement_history where based_commission in
+        <foreach item="basedCommission" collection="array" open="(" separator="," close=")">
+            #{basedCommission}
+        </foreach>
+    </delete>
+
+</mapper>

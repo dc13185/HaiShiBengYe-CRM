@@ -1,6 +1,8 @@
 package com.ruoyi.busi.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.busi.domain.BusiContract;
 
 /**
@@ -18,6 +20,9 @@ public interface BusiContractMapper
      * @return 合同管理
      */
     public BusiContract selectBusiContractById(Long contractId);
+
+
+    public BusiContract selectBusiContractByNo(String contractNo);
 
     /**
      * 查询合同管理列表
@@ -66,5 +71,7 @@ public interface BusiContractMapper
     public int selectCount();
 
     public int saveHistory(BusiContract busiContract);
+
+    Map<String,Double> queryCostByQuotationId(String quotationId);
 }
 

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增业务费用结算历史')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-history-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">基础性提成计提比例/%：</label>
+                <div class="col-sm-8">
+                    <input name="basedCommission" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">溢价部分计提比例/%：</label>
+                <div class="col-sm-8">
+                    <input name="premiumCommission" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">应付业务费合计/元：</label>
+                <div class="col-sm-8">
+                    <input name="businessCommission" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">应付业务费用类型选择：</label>
+                <div class="col-sm-8">
+                    <select name="businessCommissionType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">质保金比例/%：</label>
+                <div class="col-sm-8">
+                    <input name="warrantyCommission" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">已回款金额/元：</label>
+                <div class="col-sm-8">
+                    <input name="receivedCommission" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">已结算业务费：</label>
+                <div class="col-sm-8">
+                    <input name="alreadySettlementBusinessFee" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">结算业务费：</label>
+                <div class="col-sm-8">
+                    <input name="settlementBusinessFee" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">暂扣代缴个人所得税：</label>
+                <div class="col-sm-8">
+                    <input name="individualIncomeTax" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">支付业务费金额：</label>
+                <div class="col-sm-8">
+                    <input name="amountOfBusiness" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">业务结算费用Id：</label>
+                <div class="col-sm-8">
+                    <input name="settlementId" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "busi/history"
+        $("#form-history-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-history-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>
