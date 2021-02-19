@@ -178,13 +178,56 @@ public class BusiQuotationDetails extends BaseEntity
     /** 调整系数 */
     private Double coefficient;
 
-
     @Excel(name = "基准单价")
     private Double detailsPrice;
 
 
-    private BusiPriceDetails busiPriceDetails;
+    @Excel(name = "泵头成本")
+    private Double pumpHeadCost;
 
+    @Excel(name = "电机成本")
+    private Double motorCost;
+
+    @Excel(name = "机封以及系统成本")
+    private Double sealCost;
+
+    @Excel(name = "成本")
+    private Double allCost;
+
+
+    public Double getAllCost() {
+        return allCost;
+    }
+
+    public void setAllCost(Double allCost) {
+        this.allCost = allCost;
+    }
+
+
+
+    public Double getPumpHeadCost() {
+        return pumpHeadCost;
+    }
+
+    public void setPumpHeadCost(Double pumpHeadCost) {
+        this.pumpHeadCost = pumpHeadCost;
+    }
+
+    public Double getMotorCost() {
+        return motorCost;
+    }
+
+    public void setMotorCost(Double motorCost) {
+        this.motorCost = motorCost;
+    }
+
+    public Double getSealCost() {
+        return sealCost;
+    }
+
+    public void setSealCost(Double sealCost) {
+        this.sealCost = sealCost;
+    }
 
     public void setDetailsId(Long detailsId)
     {
@@ -597,13 +640,6 @@ public class BusiQuotationDetails extends BaseEntity
         this.bearingName = bearingName;
     }
 
-    public BusiPriceDetails getBusiPriceDetails() {
-        return busiPriceDetails;
-    }
-
-    public void setBusiPriceDetails(BusiPriceDetails busiPriceDetails) {
-        this.busiPriceDetails = busiPriceDetails;
-    }
 
     @Override
     public String toString() {

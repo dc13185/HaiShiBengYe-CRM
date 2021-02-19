@@ -19,6 +19,14 @@
                                 <label>报价单号：</label>
                                 <input type="text" name="quotationNo"/>
                             </li>
+                            <li>
+                                <label>客户：</label>
+                                <input type="text" name="customerName"/>
+                            </li>
+                            <li>
+                                <label>业务员：</label>
+                                <input type="text" name="officeStaffName"/>
+                            </li>
                             <li class="select-time">
                                 <label>报价日期：</label>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
@@ -57,7 +65,6 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('busi:quotation:edit')}]];
         var removeFlag = [[${@permission.hasPermi('busi:quotation:remove')}]];
-        var quotationTypeDatas = [[${@dict.getType('procurement_type')}]];
         var prefix = ctx + "busi/quotation";
         var supplierId = $("#supplierId").val();
         $(function() {

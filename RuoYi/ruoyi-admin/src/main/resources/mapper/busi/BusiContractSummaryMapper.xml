@@ -33,12 +33,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           (SELECT IFNULL(ROUND(SUM(details_price*coefficient * number),2),0) FROM busi_quotation_details bqd WHERE bqd.quotation_id  = bq.quotation_id ) AS  quotationPrice,
           (SELECT  IFNULL(ROUND(SUM(bod.details_price*bod.coefficient * bod.number),2),0) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.`quotation_id` )  AS outsourcingPrice,
           (SELECT   IFNULL(ROUND(SUM(bpd.details_price * bpd.number),2),0)  FROM busi_parts_details bpd WHERE bpd.quotation_id = bq.`quotation_id` ) AS partsPrice,
-
           -- 成本
           (SELECT   IFNULL(ROUND(SUM(bpd.sumPrice),2),0)  FROM busi_price_details bpd WHERE bpd.`quotation_id` = bq.`quotation_id` ) AS priceSumPrice,
 	 (SELECT   IFNULL(ROUND(SUM(boc.sumPrice),2),0)  FROM busi_outsourcing_cost boc  WHERE boc.quotation_id = bq.`quotation_id` ) AS outSumPrice,
 	(SELECT   IFNULL(ROUND(SUM(bpc.`cost_price`),2),0)  FROM busi_parts_cost bpc WHERE bpc.quotation_id = bq.`quotation_id` ) AS partsSumPrice,
-
 	    -- 真是成本
          (SELECT   IFNULL(ROUND(SUM(bpd.actual_contractPrice),2),0)  FROM busi_price_details bpd WHERE bpd.`quotation_id` = bq.`quotation_id` ) AS priceActualPrice,
 	 (SELECT   IFNULL(ROUND(SUM(boc.actualAllPrice),2),0)  FROM busi_outsourcing_cost boc  WHERE boc.quotation_id = bq.`quotation_id` ) AS outActualPrice,
@@ -62,10 +60,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBusiContractSummaryList" parameterType="BusiContractSummary" resultMap="BusiContractSummaryResult">
         <include refid="selectBusiContractSummaryVo"/>
         <where>
-            <if test="customerName != null  and customerName != ''"> and bi.customer_name like concat('%', #{customerName}, '%')</if>
-            <if test="customerNature != null  and customerNature != ''"> and bi.customer_nature like concat('%', #{customerNature}, '%')</if>
-            <if test="customerIndustry != null  and customerIndustry != ''"> and bi.customer_industry like concat('%', #{customerIndustry}, '%')</if>
-            <if test="quotationType != null "> and bq.quotation_type like concat('%', #{quotationType}, '%')</if>
+            <if test="customerName != null  and customerName != ''"> and bc.customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="customerNature != null  and customerNature != ''"> and bc.customer_nature like concat('%', #{customerNature}, '%')</if>
+            <if test="customerIndustry != null  and customerIndustry != ''"> and bc.customer_industry like concat('%', #{customerIndustry}, '%')</if>
+            <if test="customerAddress != null and customerAddress != ''"> and bc.customer_address like concat('%', #{customerAddress}, '%')</if>
+            <if test="projectName != null and projectName != ''"> and bq.project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectAddress != null and projectAddress != ''"> and bq.project_address like concat('%', #{projectAddress}, '%')</if>
+            <if test="officeAddress != null and officeAddress != ''"> and os.office_address like concat('%', #{officeAddress}, '%')</if>
+            <if test="officeStaffName != null and officeStaffName != ''"> and os.office_staff_name like concat('%', #{officeStaffName}, '%')</if>
         </where>
     </select>
 

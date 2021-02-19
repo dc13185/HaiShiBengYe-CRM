@@ -115,22 +115,47 @@ public class BusiOutsourcingDetails extends BaseEntity
 
     /** 单价系数 */
     @Excel(name = "单价系数")
-    private Long coefficient;
+    private Double coefficient;
 
     /** 单条报价单明细总价 */
     @Excel(name = "单条报价单明细总价")
     private Double detailsPrice;
 
-    private BusiOutsourcingCost busiOutsourcingCost;
+    @Excel(name = "泵头成本")
+    private Double pumpHeadCost;
+
+    @Excel(name = "电机成本")
+    private Double motorCost;
+
+    @Excel(name = "成本")
+    private Double allCost;
 
 
-    public BusiOutsourcingCost getBusiOutsourcingCost() {
-        return busiOutsourcingCost;
+
+    public Double getPumpHeadCost() {
+        return pumpHeadCost;
     }
 
-    public void setBusiOutsourcingCost(BusiOutsourcingCost busiOutsourcingCost) {
-        this.busiOutsourcingCost = busiOutsourcingCost;
+    public void setPumpHeadCost(Double pumpHeadCost) {
+        this.pumpHeadCost = pumpHeadCost;
     }
+
+    public Double getMotorCost() {
+        return motorCost;
+    }
+
+    public void setMotorCost(Double motorCost) {
+        this.motorCost = motorCost;
+    }
+
+    public Double getAllCost() {
+        return allCost;
+    }
+
+    public void setAllCost(Double allCost) {
+        this.allCost = allCost;
+    }
+
 
     public void setDetailsId(Long detailsId)
     {
@@ -330,14 +355,13 @@ public class BusiOutsourcingDetails extends BaseEntity
     {
         return quotationType;
     }
-    public void setCoefficient(Long coefficient)
-    {
-        this.coefficient = coefficient;
+
+    public Double getCoefficient() {
+        return coefficient;
     }
 
-    public Long getCoefficient()
-    {
-        return coefficient;
+    public void setCoefficient(Double coefficient) {
+        this.coefficient = coefficient;
     }
 
     public String getProductLineName() {

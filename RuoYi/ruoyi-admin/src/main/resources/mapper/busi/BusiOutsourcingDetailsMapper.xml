@@ -29,20 +29,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="quotationType"    column="quotation_type"    />
         <result property="coefficient"    column="coefficient"    />
         <result property="detailsPrice"    column="details_price"    />
-
-        <association property="busiOutsourcingCost" javaType="com.ruoyi.busi.cost.domain.BusiOutsourcingCost">
-            <result property="costId"    column="cost_id"    />
-            <result property="quotationId"    column="quotation_id"    />
-            <result property="productPrice"    column="product_price"    />
-            <result property="actualProductPrice"    column="actual_product_price"    />
-            <result property="motorPrice"    column="motor_price"    />
-            <result property="actualMotorPrice"    column="actual_motor_price"    />
-            <result property="quotationAmount"    column="quotationAmount"    />
-            <result property="profit"    column="profit"    />
-            <result property="actualProfit"    column="actualProfit"    />
-            <result property="actualAllPrice"    column="actualAllPrice"    />
-            <result property="sumPrice"    column="sumPrice"    />
-        </association>
+        <result property="pumpHeadCost"    column="pump_head_cost"    />
+        <result property="motorCost"    column="motor_cost"    />
+        <result property="allCost"    column="all_cost"    />
     </resultMap>
 
     <sql id="selectBusiOutsourcingDetailsVo">
@@ -75,17 +64,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         quotation_type,
         coefficient,
         details_price,
-        boc.*
+        pump_head_cost,
+        motor_cost,
+        all_cost
         FROM
-        busi_outsourcing_details bqd INNER JOIN `busi_outsourcing_cost` boc ON bqd.quotation_id = boc.quotation_id
+        busi_outsourcing_details bqd
         <where>
             <if test="quotationId != null  and quotationId != ''"> and bqd.quotation_id = #{quotationId}</if>
         </where>
     </select>
 
     <select id="selectBusiOutsourcingDetailsById" parameterType="Long" resultMap="BusiOutsourcingDetailsResult">
-        <include refid="selectBusiOutsourcingDetailsVo"/>
-        where details_id = #{detailsId}
+         SELECT
+         bqd.*,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.product_supplier_id ) AS  productSupplierName,
+        (SELECT bol.outsourcing_line FROM busi_outsourcing_line bol WHERE bol.outsourcing_line_id = bqd.product_line_id ) AS  productLineName,
+        (SELECT bo.outsourcing_model FROM busi_outsourcing bo WHERE bo.outsourcing_id = bqd.model_id ) AS modelName,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.motor_supplier_id ) AS  motor_supplier_name,
+        (SELECT motor_model FROM busi_motor bu WHERE bu.motor_id = bqd.motor_id) AS motor_name
+        FROM
+        busi_outsourcing_details bqd
+        where bqd.details_id = #{detailsId}
     </select>
 
     <insert id="insertBusiOutsourcingDetails" parameterType="BusiOutsourcingDetails" useGeneratedKeys="true" keyProperty="detailsId">
@@ -114,6 +113,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quotationType != null">quotation_type,</if>
             <if test="coefficient != null">coefficient,</if>
             <if test="detailsPrice != null">details_price,</if>
+            <if test="pumpHeadCost != null ">pump_head_cost,</if>
+            <if test="motorCost != null ">motor_cost,</if>
+            <if test="allCost != null">all_cost,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="quotationId != null">#{quotationId},</if>
@@ -139,6 +141,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quotationType != null">#{quotationType},</if>
             <if test="coefficient != null">#{coefficient},</if>
             <if test="detailsPrice != null">#{detailsPrice},</if>
+            <if test="pumpHeadCost != null ">#{pumpHeadCost},</if>
+            <if test="motorCost != null ">#{motorCost},</if>
+            <if test="allCost != null">#{allCost},</if>
          </trim>
     </insert>
 
@@ -168,6 +173,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quotationType != null">quotation_type = #{quotationType},</if>
             <if test="coefficient != null">coefficient = #{coefficient},</if>
             <if test="detailsPrice != null">details_price = #{detailsPrice},</if>
+            <if test="pumpHeadCost != null ">pump_head_cost = #{pumpHeadCost},</if>
+            <if test="motorCost != null ">motor_cost = #{motorCost},</if>
+            <if test="allCost != null">all_cost = #{allCost},</if>
         </trim>
         where details_id = #{detailsId}
     </update>

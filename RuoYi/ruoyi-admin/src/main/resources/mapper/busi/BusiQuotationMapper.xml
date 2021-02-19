@@ -14,7 +14,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="officeStaffName"    column="office_staff_name"    />
         <result property="technicalStaffId"    column="technical_staff_id"    />
         <result property="technicalStaffName"    column="technicalStaffName"    />
-
         <result property="quotationType"    column="quotation_type"    />
         <result property="createTime"    column="create_time"    />
         <result property="customerName"    column="customer_name"    />
@@ -41,8 +40,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT bc.customer_name FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_name,
         (SELECT bc.customer_industry FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_industry,
         (SELECT bc.contact_address FROM busi_customer bc WHERE bc.customer_id = bq.customer_id) AS customer_address,
-        bq.office_address,
-        bq.office_staff_name,
+        os.office_address,
+        os.office_staff_name,
         bq.technical_staff_id,
         (SELECT bt.`technicist_name` FROM busi_technicist bt WHERE bt.`technicist_id` = bq.`technical_staff_id` ) AS technicalStaffName,
         bq.quotation_type,
@@ -51,15 +50,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT SUM(bpd.number) FROM busi_quotation_details bpd WHERE bpd.quotation_id = bq.quotation_id) AS wholeCount ,
         (SELECT SUM(bod.number) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.quotation_id) AS outsourcingCount ,
         (SELECT SUM(bp.number) FROM busi_parts_details bp WHERE bp.quotation_id = bq.quotation_id) AS partsCount,
-        (SELECT SUM(bpd.details_price) FROM busi_quotation_details bpd WHERE bpd.quotation_id = bq.quotation_id) AS quotationPrice ,
-        (SELECT SUM(bod.details_price) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.quotation_id) AS outsourcingPrice ,
-        (SELECT SUM(bp.details_price) FROM busi_parts_details bp WHERE bp.quotation_id = bq.quotation_id) AS partsPrice
+        (SELECT SUM(bpd.details_price * bpd.number * bpd.coefficient) FROM busi_quotation_details bpd WHERE bpd.quotation_id = bq.quotation_id) AS quotationPrice ,
+        (SELECT SUM(bod.details_price * bod.number * bod.coefficient) FROM busi_outsourcing_details bod WHERE bod.quotation_id = bq.quotation_id) AS outsourcingPrice ,
+        (SELECT SUM(bp.details_price* bp.number * bp.coefficient) FROM busi_parts_details bp WHERE bp.quotation_id = bq.quotation_id) AS partsPrice
         FROM
         busi_quotation bq
+        LEFT JOIN  busi_customer bc1  ON bq.`customer_id` = bc1.`customer_id`
+        LEFT JOIN `office_staff` os ON os.`office_staff_id` = bq.`staff_id`
         <where>
             <if test="projectName != null  and projectName != ''"> and bq.project_name like concat('%', #{projectName}, '%')</if>
             <if test="quotationNo != null  and quotationNo != ''"> and bq.quotation_no = #{quotationNo}</if>
             <if test="quotationType != null "> and bq.quotation_type = #{quotationType}</if>
+            <if test="customerName != null "> and bc1.customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="officeStaffName != null "> and os.office_staff_name like concat('%', #{officeStaffName}, '%')</if>
             <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始时间检索 -->
                 and bq.date_format(create_time,'%y-%m-%d') &gt;= date_format(#{params.beginCreateTime},'%y-%m-%d')
             </if>

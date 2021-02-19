@@ -50,8 +50,6 @@ public class BusiPartsDetails extends BaseEntity
 
     private Double detailsPrice;
 
-    private BusiPartsCost partsCost;
-
     /** 调整系数 */
     private Double coefficient;
 
@@ -65,6 +63,17 @@ public class BusiPartsDetails extends BaseEntity
     @Excel(name = "过流材质")
     private String materialName;
 
+    @Excel(name = "成本")
+    private Double allCost;
+
+
+    public Double getAllCost() {
+        return allCost;
+    }
+
+    public void setAllCost(Double allCost) {
+        this.allCost = allCost;
+    }
 
     public Double getCoefficient() {
         return coefficient;
@@ -106,13 +115,6 @@ public class BusiPartsDetails extends BaseEntity
         this.materialName = materialName;
     }
 
-    public BusiPartsCost getPartsCost() {
-        return partsCost;
-    }
-
-    public void setPartsCost(BusiPartsCost partsCost) {
-        this.partsCost = partsCost;
-    }
 
     public void setDetailsId(Long detailsId)
     {

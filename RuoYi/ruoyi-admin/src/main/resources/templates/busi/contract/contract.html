@@ -51,6 +51,7 @@
         var removeFlag = [[${@permission.hasPermi('busi:contract:remove')}]];
         var prefix = ctx + "busi/contract";
         var contractTypeDatas = [[${@dict.getType('project_status')}]];
+        var quotationTypeDatas = [[${@dict.getType('project_type')}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -145,6 +146,15 @@
                         return $.table.selectDictLabel(contractTypeDatas, value);
                     }
                 },
+                {
+                    field: 'busiQuotation.quotationType',
+                    title: '产品类型',
+                    formatter: function(value, row, index) {
+                        debugger;
+                        return $.table.selectDictLabel(quotationTypeDatas, value);
+                    }
+                },
+
                 {
                     field: 'updateTime',
                     title: '更进时间'

@@ -71,43 +71,43 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">冲洗方案：</label>
                 <div class="col-sm-8">
-                    <input name="rinseSolutionId" class="form-control"></input>
+                    <input name="rinseSolutionId" class="form-control"  th:field="*{rinseSolutionId}"></input>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">额定流量(m3/h)：</label>
                 <div class="col-sm-8">
-                    <input name="ratedFlow" class="form-control" type="text">
+                    <input name="ratedFlow" th:field="*{ratedFlow}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">扬程(m)：</label>
                 <div class="col-sm-8">
-                    <input name="lift" class="form-control" type="text">
+                    <input name="lift" class="form-control" type="text" th:field="*{lift}" >
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">工况温度(℃)：</label>
                 <div class="col-sm-8">
-                    <input name="operatingTemperature" class="form-control" type="text">
+                    <input name="operatingTemperature" class="form-control" type="text" th:field="*{operatingTemperature}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">流体密度(Kg/m³)：</label>
                 <div class="col-sm-8">
-                    <input name="fluidDensity" class="form-control" type="text">
+                    <input name="fluidDensity" class="form-control" type="text" th:field="*{fluidDensity}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">入口压力(Mpa)：</label>
                 <div class="col-sm-8">
-                    <input name="inletPressure" class="form-control" type="text">
+                    <input name="inletPressure" class="form-control" type="text" th:field="*{inletPressure}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">汽蚀余量(m)：</label>
                 <div class="col-sm-8">
-                    <input name="npsh" class="form-control" type="text">
+                    <input name="npsh" class="form-control" type="text"  th:field="*{npsh}">
                 </div>
             </div>
            <!-- <div class="form-group">

@@ -154,18 +154,15 @@ public class BusiPartsDetailsController extends BaseController
     {
         BusiProductLine busiProductLine = busiProductLineService.selectBusiProductLineById(busiPartsDetails.getProductLineId());
         PriceSum priceSum = busiProductParameterMapper.selectPriceDetil(busiPartsDetails.getParameterId());
-
         BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionById(busiPartsDetails.getMaterialId());
-
         //返回材料成本费用
         Double materialCosts = 0d;
         if (busiMaterialProduction == null){
-            Double.valueOf(priceSum.getWeight() * priceSum.getMaterialPrice()* priceSum.getMassRatio());
+            materialCosts = Double.valueOf(priceSum.getWeight() * priceSum.getMaterialPrice()* priceSum.getMassRatio());
         }else{
             //如果材质存在 ,则就是重量*系数* 材质单价
-            Double.valueOf(priceSum.getWeight() * busiMaterialProduction.getPrice()* priceSum.getMassRatio());
+            materialCosts = Double.valueOf(priceSum.getWeight() * busiMaterialProduction.getPrice()* priceSum.getMassRatio());
         }
-
         //返回人工成本费用
         Double laborCost = priceSum.getTime()* Constant.LABOR_COSTCOE_FFICIENT;
         //返回制造成本费用
@@ -173,6 +170,8 @@ public class BusiPartsDetailsController extends BaseController
         //（配件重量×材料单价+配件工时×机加工工时单价）/（1-配件毛利率）
         Double allSum = (materialCosts+laborCost+makeCost) / (1 - Constant.ACCESSORIES_GROSS_MARGIN);
         busiPartsDetails.setDetailsPrice(format(allSum));
+        //保存成本
+        busiPartsDetails.setAllCost(materialCosts+laborCost+makeCost);
         int i = busiPartsDetailsService.insertBusiPartsDetails(busiPartsDetails);
         if (i > 0){
             restart(busiPartsDetails.getQuotationId());
@@ -200,7 +199,31 @@ public class BusiPartsDetailsController extends BaseController
     @ResponseBody
     public AjaxResult editSave(BusiPartsDetails busiPartsDetails)
     {
-        return toAjax(busiPartsDetailsService.updateBusiPartsDetails(busiPartsDetails));
+        BusiProductLine busiProductLine = busiProductLineService.selectBusiProductLineById(busiPartsDetails.getProductLineId());
+        PriceSum priceSum = busiProductParameterMapper.selectPriceDetil(busiPartsDetails.getParameterId());
+        BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionById(busiPartsDetails.getMaterialId());
+        //返回材料成本费用
+        Double materialCosts = 0d;
+        if (busiMaterialProduction == null){
+            materialCosts = Double.valueOf(priceSum.getWeight() * priceSum.getMaterialPrice()* priceSum.getMassRatio());
+        }else{
+            //如果材质存在 ,则就是重量*系数* 材质单价
+            materialCosts = Double.valueOf(priceSum.getWeight() * busiMaterialProduction.getPrice()* priceSum.getMassRatio());
+        }
+        //返回人工成本费用
+        Double laborCost = priceSum.getTime()* Constant.LABOR_COSTCOE_FFICIENT;
+        //返回制造成本费用
+        Double makeCost = priceSum.getTime()*Constant.MAKE_COEFFICIENT;
+        //（配件重量×材料单价+配件工时×机加工工时单价）/（1-配件毛利率）
+        Double allSum = (materialCosts+laborCost+makeCost) / (1 - Constant.ACCESSORIES_GROSS_MARGIN);
+        busiPartsDetails.setDetailsPrice(format(allSum));
+        //保存成本
+        busiPartsDetails.setAllCost(materialCosts+laborCost+makeCost);
+        int i = busiPartsDetailsService.updateBusiPartsDetails(busiPartsDetails);
+        if (i > 0){
+            restart(busiPartsDetails.getQuotationId());
+        }
+        return toAjax(i);
     }
 
     /**

@@ -13,6 +13,7 @@ import com.ruoyi.busi.Constant;
 import com.ruoyi.busi.domain.*;
 import com.ruoyi.busi.mapper.BusiQuotationDetailsMapper;
 import com.ruoyi.busi.service.*;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -215,7 +216,7 @@ public class BusiQuotationDetailsController extends BaseController
             }else{
                 modelMap.put("sumPrice", 0);
             }
-            modelMap.put("zhengjiFlag", 1);
+            modelMap.put("quotationFlag", 1);
         }
         if (bpdCount > 0){
             Double partsgSum = quotationDetailsMapper.getPartsgSumPrice(quotationId);
@@ -237,8 +238,6 @@ public class BusiQuotationDetailsController extends BaseController
         List<BusiQuotationDetails> list = busiQuotationDetailsService.selectBusiQuotationDetailsList(busiQuotationDetails);
         return getDataTable(list);
     }
-
-
 
 
     /**
@@ -315,30 +314,27 @@ public class BusiQuotationDetailsController extends BaseController
         //电机价格
         if (busiQuotationDetails.getMotorId() != null){
             motorPrice = quotationDetailsMapper.getMotorPrice(busiQuotationDetails.getMotorId());
+        }else if (busiQuotationDetails.getOtherMotorPrice() != null){
+            motorPrice = busiQuotationDetails.getOtherMotorPrice();
         }
-        if (busiQuotationDetails.getOtherMotorPrice() != null){
-            motorPrice =  format(motorPrice + busiQuotationDetails.getOtherMotorPrice());
-        }
+
         //机封成本
         if (busiQuotationDetails.getMachineId() != null){
             machineProce = quotationDetailsMapper.getMachinePrice(busiQuotationDetails.getMachineId());
-        }
-        if (busiQuotationDetails.getOtherMachinePrice() != null){
-            machineProce = format(machineProce + busiQuotationDetails.getOtherMachinePrice());
+        } else if(busiQuotationDetails.getOtherMachinePrice() != null){
+            machineProce = busiQuotationDetails.getOtherMachinePrice();
         }
         //联轴器成本
         if (busiQuotationDetails.getCouplingId() != null){
             couplingPrice = quotationDetailsMapper.getCouplingPrice(busiQuotationDetails.getCouplingId());
-        }
-        if (busiQuotationDetails.getOtherCouplingPrice() != null){
-            couplingPrice = format(couplingPrice + busiQuotationDetails.getOtherCouplingPrice());
+        } else if (busiQuotationDetails.getOtherCouplingPrice() != null){
+            couplingPrice =  busiQuotationDetails.getOtherCouplingPrice();
         }
         //轴承成本
         if (busiQuotationDetails.getBearingId() != null){
             bearingPrice =  quotationDetailsMapper.getBearingPrice(busiQuotationDetails.getBearingId());
-        }
-        if (busiQuotationDetails.getOtherBearingPrice() != null){
-            bearingPrice = format(bearingPrice + busiQuotationDetails.getOtherBearingPrice());
+        } else if (busiQuotationDetails.getOtherBearingPrice() != null){
+            bearingPrice = busiQuotationDetails.getOtherBearingPrice();
         }
         if(busiQuotationDetails.getOtherExpenses() != null){
             otherPrice = busiQuotationDetails.getOtherExpenses();
@@ -353,6 +349,15 @@ public class BusiQuotationDetailsController extends BaseController
         Double allPrice =  (bengTouPrice + waiGouPrice) / (1 - PACKING_AND_TRANSPORTATION_COSTS) / (1 - TAX_AND_ADDITIONAL_RATIO);
         busiQuotationDetails.setDetailsPrice(format(allPrice));
         busiQuotationDetails.setQuotationType(0L);
+        //成本核算 （材料成本+人工成本+制造费用）
+        busiQuotationDetails.setPumpHeadCost(StringUtils.doubleFormat((materialCosts + laborCost + makeCost)));
+        //电机成本
+        busiQuotationDetails.setMotorCost(motorPrice);
+        //机封成本
+        busiQuotationDetails.setMotorCost(machineProce);
+        //总成本
+        Double allCost = StringUtils.doubleFormat(materialCosts + laborCost + makeCost + motorPrice + machineProce + couplingPrice + bearingPrice + otherPrice);
+        busiQuotationDetails.setAllCost(allCost);
         busiQuotationDetailsService.insertBusiQuotationDetails(busiQuotationDetails);
         Double sumPrice =  quotationDetailsMapper.getSumPrice(busiQuotationDetails.getQuotationId());
         reset(busiQuotationDetails.getQuotationId());
@@ -408,30 +413,27 @@ public class BusiQuotationDetailsController extends BaseController
         //电机价格
         if (busiQuotationDetails.getMotorId() != null){
             motorPrice = quotationDetailsMapper.getMotorPrice(busiQuotationDetails.getMotorId());
+        }else if (busiQuotationDetails.getOtherMotorPrice() != null){
+            motorPrice = busiQuotationDetails.getOtherMotorPrice();
         }
-        if (busiQuotationDetails.getOtherMotorPrice() != null){
-            motorPrice =  format(motorPrice + busiQuotationDetails.getOtherMotorPrice());
-        }
+
         //机封成本
         if (busiQuotationDetails.getMachineId() != null){
             machineProce = quotationDetailsMapper.getMachinePrice(busiQuotationDetails.getMachineId());
-        }
-        if (busiQuotationDetails.getOtherMachinePrice() != null){
-            machineProce = format(machineProce + busiQuotationDetails.getOtherMachinePrice());
+        } else if(busiQuotationDetails.getOtherMachinePrice() != null){
+            machineProce = busiQuotationDetails.getOtherMachinePrice();
         }
         //联轴器成本
         if (busiQuotationDetails.getCouplingId() != null){
             couplingPrice = quotationDetailsMapper.getCouplingPrice(busiQuotationDetails.getCouplingId());
-        }
-        if (busiQuotationDetails.getOtherCouplingPrice() != null){
-            couplingPrice = format(couplingPrice + busiQuotationDetails.getOtherCouplingPrice());
+        } else if (busiQuotationDetails.getOtherCouplingPrice() != null){
+            couplingPrice =  busiQuotationDetails.getOtherCouplingPrice();
         }
         //轴承成本
         if (busiQuotationDetails.getBearingId() != null){
             bearingPrice =  quotationDetailsMapper.getBearingPrice(busiQuotationDetails.getBearingId());
-        }
-        if (busiQuotationDetails.getOtherBearingPrice() != null){
-            bearingPrice = format(bearingPrice + busiQuotationDetails.getOtherBearingPrice());
+        } else if (busiQuotationDetails.getOtherBearingPrice() != null){
+            bearingPrice = busiQuotationDetails.getOtherBearingPrice();
         }
         if(busiQuotationDetails.getOtherExpenses() != null){
             otherPrice = busiQuotationDetails.getOtherExpenses();
@@ -446,10 +448,18 @@ public class BusiQuotationDetailsController extends BaseController
         Double allPrice =  (bengTouPrice + waiGouPrice) / (1 - PACKING_AND_TRANSPORTATION_COSTS) / (1 - TAX_AND_ADDITIONAL_RATIO);
         busiQuotationDetails.setDetailsPrice(format(allPrice));
         busiQuotationDetails.setQuotationType(0L);
+        //成本核算 （材料成本+人工成本+制造费用）
+        busiQuotationDetails.setPumpHeadCost(StringUtils.doubleFormat((materialCosts + laborCost + makeCost)));
+        //电机成本
+        busiQuotationDetails.setMotorCost(motorPrice);
+        //机封成本
+        busiQuotationDetails.setMotorCost(machineProce);
+        //总成本
+        Double allCost = StringUtils.doubleFormat(materialCosts + laborCost + makeCost + motorPrice + machineProce + couplingPrice + bearingPrice + otherPrice);
+        busiQuotationDetails.setAllCost(allCost);
         busiQuotationDetailsService.updateBusiQuotationDetails(busiQuotationDetails);
         Double sumPrice =  quotationDetailsMapper.getSumPrice(busiQuotationDetails.getQuotationId());
         reset(busiQuotationDetails.getQuotationId());
-
         return success(format(sumPrice).toString());
     }
 

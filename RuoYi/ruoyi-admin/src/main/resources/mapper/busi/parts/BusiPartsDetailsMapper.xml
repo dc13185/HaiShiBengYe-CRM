@@ -16,26 +16,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="detailsPrice"    column="details_price"    />
         <result property="modelName"    column="modelName"    />
         <result property="parameterName"    column="parameterName"    />
-
         <result property="coefficient"    column="coefficient"    />
         <result property="materialId"    column="material_id"    />
         <result property="materialSupplierId"    column="material_supplier_id"    />
         <result property="materialSupplierName"    column="material_supplier_name"    />
         <result property="materialName"    column="material_name"    />
-
-        <association property="partsCost" javaType="com.ruoyi.busi.cost.domain.BusiPartsCost">
-            <result property="costId"    column="cost_id"    />
-            <result property="costPrice"    column="cost_price"    />
-            <result property="actualPrice"    column="actual_price"    />
-            <result property="quotationAmount"    column="quotation_amount"    />
-            <result property="profit"    column="profit"    />
-            <result property="actualProfit"    column="actual_profit"    />
-            <result property="quotationId"    column="quotation_id"    />
-        </association>
+        <result property="allCost"    column="all_cost"    />
     </resultMap>
 
     <sql id="selectBusiPartsDetailsVo">
-        select details_id, quotation_id, equipment_num, product_line_id, model_id, parameter_id, details_price,number from busi_parts_details
+        select details_id, quotation_id, equipment_num, product_line_id, model_id, parameter_id, details_price,number,all_cost from busi_parts_details
     </sql>
 
     <select id="selectBusiPartsDetailsList" parameterType="BusiPartsDetails" resultMap="BusiPartsDetailsResult">
@@ -47,17 +37,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             (SELECT bpp.`item_number` FROM `busi_product_parameter` bpp WHERE bpp.`parameter_id` = bpd.`parameter_id`) AS parameterName,
             (SELECT bt.texture_name FROM busi_material_production bmp
             LEFT JOIN  busi_texture bt ON bmp.`texture_id` = bt.texture_id
-            WHERE bmp.material_id = bpd.material_id) AS material_name ,
-            bpc.*
-            FROM `busi_parts_details` bpd INNER JOIN busi_parts_cost bpc ON bpd.`quotation_id` = bpc.`quotation_id`
+            WHERE bmp.material_id = bpd.material_id) AS material_name
+            FROM `busi_parts_details` bpd
         <where>
             bpd.quotation_id = #{quotationId}
         </where>
     </select>
 
     <select id="selectBusiPartsDetailsById" parameterType="Long" resultMap="BusiPartsDetailsResult">
-        <include refid="selectBusiPartsDetailsVo"/>
-        where details_id = #{detailsId}
+        SELECT * ,
+            product_line_id,
+            (SELECT product_line_name FROM busi_product_line bpl WHERE bpl.product_line_id = bpd.product_line_id) AS productLineName ,
+            model_id,
+            (SELECT model_name FROM busi_product_model bpm WHERE bpm.model_id = bpd.model_id) AS modelName ,
+            (SELECT bpp.`item_number` FROM `busi_product_parameter` bpp WHERE bpp.`parameter_id` = bpd.`parameter_id`) AS parameterName,
+            (SELECT bt.texture_name FROM busi_material_production bmp
+            LEFT JOIN  busi_texture bt ON bmp.`texture_id` = bt.texture_id
+            WHERE bmp.material_id = bpd.material_id) AS material_name,
+            (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bpd.material_supplier_id ) AS  material_supplier_name
+            FROM `busi_parts_details` bpd
+        where bpd.details_id = #{detailsId}
     </select>
 
     <select id="selectBusiPartsDetailsByQuotationId" parameterType="Long" resultMap="BusiPartsDetailsResult">
@@ -78,6 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="coefficient != null">coefficient,</if>
             <if test="materialId != null">material_id,</if>
             <if test="materialSupplierId != null">material_supplier_id,</if>
+            <if test="allCost != null">all_cost,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="quotationId != null">#{quotationId},</if>
@@ -90,6 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="coefficient != null">#{coefficient},</if>
             <if test="materialId != null">#{materialId},</if>
             <if test="materialSupplierId != null">#{materialSupplierId},</if>
+            <if test="allCost != null">#{allCost},</if>
          </trim>
     </insert>
 
@@ -102,6 +103,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="modelId != null">model_id = #{modelId},</if>
             <if test="parameterId != null">parameter_id = #{parameterId},</if>
             <if test="number != null">number = #{number},</if>
+            <if test="allCost != null">all_cost = #{allCost},</if>
+            <if test="coefficient != null">coefficient = #{coefficient},</if>
+            <if test="detailsPrice != null">details_price = #{detailsPrice},</if>
         </trim>
         where details_id = #{detailsId}
     </update>

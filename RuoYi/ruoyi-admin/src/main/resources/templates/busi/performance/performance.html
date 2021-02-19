@@ -100,21 +100,22 @@
                         }
                     }
                 },
-                {
-                    title: '回款率',
+                /*{
+                    title: '签约金额',
                     formatter: function(value, row, index) {
-                        var number  = row.repaymentAmount / row.contractPrice;
+                        var number  = row.singQuotationPrice;
                         if (number){
                             return number.toFixed(2);
                         }else{
                             return  0;
                         }
                     }
-                },
+                },*/
+
                 {
-                    title: '签约金额',
+                    title: '报价签约率',
                     formatter: function(value, row, index) {
-                        var number  = row.singQuotationPrice;
+                        var number  = row.contractPrice/row.quotationPrice;
                         if (number){
                             return number.toFixed(2);
                         }else{
@@ -207,7 +208,7 @@
                             }
                         }
                     },
-                    {
+                   /* {
                         field: 'singQuotationPrice',
                         title: '平均签约金额',
                         formatter: function(value, row, index) {
@@ -218,13 +219,13 @@
                                 return  0;
                             }
                         }
-                    },
+                    },*/
                     {
                         title: '平均签约率',
                         formatter: function(value, row, index) {
-                            var number  = row.singQuotationPrice;
+                            var number  = row.contractPrice/row.quotationPrice;
                             if (number){
-                                return (number/row.contractPrice).toFixed(2);
+                                return number.toFixed(2);
                             }else{
                                 return  0;
                             }

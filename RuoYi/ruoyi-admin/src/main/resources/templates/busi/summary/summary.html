@@ -18,10 +18,22 @@
                                 <label>客户性质：</label>
                                 <input type="text" name="customerNature"/>
                             </li>
+
                             <li>
-                                <label>所处行业：</label>
-                                <input type="text" name="customerIndustry"/>
+                                <label>客户所在地：</label>
+                                <input type="text" name="customerAddress"/>
                             </li>
+
+                            <li>
+                                <label>项目所在地：</label>
+                                <input type="text" name="projectAddress"/>
+                            </li>
+
+                            <li>
+                                <label>项目名称：</label>
+                                <input type="text" name="projectName"/>
+                            </li>
+
                             <li>
                                 <label>产品类型：</label>
                                 <select name="quotationType" th:with="type=${@dict.getType('project_type')}">
@@ -29,6 +41,16 @@
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
+
+                            <li>
+                                <label>办事处：</label>
+                                <input type="text" name="officeAddress"/>
+                            </li>
+                            <li>
+                                <label>业务员：</label>
+                                <input type="text" name="officeStaffName"/>
+                            </li>
+
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -147,7 +169,7 @@
                 },
                 {
                     field: 'actualllSumCost',
-                    title: '实际报价成本总计',
+                    title: '实际成本总计',
                     formatter: function(value, row, index) {
                         var num = row.actualllSumCost;
                         return num.toFixed(2);
@@ -155,14 +177,14 @@
                 },
                 {
                     field: 'actualAllSumMargin',
-                    title: '实际报价毛利润',
+                    title: '实际毛利润',
                     formatter: function(value, row, index) {
                         var num = row.actualAllSumMargin;
                         return num.toFixed(2);
                     }
                 },
                 {
-                    title: '实际报价毛利率',
+                    title: '实际毛利率',
                     formatter: function(value, row, index) {
                         var num = row.actualAllSumMargin/(row.actualAllSumMargin + row.actualllSumCost);
                         return num.toFixed(2);

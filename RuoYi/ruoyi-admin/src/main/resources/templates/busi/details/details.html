@@ -179,32 +179,28 @@
                 {
                     title: '成本',
                     formatter: function(value, row, index) {
-                        debugger;
-                        var num = row.busiPriceDetails.sumPrice;
+                        var num = row.allCost;
                         return  num.toFixed(2);
                     }
                 },
                 {
                     title: '泵头成本',
                     formatter: function(value, row, index) {
-                        var busiPriceDetails = row.busiPriceDetails;
-                        var num = busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb;
+                        var num = row.pumpHeadCost;
                         return  num.toFixed(2);
                     }
                 },
                 {
                     title: '电机成本',
                     formatter: function(value, row, index) {
-                        var busiPriceDetails = row.busiPriceDetails;
-                        var num = busiPriceDetails.motorCb;
+                        var num = row.motorCost;
                         return  num.toFixed(2);
                     }
                 },
                 {
                     title: '机封及系统成本',
                     formatter: function(value, row, index) {
-                        var busiPriceDetails = row.busiPriceDetails;
-                        var num = busiPriceDetails.jfCb;
+                        var num = row.sealCost;
                         return  num.toFixed(2);
                     }
                 },

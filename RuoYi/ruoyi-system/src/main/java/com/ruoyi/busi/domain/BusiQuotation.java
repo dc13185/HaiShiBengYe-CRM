@@ -99,6 +99,17 @@ public class BusiQuotation extends BaseEntity
     private long partsCount;
 
 
+    public void setQuotationPrice(double quotationPrice) {
+        this.quotationPrice = quotationPrice;
+    }
+
+    public void setOutsourcingPrice(double outsourcingPrice) {
+        this.outsourcingPrice = outsourcingPrice;
+    }
+
+    public void setPartsPrice(double partsPrice) {
+        this.partsPrice = partsPrice;
+    }
 
     public long getWholeCount() {
         return wholeCount;

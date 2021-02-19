@@ -127,6 +127,10 @@ public class BusiOutsourcingDetailsController extends BaseController
         Double allPrice = ((busiOutsourcing.getOutsourcingPrice()) * (1 + Constant.PROPORTION_OF_MANAGEMENT_FEE_PURCHASED)) + (motorPrice * (1 + Constant.PROPORTION_MANAGEMENT));
         busiOutsourcingDetails.setDetailsPrice(StringUtils.doubleFormat(allPrice));
         busiOutsourcingDetails.setQuotationType(1L);
+        //泵头成本
+        busiOutsourcingDetails.setPumpHeadCost(busiOutsourcing.getOutsourcingPrice());
+        busiOutsourcingDetails.setMotorCost(motorPrice);
+        busiOutsourcingDetails.setAllCost(StringUtils.doubleFormat(busiOutsourcing.getOutsourcingPrice()+motorPrice));
         //先进行保存 保存完毕重新统计
         int i = busiOutsourcingDetailsService.insertBusiOutsourcingDetails(busiOutsourcingDetails);
         if (i > 0){
@@ -155,8 +159,29 @@ public class BusiOutsourcingDetailsController extends BaseController
     @ResponseBody
     public AjaxResult editSave(BusiOutsourcingDetails busiOutsourcingDetails)
     {
-
-        return toAjax(busiOutsourcingDetailsService.updateBusiOutsourcingDetails(busiOutsourcingDetails));
+        Double motorPrice = 0d ;
+        BusiOutsourcing busiOutsourcing = busiOutsourcingService.selectBusiOutsourcingById(busiOutsourcingDetails.getModelId());
+        //电机成本
+        if (busiOutsourcingDetails.getMotorId() != null){
+            BusiMotor busiMotor = busiMotorService.selectBusiMotorById(busiOutsourcingDetails.getMotorId());
+            motorPrice =  busiMotor.getPrice();
+        }else if (busiOutsourcingDetails.getOtherMotorPrice() != null){
+            motorPrice =  busiOutsourcingDetails.getOtherMotorPrice();
+        }
+        //外购报价 泵头成本（来源于供应商）*（1+外购泵配套管理费用）+电机成本*（1+外购件配套管理费比例）
+        Double allPrice = ((busiOutsourcing.getOutsourcingPrice()) * (1 + Constant.PROPORTION_OF_MANAGEMENT_FEE_PURCHASED)) + (motorPrice * (1 + Constant.PROPORTION_MANAGEMENT));
+        busiOutsourcingDetails.setDetailsPrice(StringUtils.doubleFormat(allPrice));
+        busiOutsourcingDetails.setQuotationType(1L);
+        //泵头成本
+        busiOutsourcingDetails.setPumpHeadCost(busiOutsourcing.getOutsourcingPrice());
+        busiOutsourcingDetails.setMotorCost(motorPrice);
+        busiOutsourcingDetails.setAllCost(StringUtils.doubleFormat(busiOutsourcing.getOutsourcingPrice()+motorPrice));
+        //先进行保存 保存完毕重新统计
+        int i = busiOutsourcingDetailsService.updateBusiOutsourcingDetails(busiOutsourcingDetails);
+        if (i > 0){
+            reStatistics(busiOutsourcingDetails);
+        }
+        return toAjax(1);
     }
 
     /**

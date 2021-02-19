@@ -118,6 +118,14 @@
                         return allPrice.toFixed(2);
                     }
                 },
+
+                {
+                    title: '成本',
+                    formatter: function(value, row, index) {
+                        var number = row.allCost;
+                        return number.toFixed(2);
+                    }
+                },
                 {
                     title: '操作',
                     align: 'center',

@@ -1,5 +1,6 @@
 package com.ruoyi.busi.summary.domain;
 
+import com.ruoyi.busi.domain.BusiQuotation;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -34,6 +35,12 @@ public class BusiContractSummary extends BaseEntity
     /** 所处行业 */
     @Excel(name = "所处行业")
     private String customerIndustry;
+
+    private String customerAddress;
+
+    private String projectAddress;
+
+    private String projectName;
 
     @Excel(name = "办事处")
     private String officeAddress;
@@ -84,6 +91,41 @@ public class BusiContractSummary extends BaseEntity
     private Double  priceActualProfit;
     private Double  outActualProfit;
     private Double  partsActualProfit;
+
+    private BusiQuotation busiQuotation;
+
+
+    public String getCustomerAddress() {
+        return customerAddress;
+    }
+
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
+    }
+
+    public String getProjectAddress() {
+        return projectAddress;
+    }
+
+    public void setProjectAddress(String projectAddress) {
+        this.projectAddress = projectAddress;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public BusiQuotation getBusiQuotation() {
+        return busiQuotation;
+    }
+
+    public void setBusiQuotation(BusiQuotation busiQuotation) {
+        this.busiQuotation = busiQuotation;
+    }
 
     public String getContractNo() {
         return contractNo;

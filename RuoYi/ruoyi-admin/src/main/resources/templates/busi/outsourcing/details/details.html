@@ -15,7 +15,7 @@
                                 <label>类型：</label>
                                 <select name="supplierLevel"  class="supplierLevel" onchange="toOutsourcing()">
                                     <option value="">外购</option>
-                                    <option value="zhengji"  th:if="${zhengjiFlag != null}">整机</option>
+                                    <option value="zhengji"  th:if="${quotationFlag != null}">整机</option>
                                     <option value="parts"  th:if="${partsPrice != null}">配件</option>
                                 </select>
                             </li>
@@ -198,21 +198,21 @@
                 {
                     title: '成本',
                     formatter: function(value, row, index) {
-                        var num = row.busiOutsourcingCost.sumPrice;
+                        var num = row.allCost;
                         return  num.toFixed(2);
                     }
                 },
                 {
                     title: '泵头成本',
                     formatter: function(value, row, index) {
-                        var num = row.busiOutsourcingCost.productPrice;
+                        var num = row.pumpHeadCost;
                         return  num.toFixed(2);
                     }
                 },
                 {
                     title: '电机成本',
                     formatter: function(value, row, index) {
-                        var num = row.busiOutsourcingCost.motorPrice;
+                        var num = row.motorCost;
                         return  num.toFixed(2);
                     }
                 },
@@ -228,8 +228,7 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-
-                      /*  actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.detailsId + '\')"><i class="fa fa-edit"></i>编辑</a> ');*/
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.detailsId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.detailsId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
@@ -242,7 +241,6 @@
             var quotationId = $("#quotationId").val();
             $.modal.openFull("添加报价单明细",ctx+"busi/details/add?quotationId="+quotationId)
         }
-
 
         function toOutsourcing(){
             var type = $(".supplierLevel").val();
