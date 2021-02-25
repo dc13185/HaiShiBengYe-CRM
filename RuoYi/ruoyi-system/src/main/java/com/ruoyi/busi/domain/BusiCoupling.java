@@ -26,8 +26,18 @@ public class BusiCoupling extends BaseEntity
     @Excel(name = "联轴器价格")
     private Long couplingPrice;
 
+    @Excel(name = "供应商")
+    private String supplierName;
     /**  */
     private String supplierId;
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
 
     public void setCouplingId(Long couplingId)
     {

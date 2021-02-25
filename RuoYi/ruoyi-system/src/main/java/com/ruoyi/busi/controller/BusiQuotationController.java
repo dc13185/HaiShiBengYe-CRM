@@ -82,6 +82,10 @@ public class BusiQuotationController extends BaseController
     public AjaxResult export(BusiQuotation busiQuotation)
     {
         List<BusiQuotation> list = busiQuotationService.selectBusiQuotationList(busiQuotation);
+        list.forEach(l -> {
+            l.setAllCount(null);
+            l.setSumPrice(null);
+        });
         ExcelUtil<BusiQuotation> util = new ExcelUtil<BusiQuotation>(BusiQuotation.class);
         return util.exportExcel(list, "quotation");
     }

@@ -79,7 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="profit != null"> profit = #{profit},</if>
             <if test="actualProfit != null"> actualProfit =#{actualProfit},</if>
             <if test="actualAllPrice != null"> actualAllPrice =#{actualAllPrice},</if>
-            <if test="sumPrice != null"> sumPrice =#{actualAllPrice},</if>
+            <if test="sumPrice != null"> sumPrice =#{sumPrice},</if>
         </trim>
         where quotation_id = #{quotationId}
     </update>

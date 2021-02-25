@@ -5,15 +5,15 @@ import com.ruoyi.busi.domain.BusiMotor;
 
 /**
  * 电机产品Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2021-01-01
  */
-public interface BusiMotorMapper 
+public interface BusiMotorMapper
 {
     /**
      * 查询电机产品
-     * 
+     *
      * @param motorId 电机产品ID
      * @return 电机产品
      */
@@ -21,15 +21,18 @@ public interface BusiMotorMapper
 
     /**
      * 查询电机产品列表
-     * 
+     *
      * @param busiMotor 电机产品
      * @return 电机产品集合
      */
     public List<BusiMotor> selectBusiMotorList(BusiMotor busiMotor);
 
+    public List<BusiMotor> selectBusiMotorListExport(BusiMotor busiMotor);
+
+
     /**
      * 新增电机产品
-     * 
+     *
      * @param busiMotor 电机产品
      * @return 结果
      */
@@ -37,7 +40,7 @@ public interface BusiMotorMapper
 
     /**
      * 修改电机产品
-     * 
+     *
      * @param busiMotor 电机产品
      * @return 结果
      */
@@ -45,7 +48,7 @@ public interface BusiMotorMapper
 
     /**
      * 删除电机产品
-     * 
+     *
      * @param motorId 电机产品ID
      * @return 结果
      */
@@ -53,7 +56,7 @@ public interface BusiMotorMapper
 
     /**
      * 批量删除电机产品
-     * 
+     *
      * @param motorIds 需要删除的数据ID
      * @return 结果
      */

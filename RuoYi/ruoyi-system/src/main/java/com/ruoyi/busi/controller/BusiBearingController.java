@@ -1,6 +1,8 @@
 package com.ruoyi.busi.controller;
 
 import java.util.List;
+
+import com.ruoyi.busi.mapper.BusiBearingMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,10 @@ public class BusiBearingController extends BaseController
     @Autowired
     private IBusiBearingService busiBearingService;
 
+    @Autowired
+    private BusiBearingMapper busiBearingMapper;
+
+
     @RequiresPermissions("busi:bearing:view")
     @GetMapping()
     public String bearing(String supplierId,ModelMap modelMap)
@@ -64,9 +70,9 @@ public class BusiBearingController extends BaseController
     @ResponseBody
     public AjaxResult export(BusiBearing busiBearing)
     {
-        List<BusiBearing> list = busiBearingService.selectBusiBearingList(busiBearing);
+        List<BusiBearing> list = busiBearingMapper.selectBusiBearingListExport(busiBearing);
         ExcelUtil<BusiBearing> util = new ExcelUtil<BusiBearing>(BusiBearing.class);
-        return util.exportExcel(list, "bearing");
+        return util.exportExcel(list, "轴承表");
     }
 
     /**

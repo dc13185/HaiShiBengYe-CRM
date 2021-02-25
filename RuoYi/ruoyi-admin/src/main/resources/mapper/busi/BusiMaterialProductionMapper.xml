@@ -28,6 +28,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+
+    <select id="selectBusiMaterialProductionListExport" parameterType="BusiMaterialProduction" resultMap="BusiMaterialProductionResult">
+        SELECT bmp.material_id, bmp.texture_id,bmp.material_level, bmp.price,bmp.supplier_id ,bmp.texture_id ,bt.texture_name AS materialName ,bt.texture_type   AS form,   bt.`mass_ratio` AS massRatio
+        ,ms.`material_name` as supplierName
+        FROM busi_material_production bmp
+        LEFT JOIN busi_texture bt ON bmp.texture_id = bt.texture_id
+        INNER JOIN `material_supplier` ms ON ms.`supplier_id` =  bmp.`supplier_id`
+        <where>
+            <if test="materialLevel != null "> and bmp.material_level = #{materialLevel}</if>
+            <if test="materialName != null "> and bt.texture_name like  concat('%', #{materialName}, '%') </if>
+            <if test="supplierId != null "> and bmp.supplier_id = #{supplierId}</if>
+        </where>
+    </select>
+
+
+
+
     <select id="selectBusiMaterialProductionById" parameterType="Long" resultMap="BusiMaterialProductionResult">
         <include refid="selectBusiMaterialProductionVo"/>
         where bmp.material_id = #{materialId}

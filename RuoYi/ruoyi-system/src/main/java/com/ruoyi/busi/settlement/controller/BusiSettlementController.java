@@ -110,6 +110,7 @@ public class BusiSettlementController extends BaseController
             busiSettlementHistory.setBasedCommission(busiSettlement.getBasedCommission());
             busiSettlementHistory.setPremiumCommission(busiSettlement.getPremiumCommission());
             busiSettlementHistory.setBusinessCommission(busiSettlement.getBasedCommission());
+            busiSettlementHistory.setDeductionCommission(busiSettlement.getDeductionCommission());
             busiSettlementHistory.setWarrantyCommission(busiSettlement.getWarrantyCommission());
             busiSettlementHistory.setReceivedCommission(busiSettlement.getReceivedCommission());
             busiSettlementHistory.setAlreadySettlementBusinessFee(busiSettlement.getSettlementBusinessFee());
@@ -131,21 +132,6 @@ public class BusiSettlementController extends BaseController
     public String edit(@PathVariable("settlementId") Long settlementId, ModelMap mmap)
     {
         BusiSettlement busiSettlement = busiSettlementService.selectBusiSettlementById(settlementId);
-        //求出来基本信息
-        BusiContract busiContract = busiContractMapper.selectBusiContractByNo(busiSettlement.getContractNo());
-        BusiQuotation busiQuotation = busiContract.getBusiQuotation();
-        busiQuotation.setSumPrice(StringUtils.doubleFormat(busiQuotation.getOutsourcingPrice()  + busiQuotation.getPartsPrice() + busiQuotation.getQuotationPrice()));
-        busiContract.setBusiQuotation(busiQuotation);
-
-        Map<String,Double> map = busiContractMapper.queryCostByQuotationId(busiContract.getQutationId().toString());
-        Double motorCost = map.get("motorCost");
-        Double otherCost = map.get("otherCost");
-        //保存基本信息
-        busiSettlement.setContractPrice(busiContract.getContractPrice());
-        busiSettlement.setQuotationPrice(busiQuotation.getSumPrice());
-        busiSettlement.setMotorCost(motorCost);
-        busiSettlement.setOtherCost(otherCost);
-
         mmap.put("busiSettlement", busiSettlement);
         return prefix + "/edit";
     }
@@ -165,7 +151,7 @@ public class BusiSettlementController extends BaseController
         //查找上一次的 业务结算费用
         BusiSettlement nowBusiSettlement = busiSettlementService.selectBusiSettlementById(busiSettlement.getSettlementId());
         //此时就是已结算的业务费用
-        busiSettlement.setSettlementBusinessFee(busiSettlement.getSettlementBusinessFee() + nowBusiSettlement.getSettlementBusinessFee());
+        busiSettlement.setSettlementBusinessFee(StringUtils.doubleFormat(busiSettlement.getSettlementBusinessFee() + nowBusiSettlement.getSettlementBusinessFee()));
 
         //保存历史
         busiSettlementHistory.setBasedCommission(busiSettlement.getBasedCommission());

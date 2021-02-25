@@ -8,10 +8,13 @@ import com.ruoyi.busi.cost.domain.BusiOutsourcingCost;
 import com.ruoyi.busi.cost.domain.BusiPartsCost;
 import com.ruoyi.busi.cost.mapper.BusiOutsourcingCostMapper;
 import com.ruoyi.busi.cost.mapper.BusiPartsCostMapper;
+import com.ruoyi.busi.domain.BusiContract;
 import com.ruoyi.busi.mapper.BusiPriceDetailsMapper;
 import com.ruoyi.busi.mapper.BusiProductParameterMapper;
 import com.ruoyi.busi.parts.domain.BusiPartsDetails;
 import com.ruoyi.busi.parts.mapper.BusiPartsDetailsMapper;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.poi.MyExcelUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,16 +80,6 @@ public class BusiPriceDetailsController extends BaseController
     /**
      * 导出报价单报价明细列表
      */
-    @RequiresPermissions("busi:details:export")
-    @Log(title = "报价单报价明细", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(BusiPriceDetails busiPriceDetails)
-    {
-        List<BusiPriceDetails> list = busiPriceDetailsService.selectBusiPriceDetailsList(busiPriceDetails);
-        ExcelUtil<BusiPriceDetails> util = new ExcelUtil<BusiPriceDetails>(BusiPriceDetails.class);
-        return util.exportExcel(list, "details");
-    }
 
     /**
      * 新增报价单报价明细
@@ -159,6 +152,7 @@ public class BusiPriceDetailsController extends BaseController
     @PostMapping("/searchDetails")
     @ResponseBody
     public AjaxResult searchDetails(@RequestBody  String  quotationNo){
+        quotationNo = StringUtils.trim(quotationNo);
         //整机报价
         BusiPriceDetails busiPriceDetails =  busiPriceDetailsMapper.selectBusiPriceDetailsByQuotationNo(quotationNo);
         //外购报价
@@ -171,6 +165,43 @@ public class BusiPriceDetailsController extends BaseController
         hashMap.put("busiPartsDetails",busiPartsCost);
         return  AjaxResult.success(hashMap);
     }
+
+
+    @RequiresPermissions("busi:details:export")
+    @Log(title = "报价单报价明细", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(@RequestBody  String  quotationNo)
+    {
+        quotationNo = StringUtils.trim(quotationNo);
+        //整机报价
+        BusiPriceDetails busiPriceDetails =  busiPriceDetailsMapper.selectBusiPriceDetailsByQuotationNo(quotationNo);
+        //外购报价
+        BusiOutsourcingCost busiOutsourcingCost = busiOutsourcingCostMapper.selectBusiOutsourcingCostByQuotationNo(quotationNo);
+        busiOutsourcingCost.setAllCost(null);
+        busiOutsourcingCost.setProfit(StringUtils.doubleFormat(busiOutsourcingCost.getProfit()));
+        //配件报价
+        BusiPartsCost busiPartsCost = busiPartsCostMapper.selectBusiPartsCostByQuotationNo(quotationNo);
+        HashMap hashMap = new HashMap();
+        hashMap.put("busiPriceDetails",busiPriceDetails);
+        hashMap.put("outsourcingMap",busiOutsourcingCost);
+        hashMap.put("busiPartsDetails",busiPartsCost);
+        MyExcelUtil myExcelUtil = new MyExcelUtil(BusiPriceDetails.class);
+        myExcelUtil.init();
+
+        if (busiPriceDetails != null){
+            myExcelUtil.exportExcelDetils(busiPriceDetails,BusiPriceDetails.class,"整机报价明细");
+        }
+        if (busiOutsourcingCost != null){
+            myExcelUtil.exportExcelDetils(busiOutsourcingCost,BusiOutsourcingCost.class,"外购报价明细");
+        }
+        if (busiPartsCost != null){
+            myExcelUtil.exportExcelDetils(busiPartsCost,BusiPartsCost.class,"配件报价明细");
+        }
+        return  myExcelUtil.exportAll("报价分析明细");
+    }
+
+
 
 
 

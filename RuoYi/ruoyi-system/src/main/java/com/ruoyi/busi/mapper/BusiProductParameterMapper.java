@@ -30,6 +30,8 @@ public interface BusiProductParameterMapper
      */
     public List<BusiProductParameter> selectBusiProductParameterList(BusiProductParameter busiProductParameter);
 
+    public List<BusiProductParameter> selectBusiProductParameterListExport(BusiProductParameter busiProductParameter);
+
     /**
      * 新增生产参数
      *

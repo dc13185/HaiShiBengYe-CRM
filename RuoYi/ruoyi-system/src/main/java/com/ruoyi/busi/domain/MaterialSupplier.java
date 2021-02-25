@@ -27,7 +27,7 @@ public class MaterialSupplier extends BaseEntity
     private String materialAddress;
 
     /** 采购类别 */
-    @Excel(name = "采购类别")
+    @Excel(name = "采购类别" ,dictType = "procurement_type")
     private String purchaseCategory;
 
     /** 联系人 */
@@ -50,7 +50,7 @@ public class MaterialSupplier extends BaseEntity
     private String qualification;
 
     /** 供应商评级 */
-    @Excel(name = "供应商评级")
+    @Excel(name = "供应商评级" ,dictType = "supplier_level")
     private Long supplierLevel;
 
     private String supplierType;

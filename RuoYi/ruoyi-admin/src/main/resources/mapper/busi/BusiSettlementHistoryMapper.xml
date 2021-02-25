@@ -16,10 +16,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="individualIncomeTax"    column="individual_income_tax"    />
         <result property="amountOfBusiness"    column="amount_of_business"    />
         <result property="settlementId"    column="settlement_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deductionCommission"    column="deduction_commission"    />
     </resultMap>
 
     <sql id="selectBusiSettlementHistoryVo">
-        select based_commission, premium_commission, business_commission, business_commission_type, warranty_commission, received_commission, already_settlement_business_fee, settlement_business_fee, individual_income_tax, amount_of_business, settlement_id from busi_settlement_history
+        select based_commission, premium_commission, business_commission,deduction_commission, business_commission_type, warranty_commission, received_commission, already_settlement_business_fee, settlement_business_fee, individual_income_tax, amount_of_business, settlement_id,update_time from busi_settlement_history
     </sql>
 
     <select id="selectBusiSettlementHistoryList" parameterType="BusiSettlementHistory" resultMap="BusiSettlementHistoryResult">
@@ -29,6 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and settlement_id = #{settlementId}
             </if>
         </where>
+        order by update_time desc
     </select>
 
     <select id="selectBusiSettlementHistoryById" parameterType="Double" resultMap="BusiSettlementHistoryResult">
@@ -51,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amountOfBusiness != null">amount_of_business,</if>
             <if test="settlementId != null">settlement_id,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="deductionCommission != null">deduction_commission,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="basedCommission != null">#{basedCommission},</if>
@@ -65,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amountOfBusiness != null">#{amountOfBusiness},</if>
             <if test="settlementId != null">#{settlementId},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="deductionCommission != null">#{deductionCommission},</if>
          </trim>
     </insert>
 

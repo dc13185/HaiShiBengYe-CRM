@@ -34,8 +34,19 @@ public class BusiMotor extends BaseEntity
     @Excel(name = "价格")
     private Double price;
 
+    @Excel(name = "供应商名称")
+    private String supplierName;
+
 
     private String supplierId;
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
 
     public void setMotorId(Long motorId)
     {

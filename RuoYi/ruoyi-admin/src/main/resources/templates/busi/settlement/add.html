@@ -46,6 +46,14 @@
                     <input name="quotationPrice" id="quotationPrice" class="form-control" type="text" readonly>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">成本金额/元：</label>
+                <div class="col-sm-8">
+                    <input name="quotationPrice" id="quotationCost" class="form-control" type="text" readonly>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">电机成本/元：</label>
                 <div class="col-sm-8">
@@ -95,6 +103,14 @@
                     <input name="warrantyCommission" id="warrantyCommission" class="form-control" type="text" >
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">质保金暂扣比例/%：</label>
+                <div class="col-sm-8">
+                    <input name="deductionCommission" id="deductionCommission" class="form-control" type="text" >
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">已回款金额/元：</label>
                 <div class="col-sm-8">
@@ -140,7 +156,7 @@
                 var basedCommission =  parseFloat($("#basedCommission").val());
                 var premiumCommission =  parseFloat($("#premiumCommission").val());
                 var contractPrice = parseFloat($("#contractPrice").val());
-                var quotationPrice = parseFloat($("#quotationPrice").val());
+                var quotationCost = parseFloat($("#quotationCost").val());
                 var motorCost = parseFloat($("#motorCost").val());
                 var otherCost = parseFloat($("#otherCost").val());
                 /*if (!isNaN(basedCommission) || !isNaN(premiumCommission)){
@@ -148,7 +164,13 @@
                     return;
                 }*/
                 //(合同金额-电机成本*1.1-特殊配置费用*1.1)*基础性提成计提比例+(合同金额-报价金额)*溢价部分计提比例
-                var  businessCommission = (contractPrice - motorCost - otherCost) *  (basedCommission / 100) + (contractPrice - quotationPrice) * (premiumCommission / 100)
+                var  businessCommission = 0;
+                if ((contractPrice - quotationCost) > 0){
+                    businessCommission =  (contractPrice - motorCost*1.1 - otherCost*1.1) *  (basedCommission / 100) + (contractPrice - quotationCost) * (premiumCommission / 100)
+                }else{
+                    businessCommission = (contractPrice - motorCost*1.1 - otherCost*1.1) *  (basedCommission / 100);
+                }
+
                 $("#businessCommission").val(businessCommission.toFixed(2));
                 $("#businessCommission").attr("readonly","readonly")
             }else if(businessCommissionType = "yiShiYiYi"){
@@ -162,7 +184,9 @@
             var receivedCommission =  parseFloat($("#receivedCommission").val());
             var businessCommission =  parseFloat($("#businessCommission").val());
             var warrantyCommission =  parseFloat($("#warrantyCommission").val());
-            var number  = receivedCommission/contractPrice * (businessCommission - contractPrice * (warrantyCommission/100))
+            var deductionCommission =  parseFloat($("#deductionCommission").val());
+            //（回款金额/合同金额）*（应付业务费合计-合同金额*质保金比例*质保金暂扣比例）
+            var number  = receivedCommission/contractPrice * (businessCommission - contractPrice * (warrantyCommission/100) * (deductionCommission/100))
             $("#settlementBusinessFee").val(number.toFixed(2));
             //代缴个人税 = 结算业务费*20%
             $("#individualIncomeTax").val((number*0.2).toFixed(2));

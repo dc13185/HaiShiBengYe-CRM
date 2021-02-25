@@ -245,8 +245,10 @@
                 success:function (result) {
                     var motorCost = result.motorCost;
                     var otherCost = result.otherCost;
+                    var allCost = result.allCost;
                     parent.$('#motorCost').val(motorCost);
                     parent.$('#otherCost').val(otherCost);
+                    parent.$('#quotationCost').val(allCost);
                 }
             })
 

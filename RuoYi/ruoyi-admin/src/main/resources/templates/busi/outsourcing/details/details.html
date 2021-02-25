@@ -34,7 +34,7 @@
                     <i class="fa fa-plus"></i> 添加
                 </a>
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:details:export">
-                    <i class="fa fa-download"></i> 导出
+                    <i class="fa fa-download"></i> 导出所有
                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -77,7 +77,7 @@
                 createUrl: prefix + "/add?supplierId="+supplierId,
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
+                exportUrl: ctx + "busi/details/export",
                 modalName: "报价明细",
                 columns: [{
                     radio: true
@@ -101,6 +101,13 @@
                     field: 'number',
                     align: 'center',
                     title: '数量'
+                },
+                {
+                    field: 'quotationType',
+                    title: '报价类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(project_type, value);
+                    }
                 },
          /*       {
                     field: 'productSupplierName',
@@ -214,13 +221,6 @@
                     formatter: function(value, row, index) {
                         var num = row.motorCost;
                         return  num.toFixed(2);
-                    }
-                },
-                {
-                    field: 'quotationType',
-                    title: '报价类型',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(project_type, value);
                     }
                 },
                 {

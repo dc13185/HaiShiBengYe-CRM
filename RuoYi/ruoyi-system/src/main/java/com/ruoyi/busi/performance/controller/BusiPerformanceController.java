@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.ruoyi.busi.performance.domain.BusiOfficePerformance;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.poi.MyExcelUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,9 +103,46 @@ public class BusiPerformanceController extends BaseController
     @ResponseBody
     public AjaxResult export(BusiPerformance busiPerformance)
     {
+        //业绩管理
         List<BusiPerformance> list = busiPerformanceService.selectBusiPerformanceList(busiPerformance);
-        ExcelUtil<BusiPerformance> util = new ExcelUtil<BusiPerformance>(BusiPerformance.class);
-        return util.exportExcel(list, "performance");
+        list.parallelStream().forEach(l -> {
+            l.setContractPrice(StringUtils.doubleFormat(l.getContractPrice()));
+            l.setQuotationPrice(StringUtils.doubleFormat(l.getQuotationPrice()));
+            l.setRepaymentAmount(StringUtils.doubleFormat(l.getRepaymentAmount()));
+        });
+
+        //
+        list = list.parallelStream().peek(l -> {
+            if (l.getContractPrice() == null) {
+                l.setContractPrice(0d);
+            }
+            if (l.getRepaymentAmount() == null) {
+                l.setRepaymentAmount(0d);
+            }
+        }).collect(Collectors.toList());
+        List<BusiOfficePerformance> statisticsList = Lists.newArrayList();
+        Map<String, Set<BusiPerformance>> sets =  list.stream().collect(Collectors.groupingBy(BusiPerformance::getOfficeAddress, Collectors.toSet()));
+        sets.entrySet().forEach(m -> {
+            BusiOfficePerformance busiPerformance1 = new BusiOfficePerformance();
+            busiPerformance1.setOfficeAddress(m.getKey());
+            busiPerformance1.setQuotationPrice(StringUtils.doubleFormat(m.getValue().stream().mapToDouble(BusiPerformance::getQuotationPrice).average().getAsDouble()));
+            busiPerformance1.setPeopleCount(m.getValue().stream().count());
+            busiPerformance1.setQuotationCount(m.getValue().stream().mapToLong(BusiPerformance::getQuotationCount).sum());
+            busiPerformance1.setContractCount(m.getValue().stream().mapToLong(BusiPerformance::getContractCount).sum());
+            busiPerformance1.setContractPrice(m.getValue().stream().mapToDouble(BusiPerformance::getContractPrice).average().getAsDouble());
+            busiPerformance1.setRepaymentAmount(m.getValue().stream().mapToDouble(BusiPerformance::getRepaymentAmount).average().getAsDouble());
+            busiPerformance1.setSingQuotationPrice(m.getValue().stream().mapToDouble(BusiPerformance::getSingQuotationPrice).average().getAsDouble());
+            statisticsList.add(busiPerformance1);
+        });
+
+
+        MyExcelUtil<BusiPerformance> util = new MyExcelUtil<BusiPerformance>(BusiPerformance.class);
+        util.init();
+        util.exportExcel(list,BusiPerformance.class,"业务员业绩统计");
+        util.exportExcel(statisticsList,BusiOfficePerformance.class,"办事处业务统计");
+
+
+        return util.exportAll("业绩管理表");
     }
 
     /**

@@ -35,7 +35,7 @@
                     <i class="fa fa-remove"></i> 删除
                 </a>
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:details:export">
-                    <i class="fa fa-download"></i> 导出
+                    <i class="fa fa-download"></i> 导出所有
                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -87,6 +87,13 @@
                     field: 'equipmentName',
                     align: 'center',
                     title: '设备名称'
+                },
+                {
+                    field: 'quotationType',
+                    title: '报价类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(project_type, value);
+                    }
                 },
                 {
                     field: 'number',
@@ -202,13 +209,6 @@
                     formatter: function(value, row, index) {
                         var num = row.sealCost;
                         return  num.toFixed(2);
-                    }
-                },
-                {
-                    field: 'quotationType',
-                    title: '报价类型',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(project_type, value);
                     }
                 },
                 {

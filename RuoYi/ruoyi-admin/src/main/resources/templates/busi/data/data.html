@@ -144,6 +144,10 @@
                 </div>
 
             </div>
+
+            <a class="export-btn btn btn-warning" onclick="exportDetials()" shiro:hasPermission="busi:details:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
         </div>
     </div>
     <th:block th:include="include :: footer" />
@@ -151,6 +155,23 @@
         var editFlag = [[${@permission.hasPermi('busi:data:edit')}]];
         var removeFlag = [[${@permission.hasPermi('busi:data:remove')}]];
         var prefix = ctx + "busi/data";
+
+
+        function exportDetials(){
+            var quotationNo = $("#quotationNo").val();
+            $.ajax({
+                url: ctx + "busi/data/export",
+                data:$("#formId").serialize(),
+                type: "post",
+                processData: false,
+                success: function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    }
+                }
+
+            })
+        }
 
         function searchData() {
             $.ajax({

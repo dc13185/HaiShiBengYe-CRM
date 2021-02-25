@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="detailsId"    column="details_id"    />
         <result property="quotationId"    column="quotation_id"    />
         <result property="equipmentNum"    column="equipment_num"    />
+        <result property="equipmentName"    column="equipment_name"    />
         <result property="productLineId"    column="product_line_id"    />
         <result property="modelId"    column="model_id"    />
         <result property="materialId"    column="material_id"    />
@@ -57,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="motorCost"    column="motor_cost"    />
         <result property="sealCost"    column="seal_cost"    />
         <result property="allCost"    column="all_cost"    />
+        <result property="baseMaterialSupplierId"    column="base_material_supplier_id"    />
     </resultMap>
 
     <sql id="selectBusiQuotationDetailsVo">
@@ -66,12 +68,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBusiQuotationDetailsList" parameterType="BusiQuotationDetails" resultMap="BusiQuotationDetailsResult">
         SELECT details_id, quotation_id,
         equipment_num,
+        equipment_name,
         product_line_id,
         (SELECT product_line_name FROM busi_product_line bpl WHERE bpl.product_line_id = bqd.product_line_id) AS product_line_name ,
         model_id,
         (SELECT model_name FROM busi_product_model bpm WHERE bpm.model_id = bqd.model_id) AS model_name ,
         material_supplier_id,
         (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.material_supplier_id ) AS  material_supplier_name,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.base_material_supplier_id ) AS  baseMaterialSupplierName,
         motor_id,
         material_id,
         (SELECT bt.texture_name FROM busi_material_production bmp
@@ -129,12 +133,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBusiQuotationDetailsById" parameterType="Long" resultMap="BusiQuotationDetailsResult">
         SELECT details_id, quotation_id,
         equipment_num,
+        equipment_name,
         product_line_id,
         (SELECT product_line_name FROM busi_product_line bpl WHERE bpl.product_line_id = bqd.product_line_id) AS product_line_name ,
         model_id,
         (SELECT model_name FROM busi_product_model bpm WHERE bpm.model_id = bqd.model_id) AS model_name ,
         material_supplier_id,
         (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.material_supplier_id ) AS  material_supplier_name,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.base_material_supplier_id ) AS  baseMaterialSupplierName,
         motor_id,
         material_id,
         (SELECT bt.texture_name FROM busi_material_production bmp
@@ -190,6 +196,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="quotationId != null">quotation_id,</if>
             <if test="equipmentNum != null and equipmentNum != ''">equipment_num,</if>
+            <if test="equipmentName != null and equipmentName != ''">equipment_name,</if>
             <if test="productLineId != null and productLineId != ''">product_line_id,</if>
             <if test="modelId != null and modelId != '' ">model_id,</if>
             <if test="materialSupplierId != null and materialSupplierId != ''">material_supplier_id,</if>
@@ -227,10 +234,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="motorCost != null ">motor_cost,</if>
             <if test="sealCost != null">seal_cost,</if>
             <if test="allCost != null">all_cost,</if>
+            <if test="baseMaterialSupplierId != null">base_material_supplier_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="quotationId != null and quotationId != ''">#{quotationId},</if>
             <if test="equipmentNum != null and equipmentNum != ''">#{equipmentNum},</if>
+            <if test="equipmentName != null and equipmentName != ''">#{equipmentName},</if>
             <if test="productLineId != null and productLineId != ''">#{productLineId},</if>
             <if test="modelId != null and modelId != ''">#{modelId},</if>
             <if test="materialSupplierId != null and materialSupplierId != ''">#{materialSupplierId},</if>
@@ -268,6 +277,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="motorCost != null ">#{motorCost},</if>
             <if test="sealCost != null">#{sealCost},</if>
             <if test="allCost != null">#{allCost},</if>
+            <if test="baseMaterialSupplierId != null">#{baseMaterialSupplierId},</if>
          </trim>
     </insert>
 
@@ -276,6 +286,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="quotationId != null">quotation_id = #{quotationId},</if>
             <if test="equipmentNum != null and equipmentNum != ''">equipment_num = #{equipmentNum},</if>
+            <if test="equipmentName != null and equipmentName != ''">equipment_name = #{equipmentName},</if>
             <if test="productLineId != null">product_line_id = #{productLineId},</if>
             <if test="modelId != null">model_id = #{modelId},</if>
             <if test="materialSupplierId != null and materialSupplierId != ''">material_supplier_id = #{materialSupplierId},</if>
@@ -313,6 +324,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="motorCost != null ">motor_cost = #{motorCost},</if>
             <if test="sealCost != null">seal_cost = #{sealCost},</if>
             <if test="allCost != null">all_cost = #{allCost},</if>
+            <if test="baseMaterialSupplierId != null">base_material_supplier_id = #{baseMaterialSupplierId},</if>
         </trim>
         where details_id = #{detailsId}
     </update>
@@ -336,7 +348,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM   `busi_product_parameter` bpp  LEFT JOIN  busi_texture bt
         ON bpp.`texture_id` = bt.`texture_id`
         LEFT JOIN `busi_material_production` bmp ON bt.`texture_id` = bmp.`texture_id`
-        WHERE bpp.`model_id` = #{modelId} AND bmp.`supplier_id` = #{materialSupplierId}
+        WHERE bpp.`model_id` = #{modelId} AND bmp.`supplier_id` = #{baseMaterialSupplierId}
     </select>
 
 

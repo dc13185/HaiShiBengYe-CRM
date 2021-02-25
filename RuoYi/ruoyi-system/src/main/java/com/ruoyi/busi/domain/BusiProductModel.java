@@ -49,6 +49,17 @@ public class BusiProductModel extends BaseEntity
     @Excel(name = "低值物料成本")
     private Double lowMaterialCost;
 
+    @Excel(name = "产品系列名称")
+    private String product_line_name;
+
+    public String getProduct_line_name() {
+        return product_line_name;
+    }
+
+    public void setProduct_line_name(String product_line_name) {
+        this.product_line_name = product_line_name;
+    }
+
     public void setModelId(Long modelId)
     {
         this.modelId = modelId;

@@ -26,8 +26,20 @@ public class BusiBearing extends BaseEntity
     @Excel(name = "轴承价格")
     private Double bearingPrice;
 
+    @Excel(name = "供应商")
+    private String supplierName;
+
     /**  */
     private String supplierId;
+
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
 
     public void setBearingId(Long bearingId)
     {

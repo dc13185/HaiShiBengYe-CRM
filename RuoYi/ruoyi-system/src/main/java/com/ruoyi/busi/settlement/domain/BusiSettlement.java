@@ -40,8 +40,11 @@ public class BusiSettlement extends BaseEntity
     private Double contractPrice;
 
     /** 报价金额/元 */
-    @Excel(name = "报价金额/元")
     private Double quotationPrice;
+
+    /** 成本金额 */
+    @Excel(name = "报价成本")
+    private Double quotationCost;
 
     /** 电机成本/元 */
     @Excel(name = "电机成本/元")
@@ -71,6 +74,10 @@ public class BusiSettlement extends BaseEntity
     @Excel(name = "质保金比例/%")
     private Double warrantyCommission;
 
+
+    @Excel(name = "质保金暂扣比例/%")
+    private Double deductionCommission;
+
     /** 已回款金额/元 */
     @Excel(name = "已回款金额/元")
     private Double receivedCommission;
@@ -79,6 +86,7 @@ public class BusiSettlement extends BaseEntity
     @Excel(name = "结算业务费")
     private Double settlementBusinessFee;
 
+
     /** 暂扣代缴个人所得税 */
     @Excel(name = "暂扣代缴个人所得税")
     private Double individualIncomeTax;
@@ -86,6 +94,23 @@ public class BusiSettlement extends BaseEntity
     /** 支付业务费金额 */
     @Excel(name = "支付业务费金额")
     private Double amountOfBusiness;
+
+
+    public Double getQuotationCost() {
+        return quotationCost;
+    }
+
+    public void setQuotationCost(Double quotationCost) {
+        this.quotationCost = quotationCost;
+    }
+
+    public Double getDeductionCommission() {
+        return deductionCommission;
+    }
+
+    public void setDeductionCommission(Double deductionCommission) {
+        this.deductionCommission = deductionCommission;
+    }
 
     public String getOfficeAddress() {
         return officeAddress;

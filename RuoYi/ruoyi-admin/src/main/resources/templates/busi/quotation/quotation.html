@@ -27,6 +27,22 @@
                                 <label>业务员：</label>
                                 <input type="text" name="officeStaffName"/>
                             </li>
+
+                            <li>
+                                <label>客户所在行业：</label>
+                                <input type="text" name="customerIndustry"/>
+                            </li>
+
+                            <li>
+                                <label>客户所在地：</label>
+                                <input type="text" name="customerAddress"/>
+                            </li>
+
+                            <li>
+                                <label>项目所在地：</label>
+                                <input type="text" name="projectAddress"/>
+                            </li>
+
                             <li class="select-time">
                                 <label>报价日期：</label>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginCreateTime]"/>
@@ -67,6 +83,7 @@
         var removeFlag = [[${@permission.hasPermi('busi:quotation:remove')}]];
         var prefix = ctx + "busi/quotation";
         var supplierId = $("#supplierId").val();
+        var project_type = [[${@dict.getType('project_type')}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -86,6 +103,13 @@
                 {
                     field: 'quotationNo',
                     title: '报价单号'
+                },
+                {
+                    field: 'quotationType',
+                    title: '报价类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(project_type, value);
+                    }
                 },
                 {
                     field: 'customerName',

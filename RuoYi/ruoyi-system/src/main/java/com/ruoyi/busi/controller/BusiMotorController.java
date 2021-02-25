@@ -1,6 +1,8 @@
 package com.ruoyi.busi.controller;
 
 import java.util.List;
+
+import com.ruoyi.busi.mapper.BusiMotorMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,9 @@ public class BusiMotorController extends BaseController
     @Autowired
     private IBusiMotorService busiMotorService;
 
+    @Autowired
+    private BusiMotorMapper busiMotorMapper;
+
     @RequiresPermissions("busi:motor:view")
     @GetMapping()
     public String motor(String supplierId,ModelMap modelMap)
@@ -64,9 +69,9 @@ public class BusiMotorController extends BaseController
     @ResponseBody
     public AjaxResult export(BusiMotor busiMotor)
     {
-        List<BusiMotor> list = busiMotorService.selectBusiMotorList(busiMotor);
+        List<BusiMotor> list = busiMotorMapper.selectBusiMotorListExport(busiMotor);
         ExcelUtil<BusiMotor> util = new ExcelUtil<BusiMotor>(BusiMotor.class);
-        return util.exportExcel(list, "motor");
+        return util.exportExcel(list, "电机产品");
     }
 
     /**

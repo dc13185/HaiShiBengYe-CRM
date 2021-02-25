@@ -1,5 +1,6 @@
 package com.ruoyi.busi.cost.domain;
 
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -18,28 +19,27 @@ public class BusiPartsCost extends BaseEntity
     /**  */
     private Long costId;
 
+    /** 报价金额 */
+    @Excel(name = "报价金额")
+    private Double quotationAmount;
+
     /** 成本总计 */
     @Excel(name = "成本总计")
     private Double costPrice;
 
     /** 实际成本总计 */
-    @Excel(name = "实际成本总计")
+    //@Excel(name = "实际成本总计")
     private Double actualPrice;
-
-    /** 报价金额 */
-    @Excel(name = "报价金额")
-    private Double quotationAmount;
 
     /** 毛利 */
     @Excel(name = "毛利")
     private Double profit;
 
     /** 实际毛利 */
-    @Excel(name = "实际毛利")
+   // @Excel(name = "实际毛利")
     private Double actualProfit;
 
     /** 1111 */
-    @Excel(name = "1111")
     private Long quotationId;
 
     public Long getCostId() {
@@ -75,7 +75,7 @@ public class BusiPartsCost extends BaseEntity
     }
 
     public Double getProfit() {
-        return profit;
+        return StringUtils.doubleFormat(profit);
     }
 
     public void setProfit(Double profit) {

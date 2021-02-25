@@ -226,15 +226,16 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
+            <a class="export-btn btn btn-warning" onclick="exportDetials()" shiro:hasPermission="busi:details:export" style="display: none">
+                <i class="fa fa-download"></i> 导出
+            </a>
         </div>
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
         var prefix = ctx + "busi/price/details";
+
         var editFlag = [[${@permission.hasPermi('busi:details:edit')}]];
         var removeFlag = [[${@permission.hasPermi('busi:details:remove')}]];
         var quotationNo = [[${quotationNo}]];
@@ -243,6 +244,28 @@
             $(".search-ts").click();
 
         }
+
+        function exportDetials(){
+            var quotationNo = $("#quotationNo").val();
+            if (!quotationNo || quotationNo == ''){
+                $.modal.alertWarning("请输入订单号");
+                return
+            }
+            $.ajax({
+                url: ctx + "busi/price/details/export",
+                data: quotationNo,
+                type: "post",
+                processData: false,
+                contentType: "application/json",
+                success: function(result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                    }
+                }
+
+            })
+        }
+
         function searchDetails(){
             var quotationNo = $("#quotationNo").val();
             if (!quotationNo || quotationNo == ''){
@@ -278,39 +301,43 @@
                         }
 
                         $(".self-made").show();
+                        $(".export-btn").show();
                     }else{
                         $(".self-made").hide();
                     }
                     var outsourcingMap = result.data.outsourcingMap;
                     if (outsourcingMap){
-                        $("#outsourcingPrice").html(outsourcingMap.productPrice);
-                        $("#motorPrice").html(outsourcingMap.motorPrice);
-                        $("#wgContractPrice").html(outsourcingMap.quotationAmount);
+                        $("#outsourcingPrice").html(outsourcingMap.productPrice.toFixed(2));
+                        $("#motorPrice").html(outsourcingMap.motorPrice.toFixed(2));
+                        $("#wgContractPrice").html(outsourcingMap.quotationAmount.toFixed(2));
                         var cb = outsourcingMap.productPrice + outsourcingMap.motorPrice;
                         $("#wgCb").html(cb.toFixed(2));
                         if(outsourcingMap.profit){
                             $("#wgMl").html(outsourcingMap.profit.toFixed(2));
                         }
                         $(".waigou-made").show();
+                        $(".export-btn").show();
                     }else{
                         $(".waigou-made").hide();
                     }
                     //配件
                     var busiPartsDetails = result.data.busiPartsDetails;
                     if (busiPartsDetails){
-                        $("#busiPartsPrice").html(busiPartsDetails.costPrice);
-                        $("#pjBusiPartsPrice").html(busiPartsDetails.quotationAmount);
+                        $("#busiPartsPrice").html(busiPartsDetails.costPrice.toFixed(2));
+                        $("#pjBusiPartsPrice").html(busiPartsDetails.quotationAmount.toFixed(2));
                         if(busiPartsDetails.profit){
                             $("#pjMl").html(busiPartsDetails.profit.toFixed(2));
                         }
                         $(".peijian-made").show();
+                        $(".export-btn").show();
                     }else{
                         $(".peijian-made").hide();
                     }
                 }
             });
-
         }
+
+
 
     </script>
 </body>

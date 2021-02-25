@@ -1,5 +1,6 @@
 package com.ruoyi.busi.domain;
 
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -19,12 +20,14 @@ public class BusiQuotationDetails extends BaseEntity
     private Long detailsId;
 
     /** 报价单ID */
-    @Excel(name = "报价单ID")
     private Long quotationId;
 
     /** 设备位号 */
     @Excel(name = "设备位号")
     private String equipmentNum;
+
+    @Excel(name = "设备名称")
+    private String equipmentName;
 
     /** 产品系列 */
     private Long productLineId;
@@ -32,17 +35,32 @@ public class BusiQuotationDetails extends BaseEntity
     /** 产品规格型号 */
     private Long modelId;
 
-
-
     /** 材料 */
     private Long materialId;
 
-
     private String materialSupplierId;
+
+    private String baseMaterialSupplierId;
+
 
     /** 数量 */
     @Excel(name = "数量")
     private Long number;
+
+    @Excel(name = "产品系列")
+    private String productLineName;
+
+    @Excel(name = "产品规格型号")
+    private String modelName;
+
+    @Excel(name = "非过流材质品牌")
+    private String baseMaterialSupplierName;
+
+    @Excel(name = "过流材质品牌")
+    private String materialSupplierName;
+
+    @Excel(name = "过流材质")
+    private String materialName;
 
     /** 冲洗方案 */
     @Excel(name = "冲洗方案")
@@ -86,6 +104,12 @@ public class BusiQuotationDetails extends BaseEntity
     /** 电机型号 */
     private Long motorId;
 
+    @Excel(name = "电机品牌")
+    private String motorSupplierName;
+
+    @Excel(name = "电机型号")
+    private String motorName;
+
     /** 其他电机 */
     @Excel(name = "其他电机")
     private String otherMotor;
@@ -99,6 +123,13 @@ public class BusiQuotationDetails extends BaseEntity
 
     /** 机封型号 */
     private Long machineId;
+
+    /** 机封品牌 */
+    @Excel(name = "机封品牌")
+    private String machineSupplierName;
+
+    @Excel(name = "机封型号")
+    private String machineModel;
 
     /** 其他机封 */
     @Excel(name = "其他机封")
@@ -114,6 +145,13 @@ public class BusiQuotationDetails extends BaseEntity
     /** 轴承Id */
     private Long bearingId;
 
+
+    @Excel(name = "联轴器品牌")
+    private String couplingSupplierName;
+
+    @Excel(name = "联轴器型号")
+    private String couplingName;
+
     @Excel(name = "其他轴承")
     private String otherBearingSupplier;
 
@@ -126,6 +164,12 @@ public class BusiQuotationDetails extends BaseEntity
     /** 联轴器型号 */
     private Long couplingId;
 
+    @Excel(name = "轴承品牌")
+    private String bearingSupplierName;
+
+    @Excel(name = "轴承型号")
+    private String bearingName;
+
     /** 其他联轴器 */
     @Excel(name = "其他联轴器")
     private String otherCoupling;
@@ -135,52 +179,10 @@ public class BusiQuotationDetails extends BaseEntity
     private Double otherCouplingPrice;
 
     /** 报价类型 */
-    @Excel(name = "报价类型")
     private Long quotationType;
-
-    @Excel(name = "产品系列")
-    private String productLineName;
-
-    /** 机封品牌 */
-    private String machineSupplierName;
-
-    @Excel(name = "产品规格型号")
-    private String modelName;
-
-    @Excel(name = "电机品牌")
-    private String motorSupplierName;
-
-    @Excel(name = "电机型号")
-    private String motorName;
-
-
-    @Excel(name = "过流材质品牌")
-    private String materialSupplierName;
-
-    @Excel(name = "过流材质")
-    private String materialName;
-
-    @Excel(name = "机封型号")
-    private String machineModel;
-
-    @Excel(name = "联轴器品牌")
-    private String couplingSupplierName;
-
-    @Excel(name = "联轴器型号")
-    private String couplingName;
-
-    @Excel(name = "轴承品牌")
-    private String bearingSupplierName;
-
-    @Excel(name = "轴承型号")
-    private String bearingName;
 
     /** 调整系数 */
     private Double coefficient;
-
-    @Excel(name = "基准单价")
-    private Double detailsPrice;
-
 
     @Excel(name = "泵头成本")
     private Double pumpHeadCost;
@@ -191,12 +193,54 @@ public class BusiQuotationDetails extends BaseEntity
     @Excel(name = "机封以及系统成本")
     private Double sealCost;
 
+    @Excel(name = "基准单价")
+    private Double detailsPrice;
+
+    @Excel(name = "调整单价")
+    private Double adjustUnitPrice;
+
     @Excel(name = "成本")
     private Double allCost;
 
 
+    public String getBaseMaterialSupplierId() {
+        return baseMaterialSupplierId;
+    }
+
+    public void setBaseMaterialSupplierId(String baseMaterialSupplierId) {
+        this.baseMaterialSupplierId = baseMaterialSupplierId;
+    }
+
+    public String getBaseMaterialSupplierName() {
+        return baseMaterialSupplierName;
+    }
+
+    public void setBaseMaterialSupplierName(String baseMaterialSupplierName) {
+        this.baseMaterialSupplierName = baseMaterialSupplierName;
+    }
+
+    public Double getAdjustUnitPrice() {
+        return adjustUnitPrice;
+    }
+
+    public void setAdjustUnitPrice(Double adjustUnitPrice) {
+        this.adjustUnitPrice = StringUtils.doubleFormat(detailsPrice * coefficient);
+    }
+
+    public String getEquipmentName() {
+        return equipmentName;
+    }
+
+    public void setEquipmentName(String equipmentName) {
+        this.equipmentName = equipmentName;
+    }
+
     public Double getAllCost() {
-        return allCost;
+        if (allCost != null){
+            return allCost;
+        }else{
+            return 0d;
+        }
     }
 
     public void setAllCost(Double allCost) {

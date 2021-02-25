@@ -24,10 +24,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="amountOfBusiness"    column="amount_of_business"    />
         <result property="officeAddress"    column="office_address"    />
         <result property="officeStaffName"    column="office_staff_name"    />
+        <result property="deductionCommission"    column="deduction_commission"    />
+        <result property="quotationCost"    column="quotation_cost"    />
     </resultMap>
 
     <sql id="selectBusiSettlementVo">
-        select settlement_id, contract_no, quotation_no, staff_id, contract_price, quotation_price, motor_cost, other_cost, based_commission, premium_commission, business_commission, business_commission_type, warranty_commission, received_commission, settlement_business_fee, individual_income_tax, amount_of_business from busi_settlement
+        select settlement_id, contract_no, quotation_no, staff_id, contract_price, quotation_price, motor_cost, other_cost,quotation_cost, based_commission, premium_commission,deduction_commission, business_commission, business_commission_type, warranty_commission, received_commission, settlement_business_fee, individual_income_tax, amount_of_business from busi_settlement
     </sql>
 
     <select id="selectBusiSettlementList" parameterType="BusiSettlement" resultMap="BusiSettlementResult">
@@ -86,6 +88,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settlementBusinessFee != null">settlement_business_fee,</if>
             <if test="individualIncomeTax != null">individual_income_tax,</if>
             <if test="amountOfBusiness != null">amount_of_business,</if>
+            <if test="deductionCommission != null">deduction_commission,</if>
+            <if test="quotationCost != null">quotation_cost,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="contractNo != null and contractNo != ''">#{contractNo},</if>
@@ -104,6 +108,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settlementBusinessFee != null">#{settlementBusinessFee},</if>
             <if test="individualIncomeTax != null">#{individualIncomeTax},</if>
             <if test="amountOfBusiness != null">#{amountOfBusiness},</if>
+            <if test="deductionCommission != null">#{deductionCommission},</if>
+            <if test="quotationCost != null">#{quotationCost},</if>
          </trim>
     </insert>
 
@@ -126,6 +132,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="settlementBusinessFee != null">settlement_business_fee = #{settlementBusinessFee},</if>
             <if test="individualIncomeTax != null">individual_income_tax = #{individualIncomeTax},</if>
             <if test="amountOfBusiness != null">amount_of_business = #{amountOfBusiness},</if>
+            <if test="deductionCommission != null">deduction_commission = #{deductionCommission},</if>
+            <if test="quotationCost != null">quotation_cost = #{quotationCost},</if>
         </trim>
         where settlement_id = #{settlementId}
     </update>

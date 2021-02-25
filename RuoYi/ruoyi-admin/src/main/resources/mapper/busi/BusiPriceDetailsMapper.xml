@@ -64,7 +64,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              SELECT SUM((SELECT bo.outsourcing_price * bob.`number` FROM busi_outsourcing bo WHERE bo.outsourcing_id = bob.model_id)) AS outsourcingPrice,
                 SUM((SELECT bm.price*bob.`number` FROM busi_motor bm WHERE bm.motor_id = bob.motor_id)) AS motorPrice,
                 SUM(bob.`other_motor_price` * bob.`number` )  AS otherMotorPrice,
-                 SUM(bob.details_price * bob.number * bob.`coefficient`) AS quotationAmount
+                 SUM(bob.details_price * bob.number * bob.`coefficient`) AS quotationAmount,
+                 SUM(bob.all_cost * bob.number) AS allCost
                 FROM busi_outsourcing_details bob
                 where bob.quotation_id =#{quotation_id}
     </select>

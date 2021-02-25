@@ -1,6 +1,7 @@
 package com.ruoyi.busi.summary.domain;
 
 import com.ruoyi.busi.domain.BusiQuotation;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -60,17 +61,25 @@ public class BusiContractSummary extends BaseEntity
     @Excel(name = "合同金额")
     private Double contractPrice;
 
+    @Excel(name = "折扣率")
+    private Double discountRate;
+
     @Excel(name = "报价成本总计")
     private Double allSumCost;
 
     @Excel(name = "实际成本总计")
     private Double actualllSumCost;
 
-    @Excel(name = "报价毛利率")
+    @Excel(name = "报价毛利润")
     private Double allSumMargin;
 
-    @Excel(name = "实际毛利率")
+    @Excel(name = "报价毛利率")
+    private Double allSumMarginGross;
+
+    @Excel(name = "实际毛利润")
     private Double actualAllSumMargin;
+
+    private Double actualAllSumMarginGross;
 
     private Double  quotationPrice;
     private Double  outsourcingPrice;
@@ -94,6 +103,30 @@ public class BusiContractSummary extends BaseEntity
 
     private BusiQuotation busiQuotation;
 
+
+    public Double getAllSumMarginGross() {
+        return allSumMarginGross;
+    }
+
+    public void setAllSumMarginGross(Double allSumMarginGross) {
+        this.allSumMarginGross = StringUtils.doubleFormat(allSumMargin/(allSumMargin+allSumCost));
+    }
+
+    public Double getActualAllSumMarginGross() {
+        return actualAllSumMarginGross;
+    }
+
+    public void setActualAllSumMarginGross(Double actualAllSumMarginGross) {
+        this.actualAllSumMarginGross = StringUtils.doubleFormat(actualAllSumMargin/(actualAllSumMargin+actualllSumCost));
+    }
+
+    public Double getDiscountRate() {
+        return discountRate;
+    }
+
+    public void setDiscountRate(Double discountRate) {
+        this.discountRate = StringUtils.doubleFormat(quotationPrice/contractPrice);
+    }
 
     public String getCustomerAddress() {
         return customerAddress;

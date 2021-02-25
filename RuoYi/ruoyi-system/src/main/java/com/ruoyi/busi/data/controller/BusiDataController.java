@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ruoyi.busi.data.mapper.BusiDataMapper;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.poi.MyExcelUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -102,7 +103,6 @@ public class BusiDataController extends BaseController
             resDate.setDelayContractProportion(0d);
         }
 
-
         return AjaxResult.success(resDate);
     }
 
@@ -115,9 +115,57 @@ public class BusiDataController extends BaseController
     @ResponseBody
     public AjaxResult export(BusiData busiData)
     {
-        List<BusiData> list = busiDataService.selectBusiDataList(busiData);
-        ExcelUtil<BusiData> util = new ExcelUtil<BusiData>(BusiData.class);
-        return util.exportExcel(list, "data");
+
+        BusiData resDate = new BusiData();
+        busiData.setCreateTime(new Date());
+        //业务员数量
+        Long officeUserStaffLong = busiDataMapper.queryOfficeUserStaff(busiData);
+        resDate.setOfficeUsersCount(officeUserStaffLong);
+        //办事处数量
+        Long officeAddressLong  = busiDataMapper.queryOfficeAddress(busiData);
+        resDate.setOfficeAddressCount(officeAddressLong);
+        //报价单
+        Long quotationCount =  busiDataMapper.queryQuotationCount(busiData);
+        resDate.setQuotationCount(quotationCount);
+        //报价单总价
+        Double quotationAllPrice = busiDataMapper.queryQuotationAllPrice(busiData);
+        resDate.setQuotationPrice(quotationAllPrice);
+        //人均报价额
+        resDate.setAvgQuotationPrice(StringUtils.doubleFormat(quotationAllPrice/officeUserStaffLong));
+        //合同
+        Long contractCount = busiDataMapper.queryContractCount(busiData);
+        resDate.setContractCount(contractCount);
+        //合同额
+        Double contractPrice = busiDataMapper.queryContractAllPrice(busiData);
+        resDate.setContractPrice(contractPrice);
+        //人均合同
+        resDate.setAvgContractPrice(StringUtils.doubleFormat(contractPrice/officeUserStaffLong));
+        //整体折扣率
+        resDate.setOverallDiscountRate(StringUtils.doubleFormat(StringUtils.doubleFormat(contractPrice/quotationAllPrice)));
+        //签约金额
+        Double signContractPrice = busiDataMapper.querySignContractPrice(busiData);
+        //报价签约率
+        resDate.setQuotationDiscountRate(StringUtils.doubleFormat(signContractPrice/quotationAllPrice));
+        //回款金额
+        Double repaymentAmount = busiDataMapper.queryRepaymentAmount(busiData);
+        resDate.setRefundAmount(repaymentAmount);
+        //延迟数
+        Long delayContractCount  = busiDataMapper.queryDeilverCount(busiData);
+        resDate.setDelayContractCount(delayContractCount);
+        //完成数
+        Long overCount = busiDataMapper.queryOverCount(busiData);
+        //完成比率
+        if (overCount != 0L){
+            resDate.setDelayContractProportion(StringUtils.doubleFormat(delayContractCount.doubleValue()/overCount.doubleValue()));
+        }else{
+            resDate.setDelayContractProportion(0d);
+        }
+
+        MyExcelUtil myExcelUtil = new MyExcelUtil(BusiData.class);
+        myExcelUtil.init();
+        myExcelUtil.exportExcelDetils(resDate,BusiData.class,"经费数据");
+
+        return myExcelUtil.exportAll("经费数据明细");
     }
 
     /**

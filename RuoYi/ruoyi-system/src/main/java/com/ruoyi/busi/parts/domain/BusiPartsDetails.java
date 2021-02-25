@@ -1,6 +1,7 @@
 package com.ruoyi.busi.parts.domain;
 
 import com.ruoyi.busi.cost.domain.BusiPartsCost;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -20,35 +21,30 @@ public class BusiPartsDetails extends BaseEntity
     private Long detailsId;
 
     /** 报价单ID */
-    @Excel(name = "报价单ID")
+    //@Excel(name = "报价单ID")
     private Long quotationId;
 
     /** 设备位号 */
     private String equipmentNum;
+
+    private String equipmentName;
 
     /** 产品系列 */
     private Long productLineId;
 
     @Excel(name = "产品系列")
     private String productLineName;
-
     /** 泵型号 */
     private Long modelId;
-
     @Excel(name = "泵型号")
     private String modelName;
-
     /** 配件名称 */
     private Long parameterId;
-
     @Excel(name = "配件名称")
     private String parameterName;
-
     /** 数量 */
     @Excel(name = "数量")
     private Long number;
-
-    private Double detailsPrice;
 
     /** 调整系数 */
     private Double coefficient;
@@ -58,14 +54,36 @@ public class BusiPartsDetails extends BaseEntity
     /** 供应商ID */
     private String materialSupplierId;
 
+    @Excel(name = "材质供应商")
     private String materialSupplierName;
 
-    @Excel(name = "过流材质")
+    @Excel(name = "材质")
     private String materialName;
 
     @Excel(name = "成本")
     private Double allCost;
 
+    @Excel(name = "基准单价")
+    private Double detailsPrice;
+
+    @Excel(name = "调整单价")
+    private Double adjustUnitPrice;
+
+    public String getEquipmentName() {
+        return equipmentName;
+    }
+
+    public void setEquipmentName(String equipmentName) {
+        this.equipmentName = equipmentName;
+    }
+
+    public Double getAdjustUnitPrice() {
+        return adjustUnitPrice;
+    }
+
+    public void setAdjustUnitPrice(Double adjustUnitPrice) {
+        this.adjustUnitPrice = StringUtils.doubleFormat(detailsPrice * coefficient);
+    }
 
     public Double getAllCost() {
         return allCost;

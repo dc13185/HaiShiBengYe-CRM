@@ -1,6 +1,8 @@
 package com.ruoyi.busi.controller;
 
 import java.util.List;
+
+import com.ruoyi.busi.mapper.BusiMaterialProductionMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,9 @@ public class BusiMaterialProductionController extends BaseController
     @Autowired
     private IBusiMaterialProductionService busiMaterialProductionService;
 
+    @Autowired
+    private BusiMaterialProductionMapper busiMaterialProductionMapper;
+
     @RequiresPermissions("system:production:view")
     @GetMapping()
     public String production(String supplierId,ModelMap modelMap)
@@ -64,9 +69,9 @@ public class BusiMaterialProductionController extends BaseController
     @ResponseBody
     public AjaxResult export(BusiMaterialProduction busiMaterialProduction)
     {
-        List<BusiMaterialProduction> list = busiMaterialProductionService.selectBusiMaterialProductionList(busiMaterialProduction);
+        List<BusiMaterialProduction> list = busiMaterialProductionMapper.selectBusiMaterialProductionListExport(busiMaterialProduction);
         ExcelUtil<BusiMaterialProduction> util = new ExcelUtil<BusiMaterialProduction>(BusiMaterialProduction.class);
-        return util.exportExcel(list, "production");
+        return util.exportExcel(list, "材料产品表");
     }
 
     /**

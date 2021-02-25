@@ -1,20 +1,25 @@
 package com.ruoyi.busi.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.ruoyi.busi.contract.domain.BusiContractProduct;
 import com.ruoyi.busi.contract.service.IBusiContractProductService;
 import com.ruoyi.busi.domain.BusiQuotation;
 import com.ruoyi.busi.mapper.BusiContractMapper;
 import com.ruoyi.busi.plan.domain.BusiContractPlan;
 import com.ruoyi.busi.plan.service.IBusiContractPlanService;
+import com.ruoyi.busi.service.IBusiProductLineService;
+import com.ruoyi.busi.service.IBusiProductModelService;
 import com.ruoyi.busi.service.IBusiQuotationService;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -114,8 +119,20 @@ public class BusiContractController extends BaseController
     public AjaxResult export(BusiContract busiContract)
     {
         List<BusiContract> list = busiContractService.selectBusiContractList(busiContract);
+        list.forEach(l -> {
+            l.setQuotationPrice(null);
+            l.setDiscountRate(null);
+            BusiContractProduct busiContractProduct = new BusiContractProduct();
+            busiContractProduct.setContractId(busiContract.getContractId());
+            List<BusiContractProduct>  busiContractProducts =  busiContractProductService.selectBusiContractProductList(busiContractProduct);
+            StringBuffer sb = new StringBuffer();
+            for (BusiContractProduct contractProduct : busiContractProducts) {
+                sb.append(contractProduct.toString());
+            }
+            l.setBusiContractProductsString(sb.toString());
+        });
         ExcelUtil<BusiContract> util = new ExcelUtil<BusiContract>(BusiContract.class);
-        return util.exportExcel(list, "contract");
+        return util.exportExcel(list, "合同列表");
     }
 
     /**
@@ -225,6 +242,22 @@ public class BusiContractController extends BaseController
     @GetMapping( "/queryCostByQuotationId")
     @ResponseBody
     public Map queryCostByQuotationId(String quotationId){
-        return   busiContractMapper.queryCostByQuotationId(quotationId);
+        Map<String,Double> map =  busiContractMapper.queryCostByQuotationId(quotationId);
+        Double quotationMotorCost = map.get("quotationMotorCost");
+        Double outsourcingMotorCost=   map.get("outsourcingMotorCost");
+        Double quotationOtherCost =  map.get("quotationOtherCost");
+        Double outsourcingOtherCost  =  map.get("outsourcingOtherCost");
+        Double quotationAllCost=  map.get("quotationAllCost");
+        Double outsourcingAllCost =  map.get("outsourcingAllCost");
+        Double partsAllCost =   map.get("partsAllCost");
+
+        Double motorCost = StringUtils.doubleFormat(quotationMotorCost + outsourcingMotorCost);
+        Double otherCost = StringUtils.doubleFormat(quotationOtherCost + outsourcingOtherCost);
+        Double allCost = StringUtils.doubleFormat(quotationAllCost + outsourcingAllCost + partsAllCost);
+        HashMap map1 = new HashMap();
+        map1.put("motorCost",motorCost);
+        map1.put("otherCost",otherCost);
+        map1.put("allCost",allCost);
+        return  map1;
     }
 }

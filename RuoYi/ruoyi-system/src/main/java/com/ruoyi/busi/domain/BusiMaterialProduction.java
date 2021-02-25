@@ -35,6 +35,18 @@ public class BusiMaterialProduction extends BaseEntity
     @Excel(name = "价格")
     private Float price;
 
+    @Excel(name = "供应商")
+    private String supplierName;
+
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
     /** 材质Id */
     private Long textureId;
 

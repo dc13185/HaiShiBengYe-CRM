@@ -1,5 +1,6 @@
 package com.ruoyi.busi.controller;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -12,8 +13,15 @@ import java.util.stream.Collectors;
 import com.ruoyi.busi.Constant;
 import com.ruoyi.busi.domain.*;
 import com.ruoyi.busi.mapper.BusiQuotationDetailsMapper;
+import com.ruoyi.busi.outsourcing.domain.BusiOutsourcing;
+import com.ruoyi.busi.outsourcing.service.IBusiOutsourcingService;
+import com.ruoyi.busi.parts.domain.BusiPartsDetails;
+import com.ruoyi.busi.parts.service.IBusiPartsDetailsService;
+import com.ruoyi.busi.qutsourcing.domain.BusiOutsourcingDetails;
+import com.ruoyi.busi.qutsourcing.service.IBusiOutsourcingDetailsService;
 import com.ruoyi.busi.service.*;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.poi.MyExcelUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,9 +66,11 @@ public class BusiQuotationDetailsController extends BaseController
     @Autowired
     private IBusiPriceDetailsService busiPriceDetailsService;
     @Autowired
-    private IBusiPriceService busiPriceService;
-    @Autowired
     private IBusiQuotationService quotationService;
+    @Autowired
+    private IBusiOutsourcingDetailsService busiOutsourcingDetailsService;
+    @Autowired
+    private IBusiPartsDetailsService busiPartsDetailsService;
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
@@ -85,7 +95,7 @@ public class BusiQuotationDetailsController extends BaseController
             //如果该报价单含有 外购报价单明细
             if (bodCount > 0){
                 Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
-                modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+                modelMap.put("sumOutsourcingPrice", format(sumOutsourcingPrice));
                 modelMap.put("quotationFlag", 1);
             }
             //如果有配件单
@@ -97,7 +107,7 @@ public class BusiQuotationDetailsController extends BaseController
         }else if(quotation.getQuotationType() == 1L){
             Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
             if (sumOutsourcingPrice!=null){
-                modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+                modelMap.put("sumOutsourcingPrice", format(sumOutsourcingPrice));
             }else{
                 modelMap.put("sumOutsourcingPrice", 0);
             }
@@ -128,7 +138,7 @@ public class BusiQuotationDetailsController extends BaseController
 
             if (bodCount > 0){
                 Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
-                modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+                modelMap.put("sumOutsourcingPrice", format(sumOutsourcingPrice));
                 modelMap.put("quotationFlag", 1);
             }
             if (bqdCount > 0){
@@ -144,7 +154,7 @@ public class BusiQuotationDetailsController extends BaseController
             //如果该报价单含有 外购报价单明细
             if (bodCount > 0){
                 Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
-                modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+                modelMap.put("sumOutsourcingPrice", format(sumOutsourcingPrice));
                 modelMap.put("quotationFlag", 1);
             }
 
@@ -176,7 +186,7 @@ public class BusiQuotationDetailsController extends BaseController
         //如果该报价单含有 外购报价单明细
         if (bodCount > 0){
             Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
-            modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+            modelMap.put("sumOutsourcingPrice", format(sumOutsourcingPrice));
             modelMap.put("quotationFlag", 1);
         }
         if (bpdCount > 0){
@@ -205,7 +215,7 @@ public class BusiQuotationDetailsController extends BaseController
         Long bpdCount =  map.get("bpd_count");
         Double sumOutsourcingPrice = quotationDetailsMapper.getOutsourcingSumPrice(quotationId);
         if (sumOutsourcingPrice!=null){
-            modelMap.put("sumOutsourcingPrice", sumOutsourcingPrice);
+            modelMap.put("sumOutsourcingPrice", format(sumOutsourcingPrice));
         }else{
             modelMap.put("sumOutsourcingPrice", 0);
         }
@@ -247,11 +257,34 @@ public class BusiQuotationDetailsController extends BaseController
     @Log(title = "报价明细", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(BusiQuotationDetails busiQuotationDetails)
-    {
-        List<BusiQuotationDetails> list = busiQuotationDetailsService.selectBusiQuotationDetailsList(busiQuotationDetails);
-        ExcelUtil<BusiQuotationDetails> util = new ExcelUtil<BusiQuotationDetails>(BusiQuotationDetails.class);
-        return util.exportExcel(list, "details");
+    public AjaxResult export(BusiQuotationDetails busiQuotationDetails) throws IOException {
+        //报价单明细
+        List<BusiQuotationDetails> busiQuotationDetailslist = busiQuotationDetailsService.selectBusiQuotationDetailsList(busiQuotationDetails);
+        busiQuotationDetailslist.forEach(l -> {
+            l.setAdjustUnitPrice(null);
+        });
+        //外购单明细
+        BusiOutsourcingDetails busiOutsourcingDetails = new BusiOutsourcingDetails();
+        busiOutsourcingDetails.setQuotationId(busiQuotationDetails.getQuotationId());
+        List<BusiOutsourcingDetails> busiOutsourcingDetailsList = busiOutsourcingDetailsService.selectBusiOutsourcingDetailsList(busiOutsourcingDetails);
+        busiOutsourcingDetailsList.forEach(l -> {
+            l.setAdjustUnitPrice(null);
+        });
+        //配件单明细
+        BusiPartsDetails busiPartsDetails = new BusiPartsDetails();
+        busiPartsDetails.setQuotationId(busiQuotationDetails.getQuotationId());
+        List<BusiPartsDetails> busiPartsDetailList = busiPartsDetailsService.selectBusiPartsDetailsList(busiPartsDetails);
+        busiPartsDetailList.forEach(l -> {
+            l.setAdjustUnitPrice(null);
+        });
+        //导出
+        MyExcelUtil<BusiQuotationDetails> util = new MyExcelUtil<BusiQuotationDetails>(BusiQuotationDetails.class);
+        util.init();
+        util.exportExcel(busiQuotationDetailslist,BusiQuotationDetails.class,"整机报价明细");
+        util.exportExcel(busiOutsourcingDetailsList,BusiOutsourcingDetails.class,"外购报价明细");
+        util.exportExcel(busiPartsDetailList,BusiPartsDetails.class,"配件报价明细");
+
+        return util.exportAll("报价明细");
     }
 
     /**

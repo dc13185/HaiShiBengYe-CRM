@@ -32,6 +32,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+
+    <select id="selectBusiProductModelListExport" parameterType="BusiProductModel" resultMap="BusiProductModelResult">
+        SELECT bpm.*, bpl.`product_line_name`
+        FROM busi_product_model bpm INNER JOIN busi_product_line bpl ON bpm.`product_line_id` =  bpl.`product_line_id`
+        <where>
+            <if test="modelName != null  and modelName != ''"> and bpm.model_name like concat('%', #{modelName}, '%')</if>
+            <if test="lift != null "> and bpm.lift = #{lift}</if>
+            <if test="temperature != null "> and bpm.temperature = #{temperature}</if>
+            <if test="pressure != null "> and bpm.pressure = #{pressure}</if>
+            <if test="npsh != null "> and bpm.npsh = #{npsh}</if>
+            <if test="productLineId != null "> and bpm.product_line_id = #{productLineId}</if>
+        </where>
+    </select>
+
     <select id="selectBusiProductModelById" parameterType="Long" resultMap="BusiProductModelResult">
         <include refid="selectBusiProductModelVo"/>
         where model_id = #{modelId}

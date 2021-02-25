@@ -63,6 +63,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quotationType != null "> and bq.quotation_type = #{quotationType}</if>
             <if test="customerName != null "> and bc1.customer_name like concat('%', #{customerName}, '%')</if>
             <if test="officeStaffName != null "> and os.office_staff_name like concat('%', #{officeStaffName}, '%')</if>
+            <if test="customerAddress != null "> and bc1.contact_address like concat('%', #{customerAddress}, '%')</if>
+            <if test="customerIndustry != null "> and bc1.customer_industry like concat('%', #{customerIndustry}, '%')</if>
+            <if test="projectAddress != null "> and bq.project_address like concat('%', #{projectAddress}, '%')</if>
             <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始时间检索 -->
                 and bq.date_format(create_time,'%y-%m-%d') &gt;= date_format(#{params.beginCreateTime},'%y-%m-%d')
             </if>

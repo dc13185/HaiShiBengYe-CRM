@@ -59,40 +59,48 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">基础性提成计提比例/%：</label>
                 <div class="col-sm-8">
-                    <input name="basedCommission" id="basedCommission"  class="form-control" type="text" required>
+                    <input name="basedCommission" id="basedCommission"  th:field="*{basedCommission}"  class="form-control" type="text" readonly required>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">溢价部分计提比例/%：</label>
                 <div class="col-sm-8">
-                    <input name="premiumCommission" id="premiumCommission"   class="form-control" type="text" required>
+                    <input name="premiumCommission" id="premiumCommission" th:field="*{premiumCommission}"   class="form-control" type="text" readonly required>
                 </div>
             </div>
 
-            <div class="form-group">
+         <!--   <div class="form-group">
                 <label class="col-sm-3 control-label">应付业务费用类型选择：</label>
                 <div class="col-sm-8">
-                    <select  class="businessCommissionType form-control m-b" onchange="choseType()">
+                    <select  class="businessCommissionType form-control m-b" onchange="choseType()"   >
                         <option value="">请选择</option>
                         <option value="conventional">常规</option>
                         <option value="yiShiYiYi">一事一议</option>
                     </select>
                 </div>
-            </div>
+            </div>-->
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">应付业务费合计/元：</label>
                 <div class="col-sm-8">
-                    <input name="businessCommission" id="businessCommission" class="form-control" type="text" readonly required>
+                    <input name="businessCommission"   th:field="*{businessCommission}"  id="businessCommission" class="form-control" type="text" readonly required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label">质保金比例/%：</label>
                 <div class="col-sm-8">
-                    <input name="warrantyCommission" id="warrantyCommission" class="form-control" type="text" >
+                    <input name="warrantyCommission" id="warrantyCommission"  th:field="*{warrantyCommission}"  class="form-control" readonly type="text" >
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">质保金暂扣比例”/%：</label>
+                <div class="col-sm-8">
+                    <input name="deductionCommission" id="deductionCommission" th:field="*{deductionCommission}" class="form-control" readonly type="text" >
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-sm-3 control-label">已回款金额/元：</label>
                 <div class="col-sm-8">
@@ -150,7 +158,12 @@
                     return;
                 }*/
                 //(合同金额-电机成本*1.1-特殊配置费用*1.1)*基础性提成计提比例+(合同金额-报价金额)*溢价部分计提比例
-                var  businessCommission = (contractPrice - motorCost - otherCost) *  (basedCommission / 100) + (contractPrice - quotationPrice) * (premiumCommission / 100)
+                var  businessCommission = 0;
+                if ((contractPrice - quotationPrice) > 0){
+                    businessCommission =  (contractPrice - motorCost - otherCost) *  (basedCommission / 100) + (contractPrice - quotationPrice) * (premiumCommission / 100)
+                }else{
+                    businessCommission = (contractPrice - motorCost - otherCost) *  (basedCommission / 100);
+                }
                 $("#businessCommission").val(businessCommission.toFixed(2));
                 $("#businessCommission").attr("readonly","readonly")
             }else if(businessCommissionType = "yiShiYiYi"){
@@ -159,18 +172,24 @@
         }
 
         function calculate(){
-            var basedCommission =  parseFloat($("#basedCommission").val());
             var contractPrice =       parseFloat($("#contractPrice").val());
             var receivedCommission =  parseFloat($("#receivedCommission").val());
             var businessCommission =  parseFloat($("#businessCommission").val());
             var warrantyCommission =  parseFloat($("#warrantyCommission").val());
             var alreadySettlementBusinessFee = parseFloat($("#alreadySettlementBusinessFee").val());
-            var number  = (receivedCommission/contractPrice * (businessCommission - contractPrice * (warrantyCommission/100)) - alreadySettlementBusinessFee)
+            var deductionCommission =  parseFloat($("#deductionCommission").val());
+            var number  = (receivedCommission/contractPrice * (businessCommission - contractPrice * (warrantyCommission/100) * (deductionCommission/100)) - alreadySettlementBusinessFee)
+            //为最后一次回款
+            if (contractPrice / receivedCommission == 1){
+                number += businessCommission  - number - alreadySettlementBusinessFee;
+            }
             $("#settlementBusinessFee").val(number.toFixed(2));
             //代缴个人税 = 结算业务费*20%
             $("#individualIncomeTax").val((number*0.2).toFixed(2));
             //支付业务费金额 = 结算业务费*80%
             $("#amountOfBusiness").val((number*0.8).toFixed(2))
+
+
         }
 
         function submitHandler() {

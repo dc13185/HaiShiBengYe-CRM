@@ -47,9 +47,12 @@ public class MaterialSupplierController extends BaseController
 
     @RequiresPermissions("busi:supplier:view")
     @GetMapping()
-    public String supplier(String supplierType,ModelMap modelMap)
+    public String supplier(String supplierType,String baseType,ModelMap modelMap)
     {
         modelMap.put("supplierType",supplierType);
+        if (StringUtils.isNotEmpty(baseType)){
+            modelMap.put("baseType",baseType);
+        }
         return prefix + "/supplier";
     }
 

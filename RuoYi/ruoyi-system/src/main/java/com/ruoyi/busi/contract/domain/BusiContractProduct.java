@@ -33,7 +33,7 @@ public class BusiContractProduct extends BaseEntity
     private Long productNumber;
 
     /** 合同id */
-    @Excel(name = "合同id")
+  //  @Excel(name = "合同id")
     private Long contractId;
 
 
@@ -86,14 +86,14 @@ public class BusiContractProduct extends BaseEntity
     }
 
 
+
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("product", getProduct())
-            .append("productName", getProductName())
-            .append("productPrice", getProductPrice())
-            .append("productNumber", getProductNumber())
-            .append("contractId", getContractId())
-            .toString();
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("产品名称:"+getProductName());
+        stringBuffer.append(" 产品价格:"+getProductPrice());
+        stringBuffer.append(" 产品数量"+getProductNumber()+"\n");
+        return stringBuffer.toString();
     }
 }

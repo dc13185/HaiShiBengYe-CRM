@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.busi.mapper.BusiCouplingMapper">
-    
+
     <resultMap type="BusiCoupling" id="BusiCouplingResult">
         <result property="couplingId"    column="coupling_id"    />
         <result property="couplingModel"    column="coupling_model"    />
@@ -17,16 +17,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBusiCouplingList" parameterType="BusiCoupling" resultMap="BusiCouplingResult">
         <include refid="selectBusiCouplingVo"/>
-        <where>  
+        <where>
             <if test="couplingModel != null  and couplingModel != ''"> and coupling_model = #{couplingModel}</if>
+            <if test="supplierId != null  and supplierId != ''"> and supplier_id = #{supplierId}</if>
         </where>
     </select>
-    
+
+
+    <select id="selectBusiCouplingListExport" parameterType="BusiCoupling" resultMap="BusiCouplingResult">
+        SELECT coupling_id, coupling_model, coupling_price, bm.supplier_id  ,ms.`material_name` as supplierName FROM busi_coupling bm
+        INNER JOIN `material_supplier` ms ON ms.`supplier_id` =  bm.`supplier_id`
+        <where>
+            <if test="couplingModel != null  and couplingModel != ''"> and bm.coupling_model = #{couplingModel}</if>
+            <if test="supplierId != null  and supplierId != ''"> and bm.supplier_id = #{supplierId}</if>
+        </where>
+    </select>
+
+
+
     <select id="selectBusiCouplingById" parameterType="Long" resultMap="BusiCouplingResult">
         <include refid="selectBusiCouplingVo"/>
         where coupling_id = #{couplingId}
     </select>
-        
+
     <insert id="insertBusiCoupling" parameterType="BusiCoupling" useGeneratedKeys="true" keyProperty="couplingId">
         insert into busi_coupling
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -56,7 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBusiCouplingByIds" parameterType="String">
-        delete from busi_coupling where coupling_id in 
+        delete from busi_coupling where coupling_id in
         <foreach item="couplingId" collection="array" open="(" separator="," close=")">
             #{couplingId}
         </foreach>

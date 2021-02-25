@@ -22,7 +22,6 @@ public class BusiPerformance extends BaseEntity
     @Excel(name = "办事处")
     private String officeAddress;
 
-    @Excel(name = "总人数")
     private Long peopleCount;
 
     /** 报价金额 */
@@ -80,7 +79,11 @@ public class BusiPerformance extends BaseEntity
 
     public Double getQuotationPrice()
     {
-        return quotationPrice;
+        if (quotationPrice == null){
+            return 0d;
+        }else{
+            return quotationPrice;
+        }
     }
     public void setOfficeStaffName(String officeStaffName)
     {
@@ -122,10 +125,11 @@ public class BusiPerformance extends BaseEntity
 
     public Double getContractPrice()
     {
-        if (contractCount == null){
+        if (contractPrice == null){
             return 0d;
+        }else{
+            return contractPrice;
         }
-        return contractPrice;
     }
     public void setRepaymentAmount(Double repaymentAmount)
     {
@@ -136,8 +140,10 @@ public class BusiPerformance extends BaseEntity
     {
         if (repaymentAmount == null){
             return 0d;
+        }else{
+            return repaymentAmount;
         }
-        return repaymentAmount;
+
     }
     public void setSingQuotationPrice(Double singQuotationPrice)
     {

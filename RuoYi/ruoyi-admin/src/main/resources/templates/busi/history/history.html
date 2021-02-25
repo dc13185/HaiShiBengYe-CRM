@@ -20,78 +20,84 @@
                 </form>
             </div>
 
-            <!--<div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="busi:history:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="busi:history:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="busi:history:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:history:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>-->
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
-        </div>
-    </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('busi:history:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('busi:history:remove')}]];
-        var prefix = ctx + "busi/history";
+            <div class="btn-group-sm" id="toolbar" role="group">
+              <!-- <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="busi:history:add">
+                      <i class="fa fa-plus"></i> 添加
+                  </a>
+                  <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="busi:history:edit">
+                      <i class="fa fa-edit"></i> 修改
+                  </a>
+                  <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="busi:history:remove">
+                      <i class="fa fa-remove"></i> 删除
+                  </a>-->
+                  <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="busi:history:export">
+                      <i class="fa fa-download"></i> 导出
+                  </a>
+              </div>
+              <div class="col-sm-12 select-table table-striped">
+                  <table id="bootstrap-table"></table>
+              </div>
+          </div>
+      </div>
+      <th:block th:include="include :: footer" />
+      <script th:inline="javascript">
+          var editFlag = [[${@permission.hasPermi('busi:history:edit')}]];
+          var removeFlag = [[${@permission.hasPermi('busi:history:remove')}]];
+          var prefix = ctx + "busi/history";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "业务费用结算历史",
-                pagination: false,
-                columns: [{
-                    checkbox: true
-                },
-                {
-                    field: 'basedCommission',
-                    title: '基础性提成计提比例/%'
-                },
-                {
-                    field: 'premiumCommission',
-                    title: '溢价部分计提比例/%'
-                },
-                {
-                    field: 'businessCommission',
-                    title: '应付业务费合计/元'
-                },
-                {
-                    field: 'warrantyCommission',
-                    title: '质保金比例/%'
-                },
-                {
-                    field: 'receivedCommission',
-                    title: '已回款金额/元'
-                },
-                {
-                    field: 'settlementBusinessFee',
-                    title: '结算业务费'
-                },
-                {
-                    field: 'individualIncomeTax',
-                    title: '暂扣代缴个人所得税'
-                },
-                {
-                    field: 'amountOfBusiness',
-                    title: '支付业务费金额'
-                }]
-            };
-            $.table.init(options);
-        });
-    </script>
-</body>
-</html>
+          $(function() {
+              var options = {
+                  url: prefix + "/list",
+                  createUrl: prefix + "/add",
+                  updateUrl: prefix + "/edit/{id}",
+                  removeUrl: prefix + "/remove",
+                  exportUrl: prefix + "/export",
+                  modalName: "业务费用结算历史",
+                  pagination: false,
+                  columns: [
+                  {
+                      field: 'updateTime',
+                      title: '更新日期'
+                  },
+                  {
+                      field: 'basedCommission',
+                      title: '基础性提成计提比例/%'
+                  },
+                  {
+                      field: 'premiumCommission',
+                      title: '溢价部分计提比例/%'
+                  },
+                  /*{
+                      field: 'businessCommission',
+                      title: '应付业务费合计/元'
+                  },*/
+                  {
+                      field: 'warrantyCommission',
+                      title: '质保金比例/%'
+                  },
+                  {
+                      field: 'deductionCommission',
+                      title: '质保金比例/%'
+                  },
+                  {
+                      field: 'receivedCommission',
+                      title: '已回款金额/元'
+                  },
+                  {
+                      field: 'settlementBusinessFee',
+                      title: '结算业务费'
+                  },
+                  {
+                      field: 'individualIncomeTax',
+                      title: '暂扣代缴个人所得税'
+                  },
+                  {
+                      field: 'amountOfBusiness',
+                      title: '支付业务费金额'
+                  }]
+              };
+              $.table.init(options);
+          });
+      </script>
+  </body>
+  </html>

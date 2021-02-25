@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.busi.mapper.BusiBearingMapper">
-    
+
     <resultMap type="BusiBearing" id="BusiBearingResult">
         <result property="bearingId"    column="bearing_id"    />
         <result property="bearingModel"    column="bearing_model"    />
@@ -17,16 +17,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBusiBearingList" parameterType="BusiBearing" resultMap="BusiBearingResult">
         <include refid="selectBusiBearingVo"/>
-        <where>  
+        <where>
             <if test="bearingModel != null  and bearingModel != ''"> and bearing_model = #{bearingModel}</if>
+            <if test="supplierId != null  and supplierId != ''"> and supplier_id = #{supplierId}</if>
         </where>
     </select>
-    
+
+    <select id="selectBusiBearingListExport" parameterType="BusiBearing" resultMap="BusiBearingResult">
+        SELECT bearing_id, bearing_model, bearing_price, bm.supplier_id ,ms.`material_name` AS supplierName FROM busi_bearing bm
+        INNER JOIN `material_supplier` ms ON ms.`supplier_id` =  bm.`supplier_id`
+        <where>
+            <if test="bearingModel != null  and bearingModel != ''"> and bm.bearing_model = #{bearingModel}</if>
+            <if test="supplierId != null  and supplierId != ''"> and bm.supplier_id = #{supplierId}</if>
+        </where>
+    </select>
+
     <select id="selectBusiBearingById" parameterType="Long" resultMap="BusiBearingResult">
         <include refid="selectBusiBearingVo"/>
         where bearing_id = #{bearingId}
     </select>
-        
+
     <insert id="insertBusiBearing" parameterType="BusiBearing" useGeneratedKeys="true" keyProperty="bearingId">
         insert into busi_bearing
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -56,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBusiBearingByIds" parameterType="String">
-        delete from busi_bearing where bearing_id in 
+        delete from busi_bearing where bearing_id in
         <foreach item="bearingId" collection="array" open="(" separator="," close=")">
             #{bearingId}
         </foreach>

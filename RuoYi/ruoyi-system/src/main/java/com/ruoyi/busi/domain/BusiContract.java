@@ -3,7 +3,9 @@ package com.ruoyi.busi.domain;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.busi.contract.domain.BusiContractProduct;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -29,21 +31,33 @@ public class BusiContract extends BaseEntity
     @Excel(name = "合同号")
     private String contractNo;
 
-    /** 合同金额 */
-    @Excel(name = "合同金额")
-    private Double contractPrice;
-
     /** 产品组成 */
-    @Excel(name = "产品组成")
+    //@Excel(name = "产品组成")
     private String productComposition;
 
     /** 组成价格 */
-    @Excel(name = "组成价格")
+    //@Excel(name = "组成价格")
     private String componentPrice;
 
     /** 付款方式 */
-    @Excel(name = "付款方式")
+    //@Excel(name = "付款方式")
     private String paymentMethod;
+
+    /** 产品类型 */
+    @Excel(name = "产品类型", readConverterExp = "0=整机,1=外购,2=配件")
+    private Long quotationType;
+
+    @Excel(name = "客户姓名")
+    private String customerName;
+
+    /** 项目名称 */
+    @Excel(name = "项目名称")
+    private String projectName;
+
+    /** 办事处 */
+    @Excel(name = "办事处")
+    private String officeAddress;
+
 
     /** 交货时间 */
     @Excel(name = "交货时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -53,9 +67,20 @@ public class BusiContract extends BaseEntity
     @Excel(name = "合同签订日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date signingDate;
 
-    /** 备注 */
-    @Excel(name = "备注")
-    private String remake;
+
+    @Excel(name = "报价金额" )
+    private Double quotationPrice;
+
+    /** 合同金额 */
+    @Excel(name = "合同金额")
+    private Double contractPrice;
+
+    @Excel(name = "回款金额" )
+    private Double repaymentAmount;
+
+    @Excel(name = "折扣率" )
+    private Double discountRate;
+
 
     /** 整体进度说明 */
     @Excel(name = "整体进度说明")
@@ -75,14 +100,91 @@ public class BusiContract extends BaseEntity
 
     private BusiQuotation busiQuotation;
     /** 项目状态 */
-    @Excel(name = "项目状态")
+    @Excel(name = "项目状态" , readConverterExp = "0=执行中,1=已完成")
     private Long contractType;
 
-    private Double repaymentAmount;
+
+    /** 更新时间 */
+    @Excel(name = "更进时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
 
     private Long courseId;
 
     private List<BusiContractProduct> busiContractProducts;
+
+    @Excel(name = "产品组成" )
+    private String busiContractProductsString;
+
+    /** 备注 */
+    @Excel(name = "备注")
+    private String remake;
+
+    @Override
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    @Override
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Long getQuotationType() {
+        return quotationType;
+    }
+
+    public void setQuotationType(Long quotationType) {
+        this.quotationType = quotationType;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getOfficeAddress() {
+        return officeAddress;
+    }
+
+    public void setOfficeAddress(String officeAddress) {
+        this.officeAddress = officeAddress;
+    }
+
+    public String getBusiContractProductsString() {
+        return busiContractProductsString;
+    }
+
+    public void setBusiContractProductsString(String busiContractProductsString) {
+        this.busiContractProductsString = busiContractProductsString;
+    }
+
+    public Double getDiscountRate() {
+        return discountRate;
+    }
+
+    public void setDiscountRate(Double discountRate) {
+        this.discountRate = StringUtils.doubleFormat(quotationPrice/contractPrice);
+    }
+
+    public Double getQuotationPrice() {
+        return quotationPrice;
+    }
+
+    public void setQuotationPrice(Double quotationPrice) {
+        this.quotationPrice = busiQuotation.getSumPrice();
+    }
 
     public void setContractId(Long contractId)
     {

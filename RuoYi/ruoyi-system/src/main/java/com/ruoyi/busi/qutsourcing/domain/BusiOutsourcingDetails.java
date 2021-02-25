@@ -1,6 +1,7 @@
 package com.ruoyi.busi.qutsourcing.domain;
 
 import com.ruoyi.busi.cost.domain.BusiOutsourcingCost;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -20,7 +21,7 @@ public class BusiOutsourcingDetails extends BaseEntity
     private Long detailsId;
 
     /** 报价单ID */
-    @Excel(name = "报价单ID")
+    //@Excel(name = "报价单ID")
     private Long quotationId;
 
     /** 设备位号 */
@@ -34,6 +35,13 @@ public class BusiOutsourcingDetails extends BaseEntity
     /** 产品系列 */
     private Long productLineId;
 
+    /** 数量 */
+    @Excel(name = "数量")
+    private Long number;
+
+    @Excel(name = "产品供应商")
+    private String productSupplierName;
+
     @Excel(name = "产品系列")
     private String productLineName;
 
@@ -45,25 +53,6 @@ public class BusiOutsourcingDetails extends BaseEntity
 
     /** 过流器品牌 */
     private String productSupplierId;
-
-    @Excel(name = "产品供应商")
-    private String productSupplierName;
-
-    /** 数量 */
-    @Excel(name = "数量")
-    private Long number;
-
-    /** 冲洗方案 */
-    @Excel(name = "冲洗方案")
-    private String rinseSolutionId;
-
-    /** 其他费用 */
-    @Excel(name = "其他费用")
-    private Long otherExpenses;
-
-    /** 其他费用说明 */
-    @Excel(name = "其他费用说明")
-    private String otherExpensesDescription;
 
     /** 额定流量(m3/h) */
     @Excel(name = "额定流量(m3/h)")
@@ -110,16 +99,31 @@ public class BusiOutsourcingDetails extends BaseEntity
     private Double otherMotorPrice;
 
     /** 报价类型 */
-    @Excel(name = "报价类型")
+   // @Excel(name = "报价类型")
     private Long quotationType;
 
-    /** 单价系数 */
-    @Excel(name = "单价系数")
-    private Double coefficient;
+    /** 冲洗方案 */
+    @Excel(name = "冲洗方案")
+    private String rinseSolutionId;
+
+    /** 其他费用 */
+    @Excel(name = "其他费用")
+    private Long otherExpenses;
+
+    /** 其他费用说明 */
+    @Excel(name = "其他费用说明")
+    private String otherExpensesDescription;
 
     /** 单条报价单明细总价 */
-    @Excel(name = "单条报价单明细总价")
+    @Excel(name = "基准单价")
     private Double detailsPrice;
+
+    /** 单价系数 */
+    //@Excel(name = "单价系数")
+    private Double coefficient;
+
+    @Excel(name = "调整单价")
+    private Double adjustUnitPrice;
 
     @Excel(name = "泵头成本")
     private Double pumpHeadCost;
@@ -131,6 +135,13 @@ public class BusiOutsourcingDetails extends BaseEntity
     private Double allCost;
 
 
+    public Double getAdjustUnitPrice() {
+        return adjustUnitPrice;
+    }
+
+    public void setAdjustUnitPrice(Double adjustUnitPrice) {
+        this.adjustUnitPrice = StringUtils.doubleFormat(detailsPrice * coefficient);
+    }
 
     public Double getPumpHeadCost() {
         return pumpHeadCost;

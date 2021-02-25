@@ -5,15 +5,15 @@ import com.ruoyi.busi.domain.BusiProductModel;
 
 /**
  * 产品模型管理Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2021-01-06
  */
-public interface BusiProductModelMapper 
+public interface BusiProductModelMapper
 {
     /**
      * 查询产品模型管理
-     * 
+     *
      * @param modelId 产品模型管理ID
      * @return 产品模型管理
      */
@@ -21,15 +21,17 @@ public interface BusiProductModelMapper
 
     /**
      * 查询产品模型管理列表
-     * 
+     *
      * @param busiProductModel 产品模型管理
      * @return 产品模型管理集合
      */
     public List<BusiProductModel> selectBusiProductModelList(BusiProductModel busiProductModel);
 
+    public List<BusiProductModel> selectBusiProductModelListExport(BusiProductModel busiProductModel);
+
     /**
      * 新增产品模型管理
-     * 
+     *
      * @param busiProductModel 产品模型管理
      * @return 结果
      */
@@ -37,7 +39,7 @@ public interface BusiProductModelMapper
 
     /**
      * 修改产品模型管理
-     * 
+     *
      * @param busiProductModel 产品模型管理
      * @return 结果
      */
@@ -45,7 +47,7 @@ public interface BusiProductModelMapper
 
     /**
      * 删除产品模型管理
-     * 
+     *
      * @param modelId 产品模型管理ID
      * @return 结果
      */
@@ -53,7 +55,7 @@ public interface BusiProductModelMapper
 
     /**
      * 批量删除产品模型管理
-     * 
+     *
      * @param modelIds 需要删除的数据ID
      * @return 结果
      */

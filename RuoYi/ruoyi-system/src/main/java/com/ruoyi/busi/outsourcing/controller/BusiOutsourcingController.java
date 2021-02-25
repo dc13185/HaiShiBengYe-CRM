@@ -66,7 +66,7 @@ public class BusiOutsourcingController extends BaseController
     {
         List<BusiOutsourcing> list = busiOutsourcingService.selectBusiOutsourcingList(busiOutsourcing);
         ExcelUtil<BusiOutsourcing> util = new ExcelUtil<BusiOutsourcing>(BusiOutsourcing.class);
-        return util.exportExcel(list, "outsourcing");
+        return util.exportExcel(list, "外购产品表");
     }
 
     /**

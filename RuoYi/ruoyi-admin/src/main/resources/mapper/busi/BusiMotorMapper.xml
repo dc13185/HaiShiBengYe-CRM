@@ -26,6 +26,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="selectBusiMotorListExport" parameterType="BusiMotor" resultMap="BusiMotorResult">
+        SELECT bm.motor_id, motor_model, motor_power, motor_type, price,bm.supplier_id,ms.`material_name` as supplierName
+        FROM busi_motor bm
+        INNER JOIN `material_supplier` ms ON ms.`supplier_id` =  bm.`supplier_id`
+        <where>
+            <if test="motorModel != null  and motorModel != ''"> and bm.motor_model like concat('%', #{motorModel}, '%')</if>
+            <if test="motorType != null  and motorType != ''"> and bm.motor_type = #{motorType}</if>
+            <if test="supplierId != null "> and bm.supplier_id = #{supplierId}</if>
+        </where>
+    </select>
+
+
+
     <select id="selectBusiMotorById" parameterType="Long" resultMap="BusiMotorResult">
         <include refid="selectBusiMotorVo"/>
         where motor_id = #{motorId}

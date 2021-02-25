@@ -15,6 +15,7 @@
                 <form id="formId">
                     <div class="select-list">
                         <input name="supplierType" id="supplierType" th:value="${supplierType}" type="hidden">
+                        <input id="baseType" th:value="${baseType}" type="hidden">
                         <ul>
                             <li>
                                 <label>供应商编号：</label>
@@ -196,8 +197,15 @@
             $.modal.close();
 
             if (supplierType == "material"){
-                parent.$('#materialSupplierId').val(rows);
-                parent.$('#materialSupplierName').val(column);
+                var baseType = $("#baseType").val();
+                if (baseType){
+                    parent.$('#baseMaterialSupplierId').val(rows);
+                    parent.$('#baseMaterialSupplierName').val(column);
+                }else{
+                    parent.$('#materialSupplierId').val(rows);
+                    parent.$('#materialSupplierName').val(column);
+                }
+
             }else if(supplierType == "motor"){
                 parent.$('#motorSupplierId').val(rows);
                 parent.$('#motorSupplierName').val(column);

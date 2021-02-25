@@ -61,26 +61,23 @@ public class BusiQuotation extends BaseEntity
     private String technicalStaffName;
 
     /** 产品类型 */
-    @Excel(name = "产品类型")
+    @Excel(name = "产品类型", readConverterExp = "0=整机,1=外购,2=配件")
     private Long quotationType;
 
     @Excel(name = "合计数量")
     private Long allCount;
 
-    @Excel(name = "自制报价单价格")
+    //@Excel(name = "自制报价单价格")
     private double quotationPrice;
 
-    @Excel(name = "外购单价格")
+    //@Excel(name = "外购单价格")
     private double outsourcingPrice;
 
-    @Excel(name = "配件价格")
+    //@Excel(name = "配件价格")
     private double partsPrice;
 
     @Excel(name = "报价合计")
     private Double sumPrice;
-
-
-
 
     /** 是否签约 */
     private Long isSing;
@@ -238,19 +235,19 @@ public class BusiQuotation extends BaseEntity
     }
 
     public Long getAllCount() {
-        return wholeCount+outsourcingCount+partsCount;
+        return this.allCount = wholeCount+outsourcingCount+partsCount;
     }
 
     public void setAllCount(Long allCount) {
-        this.allCount = allCount;
+        this.allCount = wholeCount+outsourcingCount+partsCount;
     }
 
     public Double getSumPrice() {
-        return StringUtils.doubleFormat(quotationPrice+outsourcingPrice+partsPrice);
+        return  this.sumPrice = StringUtils.doubleFormat(quotationPrice+outsourcingPrice+partsPrice);
     }
 
     public void setSumPrice(Double sumPrice) {
-        this.sumPrice = sumPrice;
+        this.sumPrice = StringUtils.doubleFormat(quotationPrice+outsourcingPrice+partsPrice);
     }
 
     public String getCustomerAddress() {

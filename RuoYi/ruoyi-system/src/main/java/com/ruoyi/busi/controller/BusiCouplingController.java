@@ -1,6 +1,8 @@
 package com.ruoyi.busi.controller;
 
 import java.util.List;
+
+import com.ruoyi.busi.mapper.BusiCouplingMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,8 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
+import javax.annotation.PostConstruct;
+
 /**
  * 联轴器Controller
  *
@@ -33,6 +37,9 @@ public class BusiCouplingController extends BaseController
 
     @Autowired
     private IBusiCouplingService busiCouplingService;
+
+    @Autowired
+    private BusiCouplingMapper busiCouplingMapper;
 
     @RequiresPermissions("busi:coupling:view")
     @GetMapping()
@@ -64,9 +71,9 @@ public class BusiCouplingController extends BaseController
     @ResponseBody
     public AjaxResult export(BusiCoupling busiCoupling)
     {
-        List<BusiCoupling> list = busiCouplingService.selectBusiCouplingList(busiCoupling);
+        List<BusiCoupling> list = busiCouplingMapper.selectBusiCouplingListExport(busiCoupling);
         ExcelUtil<BusiCoupling> util = new ExcelUtil<BusiCoupling>(BusiCoupling.class);
-        return util.exportExcel(list, "coupling");
+        return util.exportExcel(list, "轴联器产品表");
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.ruoyi.busi.controller;
 
 import java.util.List;
+
+import com.ruoyi.busi.mapper.BusiProductParameterMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,9 @@ public class BusiProductParameterController extends BaseController
     @Autowired
     private IBusiProductParameterService busiProductParameterService;
 
+    @Autowired
+    private BusiProductParameterMapper busiProductParameterMapper;
+
     @RequiresPermissions("busi:parameter:view")
     @GetMapping()
     public String parameter(Long modelId,ModelMap modelMap)
@@ -64,9 +69,9 @@ public class BusiProductParameterController extends BaseController
     @ResponseBody
     public AjaxResult export(BusiProductParameter busiProductParameter)
     {
-        List<BusiProductParameter> list = busiProductParameterService.selectBusiProductParameterList(busiProductParameter);
+        List<BusiProductParameter> list = busiProductParameterMapper.selectBusiProductParameterListExport(busiProductParameter);
         ExcelUtil<BusiProductParameter> util = new ExcelUtil<BusiProductParameter>(BusiProductParameter.class);
-        return util.exportExcel(list, "parameter");
+        return util.exportExcel(list, "产品参数表");
     }
 
     /**

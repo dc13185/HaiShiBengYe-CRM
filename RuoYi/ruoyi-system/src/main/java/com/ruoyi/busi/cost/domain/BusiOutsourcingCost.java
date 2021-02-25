@@ -1,5 +1,6 @@
 package com.ruoyi.busi.cost.domain;
 
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -21,15 +22,17 @@ public class BusiOutsourcingCost extends BaseEntity
     /**  */
 
     /**  */
-    @Excel(name = "")
     private Long quotationId;
+
+    @Excel(name = "报价金额")
+    private Double quotationAmount;
 
     /** 泵头成本合计 */
     @Excel(name = "泵头成本合计")
     private Double productPrice;
 
     /** 实际泵头成本 */
-    @Excel(name = "实际泵头成本")
+    //@Excel(name = "实际泵头成本")
     private Double actualProductPrice;
 
     /** 电机成本合计 */
@@ -37,21 +40,32 @@ public class BusiOutsourcingCost extends BaseEntity
     private Double motorPrice;
 
     /** 实际电机成本 */
-    @Excel(name = "实际电机成本")
+   // @Excel(name = "实际电机成本")
     private Double actualMotorPrice;
 
-    private Double quotationAmount;
+    @Excel(name = "成本总计")
+    private Double allCost;
+
+    //@Excel(name = "实际成本总计")
+    private Double actualAllPrice;
+
     /** 毛利 */
     @Excel(name = "毛利")
     private Double profit;
     /** 实际毛利 */
-    @Excel(name = "实际毛利")
+   // @Excel(name = "实际毛利")
     private Double actualProfit;
 
-    @Excel(name = "实际成本总计")
-    private Double actualAllPrice;
 
     private Double sumPrice;
+
+    public Double getAllCost() {
+        return allCost;
+    }
+
+    public void setAllCost(Double allCost) {
+        this.allCost = motorPrice + productPrice;
+    }
 
     public Double getSumPrice() {
         return sumPrice;
@@ -121,7 +135,7 @@ public class BusiOutsourcingCost extends BaseEntity
     }
 
     public Double getProfit() {
-        return profit;
+        return StringUtils.doubleFormat(profit);
     }
 
     public void setProfit(Double profit) {

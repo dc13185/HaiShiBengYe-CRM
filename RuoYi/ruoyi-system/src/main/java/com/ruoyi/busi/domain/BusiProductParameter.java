@@ -39,8 +39,12 @@ public class BusiProductParameter extends BaseEntity
     private Float time;
 
     /** 是否为过流部件 */
-    @Excel(name = "是否为过流部件")
+    @Excel(name = "是否为过流部件" ,readConverterExp = "0=否,1=是")
     private Long isCurrent;
+
+
+    @Excel(name = "型号名称" )
+    private String modelName;
 
     /** 模型ID */
     private Long modelId;
@@ -48,10 +52,16 @@ public class BusiProductParameter extends BaseEntity
 
     private Long  textureId;
 
-/*    *//** 是否为过流部件 *//*
-    @Excel(name = "低值物料成本")
-    private Double lowMaterialCost;*/
+/*    */
 
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
 
     public void setParameterId(Long parameterId)
     {

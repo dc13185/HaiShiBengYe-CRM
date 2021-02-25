@@ -79,8 +79,24 @@ public class BusiContractSummaryController extends BaseController
     public AjaxResult export(BusiContractSummary busiContractSummary)
     {
         List<BusiContractSummary> list = busiContractSummaryService.selectBusiContractSummaryList(busiContractSummary);
+        list = list.parallelStream().peek(s -> {
+            //报价
+            s.setSumQuotationPrice(StringUtils.doubleFormat(s.getQuotationPrice() + s.getOutsourcingPrice() + s.getPartsPrice()));
+            //成本
+            s.setAllSumCost(StringUtils.doubleFormat(s.getPriceSumPrice() + s.getOutSumPrice() + s.getPartsSumPrice()));
+            //真实
+            s.setActualllSumCost(StringUtils.doubleFormat(s.getPriceActualPrice() + s.getOutActualPrice() + s.getPartsActualPrice()));
+            //毛利率
+            s.setAllSumMargin(StringUtils.doubleFormat(s.getPriceProfit() + s.getOutProfit() + s.getPartsProfit()));
+            //真是毛利率
+            s.setActualAllSumMargin(StringUtils.doubleFormat(s.getPriceActualProfit() + s.getOutActualProfit() + s.getPartsActualProfit()));
+            //折扣率
+            s.setDiscountRate(null);
+            s.setAllSumMarginGross(null);
+            s.setActualAllSumMarginGross(null);
+        }).collect(Collectors.toList());
         ExcelUtil<BusiContractSummary> util = new ExcelUtil<BusiContractSummary>(BusiContractSummary.class);
-        return util.exportExcel(list, "summary");
+        return util.exportExcel(list, "历史合同汇总表");
     }
 
     /**

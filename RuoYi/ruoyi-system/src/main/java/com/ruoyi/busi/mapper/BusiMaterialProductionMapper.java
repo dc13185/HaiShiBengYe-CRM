@@ -5,15 +5,15 @@ import com.ruoyi.busi.domain.BusiMaterialProduction;
 
 /**
  * 材料产品Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2021-01-01
  */
-public interface BusiMaterialProductionMapper 
+public interface BusiMaterialProductionMapper
 {
     /**
      * 查询材料产品
-     * 
+     *
      * @param materialId 材料产品ID
      * @return 材料产品
      */
@@ -21,15 +21,18 @@ public interface BusiMaterialProductionMapper
 
     /**
      * 查询材料产品列表
-     * 
+     *
      * @param busiMaterialProduction 材料产品
      * @return 材料产品集合
      */
     public List<BusiMaterialProduction> selectBusiMaterialProductionList(BusiMaterialProduction busiMaterialProduction);
 
+    public List<BusiMaterialProduction>  selectBusiMaterialProductionListExport(BusiMaterialProduction busiMaterialProduction);
+
+
     /**
      * 新增材料产品
-     * 
+     *
      * @param busiMaterialProduction 材料产品
      * @return 结果
      */
@@ -37,7 +40,7 @@ public interface BusiMaterialProductionMapper
 
     /**
      * 修改材料产品
-     * 
+     *
      * @param busiMaterialProduction 材料产品
      * @return 结果
      */
@@ -45,7 +48,7 @@ public interface BusiMaterialProductionMapper
 
     /**
      * 删除材料产品
-     * 
+     *
      * @param materialId 材料产品ID
      * @return 结果
      */
@@ -53,7 +56,7 @@ public interface BusiMaterialProductionMapper
 
     /**
      * 批量删除材料产品
-     * 
+     *
      * @param materialIds 需要删除的数据ID
      * @return 结果
      */

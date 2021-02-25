@@ -33,6 +33,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
+
+    <select id="selectBusiProductParameterListExport" parameterType="BusiProductParameter" resultMap="BusiProductParameterResult">
+        SELECT bpp.* ,texture_name AS material , texture_type  AS materialForm ,bpm.`model_name` AS modelName
+        FROM busi_product_parameter  bpp LEFT JOIN busi_texture bt ON bpp.texture_id = bt.texture_id
+        INNER JOIN busi_product_model bpm ON bpp.`model_id` = bpm.`model_id`
+        <where>
+            <if test="itemNumber != null  and itemNumber != ''"> and bpp.tem_number like concat('%', #{itemNumber}, '%')</if>
+            <if test="material != null  and material != ''"> and bt.texture_name like concat('%', #{material}, '%')</if>
+            <if test="materialForm != null  and materialForm != ''"> and bt.texture_type like concat('%', #{materialForm}, '%')</if>
+            <if test="isCurrent != null "> and bpp.is_current = #{isCurrent}</if>
+            <if test="modelId != null "> and bpp.model_id = #{modelId}</if>
+        </where>
+    </select>
+
+
     <select id="selectPriceDetil" parameterType="java.lang.Long" resultType="com.ruoyi.busi.domain.PriceSum">
           SELECT bpp.*, bpp.weight ,bt.`mass_ratio` AS massRatio ,bmp.`price` AS materialPrice,bpp.time
         FROM   `busi_product_parameter` bpp  LEFT JOIN  busi_texture bt ON bpp.`texture_id` = bt.`texture_id`
