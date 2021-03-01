@@ -12,6 +12,8 @@ public class PriceSum {
     /** 重量 */
     private Float weight;
 
+    private Long  number;
+
     /** 质量比参数 */
     private Float massRatio;
 
@@ -28,6 +30,13 @@ public class PriceSum {
     /** 是否为过流材质 */
     private Long isCurrent;
 
+    public Long getNumber() {
+        return number;
+    }
+
+    public void setNumber(Long number) {
+        this.number = number;
+    }
 
     public Float getWeight() {
         return weight;

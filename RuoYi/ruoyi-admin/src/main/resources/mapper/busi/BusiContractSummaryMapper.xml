@@ -60,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectBusiContractSummaryList" parameterType="BusiContractSummary" resultMap="BusiContractSummaryResult">
         <include refid="selectBusiContractSummaryVo"/>
         <where>
+            <if test="quotationType != null"> and bq.quotation_type = #{quotationType}</if>
             <if test="customerName != null  and customerName != ''"> and bc.customer_name like concat('%', #{customerName}, '%')</if>
             <if test="customerNature != null  and customerNature != ''"> and bc.customer_nature like concat('%', #{customerNature}, '%')</if>
             <if test="customerIndustry != null  and customerIndustry != ''"> and bc.customer_industry like concat('%', #{customerIndustry}, '%')</if>

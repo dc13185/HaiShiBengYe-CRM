@@ -59,7 +59,11 @@ public class BusiPartsCost extends BaseEntity
     }
 
     public Double getActualPrice() {
-        return actualPrice;
+        if (actualPrice == null){
+            return 0d;
+        }else{
+            return actualPrice;
+        }
     }
 
     public void setActualPrice(Double actualPrice) {
@@ -75,7 +79,12 @@ public class BusiPartsCost extends BaseEntity
     }
 
     public Double getProfit() {
-        return StringUtils.doubleFormat(profit);
+        if (profit != null){
+            return StringUtils.doubleFormat(profit);
+        }else{
+            return profit;
+        }
+
     }
 
     public void setProfit(Double profit) {
@@ -83,7 +92,11 @@ public class BusiPartsCost extends BaseEntity
     }
 
     public Double getActualProfit() {
-        return actualProfit;
+        if (actualProfit == null){
+            return 0d;
+        }else{
+            return actualProfit;
+        }
     }
 
     public void setActualProfit(Double actualProfit) {

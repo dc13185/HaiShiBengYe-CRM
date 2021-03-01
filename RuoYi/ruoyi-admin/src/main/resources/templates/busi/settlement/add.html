@@ -50,7 +50,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">成本金额/元：</label>
                 <div class="col-sm-8">
-                    <input name="quotationPrice" id="quotationCost" class="form-control" type="text" readonly>
+                    <input name="quotationCost" id="quotationCost" class="form-control" type="text" readonly>
                 </div>
             </div>
 
@@ -82,10 +82,10 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">应付业务费用类型选择：</label>
                 <div class="col-sm-8">
-                    <select  class="businessCommissionType form-control m-b" onchange="choseType()">
+                    <select  name="businessCommissionType" class="businessCommissionType form-control m-b" onchange="choseType()">
                         <option value="">请选择</option>
-                        <option value="conventional">常规</option>
-                        <option value="yiShiYiYi">一事一议</option>
+                        <option value="0">常规</option>
+                        <option value="1">一事一议</option>
                     </select>
                 </div>
             </div>
@@ -150,9 +150,8 @@
         }
 
         function choseType() {
-            debugger;
             var businessCommissionType = $(".businessCommissionType").val()
-            if (businessCommissionType == "conventional"){
+            if (businessCommissionType == "0"){
                 var basedCommission =  parseFloat($("#basedCommission").val());
                 var premiumCommission =  parseFloat($("#premiumCommission").val());
                 var contractPrice = parseFloat($("#contractPrice").val());
@@ -173,7 +172,7 @@
 
                 $("#businessCommission").val(businessCommission.toFixed(2));
                 $("#businessCommission").attr("readonly","readonly")
-            }else if(businessCommissionType = "yiShiYiYi"){
+            }else if(businessCommissionType = "1"){
                 $("#businessCommission").removeAttr("readonly");
             }
         }

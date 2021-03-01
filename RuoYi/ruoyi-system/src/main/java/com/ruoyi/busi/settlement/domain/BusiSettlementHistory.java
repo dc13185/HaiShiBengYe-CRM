@@ -18,6 +18,11 @@ public class BusiSettlementHistory extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+
+    @Excel(name = "更新时间")
+    private Date updateTime;
+
+
     /** 基础性提成计提比例/% */
     @Excel(name = "基础性提成计提比例/%")
     private Double basedCommission;
@@ -60,8 +65,6 @@ public class BusiSettlementHistory extends BaseEntity
     @Excel(name = "支付业务费金额")
     private Double amountOfBusiness;
 
-    @Excel(name = "更新时间")
-    private Date updateTime;
 
     @Override
     public Date getUpdateTime() {

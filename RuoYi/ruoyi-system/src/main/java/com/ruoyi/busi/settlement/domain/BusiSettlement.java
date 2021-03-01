@@ -67,7 +67,7 @@ public class BusiSettlement extends BaseEntity
     private Double businessCommission;
 
     /** 应付业务费用类型选择 */
-    @Excel(name = "应付业务费用类型选择")
+    @Excel(name = "应付业务费用类型选择" ,readConverterExp="0=常规,1=一事一议")
     private Long businessCommissionType;
 
     /** 质保金比例/% */

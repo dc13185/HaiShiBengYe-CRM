@@ -173,11 +173,36 @@
                         field: 'contractCount',
                         title: '总合同数量'
                     },
+
                     {
                         field: 'contractPrice',
-                        title: '合同金额',
+                        title: '总合同金额',
+                        formatter: function(value, row, index) {
+                            var number  = row.allContractPrice;
+                            if (number){
+                                return number.toFixed(2);
+                            }else{
+                                return  0;
+                            }
+                        }
+                    },
+                    {
+                        field: 'contractPrice',
+                        title: '平均合同金额',
                         formatter: function(value, row, index) {
                             var number  = row.contractPrice;
+                            if (number){
+                                return number.toFixed(2);
+                            }else{
+                                return  0;
+                            }
+                        }
+                    },
+                    {
+                        field: 'repaymentAmount',
+                        title: '总回款金额',
+                        formatter: function(value, row, index) {
+                            var number  = row.allRepaymentAmount;
                             if (number){
                                 return number.toFixed(2);
                             }else{
@@ -200,7 +225,7 @@
                     {
                         title: '回款率',
                         formatter: function(value, row, index) {
-                            var number  = row.repaymentAmount / row.contractPrice;
+                            var number  = row.avgRepaymentRatio;
                             if (number){
                                 return number.toFixed(2);
                             }else{
@@ -208,22 +233,34 @@
                             }
                         }
                     },
-                   /* {
-                        field: 'singQuotationPrice',
-                        title: '平均签约金额',
+
+                    {
+                        title: '总回款率',
                         formatter: function(value, row, index) {
-                            var number  = row.singQuotationPrice;
+                            var number  = row.repaymentRatio;
                             if (number){
                                 return number.toFixed(2);
                             }else{
                                 return  0;
                             }
                         }
-                    },*/
+                    },
                     {
-                        title: '平均签约率',
+                        title: '签约率',
                         formatter: function(value, row, index) {
-                            var number  = row.contractPrice/row.quotationPrice;
+                            var number  = row.avgSingQuotationRatio;
+                            if (number){
+                                return number.toFixed(2);
+                            }else{
+                                return  0;
+                            }
+                        }
+                    },
+
+                    {
+                        title: '总签约率',
+                        formatter: function(value, row, index) {
+                            var number  = row.singQuotationRatio;
                             if (number){
                                 return number.toFixed(2);
                             }else{

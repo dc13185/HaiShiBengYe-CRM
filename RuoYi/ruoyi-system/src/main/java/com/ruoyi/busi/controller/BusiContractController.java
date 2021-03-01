@@ -123,7 +123,7 @@ public class BusiContractController extends BaseController
             l.setQuotationPrice(null);
             l.setDiscountRate(null);
             BusiContractProduct busiContractProduct = new BusiContractProduct();
-            busiContractProduct.setContractId(busiContract.getContractId());
+            busiContractProduct.setContractId(l.getContractId());
             List<BusiContractProduct>  busiContractProducts =  busiContractProductService.selectBusiContractProductList(busiContractProduct);
             StringBuffer sb = new StringBuffer();
             for (BusiContractProduct contractProduct : busiContractProducts) {

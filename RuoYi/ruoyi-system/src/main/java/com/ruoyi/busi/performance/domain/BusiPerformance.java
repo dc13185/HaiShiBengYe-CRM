@@ -24,10 +24,6 @@ public class BusiPerformance extends BaseEntity
 
     private Long peopleCount;
 
-    /** 报价金额 */
-    @Excel(name = "报价金额")
-    private Double quotationPrice;
-
     /** 业务员 */
     @Excel(name = "业务员")
     private String officeStaffName;
@@ -36,6 +32,10 @@ public class BusiPerformance extends BaseEntity
     @Excel(name = "报价数量")
     private Long quotationCount;
 
+
+    /** 报价金额 */
+    @Excel(name = "报价金额")
+    private Double quotationPrice;
 
 
     /** 合同数量 */
@@ -51,8 +51,30 @@ public class BusiPerformance extends BaseEntity
     private Double repaymentAmount;
 
     /** 签约金额 */
-    @Excel(name = "签约金额")
     private Double singQuotationPrice;
+
+    @Excel(name = "报价签约率")
+    private Double singQuotationRatio;
+
+    @Excel(name = "回款率")
+    private Double repaymentRatio;
+
+
+    public Double getSingQuotationRatio() {
+        return singQuotationRatio;
+    }
+
+    public void setSingQuotationRatio(Double singQuotationRatio) {
+        this.singQuotationRatio = singQuotationRatio;
+    }
+
+    public Double getRepaymentRatio() {
+        return repaymentRatio;
+    }
+
+    public void setRepaymentRatio(Double repaymentRatio) {
+        this.repaymentRatio = repaymentRatio;
+    }
 
     public void setPerformanceId(Long performanceId)
     {

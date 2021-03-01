@@ -36,6 +36,7 @@ public class OfficeStaff extends BaseEntity
     @Excel(name = "出生年月", width = 30, dateFormat = "yyyy-MM-dd")
     private Date birth;
 
+
     /** 毕业院校 */
     @Excel(name = "毕业院校")
     private String school;
@@ -43,6 +44,9 @@ public class OfficeStaff extends BaseEntity
     /** 专业 */
     @Excel(name = "专业")
     private String major;
+
+    @Excel(name = "学历" ,dictType="education_status")
+    private Long education;
 
     /** 居住地 */
     @Excel(name = "居住地")
@@ -56,8 +60,7 @@ public class OfficeStaff extends BaseEntity
     @Excel(name = "邮箱")
     private String mail;
 
-    @Excel(name = "学历")
-    private Long education;
+
 
 
     public void setOfficeStaffId(Long officeStaffId)

@@ -1,10 +1,13 @@
 package com.ruoyi.busi.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.util.Date;
 
 /**
  * 报价单管理对象 busi_quotation
@@ -19,22 +22,17 @@ public class BusiQuotation extends BaseEntity
     /** 项目编号 */
     private Long quotationId;
 
-    /** 项目名称 */
-    @Excel(name = "项目名称")
-    private String projectName;
-
-    /** 项目所在地 */
-    @Excel(name = "项目所在地")
-    private String projectAddress;
-
     /** 报价单号 */
     @Excel(name = "报价单号")
     private String quotationNo;
 
-    /** 客户id */
-    private Long customerId;
 
-    @Excel(name = "客户姓名")
+    /** 产品类型 */
+    @Excel(name = "产品类型", readConverterExp = "0=整机,1=外购,2=配件")
+    private Long quotationType;
+
+
+    @Excel(name = "客户名称")
     private String customerName;
 
     @Excel(name = "所在行业")
@@ -43,12 +41,25 @@ public class BusiQuotation extends BaseEntity
     @Excel(name = "客户所在地")
     private String customerAddress;
 
-    /** 业务员ID */
-    private Long staffId;
+
+    /** 项目所在地 */
+    @Excel(name = "项目所在地")
+    private String projectAddress;
+
+    /** 项目名称 */
+    @Excel(name = "项目名称")
+    private String projectName;
+
 
     /** 办事处 */
     @Excel(name = "办事处")
     private String officeAddress;
+
+    /** 客户id */
+    private Long customerId;
+
+    /** 业务员ID */
+    private Long staffId;
 
     /** 业务员 */
     @Excel(name = "业务员")
@@ -60,9 +71,6 @@ public class BusiQuotation extends BaseEntity
     @Excel(name = "选型技术人员")
     private String technicalStaffName;
 
-    /** 产品类型 */
-    @Excel(name = "产品类型", readConverterExp = "0=整机,1=外购,2=配件")
-    private Long quotationType;
 
     @Excel(name = "合计数量")
     private Long allCount;
@@ -76,10 +84,14 @@ public class BusiQuotation extends BaseEntity
     //@Excel(name = "配件价格")
     private double partsPrice;
 
-    @Excel(name = "报价合计")
+    @Excel(name = "合计价格")
     private Double sumPrice;
 
+    @Excel(name = "报价日期")
+    private Date createTime;
+
     /** 是否签约 */
+    @Excel(name = "是否签约", readConverterExp = "0=否,1=是")
     private Long isSing;
 
     /** 省市区 */
@@ -98,6 +110,15 @@ public class BusiQuotation extends BaseEntity
     /** 外购数量 */
     private long partsCount;
 
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
     public void setQuotationPrice(double quotationPrice) {
         this.quotationPrice = quotationPrice;

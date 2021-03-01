@@ -31,6 +31,10 @@ public class BusiProductParameter extends BaseEntity
     private String materialForm;
 
     /** 重量/kg */
+    @Excel(name = "数量")
+    private Long number;
+
+    /** 重量/kg */
     @Excel(name = "重量/kg")
     private Float weight;
 
@@ -54,6 +58,14 @@ public class BusiProductParameter extends BaseEntity
 
 /*    */
 
+
+    public Long getNumber() {
+        return number;
+    }
+
+    public void setNumber(Long number) {
+        this.number = number;
+    }
 
     public String getModelName() {
         return modelName;

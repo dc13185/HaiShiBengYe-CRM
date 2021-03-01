@@ -1,5 +1,6 @@
 package com.ruoyi.busi.domain;
 
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -60,6 +61,9 @@ public class BusiPriceDetails extends BaseEntity
     @Excel(name = "额外配置成本")
     private Double ewCb;
 
+    @Excel(name = "外购成本合计")
+    private Double wghj;
+
 
     @Excel(name = "总计成本")
     private Double sumPrice;
@@ -76,17 +80,14 @@ public class BusiPriceDetails extends BaseEntity
     //@Excel(name = "实际人工成本")
     private Double actualBengtouRgCb;
 
-
     /** 实际制造费用成本 */
     //@Excel(name = "实际制造费用成本")
     private Double actualBengtouFyCb;
 
 
-
     /** 实际电机成本 */
    // @Excel(name = "实际电机成本")
     private Double actualMotorCb;
-
 
     /**  */
     private Long quotationId;
@@ -122,6 +123,14 @@ public class BusiPriceDetails extends BaseEntity
     //@Excel(name = "实际成本")
     private Double actualAllSumPrice;
 
+    public Double getWghj() {
+        return wghj;
+    }
+
+    public void setWghj(Double wghj) {
+        this.wghj = StringUtils.doubleFormat(motorCb + jfCb + zlqCb + ewCb);
+    }
+
     public Double getBengtouCb() {
         return bengtouCb;
     }
@@ -146,6 +155,9 @@ public class BusiPriceDetails extends BaseEntity
 
     public Double getActualBengtouclCb()
     {
+        if (actualBengtouclCb == null){
+            return 0d;
+        }
         return actualBengtouclCb;
     }
     public void setBengtouRgCb(Double bengtouRgCb)
@@ -173,6 +185,9 @@ public class BusiPriceDetails extends BaseEntity
 
     public Double getActualBengtouRgCb()
     {
+        if (actualBengtouRgCb == null){
+            return 0d;
+        }
         return actualBengtouRgCb;
     }
     public void setMotorCb(Double motorCb)
@@ -191,6 +206,9 @@ public class BusiPriceDetails extends BaseEntity
 
     public Double getActualBengtouFyCb()
     {
+        if (actualBengtouFyCb == null){
+            return 0d;
+        }
         return actualBengtouFyCb;
     }
     public void setJfCb(Double jfCb)
@@ -227,7 +245,10 @@ public class BusiPriceDetails extends BaseEntity
 
     public Double getActualMotorCb()
     {
-        return actualMotorCb;
+        if (actualMotorCb == null){return 0d;}else {
+            return actualMotorCb;
+        }
+
     }
     public void setEwCb(Double ewCb)
     {
@@ -244,8 +265,9 @@ public class BusiPriceDetails extends BaseEntity
     }
 
     public Double getActualJfCb()
-    {
+    { if (actualJfCb == null){return 0d;}else {
         return actualJfCb;
+      }
     }
     public void setActualZcCb(Double actualZcCb)
     {
@@ -254,7 +276,9 @@ public class BusiPriceDetails extends BaseEntity
 
     public Double getActualZcCb()
     {
-        return actualZcCb;
+        if (actualZcCb == null){return 0d;}else {
+            return actualZcCb;
+        }
     }
     public void setActualZlqCb(Double actualZlqCb)
     {
@@ -263,7 +287,9 @@ public class BusiPriceDetails extends BaseEntity
 
     public Double getActualZlqCb()
     {
-        return actualZlqCb;
+        if (actualZlqCb == null){return 0d;}else {
+            return actualZlqCb;
+        }
     }
     public void setActualEwCb(Double actualEwCb)
     {
@@ -272,7 +298,9 @@ public class BusiPriceDetails extends BaseEntity
 
     public Double getActualEwCb()
     {
-        return actualEwCb;
+        if (actualEwCb == null){return 0d;}else {
+            return actualEwCb;
+        }
     }
     public void setContractPrice(Double contractPrice)
     {
@@ -290,6 +318,9 @@ public class BusiPriceDetails extends BaseEntity
 
     public Double getActualContractprice()
     {
+        if (actualContractprice == null){
+            return 0d;
+        }
         return actualContractprice;
     }
     public void setProfit(Double profit)
@@ -308,7 +339,9 @@ public class BusiPriceDetails extends BaseEntity
 
     public Double getActualProfit()
     {
-        return actualProfit;
+        if (actualProfit == null){return 0d;}else {
+            return actualProfit;
+        }
     }
 
 
@@ -328,16 +361,18 @@ public class BusiPriceDetails extends BaseEntity
         this.quotationId = quotationId;
     }
 
-    public Double getActualBengtouCb() {
-        return actualBengtouCb;
-    }
-
     public void setActualBengtouCb(Double actualBengtouCb) {
         this.actualBengtouCb = actualBengtouCb;
     }
 
+    public Double getActualBengtouCb() {
+        return getActualBengtouclCb() + getActualBengtouRgCb() + getActualBengtouFyCb();
+    }
+
     public Double getActualWghj() {
-        return actualWghj;
+        if (actualWghj == null){return 0d;}else {
+            return actualWghj;
+        }
     }
 
     public void setActualWghj(Double actualWghj) {
@@ -345,7 +380,10 @@ public class BusiPriceDetails extends BaseEntity
     }
 
     public Double getActualAllSumPrice() {
-        return actualAllSumPrice;
+
+        if (actualAllSumPrice == null){return 0d;}else {
+            return actualAllSumPrice;
+        }
     }
 
     public void setActualAllSumPrice(Double actualAllSumPrice) {

@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.busi.mapper.BusiTechnicistMapper">
-    
+
     <resultMap type="BusiTechnicist" id="BusiTechnicistResult">
         <result property="technicistId"    column="technicist_id"    />
         <result property="technicistName"    column="technicist_name"    />
@@ -14,25 +14,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="major"    column="major"    />
         <result property="residence"    column="residence"    />
         <result property="email"    column="email"    />
+        <result property="contactDetails"    column="contactDetails"    />
     </resultMap>
 
     <sql id="selectBusiTechnicistVo">
-        select technicist_id, technicist_name, position, birth_date, education, university, major, residence, email from busi_technicist
+        select technicist_id, technicist_name, position, birth_date, contactDetails,education, university, major, residence, email from busi_technicist
     </sql>
 
     <select id="selectBusiTechnicistList" parameterType="BusiTechnicist" resultMap="BusiTechnicistResult">
         <include refid="selectBusiTechnicistVo"/>
-        <where>  
+        <where>
             <if test="technicistName != null  and technicistName != ''"> and technicist_name like concat('%', #{technicistName}, '%')</if>
             <if test="email != null  and email != ''"> and email = #{email}</if>
         </where>
     </select>
-    
+
     <select id="selectBusiTechnicistById" parameterType="Long" resultMap="BusiTechnicistResult">
         <include refid="selectBusiTechnicistVo"/>
         where technicist_id = #{technicistId}
     </select>
-        
+
     <insert id="insertBusiTechnicist" parameterType="BusiTechnicist" useGeneratedKeys="true" keyProperty="technicistId">
         insert into busi_technicist
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -44,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="major != null">major,</if>
             <if test="residence != null">residence,</if>
             <if test="email != null">email,</if>
+            <if test="contactDetails != null">contactDetails,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="technicistName != null">#{technicistName},</if>
@@ -54,6 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="major != null">#{major},</if>
             <if test="residence != null">#{residence},</if>
             <if test="email != null">#{email},</if>
+            <if test="contactDetails != null">#{contactDetails},</if>
          </trim>
     </insert>
 
@@ -68,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="major != null">major = #{major},</if>
             <if test="residence != null">residence = #{residence},</if>
             <if test="email != null">email = #{email},</if>
+            <if test="contactDetails != null">contactDetails= #{contactDetails},</if>
         </trim>
         where technicist_id = #{technicistId}
     </update>
@@ -77,7 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBusiTechnicistByIds" parameterType="String">
-        delete from busi_technicist where technicist_id in 
+        delete from busi_technicist where technicist_id in
         <foreach item="technicistId" collection="array" open="(" separator="," close=")">
             #{technicistId}
         </foreach>

@@ -14,10 +14,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="isCurrent"    column="is_current"    />
         <result property="modelId"    column="model_id"    />
         <result property="textureId"    column="texture_id"    />
+        <result property="number"    column="number"    />
     </resultMap>
 
     <sql id="selectBusiProductParameterVo">
-           SELECT parameter_id, item_number, weight, TIME, is_current, model_id  , bpp.texture_id,texture_name AS material , texture_type  AS materialForm
+           SELECT parameter_id, item_number, weight, TIME, is_current, model_id  , bpp.texture_id,texture_name AS material , number,texture_type  AS materialForm
            FROM busi_product_parameter  bpp LEFT JOIN busi_texture bt ON bpp.texture_id = bt.texture_id
     </sql>
 
@@ -52,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           SELECT bpp.*, bpp.weight ,bt.`mass_ratio` AS massRatio ,bmp.`price` AS materialPrice,bpp.time
         FROM   `busi_product_parameter` bpp  LEFT JOIN  busi_texture bt ON bpp.`texture_id` = bt.`texture_id`
         LEFT JOIN `busi_material_production` bmp ON bt.`texture_id` = bmp.`texture_id`
-        WHERE bpp.parameter_id = #{parameterId}
+        WHERE bpp.parameter_id = #{parameterId} limit 1
     </select>
 
     <select id="selectBusiProductParameterById" parameterType="Long" resultMap="BusiProductParameterResult">
@@ -69,6 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isCurrent != null">is_current,</if>
             <if test="modelId != null">model_id,</if>
             <if test="textureId != null">texture_id,</if>
+            <if test="number != null">number,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="itemNumber != null and itemNumber != ''">#{itemNumber},</if>
@@ -77,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isCurrent != null">#{isCurrent},</if>
             <if test="modelId != null">#{modelId},</if>
             <if test="textureId != null">#{textureId},</if>
+            <if test="number != null">#{number},</if>
          </trim>
     </insert>
 
@@ -89,6 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="isCurrent != null">is_current = #{isCurrent},</if>
             <if test="modelId != null">model_id = #{modelId},</if>
             <if test="textureId != null">texture_id = #{textureId},</if>
+            <if test="number != null">number = #{number},</if>
         </trim>
         where parameter_id = #{parameterId}
     </update>

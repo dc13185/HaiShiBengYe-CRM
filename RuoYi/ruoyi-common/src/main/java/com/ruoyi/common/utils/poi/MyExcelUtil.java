@@ -12,6 +12,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.DictUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.reflect.ReflectUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -90,6 +91,14 @@ public class MyExcelUtil<T>
      */
     public Class<T> clazz;
 
+    public Sheet getSheet() {
+        return sheet;
+    }
+
+    public void setSheet(Sheet sheet) {
+        this.sheet = sheet;
+    }
+
     public MyExcelUtil(Class<T> clazz)
     {
         this.clazz = clazz;
@@ -110,6 +119,10 @@ public class MyExcelUtil<T>
 
     public void init(){
         createWorkbook();
+    }
+
+    public void initHSSF(){
+        createHSSFWorkbook();
     }
 
     public void exportExcel(List list, Class clazz,String sheetName)
@@ -859,6 +872,12 @@ public class MyExcelUtil<T>
         this.wb = new SXSSFWorkbook(500);
     }
 
+
+    public void createHSSFWorkbook()
+    {
+        this.wb = new HSSFWorkbook();
+    }
+
     /**
      * 创建工作表
      *
@@ -946,6 +965,8 @@ public class MyExcelUtil<T>
         }
         return val;
     }
+
+
 
 
 

@@ -103,7 +103,11 @@ public class BusiOutsourcingCost extends BaseEntity
     }
 
     public Double getActualProductPrice() {
-        return actualProductPrice;
+        if (actualProductPrice == null){
+            return 0d;
+        }else{
+            return actualProductPrice;
+        }
     }
 
     public void setActualProductPrice(Double actualProductPrice) {
@@ -119,7 +123,11 @@ public class BusiOutsourcingCost extends BaseEntity
     }
 
     public Double getActualMotorPrice() {
-        return actualMotorPrice;
+        if (actualMotorPrice == null){
+            return 0d;
+        }else{
+            return actualMotorPrice;
+        }
     }
 
     public void setActualMotorPrice(Double actualMotorPrice) {
@@ -135,7 +143,12 @@ public class BusiOutsourcingCost extends BaseEntity
     }
 
     public Double getProfit() {
-        return StringUtils.doubleFormat(profit);
+        if (profit != null){
+            return StringUtils.doubleFormat(profit);
+        }else{
+            return 0d;
+        }
+
     }
 
     public void setProfit(Double profit) {
@@ -143,7 +156,12 @@ public class BusiOutsourcingCost extends BaseEntity
     }
 
     public Double getActualProfit() {
-        return actualProfit;
+        if (actualProfit == null){
+            return 0d;
+        }else{
+            return actualProfit;
+        }
+
     }
 
     public void setActualProfit(Double actualProfit) {
@@ -152,7 +170,11 @@ public class BusiOutsourcingCost extends BaseEntity
 
 
     public Double getActualAllPrice() {
-        return actualAllPrice;
+        if (actualAllPrice == null){
+            return 0d;
+        }else{
+            return actualAllPrice;
+        }
     }
 
     public void setActualAllPrice(Double actualAllPrice) {

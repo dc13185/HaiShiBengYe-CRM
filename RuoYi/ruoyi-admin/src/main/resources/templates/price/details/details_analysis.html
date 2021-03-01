@@ -272,6 +272,9 @@
                 </form>
             </div>
             <a class="btn btn-success col-sm-push-10 save-btn" onclick="save()" style="display:none;"> 确定</a>
+            <a class="export-btn btn btn-warning" onclick="exportDetials()" shiro:hasPermission="busi:details:export" style="display: none">
+                <i class="fa fa-download"></i> 导出
+            </a>
         </div>
     </div>
     <th:block th:include="include :: footer" />
@@ -338,6 +341,7 @@
 
                     $(".self-made").show();
                     $(".save-btn").show();
+                    $(".export-btn").show();
                 }else{
                     $(".self-made").hide();
                 }
@@ -359,6 +363,7 @@
                     $(".waigou-made").find(".actualAllPrice").val(outsourcingMap.actualAllPrice);
                     $(".waigou-made").show();
                     $(".save-btn").show();
+                    $(".export-btn").show();
                 }else{
                     $(".waigou-made").hide();
                 }
@@ -375,6 +380,7 @@
                     $(".peijian-made").find(".actualProfit").val(busiPartsDetails.actualProfit);
                     $(".peijian-made").show();
                     $(".save-btn").show();
+                    $(".export-btn").show();
                 }else{
                     $(".peijian-made").hide();
                 }
@@ -385,7 +391,7 @@
 
 
     function save(){
-        var selfDisplay = $(".self-made").css("display");
+       var selfDisplay = $(".self-made").css("display");
         var code;
         if (selfDisplay != 'none'){
             $.ajax({
@@ -425,19 +431,35 @@
                 dataType: "json",
                 success: function(result) {
                     code = result.code;
+
                 }
             })
         }
+
         if (code != 500){
             $.modal.alertSuccess("保存成功!");
         }
+    }
 
+    function exportDetials(){
+        var quotationNo = $("#quotationNo").val();
+        if (!quotationNo || quotationNo == ''){
+            $.modal.alertWarning("请输入订单号");
+            return
+        }
+        $.ajax({
+            url: ctx + "busi/price/details/exportAnalysis",
+            data: quotationNo,
+            type: "post",
+            processData: false,
+            contentType: "application/json",
+            success: function(result) {
+                if (result.code == web_status.SUCCESS) {
+                    window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                }
+            }
 
-
-
-
-
-
+        })
     }
 </script>
 </html>

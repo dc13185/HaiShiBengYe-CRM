@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBusiQuotationDetailsVo">
-        select details_id, quotation_id, equipment_num, product_line_id, model_id, material_id, number, rinse_solution_id, other_expenses, other_expenses_description, rated_flow, lift, operating_temperature, fluid_density, inlet_pressure, npsh, motor_supplier_id, motor_id, other_motor, other_motor_price, machine_supplier_id, machine_id, other_machine, other_machine_price, coupling_supplier_id, coupling_id, other_coupling, other_coupling_price, quotation_type ,coefficient ,details_price from busi_quotation_details
+        select details_id, quotation_id, equipment_num, product_line_id, model_id, material_id, number, base_material_supplier_id,rinse_solution_id, other_expenses, other_expenses_description, rated_flow, lift, operating_temperature, fluid_density, inlet_pressure, npsh, motor_supplier_id, motor_id, other_motor, other_motor_price, machine_supplier_id, machine_id, other_machine, other_machine_price, coupling_supplier_id, coupling_id, other_coupling, other_coupling_price, quotation_type ,coefficient ,details_price from busi_quotation_details
     </sql>
 
     <select id="selectBusiQuotationDetailsList" parameterType="BusiQuotationDetails" resultMap="BusiQuotationDetailsResult">
@@ -122,7 +122,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         pump_head_cost,
         motor_cost,
         seal_cost,
-        all_cost
+        all_cost,
+        base_material_supplier_id
         FROM
         busi_quotation_details bqd
         <where>
@@ -183,7 +184,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         other_bearing_price,
         quotation_type,
         coefficient,
-        details_price
+        details_price,
+        base_material_supplier_id
         FROM
         busi_quotation_details bqd
         where bqd.details_id = #{detailsId}
@@ -344,7 +346,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <select id="selectPriceDetil" parameterType="BusiQuotationDetails" resultType="com.ruoyi.busi.domain.PriceSum">
-        SELECT bpp.weight ,bt.`mass_ratio` as massRatio ,bmp.`price` as materialPrice,bpp.time ,bpp.is_current as isCurrent
+        SELECT bpp.weight ,bt.`mass_ratio` as massRatio ,bmp.`price` as materialPrice,bpp.time ,bpp.is_current as isCurrent,bpp.number
         FROM   `busi_product_parameter` bpp  LEFT JOIN  busi_texture bt
         ON bpp.`texture_id` = bt.`texture_id`
         LEFT JOIN `busi_material_production` bmp ON bt.`texture_id` = bmp.`texture_id`

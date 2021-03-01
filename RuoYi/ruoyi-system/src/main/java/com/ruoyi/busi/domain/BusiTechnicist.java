@@ -8,7 +8,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 选型技术人员管理对象 busi_technicist
- * 
+ *
  * @author ruoyi
  * @date 2021-01-20
  */
@@ -27,12 +27,15 @@ public class BusiTechnicist extends BaseEntity
     @Excel(name = "职位")
     private String position;
 
+    @Excel(name = "联系方式")
+    private String contactDetails;
+
     /** 出生年月 */
     @Excel(name = "出生年月", width = 30, dateFormat = "yyyy-MM-dd")
     private Date birthDate;
 
     /** 学历 */
-    @Excel(name = "学历")
+    @Excel(name = "学历" ,dictType="education_status")
     private Long education;
 
     /** 毕业院校 */
@@ -51,84 +54,93 @@ public class BusiTechnicist extends BaseEntity
     @Excel(name = "邮箱")
     private String email;
 
-    public void setTechnicistId(Long technicistId) 
+
+    public String getContactDetails() {
+        return contactDetails;
+    }
+
+    public void setContactDetails(String contactDetails) {
+        this.contactDetails = contactDetails;
+    }
+
+    public void setTechnicistId(Long technicistId)
     {
         this.technicistId = technicistId;
     }
 
-    public Long getTechnicistId() 
+    public Long getTechnicistId()
     {
         return technicistId;
     }
-    public void setTechnicistName(String technicistName) 
+    public void setTechnicistName(String technicistName)
     {
         this.technicistName = technicistName;
     }
 
-    public String getTechnicistName() 
+    public String getTechnicistName()
     {
         return technicistName;
     }
-    public void setPosition(String position) 
+    public void setPosition(String position)
     {
         this.position = position;
     }
 
-    public String getPosition() 
+    public String getPosition()
     {
         return position;
     }
-    public void setBirthDate(Date birthDate) 
+    public void setBirthDate(Date birthDate)
     {
         this.birthDate = birthDate;
     }
 
-    public Date getBirthDate() 
+    public Date getBirthDate()
     {
         return birthDate;
     }
-    public void setEducation(Long education) 
+    public void setEducation(Long education)
     {
         this.education = education;
     }
 
-    public Long getEducation() 
+    public Long getEducation()
     {
         return education;
     }
-    public void setUniversity(String university) 
+    public void setUniversity(String university)
     {
         this.university = university;
     }
 
-    public String getUniversity() 
+    public String getUniversity()
     {
         return university;
     }
-    public void setMajor(String major) 
+    public void setMajor(String major)
     {
         this.major = major;
     }
 
-    public String getMajor() 
+    public String getMajor()
     {
         return major;
     }
-    public void setResidence(String residence) 
+    public void setResidence(String residence)
     {
         this.residence = residence;
     }
 
-    public String getResidence() 
+    public String getResidence()
     {
         return residence;
     }
-    public void setEmail(String email) 
+    public void setEmail(String email)
     {
         this.email = email;
     }
 
-    public String getEmail() 
+    public String getEmail()
     {
         return email;
     }

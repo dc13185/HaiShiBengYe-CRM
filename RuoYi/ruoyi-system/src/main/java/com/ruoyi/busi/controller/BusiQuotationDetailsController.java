@@ -328,15 +328,15 @@ public class BusiQuotationDetailsController extends BaseController
         Double materialCosts = format(priceSums.parallelStream().mapToDouble(p -> {
             //如果为过流部件的话，需要将 生产参数为过流部件的材料单价替换为过流部件的单价 和质量比
             if (p.getIsCurrent() == 1 && busiMaterialProduction != null){
-                return  p.getWeight() * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
+                return  p.getNumber() * p.getWeight() * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
             }else {
-                return  p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
+                return  p.getNumber() * p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
             }
         }).sum());
         //返回人工成本费用
-        Double laborCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum());
+        Double laborCost = format(priceSums.parallelStream().mapToDouble(p -> p.getNumber() * p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum());
         //返回制造成本费用
-        Double makeCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.MAKE_COEFFICIENT).sum());
+        Double makeCost = format(priceSums.parallelStream().mapToDouble(p -> p.getNumber() * p.getTime() * Constant.MAKE_COEFFICIENT).sum());
         //低值物料成本
         Double  lowMaterialCost = busiProductModelService.selectBusiProductModelById(busiQuotationDetails.getModelId()).getLowMaterialCost();
         if (lowMaterialCost == null){
@@ -387,7 +387,7 @@ public class BusiQuotationDetailsController extends BaseController
         //电机成本
         busiQuotationDetails.setMotorCost(motorPrice);
         //机封成本
-        busiQuotationDetails.setMotorCost(machineProce);
+        busiQuotationDetails.setSealCost(machineProce);
         //总成本
         Double allCost = StringUtils.doubleFormat(materialCosts + laborCost + makeCost + motorPrice + machineProce + couplingPrice + bearingPrice + otherPrice);
         busiQuotationDetails.setAllCost(allCost);
@@ -427,15 +427,15 @@ public class BusiQuotationDetailsController extends BaseController
         Double materialCosts = format(priceSums.parallelStream().mapToDouble(p -> {
             //如果为过流部件的话，需要将 生产参数为过流部件的材料单价替换为过流部件的单价 和质量比
             if (p.getIsCurrent() == 1 && busiMaterialProduction != null){
-                return  p.getWeight() * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
+                return  p.getNumber() * p.getWeight() * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
             }else {
-                return  p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
+                return  p.getNumber() * p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
             }
         }).sum());
         //返回人工成本费用
-        Double laborCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum());
+        Double laborCost = format(priceSums.parallelStream().mapToDouble(p -> p.getNumber() * p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum());
         //返回制造成本费用
-        Double makeCost = format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.MAKE_COEFFICIENT).sum());
+        Double makeCost = format(priceSums.parallelStream().mapToDouble(p -> p.getNumber() * p.getTime() * Constant.MAKE_COEFFICIENT).sum());
         //低值物料成本
         Double  lowMaterialCost = busiProductModelService.selectBusiProductModelById(busiQuotationDetails.getModelId()).getLowMaterialCost();
         if (lowMaterialCost == null){
@@ -486,7 +486,7 @@ public class BusiQuotationDetailsController extends BaseController
         //电机成本
         busiQuotationDetails.setMotorCost(motorPrice);
         //机封成本
-        busiQuotationDetails.setMotorCost(machineProce);
+        busiQuotationDetails.setSealCost(machineProce);
         //总成本
         Double allCost = StringUtils.doubleFormat(materialCosts + laborCost + makeCost + motorPrice + machineProce + couplingPrice + bearingPrice + otherPrice);
         busiQuotationDetails.setAllCost(allCost);
@@ -546,17 +546,15 @@ public class BusiQuotationDetailsController extends BaseController
                      materialCosts += format(priceSums.parallelStream().mapToDouble(p -> {
                         //如果为过流部件的话，需要将 生产参数为过流部件的材料单价替换为过流部件的单价 和质量比
                         if (p.getIsCurrent() == 1 && busiMaterialProduction != null){
-                            return  p.getWeight()  * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
+                            return  p.getNumber() * p.getWeight()  * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
                         }else {
-                            return  p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
+                            return  p.getNumber() * p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
                         }
                     }).sum()) * number;
-                   /* //返回材料成本费用
-                    materialCosts += format(priceSums.parallelStream().mapToDouble(p -> p.getWeight() * p.getMaterialPrice()* p.getMassRatio()).sum()) * number;*/
                     //返回人工成本费用
-                    laborCost += format(priceSums.stream().mapToDouble(p -> p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum()) * number;
+                    laborCost += format(priceSums.stream().mapToDouble(p -> p.getNumber() * p.getTime() * Constant.LABOR_COSTCOE_FFICIENT).sum()) * number;
                     //返回制造成本费用
-                    makeCost += format(priceSums.parallelStream().mapToDouble(p -> p.getTime() * Constant.MAKE_COEFFICIENT).sum()) * number;
+                    makeCost += format(priceSums.parallelStream().mapToDouble(p -> p.getNumber() * p.getTime() * Constant.MAKE_COEFFICIENT).sum()) * number;
                     //低值物料成本
                     lowMaterialCost += busiProductModelService.selectBusiProductModelById(quotationDetails.getModelId()).getLowMaterialCost() * number;
 

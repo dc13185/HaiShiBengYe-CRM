@@ -23,23 +23,23 @@ public class BusiProductModel extends BaseEntity
     private String modelName;
 
     /** 流量 */
-    @Excel(name = "流量")
+    @Excel(name = "流量(m³/h)'")
     private Float flow;
 
     /** 扬程 */
-    @Excel(name = "扬程")
+    @Excel(name = "扬程(m)")
     private Float lift;
 
     /** 温度 */
-    @Excel(name = "温度")
+    @Excel(name = "温度(℃)")
     private Float temperature;
 
     /** 入口压力 */
-    @Excel(name = "入口压力")
+    @Excel(name = "设计压力(Mpa)")
     private Float pressure;
 
     /** 汽蚀余量 */
-    @Excel(name = "汽蚀余量")
+    @Excel(name = "汽蚀余量(m)")
     private Float npsh;
 
     /** 产品系列Id */

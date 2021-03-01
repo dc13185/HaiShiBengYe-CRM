@@ -50,7 +50,7 @@ public class BusiContractSummary extends BaseEntity
     private String officeStaffName;
 
     /** 产品类型 */
-    @Excel(name = "产品类型")
+    @Excel(name = "产品类型", readConverterExp = "0=整机,1=外购,2=配件")
     private Long quotationType;
 
     /** 报价金额 */

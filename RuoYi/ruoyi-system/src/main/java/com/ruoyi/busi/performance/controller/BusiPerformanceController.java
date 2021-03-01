@@ -82,12 +82,24 @@ public class BusiPerformanceController extends BaseController
             BusiOfficePerformance busiPerformance1 = new BusiOfficePerformance();
             busiPerformance1.setOfficeAddress(m.getKey());
             busiPerformance1.setQuotationPrice(m.getValue().stream().mapToDouble(BusiPerformance::getQuotationPrice).average().getAsDouble());
+            busiPerformance1.setAllQuotationPrice(m.getValue().stream().mapToDouble(BusiPerformance::getQuotationPrice).sum());
             busiPerformance1.setPeopleCount(m.getValue().stream().count());
             busiPerformance1.setQuotationCount(m.getValue().stream().mapToLong(BusiPerformance::getQuotationCount).sum());
             busiPerformance1.setContractCount(m.getValue().stream().mapToLong(BusiPerformance::getContractCount).sum());
             busiPerformance1.setContractPrice(m.getValue().stream().mapToDouble(BusiPerformance::getContractPrice).average().getAsDouble());
+            busiPerformance1.setAllContractPrice(m.getValue().stream().mapToDouble(BusiPerformance::getContractPrice).sum());
             busiPerformance1.setRepaymentAmount(m.getValue().stream().mapToDouble(BusiPerformance::getRepaymentAmount).average().getAsDouble());
-            busiPerformance1.setSingQuotationPrice(m.getValue().stream().mapToDouble(BusiPerformance::getSingQuotationPrice).average().getAsDouble());
+            busiPerformance1.setAllRepaymentAmount(m.getValue().stream().mapToDouble(BusiPerformance::getRepaymentAmount).sum());
+           /* busiPerformance1.setSingQuotationPrice(m.getValue().stream().mapToDouble(BusiPerformance::getSingQuotationPrice).average().getAsDouble());
+            busiPerformance1.setAllSingQuotationPrice(m.getValue().stream().mapToDouble(BusiPerformance::getSingQuotationPrice).sum());*/
+            //平均回款率
+            busiPerformance1.setAvgRepaymentRatio(busiPerformance1.getRepaymentAmount() / busiPerformance1.getContractPrice());
+            //总回款率
+            busiPerformance1.setRepaymentRatio(busiPerformance1.getAllRepaymentAmount() / busiPerformance1.getAllContractPrice());
+            //平均签约率
+            busiPerformance1.setAvgSingQuotationRatio(busiPerformance1.getContractPrice() / busiPerformance1.getQuotationPrice() );
+            //总签约率
+            busiPerformance1.setSingQuotationRatio(busiPerformance1.getAllContractPrice() / busiPerformance1.getAllQuotationPrice() );
             statisticsList.add(busiPerformance1);
         });
 
@@ -109,6 +121,13 @@ public class BusiPerformanceController extends BaseController
             l.setContractPrice(StringUtils.doubleFormat(l.getContractPrice()));
             l.setQuotationPrice(StringUtils.doubleFormat(l.getQuotationPrice()));
             l.setRepaymentAmount(StringUtils.doubleFormat(l.getRepaymentAmount()));
+            if (l.getQuotationPrice() != 0d){
+                l.setRepaymentRatio(StringUtils.doubleFormat(l.getRepaymentAmount()/l.getQuotationPrice()));
+                l.setSingQuotationRatio(StringUtils.doubleFormat(l.getContractPrice()/l.getQuotationPrice()));
+            }else{
+                l.setRepaymentRatio(0d);
+                l.setSingQuotationRatio(0d);
+            }
         });
 
         //
@@ -125,13 +144,23 @@ public class BusiPerformanceController extends BaseController
         sets.entrySet().forEach(m -> {
             BusiOfficePerformance busiPerformance1 = new BusiOfficePerformance();
             busiPerformance1.setOfficeAddress(m.getKey());
-            busiPerformance1.setQuotationPrice(StringUtils.doubleFormat(m.getValue().stream().mapToDouble(BusiPerformance::getQuotationPrice).average().getAsDouble()));
+            busiPerformance1.setQuotationPrice(m.getValue().stream().mapToDouble(BusiPerformance::getQuotationPrice).average().getAsDouble());
+            busiPerformance1.setAllQuotationPrice(m.getValue().stream().mapToDouble(BusiPerformance::getQuotationPrice).sum());
             busiPerformance1.setPeopleCount(m.getValue().stream().count());
             busiPerformance1.setQuotationCount(m.getValue().stream().mapToLong(BusiPerformance::getQuotationCount).sum());
             busiPerformance1.setContractCount(m.getValue().stream().mapToLong(BusiPerformance::getContractCount).sum());
             busiPerformance1.setContractPrice(m.getValue().stream().mapToDouble(BusiPerformance::getContractPrice).average().getAsDouble());
+            busiPerformance1.setAllContractPrice(m.getValue().stream().mapToDouble(BusiPerformance::getContractPrice).sum());
             busiPerformance1.setRepaymentAmount(m.getValue().stream().mapToDouble(BusiPerformance::getRepaymentAmount).average().getAsDouble());
-            busiPerformance1.setSingQuotationPrice(m.getValue().stream().mapToDouble(BusiPerformance::getSingQuotationPrice).average().getAsDouble());
+            busiPerformance1.setAllRepaymentAmount(m.getValue().stream().mapToDouble(BusiPerformance::getRepaymentAmount).sum());
+            //平均回款率
+            busiPerformance1.setAvgRepaymentRatio(busiPerformance1.getRepaymentAmount() / busiPerformance1.getContractPrice());
+            //总回款率
+            busiPerformance1.setRepaymentRatio(busiPerformance1.getAllRepaymentAmount() / busiPerformance1.getAllContractPrice());
+            //平均签约率
+            busiPerformance1.setAvgSingQuotationRatio(busiPerformance1.getContractPrice() / busiPerformance1.getQuotationPrice() );
+            //总签约率
+            busiPerformance1.setSingQuotationRatio(busiPerformance1.getAllContractPrice() / busiPerformance1.getAllQuotationPrice() );
             statisticsList.add(busiPerformance1);
         });
 
