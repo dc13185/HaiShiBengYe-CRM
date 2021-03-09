@@ -1,6 +1,8 @@
 package com.ruoyi.busi.outsourcing.controller;
 
 import java.util.List;
+
+import com.ruoyi.busi.domain.BusiBearing;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 外购产品供应商Controller
@@ -90,6 +93,31 @@ public class BusiOutsourcingController extends BaseController
     {
         return toAjax(busiOutsourcingService.insertBusiOutsourcing(busiOutsourcing));
     }
+
+
+
+    @RequiresPermissions("busi:bearing:export")
+    @Log(title = "电机产品", businessType = BusinessType.EXPORT)
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file, String outsourcingLineId) throws Exception {
+        ExcelUtil<BusiOutsourcing> util = new ExcelUtil<>(BusiOutsourcing.class);
+        List<BusiOutsourcing> userList = util.importExcel(file.getInputStream());
+        for (BusiOutsourcing busiMotor : userList) {
+            busiMotor.setOutsourcingLineId(Long.parseLong(outsourcingLineId));
+            busiOutsourcingService.insertBusiOutsourcing(busiMotor);
+        }
+        return AjaxResult.success();
+    }
+
+    @GetMapping("/importTemplate")
+    @ResponseBody
+    public AjaxResult importTemplate()
+    {
+        ExcelUtil<BusiOutsourcing> util = new ExcelUtil<BusiOutsourcing>(BusiOutsourcing.class);
+        return util.importTemplateExcel("外购产品");
+    }
+
 
     /**
      * 修改外购产品供应商

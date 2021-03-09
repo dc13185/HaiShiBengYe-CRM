@@ -40,7 +40,14 @@ public class BusiQuotationDetails extends BaseEntity
 
     private String materialSupplierId;
 
+    /** 过流部件 */
     private String baseMaterialSupplierId;
+
+    /** 冲洗方案供应商 */
+    private String rinseSupplierId;
+
+    /** 系统冲洗方案ID */
+    private Long rinseId;
 
 
     /** 数量 */
@@ -62,9 +69,7 @@ public class BusiQuotationDetails extends BaseEntity
     @Excel(name = "过流材质")
     private String materialName;
 
-    /** 冲洗方案 */
-    @Excel(name = "冲洗方案")
-    private String rinseSolutionId;
+
 
     /** 其他费用 */
     @Excel(name = "其他费用")
@@ -178,6 +183,14 @@ public class BusiQuotationDetails extends BaseEntity
     @Excel(name = "其他联轴器价格")
     private Double otherCouplingPrice;
 
+    /** 冲洗方案 */
+    @Excel(name = "系统冲洗方案供应商")
+    private String rinseSupplierName;
+
+    /** 冲洗方案 */
+    @Excel(name = "冲洗方案")
+    private String rinseName;
+
     /** 报价类型 */
     private Long quotationType;
 
@@ -193,6 +206,9 @@ public class BusiQuotationDetails extends BaseEntity
     @Excel(name = "机封以及系统成本")
     private Double sealCost;
 
+    /** 机洗成本*/
+    private Double rinseCost;
+
     @Excel(name = "基准单价")
     private Double detailsPrice;
 
@@ -202,6 +218,15 @@ public class BusiQuotationDetails extends BaseEntity
     @Excel(name = "成本")
     private Double allCost;
 
+
+    public Double getRinseCost() {
+        return rinseCost;
+    }
+
+    public BusiQuotationDetails setRinseCost(Double rinseCost) {
+        this.rinseCost = rinseCost;
+        return this;
+    }
 
     public String getBaseMaterialSupplierId() {
         return baseMaterialSupplierId;
@@ -336,14 +361,42 @@ public class BusiQuotationDetails extends BaseEntity
     {
         return number;
     }
-    public void setRinseSolutionId(String rinseSolutionId)
-    {
-        this.rinseSolutionId = rinseSolutionId;
+
+
+    public String getRinseSupplierId() {
+        return rinseSupplierId;
     }
 
-    public String getRinseSolutionId()
-    {
-        return rinseSolutionId;
+    public BusiQuotationDetails setRinseSupplierId(String rinseSupplierId) {
+        this.rinseSupplierId = rinseSupplierId;
+        return this;
+    }
+
+    public Long getRinseId() {
+        return rinseId;
+    }
+
+    public BusiQuotationDetails setRinseId(Long rinseId) {
+        this.rinseId = rinseId;
+        return this;
+    }
+
+    public String getRinseSupplierName() {
+        return rinseSupplierName;
+    }
+
+    public BusiQuotationDetails setRinseSupplierName(String rinseSupplierName) {
+        this.rinseSupplierName = rinseSupplierName;
+        return this;
+    }
+
+    public String getRinseName() {
+        return rinseName;
+    }
+
+    public BusiQuotationDetails setRinseName(String rinseName) {
+        this.rinseName = rinseName;
+        return this;
     }
 
     public Double getOtherExpenses() {
@@ -695,7 +748,6 @@ public class BusiQuotationDetails extends BaseEntity
             .append("modelId", getModelId())
             .append("materialId", getMaterialId())
             .append("number", getNumber())
-            .append("rinseSolutionId", getRinseSolutionId())
             .append("otherExpenses", getOtherExpenses())
             .append("otherExpensesDescription", getOtherExpensesDescription())
             .append("ratedFlow", getRatedFlow())

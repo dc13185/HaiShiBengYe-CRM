@@ -18,6 +18,8 @@ public class BusiSettlement extends BaseEntity
     /**  */
     private Long settlementId;
 
+    private String contractId;
+
     /** 合同号 */
     @Excel(name = "合同号")
     private String contractNo;
@@ -49,6 +51,9 @@ public class BusiSettlement extends BaseEntity
     /** 电机成本/元 */
     @Excel(name = "电机成本/元")
     private Double motorCost;
+
+    @Excel(name = "冲洗方案成本/元")
+    private Double rinseCost;
 
     /** 特殊配置费用/元 */
     @Excel(name = "特殊配置费用/元")
@@ -95,6 +100,15 @@ public class BusiSettlement extends BaseEntity
     @Excel(name = "支付业务费金额")
     private Double amountOfBusiness;
 
+
+    public Double getRinseCost() {
+        return rinseCost;
+    }
+
+    public BusiSettlement setRinseCost(Double rinseCost) {
+        this.rinseCost = rinseCost;
+        return this;
+    }
 
     public Double getQuotationCost() {
         return quotationCost;

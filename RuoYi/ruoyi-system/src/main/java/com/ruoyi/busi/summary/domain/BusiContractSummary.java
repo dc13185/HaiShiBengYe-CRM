@@ -104,6 +104,8 @@ public class BusiContractSummary extends BaseEntity
     private BusiQuotation busiQuotation;
 
 
+    private Double settlementBusinessFee;
+
     public Double getAllSumMarginGross() {
         return allSumMarginGross;
     }
@@ -404,6 +406,16 @@ public class BusiContractSummary extends BaseEntity
 
     public void setActualAllSumMargin(Double actualAllSumMargin) {
         this.actualAllSumMargin = actualAllSumMargin;
+    }
+
+
+    public Double getSettlementBusinessFee() {
+        return settlementBusinessFee;
+    }
+
+    public BusiContractSummary setSettlementBusinessFee(Double settlementBusinessFee) {
+        this.settlementBusinessFee = settlementBusinessFee;
+        return this;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ruoyi.busi.controller;
 
 import java.util.List;
 
+import com.ruoyi.busi.domain.BusiMotor;
 import com.ruoyi.busi.mapper.BusiCouplingMapper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 
@@ -75,6 +77,30 @@ public class BusiCouplingController extends BaseController
         ExcelUtil<BusiCoupling> util = new ExcelUtil<BusiCoupling>(BusiCoupling.class);
         return util.exportExcel(list, "轴联器产品表");
     }
+
+
+    @RequiresPermissions("busi:coupling:export")
+    @Log(title = "电机产品", businessType = BusinessType.EXPORT)
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file, String supplierId) throws Exception {
+        ExcelUtil<BusiCoupling> util = new ExcelUtil<>(BusiCoupling.class);
+        List<BusiCoupling> userList = util.importExcel(file.getInputStream());
+        for (BusiCoupling busiMotor : userList) {
+            busiMotor.setSupplierId(supplierId);
+            busiCouplingMapper.insertBusiCoupling(busiMotor);
+        }
+        return AjaxResult.success();
+    }
+
+    @GetMapping("/importTemplate")
+    @ResponseBody
+    public AjaxResult importTemplate()
+    {
+        ExcelUtil<BusiCoupling> util = new ExcelUtil<BusiCoupling>(BusiCoupling.class);
+        return util.importTemplateExcel("轴联器产品");
+    }
+
 
     /**
      * 新增联轴器

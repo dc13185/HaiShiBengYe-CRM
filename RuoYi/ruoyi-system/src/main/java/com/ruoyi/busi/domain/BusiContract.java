@@ -120,6 +120,8 @@ public class BusiContract extends BaseEntity
     @Excel(name = "备注")
     private String remake;
 
+    private Double settlementBusinessFee;
+
     @Override
     public Date getUpdateTime() {
         return updateTime;
@@ -347,6 +349,16 @@ public class BusiContract extends BaseEntity
 
     public void setCourseId(Long courseId) {
         this.courseId = courseId;
+    }
+
+
+    public Double getSettlementBusinessFee() {
+        return settlementBusinessFee;
+    }
+
+    public BusiContract setSettlementBusinessFee(Double settlementBusinessFee) {
+        this.settlementBusinessFee = settlementBusinessFee;
+        return this;
     }
 
     @Override

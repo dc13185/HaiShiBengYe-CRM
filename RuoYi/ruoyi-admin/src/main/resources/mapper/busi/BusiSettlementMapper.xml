@@ -60,14 +60,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectBusiSettlementById" parameterType="Long" resultMap="BusiSettlementResult">
-           SELECT
+         SELECT
         bs.* ,
         os.`office_address`,
         os.`office_staff_name`
         FROM
-        busi_settlement bs INNER JOIN office_staff os ON bs.`staff_id` = os.`office_staff_id`
+     busi_settlement bs INNER JOIN office_staff os ON bs.`staff_id` = os.`office_staff_id`
         where bs.settlement_id = #{settlementId}
     </select>
+
+
+    <select id="selectBusiSettlementByContractNo" parameterType="String" resultMap="BusiSettlementResult">
+        SELECT
+            bs.settlementId
+        FROM
+            busi_settlement bs
+        where bs.contract_no = #{contractNo}
+    </select>
+
+
 
     <insert id="insertBusiSettlement" parameterType="BusiSettlement" useGeneratedKeys="true" keyProperty="settlementId">
         insert into busi_settlement
@@ -90,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amountOfBusiness != null">amount_of_business,</if>
             <if test="deductionCommission != null">deduction_commission,</if>
             <if test="quotationCost != null">quotation_cost,</if>
+            <if test="rinseCost != null">rinse_cost,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="contractNo != null and contractNo != ''">#{contractNo},</if>
@@ -110,6 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amountOfBusiness != null">#{amountOfBusiness},</if>
             <if test="deductionCommission != null">#{deductionCommission},</if>
             <if test="quotationCost != null">#{quotationCost},</if>
+            <if test="rinseCost != null">#{rinseCost},</if>
          </trim>
     </insert>
 
@@ -134,6 +147,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amountOfBusiness != null">amount_of_business = #{amountOfBusiness},</if>
             <if test="deductionCommission != null">deduction_commission = #{deductionCommission},</if>
             <if test="quotationCost != null">quotation_cost = #{quotationCost},</if>
+            <if test="rinseCost != null">rinse_cost = #{rinseCost},</if>
         </trim>
         where settlement_id = #{settlementId}
     </update>

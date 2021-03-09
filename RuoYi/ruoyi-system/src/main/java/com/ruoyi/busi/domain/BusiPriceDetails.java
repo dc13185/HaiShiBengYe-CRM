@@ -46,8 +46,11 @@ public class BusiPriceDetails extends BaseEntity
     private Double motorCb;
 
     /** 机封及系统成本 */
-    @Excel(name = "机封及系统成本")
+    @Excel(name = "机封成本")
     private Double jfCb;
+
+    @Excel(name = "系统冲洗方案成本")
+    private Double rinseCose;
 
     /** 轴承成本 */
     @Excel(name = "轴承成本")
@@ -122,6 +125,16 @@ public class BusiPriceDetails extends BaseEntity
 
     //@Excel(name = "实际成本")
     private Double actualAllSumPrice;
+
+
+    public Double getRinseCose() {
+        return rinseCose;
+    }
+
+    public BusiPriceDetails setRinseCose(Double rinseCose) {
+        this.rinseCose = rinseCose;
+        return this;
+    }
 
     public Double getWghj() {
         return wghj;

@@ -90,8 +90,13 @@
                 {
                     title: '折扣率',
                     formatter: function(value, row, index) {
-                        var number = row.contractPrice / row.busiQuotation.sumPrice;
-                        return number.toFixed(2)
+                        if (row.busiQuotation.sumPrice != 0){
+                            var number = row.contractPrice / row.busiQuotation.sumPrice;
+                            return number.toFixed(2)
+                        }else{
+                            return 0;
+                        }
+
                     }
                 },
                 {

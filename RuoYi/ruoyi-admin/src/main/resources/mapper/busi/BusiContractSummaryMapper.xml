@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="quotationType"    column="quotation_type"    />
         <result property="sumQuotationPrice"    column="sumQuotationPrice"    />
         <result property="contractPrice"    column="contract_price"    />
+        <result property="settlementBusinessFee"    column="settlementBusinessFee"    />
 
     </resultMap>
 
@@ -48,7 +49,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	(SELECT   IFNULL(ROUND(SUM(bpd.actual_profit),2),0)  FROM busi_price_details bpd WHERE bpd.`quotation_id` = bq.`quotation_id` ) AS priceActualProfit,
 	 (SELECT   IFNULL(ROUND(SUM(boc.actualProfit),2),0)  FROM busi_outsourcing_cost boc  WHERE boc.quotation_id = bq.`quotation_id` ) AS outActualProfit,
-	(SELECT   IFNULL(ROUND(SUM(bpc.`actual_profit`),2),0)  FROM busi_parts_cost bpc WHERE bpc.quotation_id = bq.`quotation_id` ) AS partsActualProfit
+	(SELECT   IFNULL(ROUND(SUM(bpc.`actual_profit`),2),0)  FROM busi_parts_cost bpc WHERE bpc.quotation_id = bq.`quotation_id` ) AS partsActualProfit,
+     (SELECT bs.`settlement_business_fee` FROM busi_settlement bs WHERE bs.`contract_no` = bi.`contract_no` ) AS settlementBusinessFee
         FROM
           busi_contract bi
           INNER JOIN busi_quotation bq ON bi.`qutation_id` = bq.`quotation_id`

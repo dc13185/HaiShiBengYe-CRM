@@ -26,9 +26,19 @@ public class PriceSum {
     /** 低值物料成本 */
     private Double lowMaterialCost;
 
-
     /** 是否为过流材质 */
     private Long isCurrent;
+
+    private String textureType;
+
+    public String getTextureType() {
+        return textureType;
+    }
+
+    public PriceSum setTextureType(String textureType) {
+        this.textureType = textureType;
+        return this;
+    }
 
     public Long getNumber() {
         return number;

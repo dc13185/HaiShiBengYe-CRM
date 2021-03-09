@@ -2,6 +2,7 @@ package com.ruoyi.busi.mapper;
 
 import java.util.List;
 import com.ruoyi.busi.domain.BusiMaterialProduction;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 材料产品Mapper接口
@@ -18,6 +19,8 @@ public interface BusiMaterialProductionMapper
      * @return 材料产品
      */
     public BusiMaterialProduction selectBusiMaterialProductionById(Long materialId);
+
+    public BusiMaterialProduction selectBusiMaterialProductionBySupplierId(@Param("supplierId") String supplierId, @Param("type") String type);
 
     /**
      * 查询材料产品列表

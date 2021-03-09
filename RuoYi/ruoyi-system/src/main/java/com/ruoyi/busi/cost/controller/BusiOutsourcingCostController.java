@@ -1,6 +1,8 @@
 package com.ruoyi.busi.cost.controller;
 
 import java.util.List;
+
+import com.ruoyi.busi.domain.BusiBearing;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 外购电机成本明细Controller
@@ -84,6 +87,9 @@ public class BusiOutsourcingCostController extends BaseController
     {
         return toAjax(busiOutsourcingCostService.insertBusiOutsourcingCost(busiOutsourcingCost));
     }
+
+
+
 
     /**
      * 修改外购电机成本明细

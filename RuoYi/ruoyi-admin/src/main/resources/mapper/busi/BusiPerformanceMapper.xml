@@ -32,14 +32,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         LEFT JOIN busi_quotation_details bqd1 ON bqd1.quotation_id = bq1.`quotation_id`
         LEFT JOIN busi_outsourcing_details bod1 ON bod1.quotation_id = bq1.`quotation_id`
         LEFT JOIN busi_parts_details  bpd1 ON bpd1.`quotation_id`  = bq1.`quotation_id`
-        GROUP BY os.office_staff_id
-        ORDER BY os.`office_address` ASC
+
     </sql>
 
     <select id="selectBusiPerformanceList" parameterType="BusiPerformance" resultMap="BusiPerformanceResult">
         <include refid="selectBusiPerformanceVo"/>
         <where>
+            <if test="params.beginSigningDate != null and params.beginSigningDate != ''"><!-- 开始时间检索 -->
+                and date_format(bq.create_time,'%y-%m-%d') &gt;= date_format(#{params.beginSigningDate},'%y-%m-%d')
+            </if>
+            <if test="params.endSigningDate != null and params.endSigningDate != ''"><!-- 结束时间检索 -->
+                and date_format(bq.create_time,'%y-%m-%d')&lt;=  date_format(#{params.endSigningDate},'%y-%m-%d')
+            </if>
         </where>
+        GROUP BY os.office_staff_id
+        ORDER BY os.`office_address` ASC
     </select>
 
     <select id="selectBusiPerformanceById" parameterType="Long" resultMap="BusiPerformanceResult">

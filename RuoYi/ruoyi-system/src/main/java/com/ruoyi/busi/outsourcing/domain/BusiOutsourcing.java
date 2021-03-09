@@ -31,7 +31,6 @@ public class BusiOutsourcing extends BaseEntity
     private Double outsourcingPrice;
 
     /**  */
-    @Excel(name = "")
     private Long outsourcingLineId;
 
     public void setOutsourcingId(Long outsourcingId)

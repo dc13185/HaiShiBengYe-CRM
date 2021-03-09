@@ -186,6 +186,10 @@ public class MaterialSupplierController extends BaseController
             return "redirect:/busi/bearing?supplierId="+supplierId;
         }else if(supplier.getSupplierType().equals("outsourcing")){
             return "redirect:/busi/outsourcing/line?supplierId="+supplierId;
+        }else if(supplier.getSupplierType().equals("machine")){
+            return "redirect:/busi/machine?supplierId="+supplierId;
+        }else if(supplier.getSupplierType().equals("rinse")){
+            return "redirect:/busi/rinse?supplierId="+supplierId;
         }
 
 

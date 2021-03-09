@@ -1,6 +1,8 @@
 package com.ruoyi.busi.controller;
 
 import java.util.List;
+
+import com.ruoyi.busi.domain.BusiMotor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 机封管理Controller
@@ -112,6 +115,29 @@ public class BusiMachineController extends BaseController
     public AjaxResult editSave(BusiMachine busiMachine)
     {
         return toAjax(busiMachineService.updateBusiMachine(busiMachine));
+    }
+
+
+    @RequiresPermissions("busi:machine:edit")
+    @Log(title = "机封型号", businessType = BusinessType.EXPORT)
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file, String supplierId) throws Exception {
+        ExcelUtil<BusiMachine> util = new ExcelUtil<>(BusiMachine.class);
+        List<BusiMachine> userList = util.importExcel(file.getInputStream());
+        for (BusiMachine busiMotor : userList) {
+            busiMotor.setSupplierId(supplierId);
+            busiMachineService.insertBusiMachine(busiMotor);
+        }
+        return AjaxResult.success();
+    }
+
+    @GetMapping("/importTemplate")
+    @ResponseBody
+    public AjaxResult importTemplate()
+    {
+        ExcelUtil<BusiMachine> util = new ExcelUtil<BusiMachine>(BusiMachine.class);
+        return util.importTemplateExcel("机封型号");
     }
 
     /**

@@ -82,12 +82,22 @@
                     </div>
                     <div class="col-md-12 centered">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">机封及系统成本合计：</label>
+                            <label class="col-sm-3 control-label">机封成本合计：</label>
                             <div class="col-sm-9">
                                 <p id="jfCb" class="form-control-static">0</p>
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-12 centered">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">系统冲洗方案成本合计：</label>
+                            <div class="col-sm-9">
+                                <p id="rinseCose" class="form-control-static">0</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-12 centered">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">轴承成本合计：</label>
@@ -293,13 +303,13 @@
                         $("#zlqCb").html(busiPriceDetails.zlqCb);
                         $("#ewCb").html(busiPriceDetails.ewCb);
                         $("#wghj").html(busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb);
-                        var allSum = busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb+busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb;
+                        $("#rinseCose").html(busiPriceDetails.rinseCose);
+                        var allSum = busiPriceDetails.bengtouclCb+busiPriceDetails.bengtouRgCb+busiPriceDetails.bengtouFyCb+busiPriceDetails.motorCb + busiPriceDetails.jfCb + busiPriceDetails.zlqCb + busiPriceDetails.ewCb + busiPriceDetails.rinseCose;
                         $("#allPrice").html(allSum.toFixed(2))
-                        $("#zzContractPrice").html(busiPriceDetails.contractPrice)
+                        $("#zzContractPrice").html(busiPriceDetails.contractPrice);
                         if (busiPriceDetails.profit){
                             $("#zzMl").html(busiPriceDetails.profit.toFixed(2));
                         }
-
                         $(".self-made").show();
                         $(".export-btn").show();
                     }else{

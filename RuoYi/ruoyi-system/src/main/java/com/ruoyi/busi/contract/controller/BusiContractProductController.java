@@ -1,6 +1,13 @@
 package com.ruoyi.busi.contract.controller;
 
+import java.util.Date;
 import java.util.List;
+
+import com.ruoyi.busi.domain.BusiContract;
+import com.ruoyi.busi.mapper.BusiContractMapper;
+import com.ruoyi.busi.service.IBusiContractService;
+import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +40,13 @@ public class BusiContractProductController extends BaseController
 
     @Autowired
     private IBusiContractProductService busiContractProductService;
+
+    @Autowired
+    private IBusiContractService busiContractService;
+
+
+    @Autowired
+    private BusiContractMapper busiContractMapper;
 
     @GetMapping()
     public String product(String contractId,ModelMap model)
@@ -105,6 +119,16 @@ public class BusiContractProductController extends BaseController
     @ResponseBody
     public AjaxResult editSave(BusiContractProduct busiContractProduct)
     {
+        BusiContract historyBusiContract = busiContractService.selectBusiContractById(busiContractProduct.getContractId());
+        busiContractMapper.saveHistory(historyBusiContract);
+        //版本号发生变化
+        String contractNo = historyBusiContract.getContractNo();
+        String versionChar =  StringUtils.substringAfterLast(contractNo,"-");
+        String prefix =  StringUtils.substringBeforeLast(contractNo,"-");
+        char nextVersion = Constants.getVersion(versionChar.charAt(0));
+        historyBusiContract.setContractNo(prefix+"-"+nextVersion);
+        busiContractService.updateBusiContract(historyBusiContract);
+
         return toAjax(busiContractProductService.updateBusiContractProduct(busiContractProduct));
     }
 

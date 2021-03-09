@@ -10,19 +10,19 @@ import com.ruoyi.common.core.text.Convert;
 
 /**
  * 业务费用结算Service业务层处理
- * 
+ *
  * @author ruoyi
  * @date 2021-02-19
  */
 @Service
-public class BusiSettlementServiceImpl implements IBusiSettlementService 
+public class BusiSettlementServiceImpl implements IBusiSettlementService
 {
     @Autowired
     private BusiSettlementMapper busiSettlementMapper;
 
     /**
      * 查询业务费用结算
-     * 
+     *
      * @param settlementId 业务费用结算ID
      * @return 业务费用结算
      */
@@ -34,7 +34,7 @@ public class BusiSettlementServiceImpl implements IBusiSettlementService
 
     /**
      * 查询业务费用结算列表
-     * 
+     *
      * @param busiSettlement 业务费用结算
      * @return 业务费用结算
      */
@@ -46,7 +46,7 @@ public class BusiSettlementServiceImpl implements IBusiSettlementService
 
     /**
      * 新增业务费用结算
-     * 
+     *
      * @param busiSettlement 业务费用结算
      * @return 结果
      */
@@ -58,7 +58,7 @@ public class BusiSettlementServiceImpl implements IBusiSettlementService
 
     /**
      * 修改业务费用结算
-     * 
+     *
      * @param busiSettlement 业务费用结算
      * @return 结果
      */
@@ -70,7 +70,7 @@ public class BusiSettlementServiceImpl implements IBusiSettlementService
 
     /**
      * 删除业务费用结算对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -82,7 +82,7 @@ public class BusiSettlementServiceImpl implements IBusiSettlementService
 
     /**
      * 删除业务费用结算信息
-     * 
+     *
      * @param settlementId 业务费用结算ID
      * @return 结果
      */
@@ -90,5 +90,10 @@ public class BusiSettlementServiceImpl implements IBusiSettlementService
     public int deleteBusiSettlementById(Long settlementId)
     {
         return busiSettlementMapper.deleteBusiSettlementById(settlementId);
+    }
+
+    @Override
+    public BusiSettlement selectBusiSettlementByNo(String no) {
+        return busiSettlementMapper.selectBusiSettlementByContractNo(no);
     }
 }

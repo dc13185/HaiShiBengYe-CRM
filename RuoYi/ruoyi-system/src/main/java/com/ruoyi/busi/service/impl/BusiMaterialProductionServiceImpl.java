@@ -10,19 +10,19 @@ import com.ruoyi.common.core.text.Convert;
 
 /**
  * 材料产品Service业务层处理
- * 
+ *
  * @author ruoyi
  * @date 2021-01-01
  */
 @Service
-public class BusiMaterialProductionServiceImpl implements IBusiMaterialProductionService 
+public class BusiMaterialProductionServiceImpl implements IBusiMaterialProductionService
 {
     @Autowired
     private BusiMaterialProductionMapper busiMaterialProductionMapper;
 
     /**
      * 查询材料产品
-     * 
+     *
      * @param materialId 材料产品ID
      * @return 材料产品
      */
@@ -32,9 +32,16 @@ public class BusiMaterialProductionServiceImpl implements IBusiMaterialProductio
         return busiMaterialProductionMapper.selectBusiMaterialProductionById(materialId);
     }
 
+
+    @Override
+    public BusiMaterialProduction selectBusiMaterialProductionBySupplierId(String supplierId,String type)
+    {
+        return busiMaterialProductionMapper.selectBusiMaterialProductionBySupplierId(supplierId, type);
+    }
+
     /**
      * 查询材料产品列表
-     * 
+     *
      * @param busiMaterialProduction 材料产品
      * @return 材料产品
      */
@@ -46,7 +53,7 @@ public class BusiMaterialProductionServiceImpl implements IBusiMaterialProductio
 
     /**
      * 新增材料产品
-     * 
+     *
      * @param busiMaterialProduction 材料产品
      * @return 结果
      */
@@ -58,7 +65,7 @@ public class BusiMaterialProductionServiceImpl implements IBusiMaterialProductio
 
     /**
      * 修改材料产品
-     * 
+     *
      * @param busiMaterialProduction 材料产品
      * @return 结果
      */
@@ -70,7 +77,7 @@ public class BusiMaterialProductionServiceImpl implements IBusiMaterialProductio
 
     /**
      * 删除材料产品对象
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -82,7 +89,7 @@ public class BusiMaterialProductionServiceImpl implements IBusiMaterialProductio
 
     /**
      * 删除材料产品信息
-     * 
+     *
      * @param materialId 材料产品ID
      * @return 结果
      */

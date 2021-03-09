@@ -79,6 +79,8 @@
            supplierValue = "轴联器供应商";
        }else if(supplierType == 'outsourcing'){
            supplierValue = "外购供应商";
+       }else if(supplierType == 'machine'){
+           supplierValue = "机封供应商";
        }
 
         $(function() {
@@ -221,6 +223,9 @@
             }else if(supplierType == 'outsourcing'){
                 parent.$('#productSupplierId').val(rows);
                 parent.$('#productSupplierName').val(column);
+            }else if(supplierType == 'rinse'){
+                parent.$('#rinseSupplierId').val(rows);
+                parent.$('#rinseSupplierName').val(column);
             }
         }
 

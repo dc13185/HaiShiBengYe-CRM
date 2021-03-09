@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="officeAddress"    column="office_address"    />
         <result property="quotationType"    column="quotation_type"    />
         <result property="customerName"    column="customer_name"    />
+        <result property="settlementBusinessFee"    column="settlementBusinessFee"    />
 
         <association property="busiQuotation" javaType="com.ruoyi.busi.domain.BusiQuotation">
             <result property="quotationNo"    column="quotation_no"    />
@@ -282,7 +283,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT SUM(IFNULL(bod.`other_expenses`,0)* bod.number) FROM  busi_outsourcing_details bod WHERE  bod.`quotation_id` = bq.`quotation_id`) AS outsourcingOtherCost,
         (SELECT SUM((bqd.`all_cost` * bqd.number)) AS cost FROM busi_quotation_details bqd WHERE bqd.`quotation_id` =  bq.`quotation_id`) AS quotationAllCost,
         (SELECT SUM((bod.`all_cost` * bod.number))  AS cost FROM busi_outsourcing_details bod WHERE bod.`quotation_id` =  bq.`quotation_id`) AS  outsourcingAllCost,
-        (SELECT SUM(bpo.all_cost * bpo.number) AS cost FROM busi_parts_details bpo WHERE bpo.`quotation_id` = bq.`quotation_id`) AS  partsAllCost
+        (SELECT SUM(bpo.all_cost * bpo.number) AS cost FROM busi_parts_details bpo WHERE bpo.`quotation_id` = bq.`quotation_id`) AS  partsAllCost,
+          (SELECT SUM(bpd.rinse_cose) AS rinseCost FROM busi_price_details bpd WHERE bpd.`quotation_id` = bq.`quotation_id`) AS  rinseCost
         FROM  busi_quotation bq
         where bq.quotation_id = #{quotationId}
     </select>

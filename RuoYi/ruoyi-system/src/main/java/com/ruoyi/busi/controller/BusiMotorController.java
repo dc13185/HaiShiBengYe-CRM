@@ -1,5 +1,6 @@
 package com.ruoyi.busi.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.ruoyi.busi.mapper.BusiMotorMapper;
@@ -20,6 +21,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 电机产品Controller
@@ -73,6 +75,30 @@ public class BusiMotorController extends BaseController
         ExcelUtil<BusiMotor> util = new ExcelUtil<BusiMotor>(BusiMotor.class);
         return util.exportExcel(list, "电机产品");
     }
+
+
+    @RequiresPermissions("busi:motor:export")
+    @Log(title = "电机产品", businessType = BusinessType.EXPORT)
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file, String supplierId) throws Exception {
+        ExcelUtil<BusiMotor> util = new ExcelUtil<>(BusiMotor.class);
+        List<BusiMotor> userList = util.importExcel(file.getInputStream());
+        for (BusiMotor busiMotor : userList) {
+            busiMotor.setSupplierId(supplierId);
+            busiMotorMapper.insertBusiMotor(busiMotor);
+        }
+        return AjaxResult.success();
+    }
+
+    @GetMapping("/importTemplate")
+    @ResponseBody
+    public AjaxResult importTemplate()
+    {
+        ExcelUtil<BusiMotor> util = new ExcelUtil<BusiMotor>(BusiMotor.class);
+        return util.importTemplateExcel("电机产品");
+    }
+
 
     /**
      * 新增电机产品

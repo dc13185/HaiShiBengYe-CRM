@@ -27,6 +27,10 @@ public interface BusiSettlementMapper
      */
     public BusiSettlement selectBusiSettlementById(Long settlementId);
 
+
+    public BusiSettlement selectBusiSettlementByContractNo(String contractNo);
+
+
     /**
      * 新增业务费用结算
      *

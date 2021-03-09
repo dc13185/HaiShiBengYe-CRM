@@ -80,4 +80,6 @@ public interface BusiQuotationDetailsMapper
 
 
     public Map<String,Long> getDetilsFalg(Long quotationId);
+
+    Double getRinsePrice(Long machineId);
 }

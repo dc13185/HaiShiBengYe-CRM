@@ -56,7 +56,6 @@ public class BusiPerformanceController extends BaseController
     @ResponseBody
     public TableDataInfo list(BusiPerformance busiPerformance)
     {
-        startPage();
         List<BusiPerformance> list = busiPerformanceService.selectBusiPerformanceList(busiPerformance);
         return getDataTable(list);
     }

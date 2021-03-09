@@ -1,5 +1,6 @@
 package com.ruoyi.busi.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,12 @@ import com.ruoyi.busi.plan.service.IBusiContractPlanService;
 import com.ruoyi.busi.service.IBusiProductLineService;
 import com.ruoyi.busi.service.IBusiProductModelService;
 import com.ruoyi.busi.service.IBusiQuotationService;
+import com.ruoyi.busi.settlement.domain.BusiSettlement;
+import com.ruoyi.busi.settlement.service.IBusiSettlementService;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -59,6 +63,9 @@ public class BusiContractController extends BaseController
     @Autowired
     private IBusiContractProductService busiContractProductService;
 
+    @Autowired
+    private IBusiSettlementService busiSettlementService;
+
 
 
 
@@ -78,6 +85,10 @@ public class BusiContractController extends BaseController
     public String toHistory(String contractId,String courseId,ModelMap modelMap)
     {
         modelMap.put("contractId",contractId);
+        BusiContract busiContract = new BusiContract();
+        busiContract.setContractId(Long.parseLong(contractId));
+        busiContract.setUpdateTime(new Date());
+        busiContractService.updateBusiContract(busiContract);
         return prefix + "/contract_history";
     }
 
@@ -203,14 +214,23 @@ public class BusiContractController extends BaseController
     public AjaxResult editSave(BusiContract busiContract)
     {
         BusiContract historyBusiContract = busiContractService.selectBusiContractById(busiContract.getContractId());
-        busiContractMapper.saveHistory(historyBusiContract);
-        //版本号发生变化
-        String contractNo = historyBusiContract.getContractNo();
-        String versionChar =  StringUtils.substringAfterLast(contractNo,"-");
-        String prefix =  StringUtils.substringBeforeLast(contractNo,"-");
-        char nextVersion = Constants.getVersion(versionChar.charAt(0));
-        busiContract.setContractNo(prefix+"-"+nextVersion);
+        boolean flag = ObjectUtils.notEqual(historyBusiContract.getContractPrice(),busiContract.getContractPrice()) ||
+                ObjectUtils.notEqual(historyBusiContract.getDeliveryTime(),busiContract.getDeliveryTime()) ||
+                ObjectUtils.notEqual(historyBusiContract.getPaymentMethod(),busiContract.getPaymentMethod());
+        if (flag){
+            busiContractMapper.saveHistory(historyBusiContract);
+            //版本号发生变化
+            String contractNo = historyBusiContract.getContractNo();
+            String versionChar =  StringUtils.substringAfterLast(contractNo,"-");
+            String prefix =  StringUtils.substringBeforeLast(contractNo,"-");
+            char nextVersion = Constants.getVersion(versionChar.charAt(0));
+            busiContract.setContractNo(prefix+"-"+nextVersion);
+        }
         busiContractService.updateBusiContract(busiContract);
+        //同时更新其他地方
+        BusiSettlement busiSettlement = busiSettlementService.selectBusiSettlementByNo(busiContract.getContractNo());
+        busiSettlement.setContractNo(busiContract.getContractNo());
+        busiSettlementService.updateBusiSettlement(busiSettlement);
 
         return toAjax(1);
     }
@@ -251,12 +271,35 @@ public class BusiContractController extends BaseController
         Double outsourcingAllCost =  map.get("outsourcingAllCost");
         Double partsAllCost =   map.get("partsAllCost");
 
+        if (quotationMotorCost == null){
+            quotationMotorCost = 0d;
+        }
+        if (outsourcingMotorCost == null){
+            outsourcingMotorCost = 0d;
+        }
+        if (quotationOtherCost == null){
+            quotationOtherCost = 0d;
+        }
+        if (quotationAllCost == null){
+            quotationAllCost = 0d;
+        }
+        if (outsourcingAllCost == null){
+            outsourcingAllCost = 0d;
+        }
+        if (partsAllCost == null){
+            partsAllCost = 0d;
+        }
+        if (outsourcingOtherCost == null){
+            outsourcingOtherCost = 0d;
+        }
+
         Double motorCost = StringUtils.doubleFormat(quotationMotorCost + outsourcingMotorCost);
         Double otherCost = StringUtils.doubleFormat(quotationOtherCost + outsourcingOtherCost);
         Double allCost = StringUtils.doubleFormat(quotationAllCost + outsourcingAllCost + partsAllCost);
         HashMap map1 = new HashMap();
         map1.put("motorCost",motorCost);
         map1.put("otherCost",otherCost);
+        map1.put("rinseCost",map.get("rinseCost"));
         map1.put("allCost",allCost);
         return  map1;
     }

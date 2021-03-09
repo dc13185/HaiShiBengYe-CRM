@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="modelId"    column="model_id"    />
         <result property="materialId"    column="material_id"    />
         <result property="number"    column="number"    />
-        <result property="rinseSolutionId"    column="rinse_solution_id"    />
+       <!-- <result property="rinseSolutionId"    column="rinse_solution_id"    />-->
         <result property="otherExpenses"    column="other_expenses"    />
         <result property="otherExpensesDescription"    column="other_expenses_description"    />
         <result property="ratedFlow"    column="rated_flow"    />
@@ -59,7 +59,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sealCost"    column="seal_cost"    />
         <result property="allCost"    column="all_cost"    />
         <result property="baseMaterialSupplierId"    column="base_material_supplier_id"    />
-    </resultMap>
+        <result property="rinseSupplierId"    column="rinse_supplier_id"    />
+        <result property="rinseId"    column="rinse_id"    />
+     </resultMap>
 
     <sql id="selectBusiQuotationDetailsVo">
         select details_id, quotation_id, equipment_num, product_line_id, model_id, material_id, number, base_material_supplier_id,rinse_solution_id, other_expenses, other_expenses_description, rated_flow, lift, operating_temperature, fluid_density, inlet_pressure, npsh, motor_supplier_id, motor_id, other_motor, other_motor_price, machine_supplier_id, machine_id, other_machine, other_machine_price, coupling_supplier_id, coupling_id, other_coupling, other_coupling_price, quotation_type ,coefficient ,details_price from busi_quotation_details
@@ -78,9 +80,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.base_material_supplier_id ) AS  baseMaterialSupplierName,
         motor_id,
         material_id,
-        (SELECT bt.texture_name FROM busi_material_production bmp
+      /*  (SELECT bt.texture_name FROM busi_material_production bmp
         LEFT JOIN  busi_texture bt ON bmp.`texture_id` = bt.texture_id
-        WHERE bmp.material_id = bqd.material_id) AS material_name ,
+        WHERE bmp.material_id = bqd.material_id) AS*/ material_name ,
         number,
         rinse_solution_id,
         other_expenses,
@@ -123,7 +125,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         motor_cost,
         seal_cost,
         all_cost,
-        base_material_supplier_id
+        base_material_supplier_id,
+        rinse_supplier_id,
+        rinse_id
         FROM
         busi_quotation_details bqd
         <where>
@@ -144,9 +148,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.base_material_supplier_id ) AS  baseMaterialSupplierName,
         motor_id,
         material_id,
-        (SELECT bt.texture_name FROM busi_material_production bmp
+    /*    (SELECT bt.texture_name FROM busi_material_production bmp
         LEFT JOIN  busi_texture bt ON bmp.`texture_id` = bt.texture_id
-        WHERE bmp.material_id = bqd.material_id) AS material_name ,
+        WHERE bmp.material_id = bqd.material_id) AS*/ material_name ,
         number,
         rinse_solution_id,
         other_expenses,
@@ -204,7 +208,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialSupplierId != null and materialSupplierId != ''">material_supplier_id,</if>
             <if test="materialId != null and materialId != ''">material_id,</if>
             <if test="number != null  and number != ''">number,</if>
-            <if test="rinseSolutionId != null and rinseSolutionId != '' ">rinse_solution_id,</if>
             <if test="otherExpenses != null and otherExpenses != '' ">other_expenses,</if>
             <if test="otherExpensesDescription != null and otherExpensesDescription != '' ">other_expenses_description,</if>
             <if test="ratedFlow != null and ratedFlow != ''  ">rated_flow,</if>
@@ -237,6 +240,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sealCost != null">seal_cost,</if>
             <if test="allCost != null">all_cost,</if>
             <if test="baseMaterialSupplierId != null">base_material_supplier_id,</if>
+            <if test="materialName != null">material_name,</if>
+            <if test="rinseSupplierId != null">rinse_supplier_id,</if>
+            <if test="rinseId != null">rinse_id,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="quotationId != null and quotationId != ''">#{quotationId},</if>
@@ -247,7 +253,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialSupplierId != null and materialSupplierId != ''">#{materialSupplierId},</if>
             <if test="materialId != null and materialId != ''">#{materialId},</if>
             <if test="number != null and number != ''">#{number},</if>
-            <if test="rinseSolutionId != null and rinseSolutionId != ''">#{rinseSolutionId},</if>
             <if test="otherExpenses != null and otherExpenses != ''">#{otherExpenses},</if>
             <if test="otherExpensesDescription != null and otherExpensesDescription != '' ">#{otherExpensesDescription},</if>
             <if test="ratedFlow != null and ratedFlow != '' ">#{ratedFlow},</if>
@@ -280,6 +285,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sealCost != null">#{sealCost},</if>
             <if test="allCost != null">#{allCost},</if>
             <if test="baseMaterialSupplierId != null">#{baseMaterialSupplierId},</if>
+            <if test="materialName != null">#{materialName},</if>
+            <if test="rinseSupplierId != null">#{rinseSupplierId},</if>
+            <if test="rinseId != null">#{rinseId},</if>
          </trim>
     </insert>
 
@@ -294,7 +302,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialSupplierId != null and materialSupplierId != ''">material_supplier_id = #{materialSupplierId},</if>
             <if test="materialId != null">material_id = #{materialId},</if>
             <if test="number != null">number = #{number},</if>
-            <if test="rinseSolutionId != null">rinse_solution_id = #{rinseSolutionId},</if>
             <if test="otherExpenses != null">other_expenses = #{otherExpenses},</if>
             <if test="otherExpensesDescription != null">other_expenses_description = #{otherExpensesDescription},</if>
             <if test="ratedFlow != null">rated_flow = #{ratedFlow},</if>
@@ -327,6 +334,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sealCost != null">seal_cost = #{sealCost},</if>
             <if test="allCost != null">all_cost = #{allCost},</if>
             <if test="baseMaterialSupplierId != null">base_material_supplier_id = #{baseMaterialSupplierId},</if>
+            <if test="rinseSupplierId != null">rinse_supplier_id = #{rinseSupplierId},</if>
+            <if test="rinseId != null">rinse_id = #{rinseId},</if>
         </trim>
         where details_id = #{detailsId}
     </update>
@@ -346,7 +355,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <select id="selectPriceDetil" parameterType="BusiQuotationDetails" resultType="com.ruoyi.busi.domain.PriceSum">
-        SELECT bpp.weight ,bt.`mass_ratio` as massRatio ,bmp.`price` as materialPrice,bpp.time ,bpp.is_current as isCurrent,bpp.number
+      SELECT bpp.weight ,bt.`mass_ratio` AS massRatio ,bmp.`price` AS materialPrice,bpp.time ,bpp.is_current AS isCurrent,bpp.number , bt.`texture_type` AS textureType
         FROM   `busi_product_parameter` bpp  LEFT JOIN  busi_texture bt
         ON bpp.`texture_id` = bt.`texture_id`
         LEFT JOIN `busi_material_production` bmp ON bt.`texture_id` = bmp.`texture_id`
@@ -393,6 +402,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT COUNT(1)  FROM busi_quotation_details bqd WHERE bqd.quotation_id = #{quotationId} ) AS bqd_count,
         (SELECT COUNT(1)  FROM busi_parts_details bpd WHERE bpd.quotation_id = #{quotationId} ) AS bpd_count
         FROM busi_outsourcing_details bod   WHERE bod.`quotation_id` = #{quotationId}
+    </select>
+
+
+    <select id="getRinsePrice" resultType="java.lang.Double" parameterType="java.lang.Long">
+          SELECT seal_price FROM busi_seal WHERE `seal_id` =  #{machineId}
     </select>
 
 
