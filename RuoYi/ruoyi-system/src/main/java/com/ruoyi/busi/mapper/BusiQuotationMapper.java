@@ -1,6 +1,8 @@
 package com.ruoyi.busi.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.busi.domain.BusiQuotation;
 
 /**
@@ -18,6 +20,8 @@ public interface BusiQuotationMapper
      * @return 报价单管理
      */
     public BusiQuotation selectBusiQuotationById(Long quotationId);
+
+    public BusiQuotation selectBusiQuotationByIdOnlyId(Long quotationId);
 
     /**
      * 查询报价单管理列表
@@ -61,4 +65,9 @@ public interface BusiQuotationMapper
 
 
     public Integer selectEndCount(String province);
+
+
+    List<Map> selectModelById(Long quotationId);
+
+    List<Map> selectPartsModelById(Long quotationId);
 }

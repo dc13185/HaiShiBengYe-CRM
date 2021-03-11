@@ -111,8 +111,8 @@
                 <label class="col-sm-3 control-label">冲洗方案：</label>
                 <div class="col-sm-8">
                     <div class="input-group">
-                        <input class="form-control" type="text" onclick="selectRinse()" id="rinseSolutionName" th:field="*{rinseSolutionName}"   readonly="true" required>
-                        <input name="rinseSolutionId" id="rinseSolutionId" th:field="*{rinseSolutionId}"   type="hidden">
+                        <input class="form-control" type="text" onclick="selectRinse()" id="rinseName" th:field="*{rinseName}"   readonly="true" required>
+                        <input name="rinseId" id="rinseId" th:field="*{rinseId}"   type="hidden">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                 </div>
@@ -328,7 +328,7 @@
             otherExpenses:{
                 isNumber:true
             },
-            ratedFlow:{
+           /* ratedFlow:{
                 isNumber:true
             },
             operatingTemperature:{
@@ -342,7 +342,7 @@
             },
             npsh:{
                 isNumber:true
-            },
+            },*/
             otherMotorPrice:{
                 isNumber:true
             },

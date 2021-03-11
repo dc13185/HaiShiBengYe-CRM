@@ -81,27 +81,27 @@ public class BusiQuotationDetails extends BaseEntity
 
     /** 额定流量(m3/h) */
     @Excel(name = "额定流量(m3/h)")
-    private Long ratedFlow;
+    private String ratedFlow;
 
     /** 扬程(m) */
     @Excel(name = "扬程(m)")
-    private Long lift;
+    private String lift;
 
     /** 工况温度(℃) */
     @Excel(name = "工况温度(℃)")
-    private Long operatingTemperature;
+    private String operatingTemperature;
 
     /** 流体密度(Kg/m³) */
     @Excel(name = "流体密度(Kg/m³)")
-    private Long fluidDensity;
+    private String fluidDensity;
 
     /** 入口压力(Mpa) */
     @Excel(name = "入口压力(Mpa)")
-    private Long inletPressure;
+    private String inletPressure;
 
     /** 汽蚀余量(m) */
     @Excel(name = "汽蚀余量(m)")
-    private Long npsh;
+    private String npsh;
 
     /** 电机品牌 */
     private String motorSupplierId;
@@ -412,63 +412,62 @@ public class BusiQuotationDetails extends BaseEntity
         this.otherExpensesDescription = otherExpensesDescription;
     }
 
-    public String getOtherExpensesDescription()
-    {
+    public String getOtherExpensesDescription() {
         return otherExpensesDescription;
     }
-    public void setRatedFlow(Long ratedFlow)
-    {
-        this.ratedFlow = ratedFlow;
-    }
 
-    public Long getRatedFlow()
-    {
+    public String getRatedFlow() {
         return ratedFlow;
     }
-    public void setLift(Long lift)
-    {
-        this.lift = lift;
+
+    public BusiQuotationDetails setRatedFlow(String ratedFlow) {
+        this.ratedFlow = ratedFlow;
+        return this;
     }
 
-    public Long getLift()
-    {
+    public String getLift() {
         return lift;
     }
-    public void setOperatingTemperature(Long operatingTemperature)
-    {
-        this.operatingTemperature = operatingTemperature;
+
+    public BusiQuotationDetails setLift(String lift) {
+        this.lift = lift;
+        return this;
     }
 
-    public Long getOperatingTemperature()
-    {
+    public String getOperatingTemperature() {
         return operatingTemperature;
     }
-    public void setFluidDensity(Long fluidDensity)
-    {
-        this.fluidDensity = fluidDensity;
+
+    public BusiQuotationDetails setOperatingTemperature(String operatingTemperature) {
+        this.operatingTemperature = operatingTemperature;
+        return this;
     }
 
-    public Long getFluidDensity()
-    {
+    public String getFluidDensity() {
         return fluidDensity;
     }
-    public void setInletPressure(Long inletPressure)
-    {
-        this.inletPressure = inletPressure;
+
+    public BusiQuotationDetails setFluidDensity(String fluidDensity) {
+        this.fluidDensity = fluidDensity;
+        return this;
     }
 
-    public Long getInletPressure()
-    {
+    public String getInletPressure() {
         return inletPressure;
     }
-    public void setNpsh(Long npsh)
-    {
-        this.npsh = npsh;
+
+    public BusiQuotationDetails setInletPressure(String inletPressure) {
+        this.inletPressure = inletPressure;
+        return this;
     }
 
-    public Long getNpsh()
-    {
+    public String getNpsh() {
         return npsh;
+    }
+
+    public BusiQuotationDetails setNpsh(String npsh) {
+        this.npsh = npsh;
+        return this;
     }
 
     public void setMotorId(Long motorId)

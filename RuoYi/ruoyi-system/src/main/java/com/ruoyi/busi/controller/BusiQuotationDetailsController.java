@@ -20,6 +20,7 @@ import com.ruoyi.busi.parts.service.IBusiPartsDetailsService;
 import com.ruoyi.busi.qutsourcing.domain.BusiOutsourcingDetails;
 import com.ruoyi.busi.qutsourcing.service.IBusiOutsourcingDetailsService;
 import com.ruoyi.busi.service.*;
+import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.MyExcelUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -455,6 +456,12 @@ public class BusiQuotationDetailsController extends BaseController
             motorPrice = busiQuotationDetails.getOtherMotorPrice();
         }
 
+        //系统冲洗方案成本
+        if(busiQuotationDetails.getRinseId() != null){
+            rinsePrice = quotationDetailsMapper.getRinsePrice(busiQuotationDetails.getRinseId());
+        }
+
+
         //机封成本
         if (busiQuotationDetails.getMachineId() != null){
             machineProce = quotationDetailsMapper.getMachinePrice(busiQuotationDetails.getMachineId());
@@ -499,6 +506,18 @@ public class BusiQuotationDetailsController extends BaseController
         busiQuotationDetailsService.updateBusiQuotationDetails(busiQuotationDetails);
         Double sumPrice =  quotationDetailsMapper.getSumPrice(busiQuotationDetails.getQuotationId());
         reset(busiQuotationDetails.getQuotationId());
+
+        //改版本号
+        BusiQuotation busiQuotation = quotationService.selectBusiQuotationByIdOnlyId(busiQuotationDetails.getQuotationId());
+        //版本号发生变化
+        String contractNo = busiQuotation.getQuotationNo();
+        String versionChar =  StringUtils.substringAfterLast(contractNo,"-");
+        String prefix =  StringUtils.substringBeforeLast(contractNo,"-");
+        char nextVersion = Constants.getVersion(versionChar.charAt(0));
+        busiQuotation.setQuotationNo(prefix+"-"+nextVersion);
+        busiQuotation.setQuotationId(busiQuotationDetails.getQuotationId());
+        quotationService.updateBusiQuotation(busiQuotation);
+
         return success(format(sumPrice).toString());
     }
 

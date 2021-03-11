@@ -10,6 +10,7 @@ import com.ruoyi.busi.contract.domain.BusiContractProduct;
 import com.ruoyi.busi.contract.service.IBusiContractProductService;
 import com.ruoyi.busi.domain.BusiQuotation;
 import com.ruoyi.busi.mapper.BusiContractMapper;
+import com.ruoyi.busi.mapper.BusiQuotationMapper;
 import com.ruoyi.busi.plan.domain.BusiContractPlan;
 import com.ruoyi.busi.plan.service.IBusiContractPlanService;
 import com.ruoyi.busi.service.IBusiProductLineService;
@@ -66,6 +67,9 @@ public class BusiContractController extends BaseController
     @Autowired
     private IBusiSettlementService busiSettlementService;
 
+
+    @Autowired
+    private BusiQuotationMapper busiQuotationMapper;
 
 
 
@@ -303,4 +307,41 @@ public class BusiContractController extends BaseController
         map1.put("allCost",allCost);
         return  map1;
     }
+
+
+
+    @GetMapping("/getModelInfo")
+    @ResponseBody
+    public List<Map> getModelInfo(Long quotationId)
+    {
+       List<Map> maps =  busiQuotationMapper.selectModelById(quotationId);
+       List<Map> partsMaps = busiQuotationMapper.selectPartsModelById(quotationId);
+        for (Map partsMap : partsMaps) {
+            String modelNameStr="";
+            if (partsMap.containsKey("modelName")){
+                String modelName = (String) partsMap.get("modelName");
+                modelNameStr += modelName;
+            }
+            if (partsMap.containsKey("parameterName")){
+                String parameterName = (String) partsMap.get("parameterName");
+                modelNameStr +="-"+parameterName;
+            }
+            if (partsMap.containsKey("modelName")){
+                String texture_name = (String) partsMap.get("texture_name");
+                if (StringUtils.isNotEmpty(texture_name)){
+                    modelNameStr +="-"+texture_name;
+                }
+            }
+
+            Map map = new HashMap();
+            map.put("modelName",modelNameStr);
+            map.put("type",partsMap.get("TYPE"));
+            map.put("price",partsMap.get("price"));
+            map.put("number",partsMap.get("number"));
+            maps.add(map);
+        }
+        return maps;
+    }
+
+
 }

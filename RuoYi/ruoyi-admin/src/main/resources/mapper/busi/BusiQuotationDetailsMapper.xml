@@ -61,6 +61,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="baseMaterialSupplierId"    column="base_material_supplier_id"    />
         <result property="rinseSupplierId"    column="rinse_supplier_id"    />
         <result property="rinseId"    column="rinse_id"    />
+        <result property="rinseCost"    column="rinse_cost"    />
+        <result property="rinseName"    column="rinse_name"    />
+        <result property="rinseSupplierName"    column="rinse_supplier_name"    />
      </resultMap>
 
     <sql id="selectBusiQuotationDetailsVo">
@@ -126,8 +129,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         seal_cost,
         all_cost,
         base_material_supplier_id,
+        (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.rinse_supplier_id ) AS  rinse_supplier_name,
+        (SELECT seal_model FROM busi_seal bs WHERE bs.seal_id = bqd.rinse_id ) AS  rinse_name,
         rinse_supplier_id,
-        rinse_id
+        rinse_id,
+        rinse_cost
         FROM
         busi_quotation_details bqd
         <where>
@@ -189,7 +195,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         quotation_type,
         coefficient,
         details_price,
-        base_material_supplier_id
+        base_material_supplier_id,
+         (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.rinse_supplier_id ) AS  rinse_supplier_name,
+        (SELECT seal_model FROM busi_seal bs WHERE bs.seal_id = bqd.rinse_id ) AS  rinse_name,
+        rinse_supplier_id,
+        rinse_id,
+        rinse_cost
         FROM
         busi_quotation_details bqd
         where bqd.details_id = #{detailsId}
@@ -243,6 +254,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialName != null">material_name,</if>
             <if test="rinseSupplierId != null">rinse_supplier_id,</if>
             <if test="rinseId != null">rinse_id,</if>
+            <if test="rinseCost != null">rinse_cost,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="quotationId != null and quotationId != ''">#{quotationId},</if>
@@ -288,6 +300,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialName != null">#{materialName},</if>
             <if test="rinseSupplierId != null">#{rinseSupplierId},</if>
             <if test="rinseId != null">#{rinseId},</if>
+            <if test="rinseCost != null">#{rinseCost},</if>
          </trim>
     </insert>
 
@@ -304,7 +317,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="number != null">number = #{number},</if>
             <if test="otherExpenses != null">other_expenses = #{otherExpenses},</if>
             <if test="otherExpensesDescription != null">other_expenses_description = #{otherExpensesDescription},</if>
-            <if test="ratedFlow != null">rated_flow = #{ratedFlow},</if>
+            <if test="ratedFlow != null and ratedFlow != ''">rated_flow = #{ratedFlow},</if>
             <if test="lift != null">lift = #{lift},</if>
             <if test="operatingTemperature != null">operating_temperature = #{operatingTemperature},</if>
             <if test="fluidDensity != null">fluid_density = #{fluidDensity},</if>
@@ -336,6 +349,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="baseMaterialSupplierId != null">base_material_supplier_id = #{baseMaterialSupplierId},</if>
             <if test="rinseSupplierId != null">rinse_supplier_id = #{rinseSupplierId},</if>
             <if test="rinseId != null">rinse_id = #{rinseId},</if>
+            <if test="rinseCost != null">rinse_cost= #{rinseCost},</if>
         </trim>
         where details_id = #{detailsId}
     </update>

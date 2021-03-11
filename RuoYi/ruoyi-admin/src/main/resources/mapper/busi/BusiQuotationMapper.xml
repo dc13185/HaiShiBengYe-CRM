@@ -110,9 +110,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where bq.quotation_id = #{quotationId}
     </select>
 
+    <select id="selectBusiQuotationByIdOnlyId" parameterType="Long" resultMap="BusiQuotationResult">
+        SELECT bq.quotation_no  from    busi_quotation bq   where bq.quotation_id = #{quotationId}
+    </select>
+
     <select id="selectEndCount" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM  busi_quotation where province =#{province}
     </select>
+
 
 
     <insert id="insertBusiQuotation" parameterType="BusiQuotation" useGeneratedKeys="true" keyProperty="quotationId">
@@ -172,5 +177,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{quotationId}
         </foreach>
     </delete>
+
+
+    <select id="selectModelById" resultType="java.util.Map" parameterType="java.lang.Long">
+        SELECT
+        '整机' AS type, (SELECT CONCAT(bpm.model_name,'-',ifnull(bqd.`material_name`,'')) FROM busi_product_model bpm WHERE bpm.model_id = bqd.model_id) AS modelName ,
+        ROUND(bqd.`details_price`*bqd.`coefficient`,2) AS price,
+        bqd.`number`
+         FROM busi_quotation_details bqd  WHERE bqd.`quotation_id` =  #{quotationId}
+        UNION ALL
+        SELECT
+           '外购' AS type,   (SELECT CONCAT(bo.outsourcing_model,'-',bo.`outsourcing_material` )FROM busi_outsourcing bo WHERE bo.outsourcing_id = bod.model_id ) AS modelName,
+        ROUND(bod.`details_price`*bod.`coefficient`,2) AS price,
+        bod.number
+        FROM busi_outsourcing_details bod WHERE bod.`quotation_id` =  #{quotationId}
+    </select>
+
+
+    <select id="selectPartsModelById" resultType="java.util.Map" parameterType="java.lang.Long">
+        SELECT  '配件' AS TYPE, (SELECT model_name FROM busi_product_model bpm WHERE bpm.model_id = bpd.model_id) AS modelName,
+        (SELECT bpp.`item_number` FROM `busi_product_parameter` bpp WHERE bpp.`parameter_id` = bpd.`parameter_id`) AS parameterName,
+        (SELECT bt.texture_name FROM busi_material_production bmp
+        LEFT JOIN  busi_texture bt ON bmp.`texture_id` = bt.texture_id
+        WHERE bmp.material_id = bpd.material_id) AS texture_name,
+    ROUND(bpd.`details_price`*bpd.`coefficient`,2) AS price,
+    bpd.`number`
+     FROM busi_parts_details bpd WHERE bpd.`quotation_id` = #{quotationId}
+
+
+    </select>
+
 
 </mapper>

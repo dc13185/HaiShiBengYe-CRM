@@ -21,6 +21,10 @@ public class BusiContractProduct extends BaseEntity
     private Long product;
 
     /** 产品组成 */
+    @Excel(name = "产品类型")
+    private String type;
+
+    /** 产品组成 */
     @Excel(name = "产品组成")
     private String productName;
 
@@ -37,7 +41,14 @@ public class BusiContractProduct extends BaseEntity
     private Long contractId;
 
 
+    public String getType() {
+        return type;
+    }
 
+    public BusiContractProduct setType(String type) {
+        this.type = type;
+        return this;
+    }
 
     public void setProduct(Long product)
     {

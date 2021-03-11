@@ -122,7 +122,7 @@ public class BusiQuotationController extends BaseController
             endCountStr =    qz + endCountStr;
         }
         busiQuotation.setProjectAddress(busiQuotation.getProvince()+busiQuotation.getCity()+busiQuotation.getArea());
-        String quotationNo = DateUtils.dateTimeNow("YYYY-MM")+"-"+pinYin+"-"+endCountStr;
+        String quotationNo = DateUtils.dateTimeNow("YYYY-MM")+"-"+pinYin+"-"+endCountStr+"-A";
         busiQuotation.setProvince(pinYin);
         busiQuotation.setQuotationNo(quotationNo);
         busiQuotation.setCreateTime(new Date());

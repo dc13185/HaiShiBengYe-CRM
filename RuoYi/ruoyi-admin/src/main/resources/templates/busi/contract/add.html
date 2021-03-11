@@ -128,6 +128,15 @@
                     checkbox: true
                 },
                     {
+                        field: 'type',
+                        align: 'center',
+                        title: '产品类型',
+                        formatter: function(value, row, index) {
+                            var html = $.common.sprintf("<input class='form-control' type='text' name='busiContractProducts[%s].type' value='%s' required>", index, value);
+                            return html;
+                        }
+                    },
+                    {
                         field: 'productName',
                         align: 'center',
                         title: '产品组成',
@@ -160,6 +169,7 @@
 
         function addColumn() {
             var row = {
+                type: "",
                 productName: "",
                 productPrice: "",
                 productNumber: "",
@@ -189,6 +199,27 @@
             minView: "month",
             autoclose: true
         });
+
+        function addInfo(quotationId){
+            $.ajax({
+                url: ctx + "busi/contract/getModelInfo?quotationId="+quotationId,
+                type: "get",
+                processData: false,
+                success: function(result) {
+                    for (var i=0;i<result.length;i++)
+                    {
+                        var row = {
+                            type: result[i].type,
+                            productName: result[i].modelName,
+                            productPrice: result[i].price,
+                            productNumber: result[i].number
+                        }
+                        sub.addColumn(row);
+                    }
+                }
+            })
+        }
+
     </script>
 </body>
 </html>

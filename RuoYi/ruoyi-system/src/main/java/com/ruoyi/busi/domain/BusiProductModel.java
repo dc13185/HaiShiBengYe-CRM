@@ -24,23 +24,23 @@ public class BusiProductModel extends BaseEntity
 
     /** 流量 */
     @Excel(name = "流量(m³/h)'")
-    private Float flow;
+    private String flow;
 
     /** 扬程 */
     @Excel(name = "扬程(m)")
-    private Float lift;
+    private String lift;
 
     /** 温度 */
     @Excel(name = "温度(℃)")
-    private Float temperature;
+    private String temperature;
 
     /** 入口压力 */
     @Excel(name = "设计压力(Mpa)")
-    private Float pressure;
+    private String pressure;
 
     /** 汽蚀余量 */
     @Excel(name = "汽蚀余量(m)")
-    private Float npsh;
+    private String npsh;
 
     /** 产品系列Id */
     private Long productLineId;
@@ -78,44 +78,49 @@ public class BusiProductModel extends BaseEntity
         return modelName;
     }
 
-    public Float getFlow() {
+    public String getFlow() {
         return flow;
     }
 
-    public void setFlow(Float flow) {
+    public BusiProductModel setFlow(String flow) {
         this.flow = flow;
+        return this;
     }
 
-    public Float getLift() {
+    public String getLift() {
         return lift;
     }
 
-    public void setLift(Float lift) {
+    public BusiProductModel setLift(String lift) {
         this.lift = lift;
+        return this;
     }
 
-    public Float getTemperature() {
+    public String getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(Float temperature) {
+    public BusiProductModel setTemperature(String temperature) {
         this.temperature = temperature;
+        return this;
     }
 
-    public Float getPressure() {
+    public String getPressure() {
         return pressure;
     }
 
-    public void setPressure(Float pressure) {
+    public BusiProductModel setPressure(String pressure) {
         this.pressure = pressure;
+        return this;
     }
 
-    public Float getNpsh() {
+    public String getNpsh() {
         return npsh;
     }
 
-    public void setNpsh(Float npsh) {
+    public BusiProductModel setNpsh(String npsh) {
         this.npsh = npsh;
+        return this;
     }
 
     public void setProductLineId(Long productLineId) {

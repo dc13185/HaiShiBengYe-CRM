@@ -8,11 +8,13 @@ import com.ruoyi.busi.Constant;
 import com.ruoyi.busi.cost.domain.BusiOutsourcingCost;
 import com.ruoyi.busi.cost.service.IBusiOutsourcingCostService;
 import com.ruoyi.busi.domain.BusiMotor;
+import com.ruoyi.busi.domain.BusiQuotation;
 import com.ruoyi.busi.mapper.BusiPriceDetailsMapper;
 import com.ruoyi.busi.outsourcing.domain.BusiOutsourcing;
 import com.ruoyi.busi.outsourcing.service.IBusiOutsourcingService;
 import com.ruoyi.busi.service.IBusiMotorService;
 import com.ruoyi.busi.service.IBusiQuotationService;
+import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.utils.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,9 @@ public class BusiOutsourcingDetailsController extends BaseController
 
     @Autowired
     private IBusiOutsourcingCostService busiOutsourcingCostService;
+
+    @Autowired
+    private IBusiQuotationService quotationService;
 
     @RequiresPermissions("busi:details:view")
     @GetMapping()
@@ -181,6 +186,17 @@ public class BusiOutsourcingDetailsController extends BaseController
         if (i > 0){
             reStatistics(busiOutsourcingDetails);
         }
+
+        //改版本号
+        BusiQuotation busiQuotation = quotationService.selectBusiQuotationByIdOnlyId(busiOutsourcingDetails.getQuotationId());
+        //版本号发生变化
+        String contractNo = busiQuotation.getQuotationNo();
+        String versionChar =  StringUtils.substringAfterLast(contractNo,"-");
+        String prefix =  StringUtils.substringBeforeLast(contractNo,"-");
+        char nextVersion = Constants.getVersion(versionChar.charAt(0));
+        busiQuotation.setQuotationNo(prefix+"-"+nextVersion);
+        busiQuotation.setQuotationId(busiOutsourcingDetails.getQuotationId());
+        quotationService.updateBusiQuotation(busiQuotation);
         return toAjax(1);
     }
 

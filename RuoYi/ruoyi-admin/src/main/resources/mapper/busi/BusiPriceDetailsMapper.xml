@@ -106,8 +106,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="profit != null">profit,</if>
             <if test="actualProfit != null">actual_profit,</if>
             <if test="actualBengtouCb != null">actualBengtouCb,</if>
-            <if test="sumPrice != null">sumPrice</if>
-            <if test="rinseCose != null">rinse_cose</if>
+            <if test="sumPrice != null">sumPrice,</if>
+            <if test="rinseCose != null">rinse_cose,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="bengtouclCb != null">#{bengtouclCb},</if>
@@ -132,8 +132,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="profit != null">#{profit},</if>
             <if test="actualProfit != null">#{actualProfit},</if>
             <if test="actualBengtouCb != null">#{actualBengtouCb},</if>
-            <if test="sumPrice != null">#{sumPrice}</if>
-            <if test="rinseCose != null">#{rinseCose}</if>
+            <if test="sumPrice != null">#{sumPrice},</if>
+            <if test="rinseCose != null">#{rinseCose},</if>
         </trim>
     </insert>
 
@@ -165,7 +165,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actualWghj != null">actualWghj = #{actualWghj},</if>
             <if test="sumPrice != null">sumPrice = #{sumPrice},</if>
             <if test="actualAllSumPrice != null">actualAllSumPrice = #{actualAllSumPrice},</if>
-            <if test="rinseCose != null">rinse_cose = #{rinseCose}</if>
+            <if test="rinseCose != null">rinse_cose = #{rinseCose},</if>
         </trim>
         where quotation_id = #{quotationId}
     </update>

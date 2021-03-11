@@ -96,4 +96,10 @@ public class BusiQuotationServiceImpl implements IBusiQuotationService
     public Integer selectEndCount(String province){
         return busiQuotationMapper.selectEndCount(province);
     }
+
+
+    @Override
+    public BusiQuotation selectBusiQuotationByIdOnlyId(Long quotationId) {
+        return busiQuotationMapper.selectBusiQuotationByIdOnlyId(quotationId);
+    }
 }

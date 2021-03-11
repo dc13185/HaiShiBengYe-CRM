@@ -205,9 +205,16 @@
                     }
                 },
                 {
-                    title: '机封及系统成本',
+                    title: '机封成本',
                     formatter: function(value, row, index) {
                         var num = row.sealCost;
+                        return  num.toFixed(2);
+                    }
+                },
+                {
+                    title: '系统成本',
+                    formatter: function(value, row, index) {
+                        var num = row.rinseCost;
                         return  num.toFixed(2);
                     }
                 },
