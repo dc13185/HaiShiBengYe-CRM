@@ -144,6 +144,22 @@ public class BusiQuotationDetails extends BaseEntity
     @Excel(name = "其他机封价格")
     private Double otherMachinePrice;
 
+    /** 冲洗方案 */
+    @Excel(name = "系统冲洗方案供应商")
+    private String rinseSupplierName;
+
+    /** 冲洗方案 */
+    @Excel(name = "冲洗方案")
+    private String rinseName;
+
+    /** 冲洗方案 */
+    @Excel(name = "其他系统冲洗方案")
+    private String otherRinse;
+
+    /** 冲洗方案 */
+    @Excel(name = "其他系统冲洗价格")
+    private Double otherRinsePrice;
+
     /** 轴承品牌 */
     private String bearingSupplierId;
 
@@ -183,13 +199,6 @@ public class BusiQuotationDetails extends BaseEntity
     @Excel(name = "其他联轴器价格")
     private Double otherCouplingPrice;
 
-    /** 冲洗方案 */
-    @Excel(name = "系统冲洗方案供应商")
-    private String rinseSupplierName;
-
-    /** 冲洗方案 */
-    @Excel(name = "冲洗方案")
-    private String rinseName;
 
     /** 报价类型 */
     private Long quotationType;
@@ -396,6 +405,25 @@ public class BusiQuotationDetails extends BaseEntity
 
     public BusiQuotationDetails setRinseName(String rinseName) {
         this.rinseName = rinseName;
+        return this;
+    }
+
+
+    public String getOtherRinse() {
+        return otherRinse;
+    }
+
+    public BusiQuotationDetails setOtherRinse(String otherRinse) {
+        this.otherRinse = otherRinse;
+        return this;
+    }
+
+    public Double getOtherRinsePrice() {
+        return otherRinsePrice;
+    }
+
+    public BusiQuotationDetails setOtherRinsePrice(Double otherRinsePrice) {
+        this.otherRinsePrice = otherRinsePrice;
         return this;
     }
 

@@ -20,7 +20,7 @@ public interface IBusiMaterialProductionService
     public BusiMaterialProduction selectBusiMaterialProductionById(Long materialId);
 
 
-    public BusiMaterialProduction selectBusiMaterialProductionBySupplierId(String supplierId,String type);
+    public BusiMaterialProduction selectBusiMaterialProductionBySupplierId(String supplierId,String type,String materialName);
 
     /**
      * 查询材料产品列表

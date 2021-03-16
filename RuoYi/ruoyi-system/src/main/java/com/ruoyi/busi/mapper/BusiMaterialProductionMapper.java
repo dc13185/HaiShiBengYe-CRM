@@ -20,7 +20,7 @@ public interface BusiMaterialProductionMapper
      */
     public BusiMaterialProduction selectBusiMaterialProductionById(Long materialId);
 
-    public BusiMaterialProduction selectBusiMaterialProductionBySupplierId(@Param("supplierId") String supplierId, @Param("type") String type);
+    public BusiMaterialProduction selectBusiMaterialProductionBySupplierId(@Param("supplierId") String supplierId, @Param("type") String type,@Param("materialName") String materialName);
 
     /**
      * 查询材料产品列表

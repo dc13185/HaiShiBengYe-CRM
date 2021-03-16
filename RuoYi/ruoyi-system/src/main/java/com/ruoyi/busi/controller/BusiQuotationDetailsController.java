@@ -321,12 +321,14 @@ public class BusiQuotationDetailsController extends BaseController
         //获取数量
         Double  motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice=0d ,otherPrice=0d,rinsePrice=0d;
         List<PriceSum> priceSums = quotationDetailsMapper.selectPriceDetil(busiQuotationDetails);
+        // 用过流部的材质和材质形式和供应商ID 去对应供应商查价格
+        BusiMaterialProduction  baseBusiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionById(busiQuotationDetails.getMaterialId());
         //返回材料成本费用
-        Double materialCosts = format(priceSums.parallelStream().mapToDouble(p -> {
+        Double materialCosts = format(priceSums.stream().mapToDouble(p -> {
             //如果为过流部件的话，需要将 生产参数为过流部件的材料单价替换为过流部件的单价 和质量比
             if (p.getIsCurrent() == 1){
                 // 如果过流部件材质存在的话
-                BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionBySupplierId(busiQuotationDetails.getMaterialSupplierId(),p.getTextureType());
+                BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionBySupplierId(busiQuotationDetails.getMaterialSupplierId(),p.getTextureType(),baseBusiMaterialProduction.getMaterialName());
                 return  p.getNumber() * p.getWeight() * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
             }else {
                 return  p.getNumber() * p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
@@ -360,6 +362,8 @@ public class BusiQuotationDetailsController extends BaseController
         //系统冲洗方案成本
         if(busiQuotationDetails.getRinseId() != null){
             rinsePrice = quotationDetailsMapper.getRinsePrice(busiQuotationDetails.getRinseId());
+        }else if(busiQuotationDetails.getOtherRinsePrice() != null){
+            rinsePrice = busiQuotationDetails.getOtherRinsePrice();
         }
 
         //联轴器成本
@@ -427,12 +431,13 @@ public class BusiQuotationDetailsController extends BaseController
         Double  motorPrice = 0d , machineProce = 0d ,couplingPrice = 0d ,bearingPrice=0d ,otherPrice=0d,rinsePrice=0d;;
 
         List<PriceSum> priceSums = quotationDetailsMapper.selectPriceDetil(busiQuotationDetails);
+        BusiMaterialProduction  baseBusiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionById(busiQuotationDetails.getMaterialId());
         //返回材料成本费用
         Double materialCosts = format(priceSums.parallelStream().mapToDouble(p -> {
             //如果为过流部件的话，需要将 生产参数为过流部件的材料单价替换为过流部件的单价 和质量比
             if (p.getIsCurrent() == 1 ){
                 // 如果过流部件材质存在的话
-                BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionBySupplierId(busiQuotationDetails.getMaterialSupplierId(),p.getTextureType());
+                BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionBySupplierId(busiQuotationDetails.getMaterialSupplierId(),p.getTextureType(),baseBusiMaterialProduction.getMaterialName());
                 return  p.getNumber() * p.getWeight() * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
             }else {
                 return  p.getNumber() * p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
@@ -459,6 +464,8 @@ public class BusiQuotationDetailsController extends BaseController
         //系统冲洗方案成本
         if(busiQuotationDetails.getRinseId() != null){
             rinsePrice = quotationDetailsMapper.getRinsePrice(busiQuotationDetails.getRinseId());
+        }else if(busiQuotationDetails.getOtherRinsePrice() != null){
+            rinsePrice = busiQuotationDetails.getOtherRinsePrice();
         }
 
 
@@ -566,12 +573,13 @@ public class BusiQuotationDetailsController extends BaseController
             for (BusiQuotationDetails quotationDetails : busiQuotationDetailList) {
                     Long number = quotationDetails.getNumber();
                     List<PriceSum> priceSums = quotationDetailsMapper.selectPriceDetil(quotationDetails);
+                    BusiMaterialProduction  baseBusiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionById(quotationDetails.getMaterialId());
                      //返回材料成本费用
                      materialCosts += format(priceSums.parallelStream().mapToDouble(p -> {
                         //如果为过流部件的话，需要将 生产参数为过流部件的材料单价替换为过流部件的单价 和质量比
                         if (p.getIsCurrent() == 1){
                             // 如果过流部件材质存在的话
-                            BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionBySupplierId(quotationDetails.getMaterialSupplierId(),p.getTextureType());
+                            BusiMaterialProduction  busiMaterialProduction = busiMaterialProductionService.selectBusiMaterialProductionBySupplierId(quotationDetails.getMaterialSupplierId(),p.getTextureType(),baseBusiMaterialProduction.getMaterialName());
                             return  p.getNumber() * p.getWeight()  * busiMaterialProduction.getPrice() * busiMaterialProduction.getMassRatio();
                         }else {
                             return  p.getNumber() * p.getWeight() * p.getMaterialPrice()* p.getMassRatio();
@@ -587,35 +595,35 @@ public class BusiQuotationDetailsController extends BaseController
                     //电机价格
                     if (quotationDetails.getMotorId() != null){
                         motorPrice += quotationDetailsMapper.getMotorPrice(quotationDetails.getMotorId()) * number;
-                    }
-                    if (quotationDetails.getOtherMotorPrice() != null){
+                    }else if (quotationDetails.getOtherMotorPrice() != null){
                         motorPrice +=  format(motorPrice + quotationDetails.getOtherMotorPrice()) * number;
                     }
+
                     //机封成本
                     if (quotationDetails.getMachineId() != null){
                         machineProce += format(quotationDetailsMapper.getMachinePrice(quotationDetails.getMachineId()) * number);
-                    }
+                    }else if (quotationDetails.getOtherMachinePrice() != null){
+                         machineProce += format(machineProce + quotationDetails.getOtherMachinePrice()) * number; }
                      //系统冲洗方案成本
                     if(quotationDetails.getRinseId() != null){
                         rinsePrice += format(quotationDetailsMapper.getRinsePrice(quotationDetails.getRinseId()) * number);
+                    }else if(quotationDetails.getOtherRinsePrice() != null){
+                        rinsePrice += format(quotationDetails.getOtherRinsePrice() * number);
                     }
-                    if (quotationDetails.getOtherMachinePrice() != null){
-                        machineProce += format(machineProce + quotationDetails.getOtherMachinePrice()) * number;
-                    }
+
                     //联轴器成本
                     if (quotationDetails.getCouplingId() != null){
                         couplingPrice += format(quotationDetailsMapper.getCouplingPrice(quotationDetails.getCouplingId()) * number);
-                    }
-                    if (quotationDetails.getOtherCouplingPrice() != null){
+                    } else if (quotationDetails.getOtherCouplingPrice() != null){
                         couplingPrice += format(couplingPrice + quotationDetails.getOtherCouplingPrice()) * number;
                     }
                     //轴承成本
                     if (quotationDetails.getBearingId() != null){
                         bearingPrice +=  quotationDetailsMapper.getBearingPrice(quotationDetails.getBearingId()) * number;
-                    }
-                    if (quotationDetails.getOtherBearingPrice() != null){
+                    }else if (quotationDetails.getOtherBearingPrice() != null){
                         bearingPrice += format(bearingPrice + quotationDetails.getOtherBearingPrice()) * number;
                     }
+
                     if(quotationDetails.getOtherExpenses() != null){
                         otherPrice += quotationDetails.getOtherExpenses() * number;
                     }

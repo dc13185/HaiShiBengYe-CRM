@@ -34,9 +34,9 @@ public class BusiMaterialProductionServiceImpl implements IBusiMaterialProductio
 
 
     @Override
-    public BusiMaterialProduction selectBusiMaterialProductionBySupplierId(String supplierId,String type)
+    public BusiMaterialProduction selectBusiMaterialProductionBySupplierId(String supplierId,String type,String materialName)
     {
-        return busiMaterialProductionMapper.selectBusiMaterialProductionBySupplierId(supplierId, type);
+        return busiMaterialProductionMapper.selectBusiMaterialProductionBySupplierId(supplierId, type,materialName);
     }
 
     /**

@@ -64,6 +64,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="rinseCost"    column="rinse_cost"    />
         <result property="rinseName"    column="rinse_name"    />
         <result property="rinseSupplierName"    column="rinse_supplier_name"    />
+        <result property="otherRinse"    column="other_rinse"    />
+        <result property="otherRinsePrice"    column="other_rinse_price"    />
      </resultMap>
 
     <sql id="selectBusiQuotationDetailsVo">
@@ -83,9 +85,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.base_material_supplier_id ) AS  baseMaterialSupplierName,
         motor_id,
         material_id,
-      /*  (SELECT bt.texture_name FROM busi_material_production bmp
+        (SELECT bt.texture_name FROM busi_material_production bmp
         LEFT JOIN  busi_texture bt ON bmp.`texture_id` = bt.texture_id
-        WHERE bmp.material_id = bqd.material_id) AS*/ material_name ,
+        WHERE bmp.material_id = bqd.material_id) AS material_name ,
         number,
         rinse_solution_id,
         other_expenses,
@@ -133,7 +135,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT seal_model FROM busi_seal bs WHERE bs.seal_id = bqd.rinse_id ) AS  rinse_name,
         rinse_supplier_id,
         rinse_id,
-        rinse_cost
+        rinse_cost,
+        other_rinse,
+        other_rinse_price
         FROM
         busi_quotation_details bqd
         <where>
@@ -154,9 +158,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT material_name FROM material_supplier ms WHERE ms.supplier_id = bqd.base_material_supplier_id ) AS  baseMaterialSupplierName,
         motor_id,
         material_id,
-    /*    (SELECT bt.texture_name FROM busi_material_production bmp
+       (SELECT bt.texture_name FROM busi_material_production bmp
         LEFT JOIN  busi_texture bt ON bmp.`texture_id` = bt.texture_id
-        WHERE bmp.material_id = bqd.material_id) AS*/ material_name ,
+        WHERE bmp.material_id = bqd.material_id) AS material_name ,
         number,
         rinse_solution_id,
         other_expenses,
@@ -200,7 +204,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         (SELECT seal_model FROM busi_seal bs WHERE bs.seal_id = bqd.rinse_id ) AS  rinse_name,
         rinse_supplier_id,
         rinse_id,
-        rinse_cost
+        rinse_cost,
+        other_rinse,
+        other_rinse_price
         FROM
         busi_quotation_details bqd
         where bqd.details_id = #{detailsId}
@@ -255,6 +261,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="rinseSupplierId != null">rinse_supplier_id,</if>
             <if test="rinseId != null">rinse_id,</if>
             <if test="rinseCost != null">rinse_cost,</if>
+            <if test="otherRinse != null">other_rinse,</if>
+            <if test="otherRinsePrice != null">other_rinse_price,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="quotationId != null and quotationId != ''">#{quotationId},</if>
@@ -301,6 +309,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="rinseSupplierId != null">#{rinseSupplierId},</if>
             <if test="rinseId != null">#{rinseId},</if>
             <if test="rinseCost != null">#{rinseCost},</if>
+            <if test="otherRinse != null">#{otherRinse},</if>
+            <if test="otherRinsePrice != null">#{otherRinsePrice},</if>
          </trim>
     </insert>
 
@@ -350,6 +360,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="rinseSupplierId != null">rinse_supplier_id = #{rinseSupplierId},</if>
             <if test="rinseId != null">rinse_id = #{rinseId},</if>
             <if test="rinseCost != null">rinse_cost= #{rinseCost},</if>
+            <if test="otherRinse != null">other_rinse = #{otherRinse},</if>
+            <if test="otherRinsePrice != null">other_rinse_price = #{otherRinsePrice},</if>
         </trim>
         where details_id = #{detailsId}
     </update>

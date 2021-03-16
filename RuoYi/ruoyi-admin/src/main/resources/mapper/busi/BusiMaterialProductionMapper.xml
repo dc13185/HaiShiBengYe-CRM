@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBusiMaterialProductionBySupplierId"  resultMap="BusiMaterialProductionResult">
         <include refid="selectBusiMaterialProductionVo"/>
-        where bmp.supplier_id = #{supplierId} and bt.texture_type = #{type} limit 1
+        where bmp.supplier_id = #{supplierId} and bt.texture_type = #{type} and bt.texture_name = #{materialName} limit 1
     </select>
 
 
